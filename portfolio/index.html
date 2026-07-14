@@ -57,9 +57,9 @@
             <span class="metric-detail">이벤트 9종이 멈춘 위치를 6개 상태로 남기고, 업무별 수동 복구 전략 8개를 연결했습니다.</span>
           </div>
           <div class="metric-item">
-            <strong class="metric-value">9 · 500→100→20</strong>
-            <span class="metric-label">피드 랭킹 단계</span>
-            <span class="metric-detail">9개 소스를 병렬 조회하고 1차 랭킹 500건, 2차 랭킹 100건, 기본 페이지 20건으로 좁혔습니다.</span>
+            <strong class="metric-value">9 · 3 · 3</strong>
+            <span class="metric-label">피드 서빙 아키텍처</span>
+            <span class="metric-detail">9개 검색 소스는 후보 조회 포트로 분리하고, 세 랭킹 단계와 3종 캐시는 각자의 계약으로 연결했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">13개 시나리오</strong>
@@ -526,160 +526,160 @@
             <span class="case-number" aria-hidden="true">03</span>
             <div>
               <p class="section-kicker">Feed &amp; Search · Serving / Retrieval</p>
-              <h2 class="case-title" id="feed-title">캐시는 얼마나 빨리 읽느냐보다 언제 무효화하느냐가 더 중요했습니다.</h2>
+              <h2 class="case-title" id="feed-title">후보 수보다, 검색·랭킹·서빙의 경계를 먼저 설계했습니다.</h2>
               <p class="case-lede">
-                정상 스크롤에서는 후보를 재사용하고, 좌표·필터·로그인 상태가 바뀌면 Snapshot·FPR·SPR 후보 캐시만 무효화했습니다.
+                개인화 채용 피드의 온라인 경로를 후보 수집, FPR, SPR, Re-Rank, Snapshot으로 나눴습니다. 세 랭킹 단계는 같은 pull 계약으로 잇고, OpenSearch 조회와 Redis 캐시는 포트 뒤로 분리했습니다.
               </p>
+              <div class="feed-print-spine" aria-label="피드 서빙 구조 요약">
+                <span><b>9개 검색 소스</b>후보 조회 포트</span>
+                <span><b>FPR · SPR · Re-Rank</b>공통 pull 계약</span>
+                <span><b>Snapshot · FPR · SPR</b>3종 캐시 포트</span>
+              </div>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>후보 조회</dt><dd>OpenSearch 9개 소스 병렬 실행, 소스별 최대 200건</dd></div>
-            <div class="fact-cell"><dt>랭킹</dt><dd>FPR 500 → SPR/Re-Rank 100 → 페이지 20건</dd></div>
-            <div class="fact-cell"><dt>캐시</dt><dd>Snapshot · FPR · SPR · User Vector, TTL 30분</dd></div>
-            <div class="fact-cell"><dt>분기</dt><dd>요청 지문 변경, guest → member, Redis 장애</dd></div>
+            <div class="fact-cell"><dt>전체 흐름</dt><dd>Candidate Retrieval → FPR → SPR → Re-Rank → Snapshot</dd></div>
+            <div class="fact-cell"><dt>공통 계약</dt><dd>후보 수집 포트 · 역방향 pull 계약 · 캐시 포트 3개</dd></div>
+            <div class="fact-cell"><dt>검색 경계</dt><dd>검색 소스 9개 · 소스별 정책·타임아웃·실패 격리</dd></div>
+            <div class="fact-cell"><dt>모듈 경계</dt><dd>query-api는 OpenSearch 연동 전용 · 순환 의존 금지</dd></div>
           </dl>
 
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3>조건이 바뀐 뒤에도 기존 후보를 쓰면 빠르지만 틀린 결과가 됩니다.</h3>
-              <p>좌표나 필터가 달라지면 이전 후보는 현재 요청과 맞지 않습니다. 반대로 페이지마다 새로 계산하면 같은 검색과 랭킹을 되풀이하게 됩니다.</p>
+              <h3>후보 소스와 랭킹 정책, 캐시 수명은 서로 다른 이유로 바뀝니다.</h3>
+              <p>한 오케스트레이터가 검색 쿼리와 점수 계산, Redis 처리까지 모두 알면 작은 정책 변경도 전체 피드 경로를 건드립니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>스크롤, 후보 소진, 조건 변경, 장애를 각각 다르게 처리했습니다.</h3>
-              <p>정상 스크롤은 page queue만 읽고 후보가 부족할 때만 refill합니다. 요청 지문이 달라지면 후보 풀을 비우며, Redis를 사용할 수 없으면 캐시 기록을 건너뛰고 OpenSearch 후보를 메모리에서 랭킹해 응답합니다.</p>
+              <h3>오케스트레이터는 서빙 흐름을 조정하고, 계산과 캐시는 단계별 계약 뒤로 분리했습니다.</h3>
+              <p>Snapshot이 비면 Re-Rank가 SPR→FPR→후보 수집 순서로 필요한 후보를 당겨옵니다. Redis 장애 시에는 같은 랭킹 흐름을 캐시 없이 실행합니다.</p>
             </div>
           </div>
 
           <details class="diagram-disclosure" open>
-            <summary>캐시 분기와 장애 우회 보기</summary>
+            <summary>전체 서빙 아키텍처와 책임 경계 보기</summary>
             <figure class="system-figure system-map system-map--decision">
               <figcaption>
                 <div class="diagram-caption-title">
-                  <b>피드 캐시를 재사용하고, 무효화하고, 우회하는 기준</b>
-                  <span>Snapshot의 상태와 요청 지문에 따라 네 경로로 나뉩니다.</span>
+                  <b>개인화 피드 온라인 서빙의 책임 경계</b>
+                  <span>상위 계층은 서빙 흐름을 조정하고, 계산과 캐시는 단계별 계약 뒤로 분리했습니다.</span>
                 </div>
                 <div class="diagram-legend" aria-label="연결선 범례">
-                  <span><i class="legend-line"></i>정상 흐름</span>
-                  <span><i class="legend-line is-async"></i>외부 조회</span>
-                  <span><i class="legend-line is-recovery"></i>무효화 · 우회</span>
+                  <span><i class="legend-line"></i>호출 계약</span>
+                  <span><i class="legend-line is-async"></i>외부 I/O</span>
                 </div>
               </figcaption>
-              <div class="system-map__canvas" role="group" aria-label="피드 요청의 Snapshot 적중, 후보 보충, 조건 변경, Redis 장애 분기">
+              <div class="system-map__canvas" role="group" aria-label="피드 요청 경계, 역방향 랭킹 호출, 캐시 포트와 OpenSearch 어댑터의 책임 분리">
                 <section class="map-band">
                   <header class="map-band__head">
                     <span class="map-index">01</span>
-                    <div><b>요청 판별</b><small>같은 세션에서도 좌표와 필터가 달라지면 다른 요청입니다.</small></div>
+                    <div><b>요청과 서빙 경로</b><small>HTTP 입력을 정규화하고 캐시 상태에 따라 서빙 흐름을 정합니다.</small></div>
                   </header>
                   <div class="map-sequence">
                     <div class="map-node">
-                      <span class="map-node__type">GET /feed</span>
+                      <span class="map-node__type">GET /v1/api/feed</span>
                       <strong>Feed API</strong>
-                      <small>actor · cursor · page size</small>
+                      <small>HTTP · session header</small>
                     </div>
-                    <div class="map-edge"><span>세션</span></div>
+                    <div class="map-edge"><span>정규화</span></div>
                     <div class="map-node">
-                      <span class="map-node__type">Session</span>
-                      <strong>guest · member</strong>
-                      <small>TTL 30분</small>
+                      <span class="map-node__type">Core Contract</span>
+                      <strong>FeedRequestContext</strong>
+                      <small>actor · cursor · filter</small>
                     </div>
-                    <div class="map-edge"><span>비교</span></div>
-                    <div class="map-node">
-                      <span class="map-node__type">SHA-256</span>
-                      <strong>Request Fingerprint</strong>
-                      <small>좌표 · 4축 필터</small>
+                    <div class="map-edge"><span>실행</span></div>
+                    <div class="map-node map-node--result">
+                      <span class="map-node__type">Route Owner</span>
+                      <strong>Orchestrator</strong>
+                      <small>queue · refill · bypass</small>
                     </div>
-                    <div class="map-edge"><span>확인</span></div>
+                    <div class="map-edge"><span>pop</span></div>
                     <div class="map-node map-node--store">
                       <span class="map-node__type">Redis List</span>
                       <strong>Snapshot Queue</strong>
-                      <small>100건 보관 · 20건씩 소비</small>
+                      <small>최종 window · page I/O</small>
                     </div>
                   </div>
                 </section>
 
                 <div class="map-decision">
-                  <b>Snapshot과 요청 조건은 지금도 유효한가?</b>
-                  <span>hit · empty · changed · unavailable</span>
+                  <b>Snapshot 상태가 다음 경로를 결정합니다.</b>
+                  <span>Hit = page · Empty = pull · Unavailable = cache off</span>
                 </div>
 
-                <div class="map-branch-grid">
-                  <section class="map-branch map-branch--hit">
-                    <header class="map-branch__head">
-                      <span class="map-index">H</span>
-                      <div><b>캐시 적중</b><small>검색과 랭킹을 건너뜁니다.</small></div>
-                    </header>
-                    <div class="map-branch__steps">
-                      <div class="map-branch-step"><b>LPOP 20건</b><small>정렬된 Snapshot</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>Feed page</b><small>cursor와 후보 응답</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>Global Seen</b><small>회원 24시간 · 비회원 30분</small></div>
+                <section class="map-band">
+                  <header class="map-band__head">
+                    <span class="map-index">02</span>
+                    <div><b>역방향 pull 캐스케이드</b><small>최종 단계가 필요한 후보만 앞 단계에서 당겨옵니다.</small></div>
+                  </header>
+                  <div class="map-sequence">
+                    <div class="map-node map-node--result">
+                      <span class="map-node__type">Exposure Policy</span>
+                      <strong>Re-Rank</strong>
+                      <small>최종 노출 순서</small>
                     </div>
-                  </section>
-
-                  <section class="map-branch map-branch--refill">
-                    <header class="map-branch__head">
-                      <span class="map-index">R</span>
-                      <div><b>후보 보충</b><small>Snapshot이 비었을 때만 랭킹을 다시 계산합니다.</small></div>
-                    </header>
-                    <ol class="map-funnel" aria-label="피드 후보 축소 단계">
-                      <li><b>9×200</b><span>소스별 최대 후보</span></li>
-                      <li><b>500</b><span>FPR</span></li>
-                      <li><b>100</b><span>SPR · 재정렬</span></li>
-                      <li><b>20</b><span>첫 페이지</span></li>
-                    </ol>
-                    <p class="map-funnel-note">최종 100건을 RPUSH하고 첫 20건은 바로 응답합니다.</p>
-                  </section>
-
-                  <section class="map-branch map-branch--invalidate">
-                    <header class="map-branch__head">
-                      <span class="map-index">I</span>
-                      <div><b>조건 변경</b><small>세션과 Seen은 두고 후보 풀만 비웁니다.</small></div>
-                    </header>
-                    <div class="map-branch__steps">
-                      <div class="map-branch-step"><b>지문 변경</b><small>좌표 · 필터 · 로그인 전환</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>후보 3종 삭제</b><small>Snapshot · FPR · SPR</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>다음 요청에서 보충</b><small>OpenSearch부터 재실행</small></div>
+                    <div class="map-edge"><span>pull</span></div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Ranking + Pool</span>
+                      <strong>SPR</strong>
+                      <small>정밀 점수 · SPR cache</small>
                     </div>
-                  </section>
-
-                  <section class="map-branch map-branch--fail">
-                    <header class="map-branch__head">
-                      <span class="map-index">F</span>
-                      <div><b>Redis 장애</b><small>캐시 기록은 건너뛰고 이번 요청에 먼저 응답합니다.</small></div>
-                    </header>
-                    <div class="map-branch__steps">
-                      <div class="map-branch-step"><b>Snapshot 조회 실패</b><small>현재 요청에서 Redis 우회</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>메모리 랭킹</b><small>같은 정책으로 offset 계산</small></div>
-                      <span class="map-branch-arrow" aria-hidden="true">→</span>
-                      <div class="map-branch-step"><b>Feed page</b><small>캐시 · Seen 기록 없이 반환</small></div>
+                    <div class="map-edge"><span>pull</span></div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Ranking + Pool</span>
+                      <strong>FPR</strong>
+                      <small>dedupe · seen · FPR cache</small>
                     </div>
-                  </section>
+                    <div class="map-edge"><span>pull</span></div>
+                    <div class="map-node">
+                      <span class="map-node__type">Core Port</span>
+                      <strong>Candidate Retriever</strong>
+                      <small>회원 9개 소스 · 비회원 인기 공고</small>
+                    </div>
+                    <div class="map-edge map-edge--async"><span>I/O</span></div>
+                    <div class="map-node map-node--external">
+                      <span class="map-node__type">External Search</span>
+                      <strong>OpenSearch</strong>
+                      <small>query-api 어댑터 · 회원 소스 9개</small>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="map-flow-rail" aria-label="피드 데이터 흐름과 역방향 호출 방향">
+                  <div><b>데이터 흐름</b><span>OpenSearch → 후보 조회 → FPR → SPR → Re-Rank → Snapshot</span></div>
+                  <div><b>pull 호출</b><span>Snapshot 소진 → Re-Rank → SPR → FPR → 후보 조회</span></div>
+                </div>
+
+                <div class="map-contract-rail" aria-label="피드 서빙 계층별 소유 책임">
+                  <div><b>Orchestrator</b><span>route · invalidation · page I/O</span></div>
+                  <div><b>Ranking Stage</b><span>단계별 계산 · FPR/SPR pool</span></div>
+                  <div><b>Query Adapter</b><span>OpenSearch I/O · 소스 실패 격리</span></div>
                 </div>
               </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>캐시 판단 기준</b>
-            <p>정상 스크롤에서는 남은 Snapshot을 재사용하고, 조건이 바뀌면 후보 풀만 무효화합니다. Redis를 쓸 수 없을 때도 같은 랭킹을 메모리에서 계산해 응답합니다.</p>
+            <b>바뀌는 이유가 다른 코드를 서로 떼어냈습니다.</b>
+            <p>OpenSearch 필터·정렬 규칙과 호출은 query-api에, FPR·SPR·Re-Rank 계산은 각 랭킹 단계에, Snapshot·FPR·SPR 캐시는 포트 뒤에 뒀습니다. 오케스트레이터는 캐시 상태에 따라 서빙 흐름과 페이지 입출력을 조정합니다.</p>
           </div>
 
           <details class="case-details">
             <summary>랭킹·캐시·검색 정책 상세</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li>Snapshot, FPR pool, SPR pool, user vector, global seen을 서로 다른 Redis key와 TTL로 관리했습니다.</li>
-                <li>9개 OpenSearch 소스를 virtual thread에서 병렬 호출하고, 한 소스가 실패하거나 timeout이 나면 해당 결과만 제외해 나머지 후보를 유지했습니다.</li>
-                <li>Snapshot에 남은 후보가 있으면 20건만 꺼내고, 소진됐을 때만 100건짜리 랭킹 window를 다시 채웠습니다.</li>
+                <li>후보 수집은 별도 조회 포트로 두고, FPR·SPR·Re-Rank는 공통 pull 계약으로 연결했습니다.</li>
+                <li>Snapshot·FPR·SPR 캐시 포트가 Hit·Empty·Unavailable 상태를 같은 방식으로 표현합니다.</li>
+                <li>OpenSearch 검색 소스 9개의 필터·정렬 규칙과 사용할 벡터를 분리했습니다. 한 소스의 타임아웃이나 실패는 나머지 후보 조회에 영향을 주지 않습니다.</li>
+                <li>Redis 장애에는 별도 랭킹을 만들지 않고 같은 흐름을 캐시 없이 실행합니다.</li>
+                <li>query-api는 OpenSearch 연동만 맡도록 격리하고, 모듈 방향과 순환 금지는 ArchUnit으로 검증합니다.</li>
+                <li><code>@SearchDocument</code> 기반 프로세서로 검색 문서 38개 필드 경로를 생성하고, 직렬화 결과와 상수를 계약 테스트로 맞췄습니다.</li>
+                <li>FPR 500건, SPR·Re-Rank 100건, Snapshot 20건 단위로 각 단계의 계산과 소비 범위를 나눴습니다.</li>
+                <li>좌표와 4축 필터의 지문이 바뀌면 Snapshot·FPR·SPR만 무효화하고 세션과 global seen은 유지합니다.</li>
+                <li>Snapshot, FPR pool, SPR pool, user vector, global seen은 서로 다른 Redis key와 TTL로 관리했습니다.</li>
                 <li>seen은 노출한 페이지마다 기록하고 FPR에서 감점 신호로 사용했습니다.</li>
-                <li>세션과 후보 캐시는 30분, 회원 global seen은 24시간 동안 유지했습니다.</li>
                 <li>위치 기준 거리 가중치와 10km 반경, 좌표가 없는 공고의 보존·제외 정책을 반영했습니다.</li>
                 <li>메인 4축 필터를 색인과 질의 조립에 반영하고 회원·비회원에서 같은 의미로 적용했습니다.</li>
                 <li>유료 후보는 별도 영역으로 떼지 않고 FPR 점수 가산에 포함했습니다.</li>

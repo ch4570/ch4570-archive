@@ -234,6 +234,6 @@ export_pdf \
   'portfolio' \
   'POINT PLATFORM' \
   'PointExpireJob' \
-  'Request Fingerprint' \
+  'FeedRequestContext' \
   'AbstractMockTest' \
   'manifest.txt'

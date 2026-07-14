@@ -59,9 +59,9 @@
             <span class="metric-detail">이벤트 9종이 멈춘 위치를 6개 상태로 남기고, 업무별 복구 전략 8개와 15분 정체 알림을 붙였습니다.</span>
           </div>
           <div class="metric-item">
-            <strong class="metric-value">9 · 500→100→20</strong>
-            <span class="metric-label">피드 후보 선별</span>
-            <span class="metric-detail">9개 검색 소스를 병렬 조회하고 1차 랭킹 500건, 2차 랭킹 100건, 기본 페이지 20건으로 좁혔습니다.</span>
+            <strong class="metric-value">9 · 3 · 3</strong>
+            <span class="metric-label">피드 서빙 아키텍처</span>
+            <span class="metric-detail">9개 검색 소스는 후보 조회 포트로 분리하고, FPR·SPR·Re-Rank는 공통 pull 계약으로, 3종 캐시는 상태 포트로 연결했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">13개 시나리오</strong>

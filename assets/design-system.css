@@ -1589,6 +1589,10 @@ h4 {
   font-size: 16px;
 }
 
+.feed-print-spine {
+  display: none;
+}
+
 .fact-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2319,6 +2323,37 @@ h4 {
   overflow: hidden;
   border: 1px solid var(--ink);
   background: var(--ink);
+}
+
+.map-flow-rail {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 14px;
+  border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.map-flow-rail > div {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+  padding: 10px 14px;
+}
+
+.map-flow-rail > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.map-flow-rail b {
+  color: var(--green-ink);
+  font-size: 11px;
+}
+
+.map-flow-rail span {
+  color: var(--muted);
+  font-size: 9px;
+  line-height: 1.45;
 }
 
 .map-contract-rail > div {
@@ -3843,6 +3878,15 @@ h4 {
     grid-template-columns: 1fr;
   }
 
+  .map-flow-rail {
+    grid-template-columns: 1fr;
+  }
+
+  .map-flow-rail > div + div {
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
   .system-map--concurrency .map-inventory {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -4512,8 +4556,55 @@ h4 {
   }
 
   #feed .case-header {
+    break-after: auto;
     break-inside: avoid;
+    margin-bottom: 10px;
+    page-break-after: auto;
     page-break-inside: avoid;
+  }
+
+  #feed .case-title {
+    margin-bottom: 6px;
+    font-size: 19pt;
+  }
+
+  #feed .case-lede {
+    font-size: 8.5pt;
+    line-height: 1.42;
+  }
+
+  #feed .fact-grid {
+    margin-bottom: 12px;
+  }
+
+  #feed .fact-cell {
+    padding: 10px 12px;
+  }
+
+  .feed-print-spine {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 10px;
+    border-top: 1px solid var(--line-strong);
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .feed-print-spine span {
+    display: grid;
+    gap: 1px;
+    padding: 5px 8px;
+    color: var(--muted);
+    font-size: 6.5pt;
+    line-height: 1.35;
+  }
+
+  .feed-print-spine span + span {
+    border-left: 1px solid var(--line);
+  }
+
+  .feed-print-spine b {
+    color: var(--ink);
+    font-size: 7pt;
   }
 
   #test .case-details {
@@ -4854,6 +4945,20 @@ h4 {
   .map-contract-rail,
   .map-gate__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .map-flow-rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 7px;
+  }
+
+  .map-flow-rail > div {
+    padding: 5px 7px;
+  }
+
+  .map-flow-rail b,
+  .map-flow-rail span {
+    font-size: 6.5pt;
   }
 
   .map-contract-rail > div {

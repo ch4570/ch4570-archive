@@ -61,8 +61,8 @@
             </article>
             <article>
               <span>02 · Search &amp; Data</span>
-              <h3>재사용할 때와 다시 계산할 때를 나눕니다.</h3>
-              <p>후보·랭킹·캐시를 분리해 필요한 범위만 다시 계산했습니다.</p>
+              <h3>검색·랭킹·캐시의 경계를 먼저 세웁니다.</h3>
+              <p>피드 전 과정을 단계별 계약으로 나누고 의존 방향을 테스트로 고정했습니다.</p>
             </article>
             <article>
               <span>03 · AI-Native</span>
@@ -74,7 +74,7 @@
           <div class="career-proof-grid" aria-label="대표 구현 범위">
             <div><b>9종 · 6상태 · 8전략</b><span>포인트 이벤트와 15분 정체 알림</span></div>
             <div><b>9개 API · 13개 시나리오</b><span>포인트 분산락과 상태 정합성</span></div>
-            <div><b>9개 소스 · 500→100→20</b><span>검색 후보와 랭킹 단계</span></div>
+            <div><b>9개 소스 · 3단계 · 3종 캐시</b><span>개인화 피드 온라인 서빙 구조</span></div>
             <div><b>29개 · 43개</b><span>구축 당시 구현 파일과 테스트 소스</span></div>
           </div>
 
@@ -171,15 +171,15 @@
           <article class="career-project">
             <header>
               <p class="project-kicker">Feed &amp; Search · Serving / Retrieval</p>
-              <h3>9개 소스를 병렬 조회하고 캐시 재사용·무효화 기준을 분리했습니다.</h3>
+              <h3>후보 수집부터 노출까지, 개인화 피드의 온라인 서빙 구조를 세웠습니다.</h3>
             </header>
-            <p>정상 스크롤은 저장된 후보를 쓰고, 좌표·필터·로그인 주체가 바뀔 때만 필요한 단계부터 다시 계산했습니다.</p>
+            <p>검색·랭킹·캐시를 포트와 단계별 계약으로 나눴습니다. 오케스트레이터는 캐시 적중·소진·장애에 따라 서빙 흐름을 조정하고, 각 랭킹 단계는 자기 계산을, FPR·SPR는 후보 풀 캐시까지 맡습니다.</p>
             <ul class="bullet-list">
-              <li><strong>500 → 100 → 20</strong> 순으로 9개 OpenSearch 소스의 후보를 랭킹했습니다.</li>
-              <li><strong>30분 세션 캐시</strong>를 Snapshot·1차·2차 랭킹 풀로 나눠 재사용 범위를 정했습니다.</li>
-              <li><strong>로그인 전환과 Redis 장애</strong>를 별도 분기로 처리하고 중복 제거와 10km 정책을 적용했습니다.</li>
+              <li><strong>9개 검색 소스</strong>의 필터·정렬 규칙과 사용할 벡터를 소스별로 나누고, OpenSearch 호출은 공통 어댑터 뒤로 감췄습니다. 한 소스가 늦거나 실패해도 나머지 후보는 유지합니다.</li>
+              <li><strong>FPR·SPR·Re-Rank</strong>를 하나의 pull 계약으로 연결하고 Snapshot·FPR·SPR 3종 캐시의 적재·소비 책임을 단계별로 나눴습니다.</li>
+              <li><strong>query-api 모듈</strong>은 OpenSearch 연동만 맡도록 격리하고, ArchUnit으로 모듈 의존 방향과 순환 금지를 검증했습니다.</li>
             </ul>
-            <p class="career-note"><b>판단 기준</b> 스크롤, 조건 변경, 로그인 전환, Redis 장애를 같은 cache miss로 취급하지 않았습니다.</p>
+            <p class="career-note"><b>설계 기준</b> 후보 수보다 검색 소스, 랭킹 정책, 캐시 장애가 바뀔 때 수정 범위가 어디까지 번지는지를 먼저 봤습니다.</p>
           </article>
 
           <article class="career-project">
