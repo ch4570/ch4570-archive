@@ -313,68 +313,6 @@ h4 {
   font-size: 17px;
 }
 
-.metric-strip {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 2px solid var(--ink);
-  border-bottom: 1px solid var(--line-strong);
-  background: var(--surface);
-}
-
-.metric-item {
-  min-height: 164px;
-  padding: 24px;
-  border-right: 1px solid var(--line);
-}
-
-.metric-item:last-child {
-  border-right: 0;
-}
-
-.metric-item:nth-child(1) {
-  border-top: 4px solid var(--lime);
-  background: var(--surface);
-}
-
-.metric-item:nth-child(2) {
-  border-top: 4px solid var(--lime);
-  background: var(--surface);
-}
-
-.metric-item:nth-child(3) {
-  border-top: 4px solid var(--lime);
-  background: var(--surface);
-}
-
-.metric-item:nth-child(4) {
-  border-top: 4px solid var(--lime);
-  background: var(--surface);
-}
-
-.metric-value {
-  display: block;
-  margin-bottom: 9px;
-  color: var(--ink);
-  font-size: 34px;
-  font-weight: 800;
-  line-height: 1.05;
-}
-
-.metric-label {
-  display: block;
-  margin-bottom: 7px;
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-.metric-detail {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.55;
-}
-
 .tag-list {
   display: flex;
   flex-wrap: wrap;
@@ -521,10 +459,6 @@ h4 {
   font-size: 11px;
   font-weight: 600;
   text-align: right;
-}
-
-.home-metrics {
-  margin-top: 58px;
 }
 
 .document-grid {
@@ -1156,43 +1090,6 @@ h4 {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
-}
-
-.career-proof-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: 32px;
-  border-top: 4px solid var(--lime);
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.career-proof-grid > div {
-  min-height: 88px;
-  padding: 15px 17px;
-  border-right: 1px solid var(--line);
-  background: var(--surface-soft);
-}
-
-.career-proof-grid > div:last-child {
-  border-right: 0;
-}
-
-.career-proof-grid b,
-.career-proof-grid span {
-  display: block;
-}
-
-.career-proof-grid b {
-  margin-bottom: 5px;
-  color: var(--ink);
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.career-proof-grid span {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.45;
 }
 
 .career-history {
@@ -3144,19 +3041,16 @@ h4 {
     gap: 46px;
   }
 
-  .metric-strip,
   .resume-impact-strip,
   .fact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .metric-item:nth-child(2),
   .resume-impact:nth-child(2),
   .fact-cell:nth-child(2) {
     border-right: 0;
   }
 
-  .metric-item:nth-child(-n + 2),
   .resume-impact:nth-child(-n + 2),
   .fact-cell:nth-child(-n + 2) {
     border-bottom: 1px solid var(--line);
@@ -3245,23 +3139,9 @@ h4 {
     height: 300px;
   }
 
-  .home-metrics {
-    margin-top: 36px;
-  }
-
-  .metric-strip,
   .resume-impact-strip,
   .fact-grid {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .metric-item {
-    min-height: 145px;
-    padding: 18px;
-  }
-
-  .metric-value {
-    font-size: 28px;
   }
 
   .section-shell {
@@ -3387,18 +3267,6 @@ h4 {
     padding-left: 0;
     border-top: 1px solid var(--line);
     border-left: 0;
-  }
-
-  .career-proof-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .career-proof-grid > div:nth-child(2n) {
-    border-right: 0;
-  }
-
-  .career-proof-grid > div:nth-child(-n + 2) {
-    border-bottom: 1px solid var(--line);
   }
 
   .career-history article,
@@ -3803,54 +3671,20 @@ h4 {
     text-indent: 0;
   }
 
-  .metric-strip,
   .resume-impact-strip,
   .fact-grid {
     grid-template-columns: 1fr;
   }
 
-  .metric-item,
   .resume-impact,
   .fact-cell {
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
 
-  .metric-item:last-child,
   .resume-impact:last-child,
   .fact-cell:last-child {
     border-bottom: 0;
-  }
-
-  .metric-item {
-    min-height: 126px;
-  }
-
-  .home-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .home-metrics .metric-item {
-    min-height: 178px;
-    padding: 14px;
-    border-right: 1px solid var(--line);
-  }
-
-  .home-metrics .metric-item:nth-child(2n) {
-    border-right: 0;
-  }
-
-  .home-metrics .metric-value {
-    font-size: 23px;
-  }
-
-  .home-metrics .metric-label {
-    font-size: 12px;
-  }
-
-  .home-metrics .metric-detail {
-    font-size: 11px;
-    line-height: 1.45;
   }
 
   .portfolio-hero-grid {
@@ -4309,29 +4143,6 @@ h4 {
   .career-strengths span {
     font-size: 8pt;
     line-height: 1.45;
-  }
-
-  .career-proof-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-bottom: 12px;
-    border-top-width: 2px;
-  }
-
-  .career-proof-grid > div {
-    min-height: 0;
-    padding: 9px 8px;
-    background: #ffffff;
-  }
-
-  .career-proof-grid b {
-    margin-bottom: 3px;
-    font-size: 9.3pt;
-    font-weight: 800;
-  }
-
-  .career-proof-grid span {
-    font-size: 7.7pt;
-    line-height: 1.4;
   }
 
   .career-history article {

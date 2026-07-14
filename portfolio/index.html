@@ -50,28 +50,6 @@
           </div>
         </div>
 
-        <div class="metric-strip" aria-label="포트폴리오 핵심 수치">
-          <div class="metric-item">
-            <strong class="metric-value">9 · 6 · 8</strong>
-            <span class="metric-label">내부 이벤트 구조</span>
-            <span class="metric-detail">이벤트 9종이 멈춘 위치를 6개 상태로 남기고, 업무별 수동 복구 전략 8개를 연결했습니다.</span>
-          </div>
-          <div class="metric-item">
-            <strong class="metric-value">9 · 3 · 3</strong>
-            <span class="metric-label">피드 서빙 아키텍처</span>
-            <span class="metric-detail">9개 검색 소스는 후보 조회 포트로 분리하고, 세 랭킹 단계와 3종 캐시는 각자의 계약으로 연결했습니다.</span>
-          </div>
-          <div class="metric-item">
-            <strong class="metric-value">13개 시나리오</strong>
-            <span class="metric-label">포인트 동시성 계약</span>
-            <span class="metric-detail">포인트 API 9개의 연속 재요청과 3·5·10개 동시 요청에서 잔액·원장 상태·후속 이벤트까지 확인했습니다.</span>
-          </div>
-          <div class="metric-item">
-            <strong class="metric-value">15 + 32</strong>
-            <span class="metric-label">AI 개발 자산</span>
-            <span class="metric-detail">agent 15개와 skill 32개를 설치·검증 가능한 구조로 묶고 Codex 탐색 32/32를 확인했습니다.</span>
-          </div>
-        </div>
       </div>
     </section>
 
@@ -676,7 +654,6 @@
                 <li>Redis 장애에는 별도 랭킹을 만들지 않고 같은 흐름을 캐시 없이 실행합니다.</li>
                 <li>query-api는 OpenSearch 연동만 맡도록 격리하고, 모듈 방향과 순환 금지는 ArchUnit으로 검증합니다.</li>
                 <li><code>@SearchDocument</code> 기반 프로세서로 검색 문서 38개 필드 경로를 생성하고, 직렬화 결과와 상수를 계약 테스트로 맞췄습니다.</li>
-                <li>FPR 500건, SPR·Re-Rank 100건, Snapshot 20건 단위로 각 단계의 계산과 소비 범위를 나눴습니다.</li>
                 <li>좌표와 4축 필터의 지문이 바뀌면 Snapshot·FPR·SPR만 무효화하고 세션과 global seen은 유지합니다.</li>
                 <li>Snapshot, FPR pool, SPR pool, user vector, global seen은 서로 다른 Redis key와 TTL로 관리했습니다.</li>
                 <li>seen은 노출한 페이지마다 기록하고 FPR에서 감점 신호로 사용했습니다.</li>
@@ -702,13 +679,6 @@
               </p>
             </div>
           </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt>공통 구성</dt><dd>4개 테스트 진입점 · 5개 공통 도구와 정책</dd></div>
-            <div class="fact-cell"><dt>모듈 구성</dt><dd>구축 당시 공통 진입점·도우미 구현 파일 29개</dd></div>
-            <div class="fact-cell"><dt>테스트</dt><dd>구축 당시 공통 동작 테스트 소스 43개</dd></div>
-            <div class="fact-cell"><dt>작성 기준</dt><dd>테스트 작성 원칙 제안 · 느린 테스트 실행 조건 분리</dd></div>
-          </dl>
 
           <details class="diagram-disclosure" open>
             <summary>test-support의 네 가지 시작점 보기</summary>
@@ -820,13 +790,6 @@
               </p>
             </div>
           </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt>Agent 구성</dt><dd>15 agents · 32 skills</dd></div>
-            <div class="fact-cell"><dt>연결 구조</dt><dd>24 agent→skill · 11 deps</dd></div>
-            <div class="fact-cell"><dt>정적 계약 검증</dt><dd>구조 7/7 · 행동 10/10</dd></div>
-            <div class="fact-cell"><dt>설치·탐색</dt><dd>설치 52/52 · 탐색 32/32</dd></div>
-          </dl>
 
           <details class="diagram-disclosure" open>
             <summary>스킬과 에이전트가 실행되는 구조 보기</summary>
