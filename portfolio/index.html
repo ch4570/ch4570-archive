@@ -21,8 +21,8 @@
         <span>AI-Native Backend</span>
       </a>
       <nav class="site-nav" aria-label="주요 문서">
-        <a href="../">홈</a>
         <a href="../resume/">이력서</a>
+        <a href="../career/">경력기술서</a>
         <a href="./" aria-current="page">포트폴리오</a>
       </nav>
       <div class="site-utilities">
@@ -51,7 +51,8 @@
             <a href="https://velog.io/@ch4570/posts">Velog</a>
             <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
             <a href="https://www.rallit.com/hub/resumes/33771/%EC%84%9C%EB%AF%BC%EC%9E%AC?isExpanded=true">Rallit</a>
-            <a href="../resume/">Resume</a>
+            <a href="https://ch4570.github.io/ch4570-archive/resume/">이력서</a>
+            <a href="https://ch4570.github.io/ch4570-archive/career/">경력기술서</a>
           </div>
         </div>
 
@@ -62,14 +63,14 @@
             <span class="metric-detail">이벤트 9종이 멈춘 위치를 6개 상태로 남기고, 업무별 수동 복구 전략 8개를 연결했습니다.</span>
           </div>
           <div class="metric-item">
-            <strong class="metric-value">2,700→20</strong>
+            <strong class="metric-value">9 · 500→100→20</strong>
             <span class="metric-label">피드 랭킹 단계</span>
-            <span class="metric-detail">9개 소스의 후보 상한을 2,700건으로 두고 FPR 500, SPR 100, 최종 20건으로 좁혔습니다.</span>
+            <span class="metric-detail">9개 소스를 병렬 조회하고 1차 랭킹 500건, 2차 랭킹 100건, 기본 페이지 20건으로 좁혔습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">29 / 43</strong>
             <span class="metric-label">test-support 구성</span>
-            <span class="metric-detail">29개 helper에 fixture·mock·Web·JPA 준비를 모으고, 43개 테스트로 동작을 확인했습니다.</span>
+            <span class="metric-detail">29개 구현 파일에 fixture·mock·Web·JPA 준비를 모으고, 43개 테스트 소스로 동작을 확인했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">15 + 32</strong>
@@ -419,7 +420,7 @@
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>후보 조회</dt><dd>OpenSearch 9개 소스 병렬 실행, 설정상 최대 2,700건</dd></div>
+            <div class="fact-cell"><dt>후보 조회</dt><dd>OpenSearch 9개 소스 병렬 실행, 소스별 최대 200건</dd></div>
             <div class="fact-cell"><dt>랭킹</dt><dd>FPR 500 → SPR/Re-Rank 100 → 페이지 20건</dd></div>
             <div class="fact-cell"><dt>캐시</dt><dd>Snapshot · FPR · SPR · User Vector, TTL 30분</dd></div>
             <div class="fact-cell"><dt>분기</dt><dd>요청 지문 변경, guest → member, Redis 장애</dd></div>
@@ -511,7 +512,7 @@
                       <div><b>후보 보충</b><small>Snapshot이 비었을 때만 랭킹을 다시 계산합니다.</small></div>
                     </header>
                     <ol class="map-funnel" aria-label="피드 후보 축소 단계">
-                      <li><b>2,700</b><span>9개 소스 검색</span></li>
+                      <li><b>9×200</b><span>소스별 최대 후보</span></li>
                       <li><b>500</b><span>FPR</span></li>
                       <li><b>100</b><span>SPR · 재정렬</span></li>
                       <li><b>20</b><span>첫 페이지</span></li>
@@ -583,15 +584,15 @@
               <h2 class="case-title" id="test-title">테스트마다 반복하던 준비 코드를 test-support로 모았습니다.</h2>
               <p class="case-lede">
                 fixture와 mock 준비 방식이 프로젝트마다 달라 리뷰할 때마다 테스트 설정부터 다시 읽어야 했습니다.
-                Web, JPA, mock 등 목적별 진입점을 만들고 반복되는 준비 코드는 helper로 옮겼습니다.
+                Web, JPA, mock 등 목적별 진입점을 만들고 반복되는 준비 코드는 공통 모듈로 옮겼습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>주요 커밋</dt><dd>test-support를 확장한 19개 변경</dd></div>
-            <div class="fact-cell"><dt>모듈 구성</dt><dd>fixture·mock·Web·JPA 등 29개 helper</dd></div>
-            <div class="fact-cell"><dt>테스트</dt><dd>공통 진입점과 helper를 다룬 43개 테스트</dd></div>
+            <div class="fact-cell"><dt>테스트 영역</dt><dd>fixture · mock · WebMvc · JPA · transaction</dd></div>
+            <div class="fact-cell"><dt>모듈 구성</dt><dd>공통 진입점과 도우미를 담은 29개 구현 파일</dd></div>
+            <div class="fact-cell"><dt>테스트</dt><dd>공통 동작을 다룬 43개 테스트 소스</dd></div>
             <div class="fact-cell"><dt>공개 활동</dt><dd>YouthCon 2025 Spring Test 발표</dd></div>
           </dl>
 
@@ -669,8 +670,8 @@
 
                 <div class="map-contract-rail" aria-label="test-support 공통 계약">
                   <div><b>module:test-support</b><span>프로젝트 공통 테스트 기반</span></div>
-                  <div><b>29 helpers</b><span>fixture · mock · Web · JPA</span></div>
-                  <div><b>43 tests + JavaDoc</b><span>공통 동작 검증 · 사용법 문서화</span></div>
+                  <div><b>29 implementation files</b><span>fixture · mock · Web · JPA</span></div>
+                  <div><b>43 test sources + JavaDoc</b><span>공통 동작 확인 · 사용법 문서화</span></div>
                 </div>
               </div>
             </figure>
@@ -678,7 +679,7 @@
 
           <div class="case-outcome">
             <b>테스트 기반</b>
-            <p>19개 주요 변경에 걸쳐 테스트 준비 방식을 29개 helper로 통일했습니다. fixture·mock·WebMvc·JPA·transaction의 공통 동작은 43개 테스트로 검증합니다.</p>
+            <p>fixture·mock·WebMvc·JPA·transaction의 시작점을 29개 구현 파일로 정리했습니다. 공통 모듈의 동작은 43개 테스트 소스로 확인합니다.</p>
           </div>
 
           <details class="case-details">
@@ -699,7 +700,7 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">05</span>
             <div>
-              <p class="section-kicker">AI Engineering · Agent Lab v0.1.0.0</p>
+              <p class="section-kicker">웍스피어 · AI Engineering · Agent Lab v0.1.0.0</p>
               <h2 class="case-title" id="agent-title">AI 에이전트의 역할·지식·절차와 평가 기준을 함께 관리하도록 구조를 설계했습니다.</h2>
               <p class="case-lede">
                 코드 탐색, 설계 검토, 테스트 작성처럼 반복되는 작업을 agent와 skill로 나눴습니다.
@@ -1033,7 +1034,8 @@
         <p>Java · Kotlin · Spring · Agent · Skill · Evaluation</p>
       </div>
       <div class="page-footer-links">
-        <a href="../resume/">Resume</a>
+        <a href="../resume/">이력서</a>
+        <a href="../career/">경력기술서</a>
         <a href="mailto:ckdekrn88@gmail.com">Email</a>
         <a href="https://github.com/ch4570">GitHub</a>
         <a href="https://velog.io/@ch4570/posts">Velog</a>

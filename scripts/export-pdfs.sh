@@ -87,6 +87,12 @@ verify_pdf() {
     exit 1
   fi
 
+  if LC_ALL=C grep -aFq 'file:///' "$pdf_path"; then
+    printf 'PDF validation failed: %s contains a local file link.\n' \
+      "$document_name" >&2
+    exit 1
+  fi
+
   if command -v pdfinfo >/dev/null 2>&1; then
     pdf_summary=$(pdfinfo "$pdf_path")
     pages=$(printf '%s\n' "$pdf_summary" | awk '/^Pages:/ { print $2 }')
@@ -96,6 +102,18 @@ verify_pdf() {
     fi
     if ! printf '%s\n' "$pdf_summary" | grep -Fq '(A4)'; then
       printf 'PDF validation failed: %s is not A4.\n' "$document_name" >&2
+      exit 1
+    fi
+
+    case "$document_name" in
+      resume) expected_pages=2 ;;
+      career-description) expected_pages=5 ;;
+      portfolio) expected_pages=9 ;;
+      *) expected_pages='' ;;
+    esac
+    if [ -n "$expected_pages" ] && [ "$pages" -ne "$expected_pages" ]; then
+      printf 'PDF validation failed: %s has %s pages; expected %s.\n' \
+        "$document_name" "$pages" "$expected_pages" >&2
       exit 1
     fi
   else
@@ -199,7 +217,16 @@ export_pdf \
   "$output_dir/seo-minjae-resume.pdf" \
   'resume' \
   '웍스피어' \
-  'ENGINEERING PLATFORM'
+  'AGENT LAB'
+
+export_pdf \
+  "$project_root/career/index.html" \
+  "$output_dir/seo-minjae-career-description.pdf" \
+  'career-description' \
+  '경력 요약' \
+  '웍스피어' \
+  'Agent Lab' \
+  '약 200만 건'
 
 export_pdf \
   "$project_root/portfolio/index.html" \
