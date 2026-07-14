@@ -15,11 +15,6 @@
 
   <header class="site-header screen-only">
     <div class="site-header-inner">
-      <a class="site-brand" href="../" aria-label="서민재 홈">
-        <span class="site-brand-mark" aria-hidden="true">SM</span>
-        <strong>서민재</strong>
-        <span>AI-Native Backend</span>
-      </a>
       <nav class="site-nav" aria-label="주요 문서">
         <a href="../resume/">이력서</a>
         <a href="./" aria-current="page">경력기술서</a>
@@ -71,8 +66,8 @@
             </article>
             <article>
               <span>03 · AI-Native</span>
-              <h3>개발 판단을 팀이 다시 쓰는 자산으로 만듭니다.</h3>
-              <p>에이전트·스킬·평가 계약을 관리하고 변경 전에는 사람이 승인합니다.</p>
+              <h3>반복한 개발 절차를 다른 저장소에 설치 가능한 자산으로 만듭니다.</h3>
+              <p>에이전트·스킬·평가 계약을 manifest로 연결하고, 변경 전 사람 검토를 요구하는 계약을 정의했습니다.</p>
             </article>
           </div>
 
@@ -89,6 +84,42 @@
             <article><time datetime="2023-09">2023.09 — 2024.05</time><h3>오케스트로</h3><p>IDP / Vista · Backend Engineer</p></article>
             <article><time datetime="2022-11">2022.11 — 2023.02</time><h3>즐거운</h3><p>Backend Engineer</p></article>
           </div>
+
+          <figure class="system-figure career-decision-map" aria-labelledby="decision-map-title">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b id="decision-map-title">백엔드 운영과 AI 개발에 같은 판단 순서를 적용합니다.</b>
+                <span>관찰한 문제를 경계로 바꾸고, 실행 결과로 다시 확인합니다.</span>
+              </div>
+            </figcaption>
+            <div class="system-map__canvas" role="group" aria-label="문제 관찰, 경계 설계, 결과 검증으로 이어지는 엔지니어링 판단 흐름">
+              <div class="map-sequence career-decision-flow">
+                <div class="map-node">
+                  <span class="map-node__type">01 · 관찰</span>
+                  <strong>문제가 드러나는 지점을 찾습니다.</strong>
+                  <small>실패 위치 · 조건 변화 · 반복 설정 · 실행 근거</small>
+                </div>
+                <div class="map-edge"><span>구체화</span></div>
+                <div class="map-node map-node--store">
+                  <span class="map-node__type">02 · 경계 설계</span>
+                  <strong>다시 시작할 기준을 코드로 남깁니다.</strong>
+                  <small>상태 · 재시작 · 캐시 무효화 · 승인 계약</small>
+                </div>
+                <div class="map-edge map-edge--async"><span>실행</span></div>
+                <div class="map-node map-node--result">
+                  <span class="map-node__type">03 · 검증</span>
+                  <strong>끝난 뒤의 상태로 판단합니다.</strong>
+                  <small>운영 신호 · 결과 불변식 · 회귀 · 평가 계약</small>
+                </div>
+              </div>
+              <div class="map-contract-rail career-decision-evidence" aria-label="판단 흐름을 검증한 대표 근거">
+                <div><b>운영 신호</b><span>15분 정체 알림</span></div>
+                <div><b>동시성</b><span>9개 API · 13개 시나리오</span></div>
+                <div><b>설치 회귀</b><span>52/52 · 탐색 32/32</span></div>
+                <div><b>평가 계약</b><span>구조 7/7 · 행동 10/10</span></div>
+              </div>
+            </div>
+          </figure>
         </section>
 
         <section class="career-company-block career-print-page" id="worksphere-core" aria-labelledby="worksphere-title">
@@ -160,7 +191,7 @@
             <ul class="bullet-list">
               <li><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>로 fixture·mock·WebMvc·JPA·트랜잭션 공통 동작을 묶었습니다.</li>
               <li><strong>4개 진입점·5개 공통 도구와 정책</strong>으로 테스트 목적에 맞는 준비 코드와 실행 기준을 제공했습니다.</li>
-              <li><strong>테스트 작성 원칙</strong>을 제안하고 느린 동시성 테스트를 기본 CI에서 분리했습니다.</li>
+              <li><strong>테스트 작성 원칙</strong>을 제안하고 느린 동시성 테스트를 skip.slow.test 설정으로 분리했습니다.</li>
             </ul>
           </article>
         </section>
@@ -180,7 +211,7 @@
             <ul class="bullet-list">
               <li><strong>15개 에이전트·14개 지식 번들·32개 스킬</strong>과 24개 연결, 11개 의존성을 선언했습니다.</li>
               <li><strong>설치 회귀 52/52·Codex 탐색 32/32</strong>로 자산과 의존성이 공식 경로에 설치되는지 확인했습니다.</li>
-              <li><strong>구조 7/7·행동 계약 10/10</strong>을 정적으로 검증하고 사람이 승인한 변경만 다음 설치에 반영합니다.</li>
+              <li><strong>구조 7/7·행동 계약 10/10</strong>을 정적으로 검증하고 사람이 승인해야 다음 설치에 반영되도록 계약했습니다.</li>
             </ul>
             <p class="career-note"><b>현재 경계</b> 실행 런타임이 아닌 이식 가능한 자산 저장소입니다. 장기 메모리, 프롬프트 자동 수정, 스킬 자동 승격은 포함하지 않았습니다.</p>
           </article>
@@ -222,18 +253,6 @@
       </div>
     </article>
   </main>
-
-  <footer class="page-footer screen-only">
-    <div class="container page-footer-inner">
-      <div><h2>서민재 · Backend Engineer</h2><p>이력서는 요약을, 포트폴리오는 설계 판단과 구조도를 담았습니다.</p></div>
-      <div class="page-footer-links">
-        <a href="../resume/">이력서</a>
-        <a href="../portfolio/">포트폴리오</a>
-        <a href="mailto:ckdekrn88@gmail.com">Email</a>
-        <a href="https://github.com/ch4570">GitHub</a>
-      </div>
-    </div>
-  </footer>
 
   <div class="toast" role="status" aria-live="polite"></div>
 </body>

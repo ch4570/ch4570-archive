@@ -144,33 +144,6 @@ h4 {
   margin: 0 auto;
 }
 
-.site-brand {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  gap: 11px;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.site-brand-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border: 1px solid var(--lime);
-  background: var(--lime);
-  color: var(--ink);
-  font-size: 12px;
-}
-
-.site-brand span:last-child {
-  color: #aeb8ab;
-  font-size: 12px;
-  font-weight: 600;
-}
-
 .site-nav {
   display: flex;
   align-items: center;
@@ -420,45 +393,6 @@ h4 {
   font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
-}
-
-.page-footer {
-  border-top: 4px solid var(--lime);
-  background: var(--surface-soft);
-  color: var(--ink-soft);
-}
-
-.page-footer-inner {
-  display: flex;
-  min-height: 180px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.page-footer h2 {
-  margin-bottom: 8px;
-  color: var(--ink);
-  font-size: 25px;
-}
-
-.page-footer p {
-  margin-bottom: 0;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.page-footer-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  color: var(--ink);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.page-footer-links a:hover {
-  color: var(--green-ink);
 }
 
 .scroll-progress {
@@ -1288,6 +1222,19 @@ h4 {
 .career-history h3 {
   font-size: 15px;
   font-weight: 800;
+}
+
+.career-decision-map {
+  margin: 30px 0 0;
+}
+
+.career-decision-flow .map-node {
+  min-height: 116px;
+}
+
+.map-contract-rail.career-decision-evidence {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 14px;
 }
 
 .career-company-block {
@@ -3210,18 +3157,9 @@ h4 {
     gap: 14px;
   }
 
-  .site-brand span:last-child {
-    display: none;
-  }
-
-  .site-brand-mark {
-    width: 30px;
-    height: 30px;
-  }
-
   .site-nav {
     flex: 1;
-    justify-content: flex-end;
+    justify-content: flex-start;
     gap: 17px;
   }
 
@@ -3323,13 +3261,6 @@ h4 {
 
   .career-row time {
     grid-row: 2;
-  }
-
-  .page-footer-inner {
-    min-height: 220px;
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: center;
   }
 
   .resume-canvas {
@@ -3820,10 +3751,6 @@ h4 {
     gap: 8px;
   }
 
-  .site-brand strong {
-    display: none;
-  }
-
   .site-nav {
     gap: 10px;
   }
@@ -3935,6 +3862,23 @@ h4 {
     border-left: 0;
   }
 
+  .map-contract-rail.career-decision-evidence {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .career-decision-evidence > div + div {
+    border-top: 0;
+    border-left: 1px solid #485145;
+  }
+
+  .career-decision-evidence > div:nth-child(n + 3) {
+    border-top: 1px solid #485145;
+  }
+
+  .career-decision-evidence > div:nth-child(odd) {
+    border-left: 0;
+  }
+
   .map-branch__steps {
     flex-direction: column;
   }
@@ -4021,7 +3965,6 @@ h4 {
 
   .site-header,
   .scroll-progress,
-  .page-footer,
   .screen-only,
   .skip-link,
   .toast,
@@ -4361,6 +4304,25 @@ h4 {
   .career-history time,
   .career-history p {
     font-size: 7.8pt;
+  }
+
+  .career-decision-map {
+    margin-top: 12px;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .career-decision-map figcaption {
+    min-height: 0;
+  }
+
+  .career-decision-flow .map-node {
+    min-height: 52px;
+  }
+
+  .map-contract-rail.career-decision-evidence {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: 7px;
   }
 
   .career-print-page {
