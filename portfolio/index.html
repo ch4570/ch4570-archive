@@ -68,9 +68,9 @@
             <span class="metric-detail">9개 소스를 병렬 조회하고 1차 랭킹 500건, 2차 랭킹 100건, 기본 페이지 20건으로 좁혔습니다.</span>
           </div>
           <div class="metric-item">
-            <strong class="metric-value">29 / 43</strong>
-            <span class="metric-label">test-support 구성</span>
-            <span class="metric-detail">29개 구현 파일에 fixture·mock·Web·JPA 준비를 모으고, 43개 테스트 소스로 동작을 확인했습니다.</span>
+            <strong class="metric-value">13개 시나리오</strong>
+            <span class="metric-label">포인트 동시성 계약</span>
+            <span class="metric-detail">포인트 API 9개의 연속 재요청과 3·5·10개 동시 요청에서 잔액·원장 상태·후속 이벤트까지 확인했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">15 + 32</strong>
@@ -254,10 +254,10 @@
             <span class="case-number" aria-hidden="true">02</span>
             <div>
               <p class="section-kicker">Point Ledger · Balance / Archive</p>
-              <h2 class="case-title" id="point-title">대량 배치는 처리량만큼 재시작 단위가 중요했습니다.</h2>
+              <h2 class="case-title" id="point-title">배치는 멈춘 위치를, 동시 요청은 끝난 뒤의 상태를 확인했습니다.</h2>
               <p class="case-lede">
-                원장 소멸, 만료 안내, 아카이브는 같은 데이터를 보지만 끝내야 할 일은 다릅니다.
-                한 번에 많이 처리하기보다 중간에 멈춰도 진행 위치를 확인할 수 있도록 조회와 저장 단위를 나눴습니다.
+                원장 소멸·만료 알림·아카이브는 작업마다 다시 시작할 위치가 다릅니다.
+                포인트 거래와 예산 차감은 동시에 실행된 뒤 잔액과 원장 상태가 맞아야 합니다.
               </p>
             </div>
           </header>
@@ -266,7 +266,7 @@
             <div class="fact-cell"><dt>담당</dt><dd>원장 소멸 페이지 전환·아카이브 배치 구현·만료 알림 이벤트 개선</dd></div>
             <div class="fact-cell"><dt>처리 단위</dt><dd>전체 적재 대신 페이지 단위 반복 처리</dd></div>
             <div class="fact-cell"><dt>보관 대상</dt><dd>point_core 6개·point_service 4개 archive 테이블</dd></div>
-            <div class="fact-cell"><dt>동시성</dt><dd>분산락, 예산 경합, 유료·무료 원장 혼합 사용</dd></div>
+            <div class="fact-cell"><dt>동시성</dt><dd>9개 API · 13개 시나리오 · 3·5·10개 동시 요청</dd></div>
           </dl>
 
           <div class="story-grid">
@@ -277,8 +277,8 @@
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>원장은 페이지로 읽고, 후속 작업은 순서를 테스트로 고정했습니다.</h3>
-              <p>소멸은 일정한 페이지 단위로 반복합니다. 만료 대상 수집부터 Kafka 발행까지의 순서와 10개 archive 테이블의 이관 순서는 각각 테스트로 고정했습니다.</p>
+              <h3>배치에는 재시작 기준을, 동시 요청에는 결과 불변식을 뒀습니다.</h3>
+              <p>소멸·알림·아카이브는 진행 위치를 남겼습니다. 포인트 거래와 예산 차감은 락 획득 여부뿐 아니라 경쟁이 끝난 뒤 잔액·원장 상태·이벤트 수가 맞는지 확인했습니다.</p>
             </div>
           </div>
 
@@ -388,10 +388,130 @@
             </figure>
           </details>
 
-          <div class="case-outcome">
-            <b>실패 후 재시작 기준</b>
-            <p>소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서를 기준으로 다시 시작합니다. 세 Job마다 확인할 지점이 다릅니다.</p>
-          </div>
+          <details class="diagram-disclosure" open>
+            <summary>포인트 분산락과 동시성 계약 보기</summary>
+            <figure class="system-figure system-map system-map--concurrency">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>락 키와 해제 시점에 따라 달라지는 세 가지 경쟁 결과</b>
+                  <span>중복 차단·거래 정합성·어뷰징 분기의 세 경로로 나눴습니다.</span>
+                </div>
+              </figcaption>
+
+              <div class="system-map__canvas" role="group" aria-label="포인트 API 9개와 동시성 시나리오 13개의 분산락·상태 정합성 검증 구조">
+                <div class="map-contract-rail" aria-label="동시성 검증 범위">
+                  <div><b>9개 API</b><span>발급 · 거래 · 복구 · 예산 차감</span></div>
+                  <div><b>13개 시나리오</b><span>같은 락 키 · 다른 거래 참조값 · 유지 시간 경계</span></div>
+                  <div><b>3 · 5 · 10개 스레드</b><span>연속 재요청은 별도 타임라인으로 검증</span></div>
+                </div>
+
+                <section class="map-band">
+                  <header class="map-band__head">
+                    <span class="map-index">01</span>
+                    <div>
+                      <b>검증 대상</b>
+                      <small>API마다 락 키와 해제 시점은 달라도 경쟁 후 상태는 설명할 수 있어야 합니다.</small>
+                    </div>
+                  </header>
+                  <div class="map-inventory" aria-label="동시성 테스트 대상 API">
+                    <div><b>1회용 키</b><span>중복 발급 차단</span></div>
+                    <div><b>포인트 적립</b><span>잔액 · 한도</span></div>
+                    <div><b>포인트 선점</b><span>무료 · 유료 잔액</span></div>
+                    <div><b>포인트 사용</b><span>원장 · 선점 상태</span></div>
+                    <div><b>선점 복구</b><span>잔액 · 복구 상태</span></div>
+                    <div><b>포인트 환불</b><span>원장 · 환불 상태</span></div>
+                    <div><b>사용 중단</b><span>원장 · 중단 상태</span></div>
+                    <div><b>사용 재개</b><span>원장 · 재개 상태</span></div>
+                    <div><b>클릭 예산</b><span>차감 · 어뷰징 이벤트</span></div>
+                  </div>
+                </section>
+
+                <div class="map-decision">
+                  <b>경쟁 후 검증 기준</b>
+                  <span>성공 건수 · 잔액 · 상태 · 이벤트</span>
+                </div>
+
+                <div class="map-compare">
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">02</span>
+                      <div><b>중복 발급 억제</b><code>동일 사용자 · 락 유지 시간</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node">
+                        <span class="map-node__type">10개 스레드</span>
+                        <strong>같은 사용자의 키 발급 요청</strong>
+                        <small>같은 식별자로 동시에 진입</small>
+                      </div>
+                      <div class="map-edge map-edge--recovery"><span>차단</span></div>
+                      <div class="map-node map-node--risk">
+                        <span class="map-node__type">기대 결과</span>
+                        <strong>동시 요청 10건 · 생성된 키 1개</strong>
+                        <small>같은 사용자에게 키가 중복 생성되지 않음</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>락 유지 시간 경계</span><b>경과 후 재요청 허용</b></footer>
+                  </section>
+
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">03</span>
+                      <div><b>거래 순서와 정합성</b><code>동일 사용자 · 서로 다른 거래 참조값</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node">
+                        <span class="map-node__type">3개 스레드</span>
+                        <strong>API별 서로 다른 거래 정보 3건</strong>
+                        <small>적립부터 사용 중단·재개까지 7개 거래 API</small>
+                      </div>
+                      <div class="map-edge"><span>순차 처리</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">기대 결과</span>
+                        <strong>3건 모두 완료</strong>
+                        <small>성공 여부와 합계·상태를 함께 확인</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>불변식</span><b>잔액 · 원장 · 업무 상태</b></footer>
+                  </section>
+
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">04</span>
+                      <div><b>클릭 어뷰징 분기</b><code>복합 요청 식별자 · 락 유지 시간</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node">
+                        <span class="map-node__type">5개 스레드</span>
+                        <strong>고유 요청과 중복 요청</strong>
+                        <small>복합 요청 식별자로 중복 여부를 구분</small>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>판별</span></div>
+                      <div class="map-node map-node--external">
+                        <span class="map-node__type">기대 결과</span>
+                        <strong>고유 요청 5건 · 중복 요청 1건 처리</strong>
+                        <small>중복 4건은 대체 처리·어뷰징 이벤트로 전환</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>후속 처리</span><b>차감 · 대체 처리 · 이벤트</b></footer>
+                  </section>
+                </div>
+
+                <div class="map-contract-rail" aria-label="동시성 테스트 불변식">
+                  <div><b>잔액</b><span>무료·유료 잔액과 적립 한도 누적액</span></div>
+                  <div><b>원장·업무 상태</b><span>사용 · 복구 · 환불 · 중단 · 재개</span></div>
+                  <div><b>후속 이벤트</b><span>차감 · 대체 처리 · 어뷰징 이벤트 수</span></div>
+                </div>
+
+                <div class="map-gate">
+                  <header class="map-gate__head">
+                    <span class="map-index">CI</span>
+                    <div><b>느린 테스트의 실행 경계</b><small>느린 동시성 테스트는 로컬 기본 실행에 포함하고, CI에서는 slow-test 설정으로 분리했습니다.</small></div>
+                  </header>
+                  <div class="map-gate__result"><span>실행 정책</span><b>로컬 기본 포함 · CI slow-test 제외</b></div>
+                </div>
+              </div>
+            </figure>
+          </details>
 
           <details class="case-details">
             <summary>정합성과 회원 식별 처리</summary>
@@ -399,7 +519,7 @@
               <ul class="bullet-list">
                 <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 만료 알림 레코드 일괄 저장 순서를 검증했습니다.</li>
                 <li>point_core 6개와 point_service 4개 테이블의 아카이브 흐름과 테스트를 추가했습니다.</li>
-                <li>동일·상이한 lock key의 동시 요청과 같은 예산 ID의 동시 차감 시나리오를 검증했습니다.</li>
+                <li>같은 락 키와 서로 다른 거래 참조값, 같은 예산을 둘러싼 동시 요청을 각각 검증했습니다.</li>
                 <li>유료·무료 원장 혼합 사용 케이스를 별도로 검증했습니다.</li>
                 <li>회원-워크스페이스 매핑, master/member 분리, 회원 탈퇴 이벤트, globalUserRef 중복 처리를 보강했습니다.</li>
               </ul>
@@ -583,17 +703,17 @@
               <p class="section-kicker">Engineering Platform · Test Support</p>
               <h2 class="case-title" id="test-title">테스트마다 반복하던 준비 코드를 test-support로 모았습니다.</h2>
               <p class="case-lede">
-                fixture와 mock 준비 방식이 프로젝트마다 달라 리뷰할 때마다 테스트 설정부터 다시 읽어야 했습니다.
-                Web, JPA, mock 등 목적별 진입점을 만들고 반복되는 준비 코드는 공통 모듈로 옮겼습니다.
+                fixture와 mock 준비 방식이 프로젝트마다 달라 테스트 설정부터 다시 읽어야 했습니다.
+                네 가지 진입점과 다섯 가지 공통 도구·정책을 만들고, 테스트 선택 기준과 CI 실행 범위를 문서화했습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>테스트 영역</dt><dd>fixture · mock · WebMvc · JPA · transaction</dd></div>
-            <div class="fact-cell"><dt>모듈 구성</dt><dd>공통 진입점과 도우미를 담은 29개 구현 파일</dd></div>
-            <div class="fact-cell"><dt>테스트</dt><dd>공통 동작을 다룬 43개 테스트 소스</dd></div>
-            <div class="fact-cell"><dt>공개 활동</dt><dd>YouthCon 2025 Spring Test 발표</dd></div>
+            <div class="fact-cell"><dt>공통 구성</dt><dd>4개 테스트 진입점 · 5개 공통 도구와 정책</dd></div>
+            <div class="fact-cell"><dt>모듈 구성</dt><dd>구축 당시 공통 진입점·도우미 구현 파일 29개</dd></div>
+            <div class="fact-cell"><dt>테스트</dt><dd>구축 당시 공통 동작 테스트 소스 43개</dd></div>
+            <div class="fact-cell"><dt>작성 기준</dt><dd>테스트 작성 원칙 제안 · 느린 테스트 CI 분리</dd></div>
           </dl>
 
           <details class="diagram-disclosure" open>
@@ -602,7 +722,7 @@
               <figcaption>
                 <div class="diagram-caption-title">
                   <b>테스트 목적에 맞춰 공통 준비를 나눈 구조</b>
-                  <span>base class와 helper를 네 가지 테스트 방식에 맞춰 묶었습니다.</span>
+                  <span>진입점, 생명주기, 컨텍스트 범위, 실행 정책을 한 기준으로 묶었습니다.</span>
                 </div>
               </figcaption>
               <div class="system-map__canvas" role="group" aria-label="test-support의 base, mock, web, database 진입점과 공통 도구 매트릭스">
@@ -612,7 +732,7 @@
                     <div class="map-node">
                       <span class="map-node__type">Base class</span>
                       <strong>AbstractTest</strong>
-                      <small>공통 fixture · 기본 설정</small>
+                      <small>PER_CLASS · 공통 fixture</small>
                     </div>
                     <div class="map-matrix__connector" aria-hidden="true">↓</div>
                     <div class="map-node map-node--store">
@@ -633,7 +753,7 @@
                     <div class="map-node map-node--store">
                       <span class="map-node__type">Extension</span>
                       <strong>AutoMockExtension</strong>
-                      <small>mock 주입 · reset</small>
+                      <small>주입 · reset · session 정리</small>
                     </div>
                   </section>
 
@@ -642,13 +762,13 @@
                     <div class="map-node">
                       <span class="map-node__type">Base class</span>
                       <strong>AbstractWebMvcTest</strong>
-                      <small>MVC 요청 · 응답</small>
+                      <small>@WebMvcTest · Controller 자동 등록</small>
                     </div>
                     <div class="map-matrix__connector" aria-hidden="true">↓</div>
                     <div class="map-node map-node--external">
                       <span class="map-node__type">Web helper</span>
                       <strong>WrappedMockMvc</strong>
-                      <small>요청 · 응답 검증용 wrapper</small>
+                      <small>요청 · 응답 검증용 래퍼</small>
                     </div>
                   </section>
 
@@ -657,40 +777,38 @@
                     <div class="map-node">
                       <span class="map-node__type">Base class</span>
                       <strong>AbstractDataBaseTest</strong>
-                      <small>JPA · transaction 환경</small>
+                      <small>@DataJpaTest · Repository·Config 등록</small>
                     </div>
                     <div class="map-matrix__connector" aria-hidden="true">↓</div>
                     <div class="map-node map-node--result">
                       <span class="map-node__type">Database helper</span>
-                      <strong>DB Initializer · Tx Support</strong>
-                      <small>데이터 초기화 · transaction 제어</small>
+                      <strong>DB Initializer</strong>
+                      <small>Repository·Config Bean 등록</small>
                     </div>
                   </section>
                 </div>
 
                 <div class="map-contract-rail" aria-label="test-support 공통 계약">
-                  <div><b>module:test-support</b><span>프로젝트 공통 테스트 기반</span></div>
-                  <div><b>29 implementation files</b><span>fixture · mock · Web · JPA</span></div>
-                  <div><b>43 test sources + JavaDoc</b><span>공통 동작 확인 · 사용법 문서화</span></div>
+                  <div><b>4개 테스트 진입점</b><span>Base · Mock · WebMvc · JPA</span></div>
+                  <div><b>5개 공통 도구·정책</b><span>Fixture · Response · MockMvc · Tx Support · Slow-test</span></div>
+                  <div><b>실행·작성 기준</b><span>CI slow-test 제외 · 테스트 작성 원칙 제안</span></div>
                 </div>
               </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>테스트 기반</b>
-            <p>fixture·mock·WebMvc·JPA·transaction의 시작점을 29개 구현 파일로 정리했습니다. 공통 모듈의 동작은 43개 테스트 소스로 확인합니다.</p>
+            <b>코드와 사용 기준</b>
+            <p>공통 도우미와 함께 테스트 진입점, mock·컨텍스트 생명주기, 별도 트랜잭션, 느린 테스트의 실행 기준을 문서화했습니다.</p>
           </div>
 
           <details class="case-details">
             <summary>제공 기능과 CI 처리</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li>기본 테스트, mock 테스트, WebMvc 테스트, JPA 테스트의 시작점을 분리했습니다.</li>
-                <li>공통 fixture 설정과 자동 mock 주입·초기화로 반복 setup을 helper로 옮겼습니다.</li>
-                <li>MockMvc 요청 빌더, query string null 처리, 응답 검증 래퍼를 제공했습니다.</li>
-                <li>JPA test initializer, Spring utils, transaction helper로 데이터 테스트 준비를 정리했습니다.</li>
-                <li>느린 테스트 제외, active profile 기본값, unsafe warning 제거, JavaDoc을 반영했습니다.</li>
+                <li>기본·mock·WebMvc·JPA 네 진입점에 FixtureMonkey와 mock 생명주기를 연결했습니다.</li>
+                <li>Controller·Repository 자동 등록, 응답 검증, REQUIRES_NEW 트랜잭션 도우미를 공통화했습니다.</li>
+                <li>테스트 작성 원칙을 제안하고 느린 동시성 테스트를 기본 CI 실행과 분리했습니다.</li>
               </ul>
             </div>
           </details>
@@ -832,8 +950,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>실제 적용</b>
-            <p>Claude Code에는 agent와 skill을 함께 설치하고, Codex에는 32개 skill을 공식 경로로 배포합니다. 개선안은 자동 반영하지 않습니다. 제안과 평가 기록을 남기고 사람이 승인한 변경만 다음 프로젝트에 적용하도록 설계했습니다.</p>
+            <b>현재 설치 범위</b>
+            <p>Claude Code에는 에이전트와 스킬을, Codex에는 스킬 32개를 설치합니다. 개선안은 실행 근거와 평가 기록을 남긴 뒤 사람이 승인한 경우에만 다음 설치에 포함합니다.</p>
           </div>
 
           <details class="diagram-disclosure" open>

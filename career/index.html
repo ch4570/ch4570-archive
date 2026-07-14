@@ -78,9 +78,9 @@
 
           <div class="career-proof-grid" aria-label="대표 구현 범위">
             <div><b>9종 · 6상태 · 8전략</b><span>포인트 이벤트와 15분 정체 알림</span></div>
-            <div><b>10개 테이블</b><span>원장 아카이브 이관 순서</span></div>
+            <div><b>9개 API · 13개 시나리오</b><span>포인트 분산락과 상태 정합성</span></div>
             <div><b>9개 소스 · 500→100→20</b><span>검색 후보와 랭킹 단계</span></div>
-            <div><b>29개 · 43개</b><span>공통 모듈 구현 파일과 테스트 소스</span></div>
+            <div><b>29개 · 43개</b><span>구축 당시 구현 파일과 테스트 소스</span></div>
           </div>
 
           <div class="career-history" aria-label="전체 경력">
@@ -118,14 +118,14 @@
           <article class="career-project">
             <header>
               <p class="project-kicker">Point Ledger · Batch / Archive</p>
-              <h3>포인트 소멸을 페이지 단위로 바꾸고 10개 테이블의 이관 순서를 고정했습니다.</h3>
+              <h3>배치는 다시 시작할 위치를, 분산락은 경쟁 후 상태를 테스트로 고정했습니다.</h3>
             </header>
+            <p>배치는 멈춘 위치를, 동시 요청은 처리가 끝난 뒤의 잔액과 상태를 확인했습니다.</p>
             <ul class="bullet-list">
-              <li><strong>Tasklet을 페이지 기반 Chunk 처리</strong>로 바꿔 조회와 쓰기 단위를 나눴습니다.</li>
-              <li><strong>point_core 6개·point_service 4개</strong>, 총 10개 테이블을 정해진 순서로 이관했습니다.</li>
-              <li><strong>정합성 테스트</strong>로 만료 알림 발행 순서와 동시 차감·유료/무료 원장 혼합 경로를 확인했습니다.</li>
+              <li><strong>페이지 기반 Chunk 처리</strong>로 포인트 소멸의 조회와 쓰기 단위를 나눴습니다.</li>
+              <li><strong>archive 테이블 10개</strong>의 이관 순서와 재시작 기준을 테스트로 고정했습니다.</li>
+              <li><strong>9개 API·13개 동시성 시나리오</strong>에서 잔액·원장 상태·후속 이벤트를 검증했습니다.</li>
             </ul>
-            <p class="career-note"><b>재시작 기준</b> 소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서로 처리 위치를 확인합니다.</p>
           </article>
         </section>
 
@@ -154,13 +154,13 @@
           <article class="career-project">
             <header>
               <p class="project-kicker">Engineering Platform · Test Support</p>
-              <h3>29개 구현 파일과 43개 테스트 소스로 공통 테스트 기반을 만들었습니다.</h3>
+              <h3>공통 모듈과 사용 규칙으로 테스트 진입점을 정리했습니다.</h3>
             </header>
-            <p>fixture, mock, WebMvc, JPA 준비 규칙을 공통 도우미로 묶고 도우미 자체도 테스트했습니다.</p>
+            <p>반복 설정을 공통화하고, 테스트 선택 기준과 CI 실행 범위를 문서로 남겼습니다.</p>
             <ul class="bullet-list">
-              <li><strong>29개 구현 파일</strong>에 fixture·mock·WebMvc·JPA·transaction 준비를 정리했습니다.</li>
-              <li><strong>4가지 테스트 진입점</strong>을 나눠 필요한 Spring 컨텍스트만 선택하게 했습니다.</li>
-              <li><strong>43개 테스트 소스</strong>로 공통 동작을 확인하고 기본 profile과 JavaDoc을 정리했습니다.</li>
+              <li><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>로 fixture·mock·WebMvc·JPA·트랜잭션 공통 동작을 묶었습니다.</li>
+              <li><strong>4개 진입점·5개 공통 도구와 정책</strong>으로 테스트 목적에 맞는 준비 코드와 실행 기준을 제공했습니다.</li>
+              <li><strong>테스트 작성 원칙</strong>을 제안하고 느린 동시성 테스트를 기본 CI에서 분리했습니다.</li>
             </ul>
           </article>
         </section>

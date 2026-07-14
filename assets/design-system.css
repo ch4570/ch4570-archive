@@ -3916,6 +3916,20 @@ h4 {
     grid-template-columns: 1fr;
   }
 
+  .system-map--concurrency .map-inventory {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .system-map--concurrency .map-inventory > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .system-map--concurrency .map-decision {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
   .map-contract-rail > div + div {
     border-top: 1px solid #485145;
     border-left: 0;
@@ -4535,6 +4549,16 @@ h4 {
     page-break-before: auto;
   }
 
+  #feed .case-header {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #test .case-details {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
   #previous .case-header {
     break-after: avoid;
     break-inside: avoid;
@@ -4611,6 +4635,13 @@ h4 {
   .system-figure {
     break-after: auto;
     break-inside: auto;
+  }
+
+  #point .system-map--concurrency {
+    break-before: page;
+    break-inside: avoid;
+    page-break-before: always;
+    page-break-inside: avoid;
   }
 
   .system-figure figcaption {
