@@ -1,6 +1,7 @@
 .DS_Store
 .gstack/
 .omx/
+_workspace/
 .vercel/
 _site/
 .env*

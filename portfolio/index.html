@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 포인트 이벤트 신뢰성, 원장 정합성, 피드 서빙, test-support, agent-lab 사례를 담았습니다.">
+  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 사용자에게 드러나지 않는 실패를 추적한 이벤트 복구, 원장 배치, 피드 캐시, 테스트 도구 사례입니다.">
   <title>서민재 · Backend Engineering Portfolio</title>
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
@@ -37,10 +37,10 @@
         <div class="portfolio-hero-grid">
           <div>
             <p class="eyebrow eyebrow-coral">Backend Engineering Portfolio · 2026</p>
-            <h1 class="portfolio-title" id="portfolio-title">실패 지점을 찾고,<br>복구 경로를 나눈 백엔드 작업</h1>
+            <h1 class="portfolio-title" id="portfolio-title">사용자에게 보이지 않는 실패까지 추적했습니다</h1>
             <p class="hero-copy">
-              포인트 이벤트는 실패 상태와 재처리 조건을 나눴고, 피드는 계산 결과를 다시 쓸 때와 버릴 때를 구분했습니다.
-              테스트와 개발 도구는 다른 프로젝트에서도 같은 절차로 설치하고 검증할 수 있게 정리했습니다.
+              사용자 화면에 오류가 없더라도 데이터는 틀어질 수 있습니다. 그래서 성공 여부만 보지 않고 어디서 멈췄는지,
+              다시 실행해도 되는지, 언제 캐시를 버려야 하는지를 코드와 테스트로 확인해 왔습니다.
             </p>
           </div>
           <div class="portfolio-profile">
@@ -49,6 +49,8 @@
             <a href="mailto:ch4570@naver.com">ch4570@naver.com</a>
             <a href="https://github.com/ch4570">GitHub</a>
             <a href="https://velog.io/@ch4570/posts">Velog</a>
+            <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
+            <a href="https://www.rallit.com/hub/resumes/33771/%EC%84%9C%EB%AF%BC%EC%9E%AC?isExpanded=true">Rallit</a>
             <a href="../resume/">Resume</a>
           </div>
         </div>
@@ -57,22 +59,22 @@
           <div class="metric-item">
             <strong class="metric-value">9 · 6 · 8</strong>
             <span class="metric-label">내부 이벤트 구조</span>
-            <span class="metric-detail">9개 타입을 6개 상태로 추적하고 8개 수동 복구 전략을 연결했습니다.</span>
+            <span class="metric-detail">이벤트 9종이 멈춘 위치를 6개 상태로 남기고, 업무별 수동 복구 전략 8개를 연결했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">2,700→20</strong>
             <span class="metric-label">피드 랭킹 단계</span>
-            <span class="metric-detail">9개 소스를 병렬 조회한 뒤 FPR 500, SPR 100, 최종 20건으로 좁혔습니다.</span>
+            <span class="metric-detail">9개 소스의 후보 상한을 2,700건으로 두고 FPR 500, SPR 100, 최종 20건으로 좁혔습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">29 / 43</strong>
             <span class="metric-label">test-support 구성</span>
-            <span class="metric-detail">공통 helper와 테스트로 fixture, mock, Web, JPA 진입점을 검증했습니다.</span>
+            <span class="metric-detail">29개 helper에 fixture·mock·Web·JPA 준비를 모으고, 43개 테스트로 동작을 확인했습니다.</span>
           </div>
           <div class="metric-item">
             <strong class="metric-value">32/32</strong>
             <span class="metric-label">agent-lab 설치 테스트</span>
-            <span class="metric-detail">15개 agent와 32개 skill의 설치 목록과 검증 절차를 관리했습니다.</span>
+            <span class="metric-detail">15개 agent와 32개 skill이 설치 뒤에도 의도대로 동작하는지 검사했습니다.</span>
           </div>
         </div>
       </div>
@@ -88,7 +90,7 @@
           <li><a href="#test"><span>04</span>테스트 기반</a></li>
           <li><a href="#agent"><span>05</span>개발 도구</a></li>
           <li><a href="#previous"><span>06</span>이전 경력</a></li>
-          <li><a href="#evidence"><span>07</span>책임 범위</a></li>
+          <li><a href="#evidence"><span>07</span>공개 기록</a></li>
         </ol>
         <button class="button" type="button" data-toggle-details aria-expanded="false">상세 펼치기</button>
       </nav>
@@ -99,10 +101,10 @@
             <span class="case-number" aria-hidden="true">01</span>
             <div>
               <p class="section-kicker">Point Platform · Event Reliability</p>
-              <h2 class="case-title" id="event-title">발행 실패와 처리 실패는 복구 방법부터 달랐습니다.</h2>
+              <h2 class="case-title" id="event-title">발행 실패와 처리 실패, 같은 방식으로 복구할 수 없었습니다.</h2>
               <p class="case-lede">
-                포인트 차감, 회수, 만료 알림이 늦게 실패하면 정산 확인과 고객 응대가 함께 길어집니다.
-                어디서 멈췄는지 기록하고, 다음 행동이 다른 실패는 별도 상태로 남겼습니다.
+                포인트 차감이나 회수가 늦게 실패하면 정산 확인과 고객 응대도 함께 길어집니다.
+                담당자가 로그부터 뒤지지 않도록 멈춘 위치를 상태로 남기고, 그 자리에서 다시 시작할 방법을 붙였습니다.
               </p>
             </div>
           </header>
@@ -117,13 +119,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3>성공 여부만으로는 다음 행동을 정할 수 없었습니다.</h3>
-              <p>메시지를 보내지 못한 경우와 소비자가 처리하다 실패한 경우는 확인할 데이터와 재시도 위치가 다릅니다. 한 상태로 뭉치면 운영자가 로그와 원장을 다시 대조해야 했습니다.</p>
+              <h3>‘실패’ 하나로 묶자, 원인을 찾는 일부터 다시 시작해야 했습니다.</h3>
+              <p>메시지를 보내지 못한 경우와 소비자가 처리 중 멈춘 경우는 확인할 데이터도, 재시도할 위치도 다릅니다. 상태가 같으면 운영자가 로그와 원장을 일일이 맞춰 봐야 했습니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>실패 위치를 상태로 남기고 복구 작업은 타입별로 분리했습니다.</h3>
-              <p>생성부터 복구 불가 실패까지 상태를 나누고, 포인트 차감·회수·만료 알림처럼 조건이 다른 작업은 각각의 수동 복구 전략으로 다시 실행했습니다.</p>
+              <h3>멈춘 지점을 기록하고, 다시 실행할 일은 업무별로 나눴습니다.</h3>
+              <p>생성부터 복구 불가 실패까지 6개 상태를 두었습니다. 포인트 차감·회수·만료 알림처럼 조건이 다른 8개 작업은 저장된 payload로 각 업무 서비스를 다시 호출합니다.</p>
             </div>
           </div>
 
@@ -191,8 +193,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>운영 흐름</b>
-            <p>발행 실패, 처리 실패, 복구 불가 실패를 상태로 남기고 수동 복구와 15분 정체 알림을 별도 경로로 운영했습니다.</p>
+            <b>달라진 운영</b>
+            <p>전송 실패와 처리 실패를 따로 조회하고, 15분 넘게 멈춘 이벤트는 먼저 알림을 받습니다. 담당자는 실패 위치에 맞는 복구부터 시작할 수 있습니다.</p>
           </div>
 
           <details class="case-details">
@@ -215,10 +217,10 @@
             <span class="case-number" aria-hidden="true">02</span>
             <div>
               <p class="section-kicker">Point Ledger · Balance / Archive</p>
-              <h2 class="case-title" id="point-title">대량 처리 단위와 정산 검증 순서를 함께 바꿨습니다.</h2>
+              <h2 class="case-title" id="point-title">대량 처리보다 먼저 정한 것은 어디서 다시 시작할지였습니다.</h2>
               <p class="case-lede">
-                원장 소멸, 만료 안내, 아카이브는 서로 다른 배치입니다. 소멸 배치는 원장·잔액·거래 내역을 갱신하고,
-                안내 배치는 알림 레코드와 발송 이벤트를, 아카이브 배치는 보관 테이블의 이동 순서를 각각 관리합니다.
+                원장 소멸, 만료 안내, 아카이브는 같은 데이터를 보지만 끝내야 할 일은 다릅니다.
+                한 번에 많이 처리하는 것보다 중간에 멈춰도 같은 단위로 이어갈 수 있도록 조회와 저장 순서를 먼저 정했습니다.
               </p>
             </div>
           </header>
@@ -233,13 +235,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3>세 Job은 같은 원장과 거래 데이터를 서로 다른 시점에 다룹니다.</h3>
-              <p>전체 데이터를 메모리에 올리는 방식과 느슨한 처리 경계는 데이터가 많아질수록 실행 부담과 확인 범위를 키웁니다.</p>
+              <h3>세 Job이 같은 데이터를 만진다고 같은 방식으로 돌릴 수는 없었습니다.</h3>
+              <p>소멸은 잔액과 원장을 바꾸고, 만료 안내는 알림을 쌓아 발송하며, 아카이브는 참조 순서대로 테이블을 옮깁니다. 전체 적재 방식은 데이터가 늘수록 실패 범위도 함께 커졌습니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>처리량보다 같은 단위로 다시 돌릴 수 있는 구조를 먼저 잡았습니다.</h3>
-              <p>원장 조회와 소멸은 페이지 단위로 반복하고, 만료 대상 수집부터 이벤트 발행과 아카이브까지의 순서를 테스트에 남겼습니다.</p>
+              <h3>원장은 페이지로 읽고, 후속 작업은 순서를 테스트로 고정했습니다.</h3>
+              <p>소멸은 일정한 페이지 단위로 반복합니다. 만료 대상 수집부터 Kafka 발행까지의 순서와 10개 archive 테이블의 이관 순서는 각각 테스트로 고정했습니다.</p>
             </div>
           </div>
 
@@ -300,8 +302,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>처리 순서</b>
-            <p>소멸, 만료 안내, 아카이브를 독립된 배치로 나누고 각 Job의 조회 단위와 후속 저장 순서를 테스트에 남겼습니다.</p>
+            <b>다시 시작할 단위</b>
+            <p>소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서로 진행 지점을 확인합니다. 세 배치가 실패해도 확인 범위가 섞이지 않습니다.</p>
           </div>
 
           <details class="case-details">
@@ -323,10 +325,10 @@
             <span class="case-number" aria-hidden="true">03</span>
             <div>
               <p class="section-kicker">Feed &amp; Search · Serving / Retrieval</p>
-              <h2 class="case-title" id="feed-title">빠른 캐시보다 언제 다시 계산할지가 더 중요했습니다.</h2>
+              <h2 class="case-title" id="feed-title">캐시는 빠른 것보다 버릴 때를 아는 게 중요했습니다.</h2>
               <p class="case-lede">
-                같은 사용자가 짧은 시간에 여러 페이지를 읽는 피드는 매번 검색하면 비싸고, 캐시를 오래 믿으면 낡습니다.
-                page queue, 후보 풀, 요청 지문, 노출 이력을 따로 둬 재사용 조건을 명시했습니다.
+                같은 사용자가 여러 페이지를 넘길 때마다 검색하면 비싸고, 캐시를 오래 믿으면 추천이 낡습니다.
+                정상 스크롤은 계산 결과를 이어 쓰되 좌표·필터·로그인 상태가 바뀌는 순간에는 미련 없이 버리도록 했습니다.
               </p>
             </div>
           </header>
@@ -341,13 +343,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3>호출 비용과 추천 신선함이 같은 캐시 정책 안에서 충돌했습니다.</h3>
-              <p>좌표나 필터가 바뀌었는데 이전 후보를 계속 쓰면 빠르지만 틀린 응답이 됩니다. 반대로 페이지마다 전부 다시 계산하면 검색과 랭킹 계층을 반복해서 탑니다.</p>
+              <h3>빠른 응답이 항상 맞는 응답은 아니었습니다.</h3>
+              <p>좌표나 필터가 바뀌었는데 이전 후보를 계속 쓰면 빠르지만 틀린 결과가 됩니다. 반대로 페이지마다 새로 계산하면 같은 검색과 랭킹을 되풀이하게 됩니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>스크롤, 큐 소진, 조건 변경, 장애를 서로 다른 경로로 보냈습니다.</h3>
-              <p>정상 스크롤은 page queue에서 끝내고, 후보가 부족할 때만 refill합니다. 좌표·필터 지문이 달라지면 후보 풀을 비우고, Redis 장애에는 응답을 우선했습니다.</p>
+              <h3>스크롤, 후보 소진, 조건 변경, 장애를 각각 다르게 처리했습니다.</h3>
+              <p>정상 스크롤은 page queue만 읽고 후보가 부족할 때만 refill합니다. 요청 지문이 달라지면 후보 풀을 비우며, Redis가 멈추면 캐시 기록보다 응답을 먼저 보냅니다.</p>
             </div>
           </div>
 
@@ -390,7 +392,7 @@
               <section class="architecture-lane">
                 <header class="architecture-lane-head"><b>Refill</b><span>Snapshot empty일 때 pull pipeline 실행</span></header>
                 <div class="architecture-path">
-                  <div class="architecture-node is-external"><em>OpenSearch K-NN</em><b>9개 소스 병렬 조회</b><small>source당 300 · 최대 2,700건</small></div>
+                  <div class="architecture-node is-external"><em>OpenSearch K-NN</em><b>9개 소스 병렬 조회</b><small>source당 설정 300 · 최대 2,700건</small></div>
                   <div class="architecture-link"><span>rank</span></div>
                   <div class="architecture-node is-service"><em>FPR · 500</em><b>정책·중복·Seen</b><small>차단 · contentHash · 유료 가산</small></div>
                   <div class="architecture-link"><span>pull</span></div>
@@ -426,8 +428,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>캐시 정책</b>
-            <p>cache hit, queue refill, 요청 조건 변경, 로그인 전환, Redis 장애에 각각 다른 재사용·무효화·우회 규칙을 적용했습니다.</p>
+            <b>캐시를 버리는 기준</b>
+            <p>cache hit, queue refill, 조건 변경, 로그인 전환, Redis 장애를 한 가지 miss로 다루지 않았습니다. 다시 쓸 때와 비울 때, 우회할 때가 코드에서 갈립니다.</p>
           </div>
 
           <details class="case-details">
@@ -454,10 +456,10 @@
             <span class="case-number" aria-hidden="true">04</span>
             <div>
               <p class="section-kicker">Engineering Platform · Test Support</p>
-              <h2 class="case-title" id="test-title">테스트 준비 코드를 공통 진입점으로 옮겼습니다.</h2>
+              <h2 class="case-title" id="test-title">테스트마다 반복하던 준비 코드를 test-support로 모았습니다.</h2>
               <p class="case-lede">
-                fixture와 mock 초기화 방식이 프로젝트마다 다르면 리뷰가 검증 내용보다 setup 차이를 먼저 읽게 됩니다.
-                목적별 시작점을 나누고 공통 준비 코드는 test-support로 모았습니다.
+                fixture와 mock을 준비하는 방식이 프로젝트마다 달라 리뷰할 때마다 setup부터 다시 읽어야 했습니다.
+                Web, JPA, mock처럼 테스트 목적에 맞는 시작점을 두고 반복 코드는 helper 안으로 옮겼습니다.
               </p>
             </div>
           </header>
@@ -512,8 +514,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>공통 진입점</b>
-            <p>19개 주요 커밋으로 29개 helper를 추가하고 43개 테스트에서 fixture, mock, WebMvc, JPA, transaction 진입점을 확인했습니다.</p>
+            <b>팀이 쓰는 시작점</b>
+            <p>19개 주요 변경에서 29개 helper를 만들었습니다. fixture, mock, WebMvc, JPA, transaction의 공통 동작은 43개 테스트가 확인합니다.</p>
           </div>
 
           <details class="case-details">
@@ -535,10 +537,10 @@
             <span class="case-number" aria-hidden="true">05</span>
             <div>
               <p class="section-kicker">Engineering Platform · Agent Lab</p>
-              <h2 class="case-title" id="agent-title">개인 자동화를 설치하고 검증할 수 있는 개발 자산으로 묶었습니다.</h2>
+              <h2 class="case-title" id="agent-title">프롬프트를 복사하는 데서 끝내지 않고, 설치 후 동작까지 검사했습니다.</h2>
               <p class="case-lede">
-                프롬프트 파일만 늘리면 환경이 바뀔 때 누락을 찾기 어렵습니다. 설치 목록을 manifest 한 곳에서 관리하고,
-                실제 적용 전후를 같은 명령으로 확인하도록 만들었습니다.
+                파일을 하나씩 복사하는 방식으로는 무엇이 빠졌는지, 새 환경에서도 같은 결과가 나오는지 알기 어려웠습니다.
+                manifest를 기준으로 설치하고 실제 행동까지 확인해야 재사용 가능한 도구라고 봤습니다.
               </p>
             </div>
           </header>
@@ -599,8 +601,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>배포 기준</b>
-            <p>15개 agent와 32개 skill을 같은 설치 절차로 관리하고, 구조·행동·설치 검증을 통과한 자산만 재사용 흐름에 남겼습니다.</p>
+            <b>재사용 조건</b>
+            <p>15개 agent와 32개 skill이 같은 명령으로 설치됩니다. 구조 7/7, 행동 7/7, 설치 32/32 검사를 통과해야 다음 프로젝트에서 쓸 수 있습니다.</p>
           </div>
 
           <details class="case-details">
@@ -623,8 +625,8 @@
             <span class="case-number" aria-hidden="true">06</span>
             <div>
               <p class="section-kicker">Previous Experience</p>
-              <h2 class="case-title" id="previous-title">최근 작업으로 이어진 이전 경험</h2>
-              <p class="case-lede">테스트 신뢰성, 인증·인가, 검색 API를 다룬 경험이 현재의 이벤트 복구와 서빙 구조 작업으로 이어졌습니다.</p>
+              <h2 class="case-title" id="previous-title">지금의 판단은 이전 운영 경험에서 시작됐습니다.</h2>
+              <p class="case-lede">테스트 숫자를 그대로 믿지 않게 된 일, 인증 경계를 다룬 일, 검색 조건을 동적으로 조립한 일이 지금의 이벤트 복구와 피드 작업으로 이어졌습니다.</p>
             </div>
           </header>
 
@@ -634,7 +636,7 @@
                 <h3>토스랩 · JANDI</h3>
                 <time datetime="2024-06">2024.06 — 2025.04</time>
               </div>
-              <p>테스트가 있어도 배포 판단이 어려운 원인을 작성 규칙과 CI 실행 구조에서 찾았습니다. 테스트 스타일을 정리하고 의미 없는 성공 테스트를 덜어냈으며, CI 메모리 문제는 리소스 증설보다 컨텍스트 재사용과 실행 순서를 먼저 분석했습니다.</p>
+              <p>커버리지 70%인데도 배포가 불안한 이유를 테스트 기준과 CI 실행 방식에서 찾았습니다. Drive-Service를 Spring Boot 2.3.8→3.3.3으로 올리며 테스트를 0→160개 이상으로 늘렸고, Mock 테스트가 놓친 JPA 변경 감지 오류는 실제 구현 테스트로 재현해 약 200만 건의 데이터를 보정했습니다.</p>
             </article>
             <article class="timeline-row">
               <div>
@@ -657,37 +659,36 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">07</span>
             <div>
-              <p class="section-kicker">Engineering Ownership</p>
-              <h2 class="case-title" id="evidence-title">대표 프로젝트별 책임 범위</h2>
+              <p class="section-kicker">Writing · Speaking · Open Source</p>
+              <h2 class="case-title" id="evidence-title">문제를 풀고 나면, 글과 코드로 다시 설명합니다.</h2>
+              <p class="case-lede">업무에서 배운 내용을 혼자만의 요령으로 남기고 싶지 않았습니다. 테스트와 데이터 오류를 글로 풀고, 발표와 오픈소스 리뷰에서 팀 밖의 피드백도 받아 왔습니다.</p>
             </div>
           </header>
 
           <div class="scope-grid">
             <article class="scope-item">
-              <h3>포인트 이벤트 신뢰성</h3>
-              <p>이벤트 상태, 발행 실패, 처리 실패, 타입별 재처리, 장기 미처리 집계 알림을 담당했습니다.</p>
+              <h3><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 연사</a></h3>
+              <p>‘우리팀을 위한 Spring Test 만들기’에서 테스트 코드를 줄이는 기준과 팀의 그라운드 룰을 만드는 과정을 발표했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3>포인트 원장·배치</h3>
-              <p>원장 조회, 소멸 처리, 아카이브, 만료 안내, 회원 상태 이벤트와 동시성 검증을 다뤘습니다.</p>
+              <h3><a href="https://velog.io/@ch4570/posts">기술 글 156편 · 2026.07 기준</a></h3>
+              <p>Java, JPA, 테스트, SQL 튜닝을 중심으로 시행착오를 기록했습니다. 글또 10기에서는 백엔드·인프라 빌리지 준비위원과 연사로 참여했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3>피드 서빙·검색</h3>
-              <p>후보 수집, FPR·SPR·Re-Rank, 세션 캐시, 요청 지문, 노출 이력, 장애 우회를 구현했습니다.</p>
+              <h3>Spring OSS · 개선 제안 3건 반영</h3>
+              <p><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a>에 제안한 개선이 upstream에 반영됐습니다. 불변 컬렉션, 하드코딩, 자원 정리를 다듬었습니다.</p>
             </article>
             <article class="scope-item">
-              <h3>테스트 기반</h3>
-              <p>fixture, mock, WebMvc, JPA, transaction helper와 CI·문서화 규칙을 공통 모듈에 정리했습니다.</p>
+              <h3><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 분석 플러그인</a></h3>
+              <p>JavaCafe의 Elasticsearch 플러그인을 바탕으로 한·영 자판 변환, 초성·자모 검색을 OpenSearch 2.19와 Kotlin으로 옮기고 16개 예시로 확인했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3>Agent Lab</h3>
-              <p>agent·skill manifest, 설치 명령, 검증 절차, 구조·행동 평가, 안전 경계를 구현했습니다.</p>
+              <h3><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">화면에 없던 7만+ 건의 오류</a></h3>
+              <p>응답은 정상이었지만 6년 동안 S3 삭제와 어긋난 데이터가 7만 건 넘게 쌓여 있었습니다. 이를 발견하고 원인을 좁혀 간 과정을 공개했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3>기술 스택</h3>
-              <ul class="tag-list" aria-label="기술 스택">
-                <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>Kafka</li><li>Redis</li><li>OpenSearch</li><li>Spring Batch</li><li>JPA</li><li>QueryDSL</li><li>Testcontainers</li>
-              </ul>
+              <h3><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">테스트로 찾은 약 200만 건</a></h3>
+              <p>Mock 테스트가 놓친 JPA 변경 감지 오류를 실제 구현 테스트로 재현했습니다. 보정 스크립트를 작성해 약 200만 건의 데이터를 바로잡았습니다.</p>
             </article>
           </div>
         </section>
@@ -706,6 +707,8 @@
         <a href="mailto:ch4570@naver.com">Email</a>
         <a href="https://github.com/ch4570">GitHub</a>
         <a href="https://velog.io/@ch4570/posts">Velog</a>
+        <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
+        <a href="https://www.rallit.com/hub/resumes/33771/%EC%84%9C%EB%AF%BC%EC%9E%AC?isExpanded=true">Rallit</a>
       </div>
     </div>
   </footer>
