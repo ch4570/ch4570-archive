@@ -107,7 +107,7 @@ verify_pdf() {
 
     case "$document_name" in
       resume) expected_pages=2 ;;
-      career-description) expected_pages=5 ;;
+      career-description) expected_pages=3 ;;
       portfolio) expected_pages=9 ;;
       *) expected_pages='' ;;
     esac
