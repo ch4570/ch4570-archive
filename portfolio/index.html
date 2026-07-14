@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 사용자에게 드러나지 않는 실패를 추적한 이벤트 복구, 원장 배치, 피드 캐시, 테스트 도구 사례입니다.">
-  <title>서민재 · Backend Engineering Portfolio</title>
+  <meta name="description" content="서민재 AI Native 백엔드 엔지니어 포트폴리오. 백엔드 설계·운영 사례와 Agent Lab의 agent·skill·평가 구조를 소개합니다.">
+  <title>서민재 · AI-Native Backend Engineering Portfolio</title>
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -18,7 +18,7 @@
       <a class="site-brand" href="../" aria-label="서민재 홈">
         <span class="site-brand-mark" aria-hidden="true">SM</span>
         <strong>서민재</strong>
-        <span>Backend Systems</span>
+        <span>AI-Native Backend</span>
       </a>
       <nav class="site-nav" aria-label="주요 문서">
         <a href="../">홈</a>
@@ -36,16 +36,16 @@
       <div class="container">
         <div class="portfolio-hero-grid">
           <div>
-            <p class="eyebrow eyebrow-coral">Backend Engineering Portfolio · 2026</p>
-            <h1 class="portfolio-title" id="portfolio-title">사용자에게 보이지 않는 실패까지 추적했습니다</h1>
+            <p class="eyebrow eyebrow-coral">AI-Native Backend Engineering Portfolio · 2026</p>
+            <h1 class="portfolio-title" id="portfolio-title">백엔드에서 쌓은 판단을 AI Native 개발 방식으로 구조화합니다</h1>
             <p class="hero-copy">
-              사용자 화면에 오류가 없더라도 데이터는 틀어질 수 있습니다. 그래서 성공 여부만 보지 않고 어디서 멈췄는지,
-              다시 실행해도 되는지, 언제 캐시를 버려야 하는지를 코드와 테스트로 확인해 왔습니다.
+              Java와 Kotlin으로 이벤트·배치·검색·캐시 시스템을 설계하고 운영해 왔습니다.
+              그 과정에서 쌓은 판단을 에이전트·스킬·평가로 구조화해 실제 개발 흐름에서 재사용합니다.
             </p>
           </div>
           <div class="portfolio-profile">
             <b>서민재 · Rex Seo</b>
-            <span>Backend Engineer</span>
+            <span>AI-Native Backend Engineer</span>
             <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
             <a href="https://github.com/ch4570">GitHub</a>
             <a href="https://velog.io/@ch4570/posts">Velog</a>
@@ -72,9 +72,9 @@
             <span class="metric-detail">29개 helper에 fixture·mock·Web·JPA 준비를 모으고, 43개 테스트로 동작을 확인했습니다.</span>
           </div>
           <div class="metric-item">
-            <strong class="metric-value">32/32</strong>
-            <span class="metric-label">Codex skill 탐색</span>
-            <span class="metric-detail">공식 경로에 설치한 skill 32개를 Codex CLI가 빠짐없이 찾는지 확인했습니다.</span>
+            <strong class="metric-value">15 + 32</strong>
+            <span class="metric-label">AI 개발 자산</span>
+            <span class="metric-detail">agent 15개와 skill 32개를 설치·검증 가능한 구조로 묶고 Codex 탐색 32/32를 확인했습니다.</span>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
           <li><a href="#point"><span>02</span>포인트 정합성</a></li>
           <li><a href="#feed"><span>03</span>피드 서빙</a></li>
           <li><a href="#test"><span>04</span>테스트 기반</a></li>
-          <li><a href="#agent"><span>05</span>개발 도구</a></li>
+          <li><a href="#agent"><span>05</span>AI Engineering</a></li>
           <li><a href="#previous"><span>06</span>이전 경력</a></li>
           <li><a href="#evidence"><span>07</span>공개 기록</a></li>
         </ol>
@@ -104,7 +104,7 @@
               <h2 class="case-title" id="event-title">발행 실패와 처리 실패, 같은 방식으로 복구할 수 없었습니다.</h2>
               <p class="case-lede">
                 포인트 차감이나 회수가 늦게 실패하면 정산 확인과 고객 응대도 함께 길어집니다.
-                담당자가 로그부터 뒤지지 않도록 멈춘 위치를 상태로 남기고, 그 자리에서 다시 시작할 방법을 붙였습니다.
+                실패 지점을 상태로 기록하고 업무별 복구 경로를 설계해, 운영자가 로그와 원장을 매번 대조하는 일을 줄였습니다.
               </p>
             </div>
           </header>
@@ -124,7 +124,7 @@
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3>멈춘 지점을 기록하고, 다시 실행할 일은 업무별로 나눴습니다.</h3>
+              <h3>멈춘 지점을 기록하고, 복구 로직은 업무별로 나눴습니다.</h3>
               <p>생성부터 복구 불가 실패까지 6개 상태를 두었습니다. 포인트 차감·회수·만료 알림처럼 조건이 다른 8개 작업은 저장된 payload로 각 업무 서비스를 다시 호출합니다.</p>
             </div>
           </div>
@@ -239,10 +239,10 @@
               <ul class="bullet-list">
                 <li>내부 이벤트 9종을 생성, 발행 실패, 처리 중, 완료, 처리 실패, 복구 불가 실패의 6개 상태로 기록했습니다.</li>
                 <li>수동 복구 API가 타입과 상태로 레코드를 찾고 저장된 payload로 8개 전략 중 하나를 실행하도록 구성했습니다.</li>
-                <li>Kafka에 다시 넣지 않고 타입별 업무 서비스를 직접 호출해 복구 위치를 고정했습니다.</li>
+                <li>Kafka에 다시 넣지 않고 타입별 업무 서비스를 직접 호출해 복구 범위를 실패한 업무로 제한했습니다.</li>
                 <li>IN_PROGRESS 상태로 15분 이상 멈춘 추적 대상 8종만 조회해 타입별 건수를 Slack에 전송했습니다.</li>
                 <li>상태 전환 타이밍 오류, 잘못된 상태 검사, 이벤트 발송 실패 로깅 누락을 수정했습니다.</li>
-                <li>배치 재시도와 프록시 기반 재시도 호출 문제를 확인하고 포인트 선점 복구 경로를 보강했습니다.</li>
+                <li>배치 재시도와 프록시 기반 재시도 호출 문제를 수정하고 포인트 선점 복구 경로를 보강했습니다.</li>
               </ul>
             </div>
           </details>
@@ -253,17 +253,17 @@
             <span class="case-number" aria-hidden="true">02</span>
             <div>
               <p class="section-kicker">Point Ledger · Balance / Archive</p>
-              <h2 class="case-title" id="point-title">대량 처리보다 먼저 정한 것은 어디서 다시 시작할지였습니다.</h2>
+              <h2 class="case-title" id="point-title">대량 배치는 처리량만큼 재시작 단위가 중요했습니다.</h2>
               <p class="case-lede">
                 원장 소멸, 만료 안내, 아카이브는 같은 데이터를 보지만 끝내야 할 일은 다릅니다.
-                한 번에 많이 처리하는 것보다 중간에 멈춰도 같은 단위로 이어갈 수 있도록 조회와 저장 순서를 먼저 정했습니다.
+                한 번에 많이 처리하기보다 중간에 멈춰도 진행 위치를 확인할 수 있도록 조회와 저장 단위를 나눴습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>담당</dt><dd>원장 소멸 paging 전환·아카이브 배치 구현·만료 알림 이벤트 개선</dd></div>
-            <div class="fact-cell"><dt>처리 단위</dt><dd>전체 적재 대신 paging 기반 반복 처리</dd></div>
+            <div class="fact-cell"><dt>담당</dt><dd>원장 소멸 페이지 전환·아카이브 배치 구현·만료 알림 이벤트 개선</dd></div>
+            <div class="fact-cell"><dt>처리 단위</dt><dd>전체 적재 대신 페이지 단위 반복 처리</dd></div>
             <div class="fact-cell"><dt>보관 대상</dt><dd>point_core 6개·point_service 4개 archive 테이블</dd></div>
             <div class="fact-cell"><dt>동시성</dt><dd>분산락, 예산 경합, 유료·무료 원장 혼합 사용</dd></div>
           </dl>
@@ -396,7 +396,7 @@
             <summary>정합성과 회원 식별 처리</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 만료 알림 레코드 batch insert 순서를 검증했습니다.</li>
+                <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 만료 알림 레코드 일괄 저장 순서를 검증했습니다.</li>
                 <li>point_core 6개와 point_service 4개 테이블의 아카이브 흐름과 테스트를 추가했습니다.</li>
                 <li>동일·상이한 lock key의 동시 요청과 같은 예산 ID의 동시 차감 시나리오를 검증했습니다.</li>
                 <li>유료·무료 원장 혼합 사용 케이스를 별도로 검증했습니다.</li>
@@ -411,10 +411,9 @@
             <span class="case-number" aria-hidden="true">03</span>
             <div>
               <p class="section-kicker">Feed &amp; Search · Serving / Retrieval</p>
-              <h2 class="case-title" id="feed-title">캐시는 빠른 것보다 버릴 때를 아는 게 중요했습니다.</h2>
+              <h2 class="case-title" id="feed-title">캐시는 얼마나 빨리 읽느냐보다 언제 무효화하느냐가 더 중요했습니다.</h2>
               <p class="case-lede">
-                같은 사용자가 여러 페이지를 넘길 때마다 검색하면 비싸고, 캐시를 오래 믿으면 추천이 낡습니다.
-                정상 스크롤은 계산 결과를 이어 쓰되 좌표·필터·로그인 상태가 바뀌는 순간에는 미련 없이 버리도록 했습니다.
+                정상 스크롤에서는 후보를 재사용하고, 좌표·필터·로그인 상태가 바뀌면 Snapshot·FPR·SPR 후보 캐시만 무효화했습니다.
               </p>
             </div>
           </header>
@@ -429,13 +428,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3>빠른 응답이 항상 맞는 응답은 아니었습니다.</h3>
-              <p>좌표나 필터가 바뀌었는데 이전 후보를 계속 쓰면 빠르지만 틀린 결과가 됩니다. 반대로 페이지마다 새로 계산하면 같은 검색과 랭킹을 되풀이하게 됩니다.</p>
+              <h3>조건이 바뀐 뒤에도 기존 후보를 쓰면 빠르지만 틀린 결과가 됩니다.</h3>
+              <p>좌표나 필터가 달라지면 이전 후보는 현재 요청과 맞지 않습니다. 반대로 페이지마다 새로 계산하면 같은 검색과 랭킹을 되풀이하게 됩니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
               <h3>스크롤, 후보 소진, 조건 변경, 장애를 각각 다르게 처리했습니다.</h3>
-              <p>정상 스크롤은 page queue만 읽고 후보가 부족할 때만 refill합니다. 요청 지문이 달라지면 후보 풀을 비우며, Redis가 멈추면 캐시 기록보다 응답을 먼저 보냅니다.</p>
+              <p>정상 스크롤은 page queue만 읽고 후보가 부족할 때만 refill합니다. 요청 지문이 달라지면 후보 풀을 비우며, Redis를 사용할 수 없으면 캐시 기록을 건너뛰고 OpenSearch 후보를 메모리에서 랭킹해 응답합니다.</p>
             </div>
           </div>
 
@@ -444,7 +443,7 @@
             <figure class="system-figure system-map system-map--decision">
               <figcaption>
                 <div class="diagram-caption-title">
-                  <b>피드 캐시를 이어 쓰고, 비우고, 우회하는 기준</b>
+                  <b>피드 캐시를 재사용하고, 무효화하고, 우회하는 기준</b>
                   <span>Snapshot의 상태와 요청 지문에 따라 네 경로로 나뉩니다.</span>
                 </div>
                 <div class="diagram-legend" aria-label="연결선 범례">
@@ -554,7 +553,7 @@
 
           <div class="case-outcome">
             <b>캐시 판단 기준</b>
-            <p>정상 스크롤에서는 남은 Snapshot을 이어 쓰고, 조건이 바뀌면 후보 풀만 지웁니다. Redis를 쓸 수 없을 때도 같은 랭킹을 메모리에서 계산해 응답부터 보냅니다.</p>
+            <p>정상 스크롤에서는 남은 Snapshot을 재사용하고, 조건이 바뀌면 후보 풀만 무효화합니다. Redis를 쓸 수 없을 때도 같은 랭킹을 메모리에서 계산해 응답합니다.</p>
           </div>
 
           <details class="case-details">
@@ -562,14 +561,14 @@
             <div class="details-content">
               <ul class="bullet-list">
                 <li>Snapshot, FPR pool, SPR pool, user vector, global seen을 서로 다른 Redis key와 TTL로 관리했습니다.</li>
-                <li>9개 OpenSearch 소스를 virtual thread에서 병렬 호출하고 한 소스의 실패나 timeout은 빈 후보로 접어 나머지 결과를 유지했습니다.</li>
+                <li>9개 OpenSearch 소스를 virtual thread에서 병렬 호출하고, 한 소스가 실패하거나 timeout이 나면 해당 결과만 제외해 나머지 후보를 유지했습니다.</li>
                 <li>Snapshot에 남은 후보가 있으면 20건만 꺼내고, 소진됐을 때만 100건짜리 랭킹 window를 다시 채웠습니다.</li>
                 <li>seen은 노출한 페이지마다 기록하고 FPR에서 감점 신호로 사용했습니다.</li>
                 <li>세션과 후보 캐시는 30분, 회원 global seen은 24시간 동안 유지했습니다.</li>
                 <li>위치 기준 거리 가중치와 10km 반경, 좌표가 없는 공고의 보존·제외 정책을 반영했습니다.</li>
                 <li>메인 4축 필터를 색인과 질의 조립에 반영하고 회원·비회원에서 같은 의미로 적용했습니다.</li>
                 <li>유료 후보는 별도 영역으로 떼지 않고 FPR 점수 가산에 포함했습니다.</li>
-                <li>재게시된 같은 공고는 FPR에서 contentHash 기반으로 다시 접었습니다.</li>
+                <li>재게시된 같은 공고는 FPR에서 contentHash로 중복을 제거했습니다.</li>
                 <li>검색 인덱스 전환, read/write 계정 경계, strict mapping 이슈를 함께 다뤘습니다.</li>
               </ul>
             </div>
@@ -583,8 +582,8 @@
               <p class="section-kicker">Engineering Platform · Test Support</p>
               <h2 class="case-title" id="test-title">테스트마다 반복하던 준비 코드를 test-support로 모았습니다.</h2>
               <p class="case-lede">
-                fixture와 mock을 준비하는 방식이 프로젝트마다 달라 리뷰할 때마다 setup부터 다시 읽어야 했습니다.
-                Web, JPA, mock처럼 테스트 목적에 맞는 시작점을 두고 반복 코드는 helper 안으로 옮겼습니다.
+                fixture와 mock 준비 방식이 프로젝트마다 달라 리뷰할 때마다 테스트 설정부터 다시 읽어야 했습니다.
+                Web, JPA, mock 등 목적별 진입점을 만들고 반복되는 준비 코드는 helper로 옮겼습니다.
               </p>
             </div>
           </header>
@@ -678,8 +677,8 @@
           </details>
 
           <div class="case-outcome">
-            <b>공통화한 범위</b>
-            <p>19개 주요 변경에서 29개 helper를 정리했습니다. 43개 테스트로 fixture·mock·WebMvc·JPA·transaction의 공통 동작을 검증합니다.</p>
+            <b>테스트 기반</b>
+            <p>19개 주요 변경에 걸쳐 테스트 준비 방식을 29개 helper로 통일했습니다. fixture·mock·WebMvc·JPA·transaction의 공통 동작은 43개 테스트로 검증합니다.</p>
           </div>
 
           <details class="case-details">
@@ -700,20 +699,20 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">05</span>
             <div>
-              <p class="section-kicker">Engineering Platform · Agent Lab v0.1.0.0</p>
-              <h2 class="case-title" id="agent-title">잘 만든 프롬프트 하나에 그치지 않고, 다시 검증할 수 있는 실행 자산을 만들었습니다.</h2>
+              <p class="section-kicker">AI Engineering · Agent Lab v0.1.0.0</p>
+              <h2 class="case-title" id="agent-title">AI 에이전트의 역할·지식·절차와 평가 기준을 함께 관리하도록 구조를 설계했습니다.</h2>
               <p class="case-lede">
-                에이전트 역할만 적어 둔 문서는 오래 쓰기 어려웠습니다. 어떤 근거를 읽고 어떤 skill을 호출할지,
-                변경 뒤에도 같은 방식으로 설치되고 발견되는지까지 한 묶음으로 관리했습니다.
+                코드 탐색, 설계 검토, 테스트 작성처럼 반복되는 작업을 agent와 skill로 나눴습니다.
+                manifest로 설치 관계를 관리하고, 구조 fixture와 행동 계약, 설치 회귀와 Codex 탐색을 각각 검증했습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>실행 자산</dt><dd>15 agents · 32 skills</dd></div>
+            <div class="fact-cell"><dt>Agent 구성</dt><dd>15 agents · 32 skills</dd></div>
             <div class="fact-cell"><dt>연결 구조</dt><dd>24 agent→skill · 11 deps</dd></div>
-            <div class="fact-cell"><dt>평가 계약</dt><dd>구조 7/7 · 행동 10/10</dd></div>
-            <div class="fact-cell"><dt>실행 검증</dt><dd>설치 52/52 · 탐색 32/32</dd></div>
+            <div class="fact-cell"><dt>정적 계약 검증</dt><dd>구조 7/7 · 행동 10/10</dd></div>
+            <div class="fact-cell"><dt>설치·탐색</dt><dd>설치 52/52 · 탐색 32/32</dd></div>
           </dl>
 
           <details class="diagram-disclosure" open>
@@ -805,8 +804,8 @@
                 <div class="agent-execution-rail" aria-label="공통 실행 결과">
                   <div>
                     <span>Shared execution</span>
-                    <b>현재 코드와 도구를 읽고</b>
-                    <small>추측 대신 저장소 상태를 기준으로 작업합니다.</small>
+                    <b>저장소 상태를 먼저 확인하고</b>
+                    <small>코드·설정·도구를 기준으로 작업 범위를 정합니다.</small>
                   </div>
                   <i aria-hidden="true">→</i>
                   <div class="agent-execution-rail__result">
@@ -830,6 +829,11 @@
               </div>
             </figure>
           </details>
+
+          <div class="case-outcome">
+            <b>실제 적용</b>
+            <p>Claude Code에는 agent와 skill을 함께 설치하고, Codex에는 32개 skill을 공식 경로로 배포합니다. 개선안은 자동 반영하지 않습니다. 제안과 평가 기록을 남기고 사람이 승인한 변경만 다음 프로젝트에 적용하도록 설계했습니다.</p>
+          </div>
 
           <details class="diagram-disclosure" open>
             <summary>실행 경험이 다음 작업에 반영되는 과정 보기</summary>
@@ -864,7 +868,7 @@
                 <section class="learning-trust-gate">
                   <header>
                     <span class="map-index">03</span>
-                    <div><b>쓰기·검색 게이트</b><small>비슷해 보인다는 이유만으로 행동 지침에 넣지 않습니다.</small></div>
+                    <div><b>쓰기·검색 게이트</b><small>출처와 적용 범위를 확인하지 않은 후보는 행동 지침에 넣지 않습니다.</small></div>
                   </header>
                   <div class="learning-trust-gate__body">
                     <ul class="learning-checks" aria-label="기억 신뢰 검사 항목">
@@ -920,20 +924,15 @@
 
                 <div class="learning-return">
                   <span>Next run</span>
-                  <b>다음 실행에 쓰려면 retrieval gate를 다시 통과해야 합니다.</b>
+                  <b>다음 실행에 쓰기 전, 관련성과 근거를 다시 확인합니다.</b>
                 </div>
 
                 <p class="learning-contract-note">
-                  <b>현재 경계</b> 5개 schema, 6개 policy, fixture와 runner까지 구현했습니다. 장기 memory backend와 자동 prompt 수정·skill 승격은 아직 없습니다.
+                  <b>현재 경계</b> 기억 스키마 5개와 정책 6개, 검증용 fixture와 runner를 구현했습니다. 장기 메모리 저장소와 프롬프트 자동 수정, skill 자동 승격은 포함하지 않았습니다.
                 </p>
               </div>
             </figure>
           </details>
-
-          <div class="case-outcome">
-            <b>지금 쓸 수 있는 범위</b>
-            <p>Claude Code에는 agent와 skill을 함께, Codex에는 32개 skill을 설치해 쓸 수 있습니다. 개선안은 자동 반영하지 않습니다. 제안과 평가 기록을 남기고, 사람이 승인한 변경만 다음 프로젝트에 적용하도록 설계했습니다.</p>
-          </div>
 
           <details class="case-details">
             <summary>도구 범위와 안전 경계</summary>
@@ -942,7 +941,7 @@
                 <li>manifest에 15개 agent, 14개 지식 번들, 32개 skill과 연결 의존성을 등록했습니다.</li>
                 <li>설치 회귀 52개를 통과했고, Codex CLI에서 32개 skill을 모두 탐색했습니다.</li>
                 <li>구조 fixture 7개와 행동 케이스 10개의 입력·임계값·안전 계약을 정적 검증했습니다.</li>
-                <li>행동 평가는 output과 metrics sidecar를 따로 받아 결과·과정·안전·비용을 비교합니다. 실제 에이전트 실행에는 별도 런타임 adapter가 필요합니다.</li>
+                <li>행동 평가에서는 결과와 실행 지표를 따로 받아 결과·과정·안전·비용을 비교합니다. 실제 에이전트를 실행하려면 런타임별 adapter가 더 필요합니다.</li>
                 <li>메모리 5개 schema와 6개 policy로 기억을 쓰고 읽는 조건, 격리·승격·교체, 자기 수정의 경계를 먼저 정했습니다.</li>
                 <li>NL-SQL MCP에 multi-dialect와 읽기 전용 경계를 두고 위험한 쿼리 실행을 막았습니다.</li>
                 <li>code cartographer와 diagram extract skill로 코드 이해 결과를 다이어그램으로 공유하게 했습니다.</li>
@@ -956,8 +955,8 @@
             <span class="case-number" aria-hidden="true">06</span>
             <div>
               <p class="section-kicker">Previous Experience</p>
-              <h2 class="case-title" id="previous-title">지금의 판단은 이전 운영 경험에서 시작됐습니다.</h2>
-              <p class="case-lede">테스트 숫자를 그대로 믿지 않게 된 일, 인증 경계를 다룬 일, 검색 조건을 동적으로 조립한 일이 지금의 이벤트 복구와 피드 작업으로 이어졌습니다.</p>
+              <h2 class="case-title" id="previous-title">테스트, 인증, 검색 경험이 지금의 설계 기준이 됐습니다.</h2>
+              <p class="case-lede">실제 구현을 검증하는 테스트, 인증·인가 경계, OpenSearch 동적 쿼리를 직접 다뤘습니다. 이 경험은 이벤트 신뢰성, 배치 재시작, 피드 캐시와 검색 정책을 설계할 때의 기준이 됐습니다.</p>
             </div>
           </header>
 
@@ -974,14 +973,14 @@
                 <h3>오케스트로 · IDP / Vista</h3>
                 <time datetime="2023-09">2023.09 — 2024.05</time>
               </div>
-              <p>신용정보원 IDP에서 Spring Cloud API Gateway, Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. 하나금융그룹 Vista에서는 VM metric 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
+              <p>신용정보원 IDP에서 Spring Cloud API Gateway, Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. 하나금융그룹 Vista에서는 VM 메트릭 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
             </article>
             <article class="timeline-row">
               <div>
                 <h3>즐거운 · Backend</h3>
                 <time datetime="2022-11">2022.11 — 2023.02</time>
               </div>
-              <p>자사 서비스의 백엔드 기능을 개발하고 운영 중 발생한 이슈를 유지보수했습니다.</p>
+              <p>자사 서비스의 백엔드 기능을 개발하고 운영 중 발생한 문제를 해결했습니다.</p>
             </article>
           </div>
         </section>
@@ -1007,7 +1006,7 @@
             </article>
             <article class="scope-item">
               <h3>Spring OSS · 개선 제안 3건 반영</h3>
-              <p><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a>에 제안한 개선이 upstream에 반영됐습니다. 불변 컬렉션, 하드코딩, 자원 정리를 다듬었습니다.</p>
+              <p><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a>에 제안한 개선 3건이 반영됐습니다. 불변 컬렉션 처리, 하드코딩 제거, 자원 정리 로직을 개선했습니다.</p>
             </article>
             <article class="scope-item">
               <h3><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 분석 플러그인</a></h3>
@@ -1015,7 +1014,7 @@
             </article>
             <article class="scope-item">
               <h3><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">화면에 없던 7만+ 건의 오류</a></h3>
-              <p>응답은 정상이었지만 6년 동안 S3 삭제와 어긋난 데이터가 7만 건 넘게 쌓여 있었습니다. 이를 발견하고 원인을 좁혀 간 과정을 공개했습니다.</p>
+              <p>응답은 정상이었지만 S3에서는 삭제되고 DB에는 남은 데이터가 6년 동안 7만 건 넘게 쌓여 있었습니다. 이를 발견하고 원인을 좁혀 간 과정을 공개했습니다.</p>
             </article>
             <article class="scope-item">
               <h3><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">테스트로 찾은 약 200만 건</a></h3>
@@ -1030,8 +1029,8 @@
   <footer class="page-footer">
     <div class="container page-footer-inner">
       <div>
-        <h2>서민재 · Backend Engineer</h2>
-        <p>Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
+        <h2>서민재 · AI-Native Backend Engineer</h2>
+        <p>Java · Kotlin · Spring · Agent · Skill · Evaluation</p>
       </div>
       <div class="page-footer-links">
         <a href="../resume/">Resume</a>

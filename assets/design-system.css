@@ -3620,6 +3620,7 @@ h4 {
     break-before: page;
   }
 
+  #feed.case-section,
   #test.case-section,
   #agent.case-section,
   #previous.case-section {
@@ -3631,6 +3632,16 @@ h4 {
     break-after: avoid;
     break-inside: avoid;
     page-break-after: avoid;
+  }
+
+  #previous.case-section {
+    break-before: page;
+    page-break-before: always;
+  }
+
+  #previous .timeline-row {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   .case-title {
@@ -4261,6 +4272,145 @@ h4 {
   .learning-contract-note {
     margin-top: 5px;
     padding: 5px 7px;
+  }
+
+  #agent .system-map--agent-runtime .agent-registry__copy {
+    padding: 11px 12px;
+  }
+
+  #agent .system-map--agent-runtime .agent-registry__stats > div {
+    padding: 10px 7px;
+  }
+
+  #agent .system-map--agent-runtime .agent-registry__copy span,
+  #agent .system-map--agent-runtime .agent-registry__copy small,
+  #agent .system-map--agent-runtime .agent-registry__stats dt,
+  #agent .system-map--agent-runtime .runtime-lane__head > span,
+  #agent .system-map--agent-runtime .runtime-lane__head small,
+  #agent .system-map--agent-runtime .agent-execution-rail span,
+  #agent .system-map--agent-runtime .agent-execution-rail small,
+  #agent .system-map--agent-runtime .agent-install-flow small,
+  #agent .system-map--agent-runtime .runtime-caveat span,
+  #agent .system-map--agent-runtime .runtime-caveat b {
+    font-size: 6.2pt;
+  }
+
+  #agent .system-map--agent-runtime .agent-registry__copy b {
+    font-size: 11pt;
+  }
+
+  #agent .system-map--agent-runtime .agent-registry__stats dd {
+    font-size: 13pt;
+  }
+
+  #agent .system-map--agent-runtime .agent-runtime-fork {
+    height: 58px;
+  }
+
+  #agent .system-map--agent-runtime .agent-runtime-fork::after {
+    position: absolute;
+    right: 25%;
+    bottom: 0;
+    left: 25%;
+    border-top: 1px solid var(--teal);
+    content: "";
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane {
+    position: relative;
+    padding: 10px;
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane::before,
+  #agent .system-map--agent-runtime .runtime-lane::after {
+    position: absolute;
+    left: 50%;
+    height: 10px;
+    border-left: 1px solid var(--teal);
+    content: "";
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane::before {
+    top: -10px;
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane::after {
+    bottom: -10px;
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane__head {
+    margin-bottom: 8px;
+  }
+
+  #agent .system-map--agent-runtime .runtime-lane__head b {
+    font-size: 8pt;
+  }
+
+  #agent .system-map--agent-runtime .runtime-route .map-node {
+    min-height: 90px;
+    padding: 9px 7px 9px 10px;
+  }
+
+  #agent .system-map--agent-runtime .agent-runtime-lanes {
+    position: relative;
+    margin-bottom: 30px;
+  }
+
+  #agent .system-map--agent-runtime .agent-runtime-lanes::before {
+    position: absolute;
+    right: 25%;
+    bottom: -10px;
+    left: 25%;
+    border-top: 1px solid var(--teal);
+    content: "";
+  }
+
+  #agent .system-map--agent-runtime .agent-runtime-lanes::after {
+    position: absolute;
+    bottom: -30px;
+    left: 50%;
+    height: 20px;
+    border-left: 1px solid var(--teal);
+    content: "";
+  }
+
+  #agent .system-map--agent-runtime .agent-execution-rail {
+    position: relative;
+    margin-top: 0;
+    margin-bottom: 26px;
+  }
+
+  #agent .system-map--agent-runtime .agent-execution-rail::after {
+    position: absolute;
+    bottom: -26px;
+    left: 50%;
+    height: 26px;
+    border-left: 1px solid var(--ink);
+    content: "";
+  }
+
+  #agent .system-map--agent-runtime .agent-execution-rail > div {
+    min-height: 64px;
+    padding: 8px 10px;
+  }
+
+  #agent .system-map--agent-runtime .agent-execution-rail b,
+  #agent .system-map--agent-runtime .agent-install-flow b {
+    font-size: 7.2pt;
+  }
+
+  #agent .system-map--agent-runtime .agent-install-flow {
+    margin-top: 0;
+  }
+
+  #agent .system-map--agent-runtime .agent-install-flow li {
+    min-height: 62px;
+    padding: 8px 7px 8px 22px;
+  }
+
+  #agent .system-map--agent-runtime .runtime-caveat {
+    margin-top: 9px;
+    padding: 8px 10px;
   }
 
   .case-outcome {

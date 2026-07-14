@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 백엔드 엔지니어 이력서. 포인트 이벤트 복구, 피드 캐시, 테스트 개선과 Spring 오픈소스 활동을 수치와 함께 담았습니다.">
-  <title>서민재 · Backend Engineer Resume</title>
+  <meta name="description" content="서민재 AI Native 백엔드 엔지니어 이력서. 이벤트·배치·검색·캐시·테스트 설계 경험과 Agent Lab, Spring 오픈소스 활동을 담았습니다.">
+  <title>서민재 · AI-Native Backend Engineer Resume</title>
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -18,7 +18,7 @@
       <a class="site-brand" href="../" aria-label="서민재 홈">
         <span class="site-brand-mark" aria-hidden="true">SM</span>
         <strong>서민재</strong>
-        <span>Backend Systems</span>
+        <span>AI-Native Backend</span>
       </a>
       <nav class="site-nav" aria-label="주요 문서">
         <a href="../">홈</a>
@@ -35,13 +35,13 @@
     <article class="resume-document">
       <header class="resume-hero">
         <div>
-          <p class="eyebrow eyebrow-coral">Backend Engineer</p>
+          <p class="eyebrow eyebrow-coral">AI-Native Backend Engineer</p>
           <h1>서민재</h1>
           <p class="resume-hero-role">Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
           <p class="resume-hero-copy">
-            Java와 Kotlin으로 서비스 백엔드를 개발해 왔습니다. 이벤트가 멈춘 위치를 상태로 남기고,
-            요청 조건이 달라질 때만 피드 캐시를 비우는 기준을 설계했습니다. 테스트가 숫자만 채우지 않도록
-            실제 구현을 검증하는 방식과 공통 도구도 꾸준히 다듬어 왔습니다.
+            Java와 Kotlin으로 이벤트·배치·검색·캐시 시스템을 설계하고 운영해 온 백엔드 엔지니어입니다.
+            코드 탐색과 설계 검토, 테스트와 평가를 에이전트와 스킬로 구조화해 개발 과정에 적용합니다.
+            AI가 만든 결과도 코드와 테스트, 실행 기록으로 다시 검증합니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -69,7 +69,7 @@
         </div>
         <div class="resume-impact">
           <b>15 + 32</b>
-          <span>설치·검증 가능한 agent와 skill</span>
+          <span>Agent Lab의 agent·skill 구성</span>
         </div>
       </section>
 
@@ -84,6 +84,10 @@
             <div class="stack-group">
               <b>Backend</b>
               <p>Spring Boot, Spring Batch, Spring MVC/WebFlux, JPA/Hibernate, QueryDSL</p>
+            </div>
+            <div class="stack-group">
+              <b>AI Engineering</b>
+              <p>Claude Code, Codex, Agent/Skill Architecture, MCP, Evaluation Contracts, Memory Policies</p>
             </div>
             <div class="stack-group">
               <b>Data</b>
@@ -126,60 +130,60 @@
               <header class="experience-head">
                 <div>
                   <h3>웍스피어(유) · Backend Engineer</h3>
-                  <p>JOBKOREA / Albamon Platform</p>
+                  <p>JOBKOREA / Albamon Platform · Backend Engineering</p>
                 </div>
                 <time datetime="2025-06">2025.06 — 현재</time>
               </header>
 
               <div class="project-entry">
                 <p class="project-kicker">Point Platform · Event Reliability</p>
-                <h4>내부 이벤트 9종의 실패 위치를 6개 상태로 추적하고 8개 수동 복구 전략을 연결</h4>
+                <h4>포인트 내부 이벤트의 실패 지점을 상태로 남기고 업무별 복구 경로를 설계</h4>
                 <p>메시지를 보내지 못한 경우와 소비자가 처리 중 실패한 경우는 다시 시작할 위치가 다릅니다. 운영자가 매번 로그와 원장을 맞춰 보지 않도록 멈춘 지점 자체를 상태로 남겼습니다.</p>
                 <ul class="bullet-list">
                   <li>내부 이벤트 9종을 생성부터 복구 불가 실패까지 6개 상태로 기록해 중단 위치를 조회할 수 있게 했습니다.</li>
                   <li>수동 복구 API는 타입과 상태로 대상을 찾은 뒤, 저장된 payload를 8개 업무별 전략 중 하나로 넘깁니다.</li>
                   <li>처리 중 상태가 15분을 넘긴 추적 대상은 타입별로 모아 Slack에 알렸습니다.</li>
-                  <li>배치 재시도와 프록시 호출 문제를 확인하고 포인트 선점 복구도 같은 흐름에서 점검했습니다.</li>
+                  <li>배치 재시도와 프록시 호출 문제를 수정하고 포인트 선점 복구 경로를 보강했습니다.</li>
                 </ul>
-                <p class="impact-line"><b>달라진 운영</b> 전송 실패, 처리 실패, 장기 미처리를 따로 조회하므로 담당자가 실패 위치에 맞는 복구부터 시작할 수 있습니다.</p>
+                <p class="impact-line"><b>운영 기준</b> 운영자는 전송 실패, 처리 실패, 장기 미처리를 따로 조회하고 각 실패 지점에 맞춰 복구를 시작할 수 있습니다.</p>
               </div>
 
               <div class="project-entry">
                 <p class="project-kicker">Point Ledger · Balance / Archive</p>
-                <h4>원장 소멸을 paging으로 전환하고 10개 archive 테이블의 이관 순서를 고정</h4>
-                <p>세 배치는 같은 원장과 회원 데이터를 만지지만 시작 시점과 후속 작업은 다릅니다. 중간에 멈춰도 같은 단위로 다시 확인할 수 있게 조회와 저장 순서를 나눴습니다.</p>
+                <h4>원장 소멸을 페이지 단위 처리로 바꾸고 10개 아카이브 테이블의 이관 순서를 고정</h4>
+                <p>세 배치는 같은 원장과 회원 데이터를 다루지만 시작 시점과 후속 작업은 다릅니다. 중간에 멈춰도 처리 범위를 확인할 수 있도록 조회와 저장 단위를 나눴습니다.</p>
                 <ul class="bullet-list">
-                  <li>원장 조회와 소멸 처리를 paging으로 바꿔 데이터 양과 관계없이 일정한 단위로 반복했습니다.</li>
-                  <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 알림 레코드 batch insert, Kafka 발행 순서를 테스트로 고정했습니다.</li>
+                  <li>원장 조회와 소멸 처리를 페이지 단위로 바꿔 한 번에 적재하는 범위를 제한했습니다.</li>
+                  <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 알림 레코드 일괄 저장, Kafka 발행 순서를 테스트로 고정했습니다.</li>
                   <li>point_core 6개와 point_service 4개 archive 테이블의 이관 순서를 구현하고 테스트를 추가했습니다.</li>
                   <li>동일·상이한 lock key의 동시 요청, 같은 예산 ID의 동시 차감, 유료·무료 원장 혼합 사용, 회원 식별자 중복을 검증했습니다.</li>
                 </ul>
-                <p class="impact-line"><b>다시 시작할 단위</b> 소멸, 만료 안내, 아카이브가 각각 어디까지 끝났는지 Job의 처리 순서로 확인할 수 있습니다.</p>
+                <p class="impact-line"><b>진행 위치</b> 소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서로 어디까지 처리됐는지 확인합니다.</p>
               </div>
 
               <div class="project-entry">
                 <p class="project-kicker">Feed &amp; Search · Serving / Retrieval</p>
                 <h4>9개 후보 소스를 병렬 조회하고 500 → 100 → 20건으로 좁히는 캐시 계층을 분리</h4>
-                <p>캐시가 살아 있어도 좌표·필터·로그인 상태가 달라지면 결과는 이미 낡은 값입니다. 정상 스크롤은 재사용하되, 추천의 의미가 바뀌는 순간만 다시 계산했습니다.</p>
+                <p>좌표·필터·로그인 상태가 달라지면 캐시에 값이 남아 있어도 현재 요청에는 오래된 결과입니다. 정상 스크롤에서는 기존 후보를 재사용하고, 추천 조건이 바뀔 때만 다시 계산했습니다.</p>
                 <ul class="bullet-list">
                   <li>9개 OpenSearch 소스의 후보 상한을 2,700건으로 두고 병렬 조회해 FPR 500건, SPR 100건, 최종 20건으로 줄였습니다.</li>
                   <li>Snapshot, refill window, candidate pool, seen store를 나눠 정상 스크롤은 20건 page queue에서 끝나도록 설계했습니다.</li>
                   <li>30분 세션 TTL과 좌표·필터 요청 지문을 분리하고, 조건이 달라질 때만 후보 풀을 무효화했습니다.</li>
                   <li>guest → member 전환, Redis 장애 시 in-memory 우회, contentHash dedupe, 10km 거리 정책을 반영했습니다.</li>
                 </ul>
-                <p class="impact-line"><b>캐시를 버리는 기준</b> queue 소진, 조건 변경, 로그인 전환, Redis 장애를 한 가지 miss로 다루지 않고 각 상황에 맞춰 다시 계산하거나 우회했습니다.</p>
+                <p class="impact-line"><b>무효화·우회 기준</b> queue 소진, 조건 변경, 로그인 전환, Redis 장애를 한 가지 miss로 다루지 않고 상황에 맞춰 다시 계산하거나 우회했습니다.</p>
               </div>
 
               <div class="project-entry">
                 <p class="project-kicker">Engineering Platform · Test Support / Agent Lab</p>
-                <h4>반복하던 테스트 준비를 모으고, 개발 도구의 설치 경로와 검증 기준을 고정</h4>
+                <h4>테스트 준비를 공통 도구로 만들고 반복 개발 절차를 agent·skill로 구조화</h4>
                 <ul class="bullet-list">
                   <li>19개 주요 커밋으로 29개 helper와 43개 테스트를 추가해 fixture, mock, WebMvc, JPA, transaction 테스트 진입점을 통일했습니다.</li>
                   <li>15개 agent와 32개 skill을 manifest에 묶고 연결된 skill 의존성까지 재귀적으로 따라가 설치했습니다.</li>
-                  <li>구조 fixture 7개와 행동 케이스 10개를 정적으로 검증했습니다. 설치 회귀 52개와 Codex skill 탐색 32개도 모두 통과했습니다.</li>
+                  <li>구조 fixture 7개와 행동 케이스 10개의 계약을 정적으로 검증했고, 설치 회귀 52/52와 Codex skill 탐색 32/32를 확인했습니다.</li>
                   <li>NL-SQL guardian, index migration architect, search relevance evaluator, code cartographer 등 검색·DB·코드 이해 도구를 추가했습니다.</li>
                 </ul>
-                <p class="impact-line"><b>함께 쓰는 조건</b> test-support 변경은 43개 테스트로 확인합니다. agent-lab도 설치 결과와 런타임 탐색을 같은 절차로 다시 검증할 수 있습니다.</p>
+                <p class="impact-line"><b>반복 검증</b> test-support 변경은 43개 테스트로, Agent Lab 변경은 설치 회귀와 Codex skill 탐색으로 다시 확인합니다.</p>
               </div>
             </article>
           </section>
@@ -190,17 +194,17 @@
               <article class="compact-career-item">
                 <h3>토스랩 · JANDI Backend</h3>
                 <time datetime="2024-06">2024.06 — 2025.04</time>
-                <p>커버리지 70%인데도 배포 판단이 어려운 원인을 테스트 기준과 CI 실행 방식에서 찾았습니다. Drive-Service를 Spring Boot 2.3.8→3.3.3으로 올리며 테스트를 0→160개 이상으로 늘렸고, Mock 테스트가 놓친 JPA 변경 감지 오류는 실제 구현 테스트로 재현해 약 200만 건의 데이터를 보정했습니다.</p>
+                <p>커버리지 수치만으로 배포를 판단하기 어려워 테스트 기준과 CI 실행 방식을 다시 설계했습니다. Drive-Service를 Spring Boot 2.3.8→3.3.3으로 올리며 테스트를 0→160개 이상으로 늘렸고, Mock 테스트가 놓친 JPA 변경 감지 오류는 실제 구현 테스트로 재현해 약 200만 건의 데이터를 보정했습니다.</p>
               </article>
               <article class="compact-career-item">
                 <h3>오케스트로 · IDP / Vista</h3>
                 <time datetime="2023-09">2023.09 — 2024.05</time>
-                <p>Spring Cloud API Gateway와 Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. Vista에서는 VM metric 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
+                <p>Spring Cloud API Gateway와 Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. Vista에서는 VM 메트릭 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
               </article>
               <article class="compact-career-item">
                 <h3>즐거운 · Backend</h3>
                 <time datetime="2022-11">2022.11 — 2023.02</time>
-                <p>자사 서비스 백엔드 기능을 개발하고 운영 중 발생한 이슈를 유지보수했습니다.</p>
+                <p>자사 서비스 백엔드 기능을 개발하고 운영 중 발생한 문제를 해결했습니다.</p>
               </article>
             </div>
           </section>
