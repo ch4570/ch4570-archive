@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11150f">
+  <meta name="description" content="서민재 백엔드 엔지니어의 이력서와 포트폴리오. 이벤트 신뢰성, 피드 서빙, 테스트 기반, 개발 도구 경험을 정리했습니다.">
+  <title>서민재 · Backend Engineer</title>
+  <link rel="stylesheet" href="./assets/design-system.css">
+  <script src="./assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">본문으로 건너뛰기</a>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="site-brand" href="./" aria-label="서민재 홈">
+        <span class="site-brand-mark" aria-hidden="true">SM</span>
+        <strong>서민재</strong>
+        <span>Backend Systems</span>
+      </a>
+      <nav class="site-nav" aria-label="주요 문서">
+        <a href="./" aria-current="page">홈</a>
+        <a href="./resume/">이력서</a>
+        <a href="./portfolio/">포트폴리오</a>
+      </nav>
+      <div class="site-utilities">
+        <button class="button" type="button" data-copy-email>이메일 복사</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="home-hero" aria-labelledby="home-title">
+      <div class="container">
+        <div class="home-hero-layout">
+          <div>
+            <p class="identity-line">Rex Seo · Backend Engineer</p>
+            <h1 class="home-name" id="home-title">서민재</h1>
+            <p class="home-role">Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
+            <p class="hero-copy">
+              실패 지점을 빠르게 찾고 같은 규칙으로 복구할 수 있는 백엔드를 만들어 왔습니다.
+              최근에는 포인트 이벤트, 피드 서빙 캐시, 공통 test-support와 agent-lab을 맡아
+              상태·재처리·알림·캐시 무효화·설치 검증 규칙을 코드와 운영 절차에 반영했습니다.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="./portfolio/">대표 작업 보기 <span aria-hidden="true">→</span></a>
+              <a class="button" href="./resume/">이력서 보기</a>
+            </div>
+          </div>
+
+          <figure class="portrait-figure">
+            <img src="./assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886">
+            <figcaption>Seoul, Korea · 2022—현재</figcaption>
+          </figure>
+        </div>
+
+        <div class="metric-strip home-metrics" aria-label="대표 작업 규모">
+          <div class="metric-item">
+            <strong class="metric-value">9 · 6 · 8</strong>
+            <span class="metric-label">포인트 이벤트 추적</span>
+            <span class="metric-detail">내부 이벤트 9종을 6개 상태로 추적하고 8개 수동 복구 전략과 15분 정체 알림을 구성했습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">2,700→20</strong>
+            <span class="metric-label">피드 후보 선별</span>
+            <span class="metric-detail">9개 검색 소스의 후보를 FPR 500건, SPR 100건, 최종 20건 순서로 좁혔습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">29 + 43</strong>
+            <span class="metric-label">test-support 모듈</span>
+            <span class="metric-detail">29개 helper와 43개 테스트로 fixture, mock, Web, JPA 테스트의 시작점을 통일했습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">15 + 32</strong>
+            <span class="metric-label">agent-lab 구성</span>
+            <span class="metric-detail">15개 agent와 32개 skill에 설치, 검증, 평가 절차를 붙였습니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell" aria-labelledby="documents-title">
+      <div class="container">
+        <p class="section-kicker">Selected Work</p>
+        <h2 class="section-title" id="documents-title">이력서와 엔지니어링 포트폴리오</h2>
+
+        <div class="document-grid">
+          <a class="document-card" href="./resume/">
+            <span class="document-card-label">Resume</span>
+            <h3>이력서</h3>
+            <p>역순 경력, 대표 성과, 기술 스택, 학력과 공개 활동을 한 문서에 정리했습니다.</p>
+            <span class="document-card-meta">경력 · 기술 · 공개 활동</span>
+          </a>
+          <a class="document-card" href="./portfolio/">
+            <span class="document-card-label">Portfolio</span>
+            <h3>엔지니어링 포트폴리오</h3>
+            <p>이벤트 신뢰성, 포인트 정합성, 피드 서빙, 테스트 기반, 개발 도구를 사례로 설명합니다.</p>
+            <span class="document-card-meta">5개 사례 · 시스템 구조</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-shell" aria-labelledby="career-title">
+      <div class="container">
+        <p class="section-kicker">Career</p>
+        <h2 class="section-title" id="career-title">서비스 백엔드에서 운영 신뢰성까지</h2>
+        <p class="section-intro">API 개발로 시작해 이벤트 복구, 검색·랭킹 캐시, 테스트 도구처럼 운영에서 자주 쓰이는 기반을 다뤄 왔습니다.</p>
+
+        <div class="career-list">
+          <div class="career-row">
+            <time datetime="2025-06">2025.06 — 현재</time>
+            <div class="career-company">웍스피어(유)</div>
+            <p>JOBKOREA·Albamon Platform에서 포인트 이벤트, 피드 서빙, 공통 test-support와 agent-lab을 담당했습니다.</p>
+          </div>
+          <div class="career-row">
+            <time datetime="2024-06">2024.06 — 2025.04</time>
+            <div class="career-company">토스랩</div>
+            <p>JANDI 백엔드의 테스트 작성 규칙과 CI 실행 구조를 살펴 배포 신뢰도를 해치는 원인을 정리했습니다.</p>
+          </div>
+          <div class="career-row">
+            <time datetime="2023-09">2023.09 — 2024.05</time>
+            <div class="career-company">오케스트로</div>
+            <p>IDP의 API Gateway·인증/인가와 데이터 시각화 솔루션의 OpenSearch metric 조회 API를 개발했습니다.</p>
+          </div>
+          <div class="career-row">
+            <time datetime="2022-11">2022.11 — 2023.02</time>
+            <div class="career-company">즐거운</div>
+            <p>자사 서비스의 백엔드 기능을 개발하고 운영 이슈를 유지보수했습니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <div class="container page-footer-inner">
+      <div>
+        <h2>서민재 · Backend Engineer</h2>
+        <p>실패를 찾고, 복구 경로를 남기고, 다음 작업이 같은 규칙으로 이어지게 만듭니다.</p>
+      </div>
+      <div class="page-footer-links">
+        <a href="mailto:ch4570@naver.com">Email</a>
+        <a href="https://github.com/ch4570">GitHub</a>
+        <a href="https://velog.io/@ch4570/posts">Velog</a>
+        <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

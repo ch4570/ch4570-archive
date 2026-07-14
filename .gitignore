@@ -1,0 +1,5 @@
+.DS_Store
+.gstack/
+.omx/
+.vercel/
+_site/

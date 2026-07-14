@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11150f">
+  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 포인트 이벤트 신뢰성, 원장 정합성, 피드 서빙, test-support, agent-lab 사례를 담았습니다.">
+  <title>서민재 · Backend Engineering Portfolio</title>
+  <link rel="stylesheet" href="../assets/design-system.css">
+  <script src="../assets/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#portfolio-main">포트폴리오 본문으로 건너뛰기</a>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <header class="site-header screen-only">
+    <div class="site-header-inner">
+      <a class="site-brand" href="../" aria-label="서민재 홈">
+        <span class="site-brand-mark" aria-hidden="true">SM</span>
+        <strong>서민재</strong>
+        <span>Backend Systems</span>
+      </a>
+      <nav class="site-nav" aria-label="주요 문서">
+        <a href="../">홈</a>
+        <a href="../resume/">이력서</a>
+        <a href="./" aria-current="page">포트폴리오</a>
+      </nav>
+      <div class="site-utilities">
+        <button class="button" type="button" data-print>인쇄 · PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="portfolio-main">
+    <section class="portfolio-hero" aria-labelledby="portfolio-title">
+      <div class="container">
+        <div class="portfolio-hero-grid">
+          <div>
+            <p class="eyebrow eyebrow-coral">Backend Engineering Portfolio · 2026</p>
+            <h1 class="portfolio-title" id="portfolio-title">실패 지점을 찾고,<br>복구 경로를 나눈 백엔드 작업</h1>
+            <p class="hero-copy">
+              포인트 이벤트는 실패 상태와 재처리 조건을 나눴고, 피드는 계산 결과를 다시 쓸 때와 버릴 때를 구분했습니다.
+              테스트와 개발 도구는 다른 프로젝트에서도 같은 절차로 설치하고 검증할 수 있게 정리했습니다.
+            </p>
+          </div>
+          <div class="portfolio-profile">
+            <b>서민재 · Rex Seo</b>
+            <span>Backend Engineer</span>
+            <a href="mailto:ch4570@naver.com">ch4570@naver.com</a>
+            <a href="https://github.com/ch4570">GitHub</a>
+            <a href="https://velog.io/@ch4570/posts">Velog</a>
+            <a href="../resume/">Resume</a>
+          </div>
+        </div>
+
+        <div class="metric-strip" aria-label="포트폴리오 핵심 수치">
+          <div class="metric-item">
+            <strong class="metric-value">9 · 6 · 8</strong>
+            <span class="metric-label">내부 이벤트 구조</span>
+            <span class="metric-detail">9개 타입을 6개 상태로 추적하고 8개 수동 복구 전략을 연결했습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">2,700→20</strong>
+            <span class="metric-label">피드 랭킹 단계</span>
+            <span class="metric-detail">9개 소스를 병렬 조회한 뒤 FPR 500, SPR 100, 최종 20건으로 좁혔습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">29 / 43</strong>
+            <span class="metric-label">test-support 구성</span>
+            <span class="metric-detail">공통 helper와 테스트로 fixture, mock, Web, JPA 진입점을 검증했습니다.</span>
+          </div>
+          <div class="metric-item">
+            <strong class="metric-value">32/32</strong>
+            <span class="metric-label">agent-lab 설치 테스트</span>
+            <span class="metric-detail">15개 agent와 32개 skill의 설치 목록과 검증 절차를 관리했습니다.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="portfolio-layout">
+      <nav class="case-nav" aria-label="포트폴리오 목차">
+        <p class="case-nav-title">Case Index</p>
+        <ol>
+          <li><a href="#event" aria-current="true"><span>01</span>이벤트 신뢰성</a></li>
+          <li><a href="#point"><span>02</span>포인트 정합성</a></li>
+          <li><a href="#feed"><span>03</span>피드 서빙</a></li>
+          <li><a href="#test"><span>04</span>테스트 기반</a></li>
+          <li><a href="#agent"><span>05</span>개발 도구</a></li>
+          <li><a href="#previous"><span>06</span>이전 경력</a></li>
+          <li><a href="#evidence"><span>07</span>책임 범위</a></li>
+        </ol>
+        <button class="button" type="button" data-toggle-details aria-expanded="false">상세 펼치기</button>
+      </nav>
+
+      <article class="portfolio-content">
+        <section class="case-section" id="event" aria-labelledby="event-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">01</span>
+            <div>
+              <p class="section-kicker">Point Platform · Event Reliability</p>
+              <h2 class="case-title" id="event-title">발행 실패와 처리 실패는 복구 방법부터 달랐습니다.</h2>
+              <p class="case-lede">
+                포인트 차감, 회수, 만료 알림이 늦게 실패하면 정산 확인과 고객 응대가 함께 길어집니다.
+                어디서 멈췄는지 기록하고, 다음 행동이 다른 실패는 별도 상태로 남겼습니다.
+              </p>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt>담당</dt><dd>이벤트 상태·수동 복구·정체 알림 설계 및 구현</dd></div>
+            <div class="fact-cell"><dt>구조</dt><dd>내부 이벤트 9종, 상태 6개, 타입별 복구 전략 8개</dd></div>
+            <div class="fact-cell"><dt>저장</dt><dd>PostgreSQL internal_event_record · JSONB payload</dd></div>
+            <div class="fact-cell"><dt>관측</dt><dd>IN_PROGRESS 15분 초과 건을 타입별로 집계해 Slack 전송</dd></div>
+          </dl>
+
+          <div class="story-grid">
+            <div class="story-block">
+              <span class="story-label">상황</span>
+              <h3>성공 여부만으로는 다음 행동을 정할 수 없었습니다.</h3>
+              <p>메시지를 보내지 못한 경우와 소비자가 처리하다 실패한 경우는 확인할 데이터와 재시도 위치가 다릅니다. 한 상태로 뭉치면 운영자가 로그와 원장을 다시 대조해야 했습니다.</p>
+            </div>
+            <div class="story-block">
+              <span class="story-label">판단</span>
+              <h3>실패 위치를 상태로 남기고 복구 작업은 타입별로 분리했습니다.</h3>
+              <p>생성부터 복구 불가 실패까지 상태를 나누고, 포인트 차감·회수·만료 알림처럼 조건이 다른 작업은 각각의 수동 복구 전략으로 다시 실행했습니다.</p>
+            </div>
+          </div>
+
+          <details class="diagram-disclosure" open>
+            <summary>이벤트 처리와 복구 구조 전체 보기</summary>
+            <figure class="system-figure is-architecture">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b>내부 이벤트 생성·처리·복구 구조</b>
+                <span>실제 모듈과 저장소 경계</span>
+              </div>
+              <div class="diagram-legend" aria-label="연결선 범례">
+                <span><i class="legend-line"></i>호출</span>
+                <span><i class="legend-line is-async"></i>비동기</span>
+                <span><i class="legend-line is-recovery"></i>복구</span>
+              </div>
+            </figcaption>
+            <div class="architecture-board" role="group" aria-label="포인트 내부 이벤트의 생성, Kafka 처리, 수동 복구, 정체 알림 구조">
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>생성</b><span>point-application</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>Use case</em><b>API · Admin · Batch</b><small>차감·회수·사용·만료 업무</small></div>
+                  <div class="architecture-link"><span>create</span></div>
+                  <div class="architecture-node is-service"><em>Application</em><b>InternalEventCreator</b><small>payload 직렬화 · eventId 발급</small></div>
+                  <div class="architecture-link"><span>save</span></div>
+                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>internal_event_record</b><small>CREATED · JSONB payload</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>처리</b><span>infrastructure → worker</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>Producer</em><b>InternalEvent<wbr>KafkaProducer</b><small>발행 실패 → SEND_FAILED</small></div>
+                  <div class="architecture-link is-async"><span>send</span></div>
+                  <div class="architecture-node is-external"><em>Kafka</em><b>9개 내부 이벤트 topic</b><small>eventId와 payload 전달</small></div>
+                  <div class="architecture-link is-async"><span>consume</span></div>
+                  <div class="architecture-node is-service"><em>point-worker</em><b>9개 Listener</b><small>CREATED 확인 → IN_PROGRESS</small></div>
+                  <div class="architecture-link"><span>execute</span></div>
+                  <div class="architecture-node is-result"><em>Worker service</em><b>EventProcessor</b><small>COMPLETED · FAILED · NOT_RECOVERABLE_FAILED</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane is-recovery-lane">
+                <header class="architecture-lane-head"><b>수동 복구</b><span>Kafka 재발행 없이 업무 서비스 재실행</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-risk"><em>POST</em><b>/v1/internal-events/retry</b><small>event type · status 지정</small></div>
+                  <div class="architecture-link is-recovery"><span>query</span></div>
+                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>대상 이벤트 조회</b><small>저장된 payload 복원</small></div>
+                  <div class="architecture-link is-recovery"><span>route</span></div>
+                  <div class="architecture-node is-risk"><em>Coordinator</em><b>8개 Retry Strategy</b><small>타입별 업무 서비스 선택</small></div>
+                  <div class="architecture-link is-recovery"><span>rerun</span></div>
+                  <div class="architecture-node is-service"><em>Domain</em><b>업무 서비스 직접 호출</b><small>차감 · 회수 · 사용 · 알림</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>관측</b><span>point-worker batch</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>Batch trigger</em><b>Notification Job</b><small>외부 스케줄러가 HTTP로 실행</small></div>
+                  <div class="architecture-link"><span>find</span></div>
+                  <div class="architecture-node is-store"><em>QueryDSL</em><b>IN_PROGRESS · 15분 초과</b><small>추적 가능한 8종만 조회</small></div>
+                  <div class="architecture-link is-async"><span>group</span></div>
+                  <div class="architecture-node is-external"><em>APM client</em><b>Slack 요약 알림</b><small>이벤트 타입별 건수 전송</small></div>
+                </div>
+              </section>
+            </div>
+            </figure>
+          </details>
+
+          <div class="case-outcome">
+            <b>운영 흐름</b>
+            <p>발행 실패, 처리 실패, 복구 불가 실패를 상태로 남기고 수동 복구와 15분 정체 알림을 별도 경로로 운영했습니다.</p>
+          </div>
+
+          <details class="case-details">
+            <summary>세부 구현과 예외 처리</summary>
+            <div class="details-content">
+              <ul class="bullet-list">
+                <li>내부 이벤트 9종을 생성, 발행 실패, 처리 중, 완료, 처리 실패, 복구 불가 실패의 6개 상태로 기록했습니다.</li>
+                <li>수동 복구 API가 타입과 상태로 레코드를 찾고 저장된 payload로 8개 전략 중 하나를 실행하도록 구성했습니다.</li>
+                <li>Kafka에 다시 넣지 않고 타입별 업무 서비스를 직접 호출해 복구 위치를 고정했습니다.</li>
+                <li>IN_PROGRESS 상태로 15분 이상 멈춘 추적 대상 8종만 조회해 타입별 건수를 Slack에 전송했습니다.</li>
+                <li>상태 전환 타이밍 오류, 잘못된 상태 검사, 이벤트 발송 실패 로깅 누락을 수정했습니다.</li>
+                <li>배치 재시도와 프록시 기반 재시도 호출 문제를 확인하고 포인트 선점 복구 경로를 보강했습니다.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section class="case-section" id="point" aria-labelledby="point-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">02</span>
+            <div>
+              <p class="section-kicker">Point Ledger · Balance / Archive</p>
+              <h2 class="case-title" id="point-title">대량 처리 단위와 정산 검증 순서를 함께 바꿨습니다.</h2>
+              <p class="case-lede">
+                원장 소멸, 만료 안내, 아카이브는 서로 다른 배치입니다. 소멸 배치는 원장·잔액·거래 내역을 갱신하고,
+                안내 배치는 알림 레코드와 발송 이벤트를, 아카이브 배치는 보관 테이블의 이동 순서를 각각 관리합니다.
+              </p>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt>담당</dt><dd>원장 소멸 paging 전환·아카이브 배치 구현·만료 알림 이벤트 개선</dd></div>
+            <div class="fact-cell"><dt>처리 단위</dt><dd>전체 적재 대신 paging 기반 반복 처리</dd></div>
+            <div class="fact-cell"><dt>보관 대상</dt><dd>point_core 6개·point_service 4개 archive 테이블</dd></div>
+            <div class="fact-cell"><dt>동시성</dt><dd>분산락, 예산 경합, 유료·무료 원장 혼합 사용</dd></div>
+          </dl>
+
+          <div class="story-grid">
+            <div class="story-block">
+              <span class="story-label">상황</span>
+              <h3>세 Job은 같은 원장과 거래 데이터를 서로 다른 시점에 다룹니다.</h3>
+              <p>전체 데이터를 메모리에 올리는 방식과 느슨한 처리 경계는 데이터가 많아질수록 실행 부담과 확인 범위를 키웁니다.</p>
+            </div>
+            <div class="story-block">
+              <span class="story-label">판단</span>
+              <h3>처리량보다 같은 단위로 다시 돌릴 수 있는 구조를 먼저 잡았습니다.</h3>
+              <p>원장 조회와 소멸은 페이지 단위로 반복하고, 만료 대상 수집부터 이벤트 발행과 아카이브까지의 순서를 테스트에 남겼습니다.</p>
+            </div>
+          </div>
+
+          <details class="diagram-disclosure" open>
+            <summary>원장 배치 구조 전체 보기</summary>
+            <figure class="system-figure is-architecture">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b>원장 소멸·만료 안내·아카이브 배치</b>
+                <span>point-worker의 독립된 Job과 공통 데이터 경계</span>
+              </div>
+              <div class="diagram-legend" aria-label="연결선 범례">
+                <span><i class="legend-line"></i>chunk 처리</span>
+                <span><i class="legend-line is-async"></i>후속 이벤트</span>
+              </div>
+            </figcaption>
+            <div class="architecture-board" role="group" aria-label="포인트 원장의 소멸, 만료 안내, 아카이브 배치 구조">
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>소멸</b><span>PointExpireJob</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>Spring Batch</em><b>PointExpireJob</b><small>외부 호출로 Job 시작</small></div>
+                  <div class="architecture-link"><span>page</span></div>
+                  <div class="architecture-node is-store"><em>Reader</em><b>pointUserId 기반 조회</b><small>만료 원장과 회원 매핑 수집</small></div>
+                  <div class="architecture-link"><span>chunk</span></div>
+                  <div class="architecture-node is-service"><em>Transaction</em><b>PointExpireAppService</b><small>유료·무료 잔액과 원장 차감</small></div>
+                  <div class="architecture-link"><span>persist</span></div>
+                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>ExpireAlarmService</b><small>소멸 결과를 expire_notification_record에 저장</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>만료 안내</b><span>PointExpireAlarmJob</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>Partition</em><b>사이트별 Step</b><small>origin site 단위 분리</small></div>
+                  <div class="architecture-link is-wide-label"><span>beforeStep</span></div>
+                  <div class="architecture-node is-service"><em>Application</em><b>PointExpireAlarm<wbr>AppService</b><small>500건 paging·기업 회원 필터·알림 레코드 적재</small></div>
+                  <div class="architecture-link"><span>read</span></div>
+                  <div class="architecture-node is-store"><em>Reader</em><b>PENDING 알림</b><small>회원 이메일과 발송 대상 조회</small></div>
+                  <div class="architecture-link"><span>chunk</span></div>
+                  <div class="architecture-node is-service"><em>Writer</em><b>Kafka 이벤트 발행</b><small>POINT_<wbr>EXPIRATION_<wbr>ALARM_<wbr>SEND</small></div>
+                  <div class="architecture-link is-async"><span>publish</span></div>
+                  <div class="architecture-node is-result"><em>Worker</em><b>메일 전송</b><small>발송 후 SUCCESS 상태 반영</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>아카이브</b><span>LedgerArchiveJob</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>POST</em><b>/v1/ledgers/archive</b><small>상태·origin site·회원 유형·경과일 지정</small></div>
+                  <div class="architecture-link"><span>page 0</span></div>
+                  <div class="architecture-node is-store"><em>Paging reader</em><b>보관 대상 원장</b><small>삭제하며 읽어 항상 첫 페이지 조회</small></div>
+                  <div class="architecture-link"><span>chunk</span></div>
+                  <div class="architecture-node is-service"><em>Application</em><b>LedgerArchive<wbr>AppService</b><small>Facade로 10개 operator를 정해진 순서로 실행</small></div>
+                  <div class="architecture-link"><span>copy</span></div>
+                  <div class="architecture-node is-result"><em>point_core · point_service</em><b>10개 archive 테이블</b><small>원장·상태·거래·임시 사용·매핑 데이터</small></div>
+                </div>
+              </section>
+            </div>
+            </figure>
+          </details>
+
+          <div class="case-outcome">
+            <b>처리 순서</b>
+            <p>소멸, 만료 안내, 아카이브를 독립된 배치로 나누고 각 Job의 조회 단위와 후속 저장 순서를 테스트에 남겼습니다.</p>
+          </div>
+
+          <details class="case-details">
+            <summary>정합성과 회원 식별 처리</summary>
+            <div class="details-content">
+              <ul class="bullet-list">
+                <li>만료 대상 수집, 날짜 계산, 기업 회원 필터, 만료 알림 레코드 batch insert 순서를 검증했습니다.</li>
+                <li>point_core 6개와 point_service 4개 테이블의 아카이브 흐름과 테스트를 추가했습니다.</li>
+                <li>동일·상이한 lock key의 동시 요청과 같은 예산 ID의 동시 차감 시나리오를 검증했습니다.</li>
+                <li>유료·무료 원장 혼합 사용 케이스를 별도로 검증했습니다.</li>
+                <li>회원-워크스페이스 매핑, master/member 분리, 회원 탈퇴 이벤트, globalUserRef 중복 처리를 보강했습니다.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section class="case-section" id="feed" aria-labelledby="feed-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">03</span>
+            <div>
+              <p class="section-kicker">Feed &amp; Search · Serving / Retrieval</p>
+              <h2 class="case-title" id="feed-title">빠른 캐시보다 언제 다시 계산할지가 더 중요했습니다.</h2>
+              <p class="case-lede">
+                같은 사용자가 짧은 시간에 여러 페이지를 읽는 피드는 매번 검색하면 비싸고, 캐시를 오래 믿으면 낡습니다.
+                page queue, 후보 풀, 요청 지문, 노출 이력을 따로 둬 재사용 조건을 명시했습니다.
+              </p>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt>후보 조회</dt><dd>OpenSearch 9개 소스 병렬 실행, 설정상 최대 2,700건</dd></div>
+            <div class="fact-cell"><dt>랭킹</dt><dd>FPR 500 → SPR/Re-Rank 100 → 페이지 20건</dd></div>
+            <div class="fact-cell"><dt>캐시</dt><dd>Snapshot · FPR · SPR · User Vector, TTL 30분</dd></div>
+            <div class="fact-cell"><dt>분기</dt><dd>요청 지문 변경, guest → member, Redis 장애</dd></div>
+          </dl>
+
+          <div class="story-grid">
+            <div class="story-block">
+              <span class="story-label">상황</span>
+              <h3>호출 비용과 추천 신선함이 같은 캐시 정책 안에서 충돌했습니다.</h3>
+              <p>좌표나 필터가 바뀌었는데 이전 후보를 계속 쓰면 빠르지만 틀린 응답이 됩니다. 반대로 페이지마다 전부 다시 계산하면 검색과 랭킹 계층을 반복해서 탑니다.</p>
+            </div>
+            <div class="story-block">
+              <span class="story-label">판단</span>
+              <h3>스크롤, 큐 소진, 조건 변경, 장애를 서로 다른 경로로 보냈습니다.</h3>
+              <p>정상 스크롤은 page queue에서 끝내고, 후보가 부족할 때만 refill합니다. 좌표·필터 지문이 달라지면 후보 풀을 비우고, Redis 장애에는 응답을 우선했습니다.</p>
+            </div>
+          </div>
+
+          <details class="diagram-disclosure" open>
+            <summary>피드 캐시와 장애 우회 구조 전체 보기</summary>
+            <figure class="system-figure is-architecture">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b>Feed 조회의 cache hit·refill·fail-open 경로</b>
+                <span>feed-job-api · feed-job-core · OpenSearch · Redis</span>
+              </div>
+              <div class="diagram-legend" aria-label="연결선 범례">
+                <span><i class="legend-line"></i>데이터 흐름</span>
+                <span><i class="legend-line is-recovery"></i>무효화·우회</span>
+              </div>
+            </figcaption>
+            <div class="architecture-board" role="group" aria-label="피드 요청이 Redis snapshot을 우선 사용하고, 소진 시 OpenSearch와 랭킹 파이프라인으로 보충하며, 장애 시 메모리에서 계산하는 구조">
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>요청</b><span>feed-job-api</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-service"><em>GET /feed</em><b>Feed API</b><small>actor · cursor · page size 정규화</small></div>
+                  <div class="architecture-link"><span>resolve</span></div>
+                  <div class="architecture-node is-service"><em>Session</em><b>Session Manager</b><small>guest/member · 30분 TTL</small></div>
+                  <div class="architecture-link"><span>hash</span></div>
+                  <div class="architecture-node is-service"><em>SHA-256</em><b>Request Fingerprint</b><small>좌표와 4축 필터 비교</small></div>
+                  <div class="architecture-link"><span>pop</span></div>
+                  <div class="architecture-node is-store"><em>Redis List</em><b>Snapshot Queue</b><small>최종 후보 100건을 20건씩 소비</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>Cache hit</b><span>검색·랭킹 생략</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-store"><em>LPOP</em><b>Snapshot 20건</b><small>이미 정렬된 page</small></div>
+                  <div class="architecture-link"><span>serve</span></div>
+                  <div class="architecture-node is-result"><em>Response</em><b>Feed page</b><small>다음 cursor와 후보 반환</small></div>
+                  <div class="architecture-link is-async"><span>record</span></div>
+                  <div class="architecture-node is-store"><em>Redis Hash</em><b>Global Seen</b><small>회원 24시간 · 비회원 30분</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>Refill</b><span>Snapshot empty일 때 pull pipeline 실행</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-external"><em>OpenSearch K-NN</em><b>9개 소스 병렬 조회</b><small>source당 300 · 최대 2,700건</small></div>
+                  <div class="architecture-link"><span>rank</span></div>
+                  <div class="architecture-node is-service"><em>FPR · 500</em><b>정책·중복·Seen</b><small>차단 · contentHash · 유료 가산</small></div>
+                  <div class="architecture-link"><span>pull</span></div>
+                  <div class="architecture-node is-service"><em>SPR · 100</em><b>source quota</b><small>종류별 Top-K와 점수 정규화</small></div>
+                  <div class="architecture-link"><span>re-rank</span></div>
+                  <div class="architecture-node is-service"><em>Window · 100</em><b>회사 연속 노출 조정</b><small>같은 회사 최대 2개 연속</small></div>
+                  <div class="architecture-link"><span>RPUSH</span></div>
+                  <div class="architecture-node is-store"><em>Redis List</em><b>Snapshot refill</b><small>첫 20건 즉시 응답</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane is-recovery-lane">
+                <header class="architecture-lane-head"><b>무효화</b><span>세션과 Seen은 유지</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-risk"><em>Fingerprint changed</em><b>좌표·필터 변경</b><small>이전 후보를 재사용하지 않음</small></div>
+                  <div class="architecture-link is-recovery"><span>delete</span></div>
+                  <div class="architecture-node is-store"><em>Redis</em><b>Snapshot · FPR · SPR</b><small>후보 풀 3종만 삭제</small></div>
+                  <div class="architecture-link is-recovery"><span>next miss</span></div>
+                  <div class="architecture-node is-service"><em>Cold path</em><b>새 조건으로 refill</b><small>OpenSearch부터 다시 실행</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane is-recovery-lane">
+                <header class="architecture-lane-head"><b>Fail-open</b><span>Redis unavailable</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-risk"><em>Cache error</em><b>Snapshot unavailable</b><small>요청 cycle에서 Redis 우회</small></div>
+                  <div class="architecture-link is-recovery"><span>bypass</span></div>
+                  <div class="architecture-node is-service"><em>In-memory</em><b>같은 랭킹 파이프라인</b><small>offset page를 메모리에서 계산</small></div>
+                  <div class="architecture-link is-recovery"><span>skip write</span></div>
+                  <div class="architecture-node is-result"><em>Response first</em><b>Feed page</b><small>cache와 seen 기록 없이 반환</small></div>
+                </div>
+              </section>
+            </div>
+            </figure>
+          </details>
+
+          <div class="case-outcome">
+            <b>캐시 정책</b>
+            <p>cache hit, queue refill, 요청 조건 변경, 로그인 전환, Redis 장애에 각각 다른 재사용·무효화·우회 규칙을 적용했습니다.</p>
+          </div>
+
+          <details class="case-details">
+            <summary>랭킹·캐시·검색 정책 상세</summary>
+            <div class="details-content">
+              <ul class="bullet-list">
+                <li>Snapshot, FPR pool, SPR pool, user vector, global seen을 서로 다른 Redis key와 TTL로 관리했습니다.</li>
+                <li>9개 OpenSearch 소스를 virtual thread에서 병렬 호출하고 한 소스의 실패나 timeout은 빈 후보로 접어 나머지 결과를 유지했습니다.</li>
+                <li>Snapshot에 남은 후보가 있으면 20건만 꺼내고, 소진됐을 때만 100건짜리 랭킹 window를 다시 채웠습니다.</li>
+                <li>seen은 노출한 페이지마다 기록하고 FPR에서 감점 신호로 사용했습니다.</li>
+                <li>세션과 후보 캐시는 30분, 회원 global seen은 24시간 동안 유지했습니다.</li>
+                <li>위치 기준 거리 가중치와 10km 반경, 좌표가 없는 공고의 보존·제외 정책을 반영했습니다.</li>
+                <li>메인 4축 필터를 색인과 질의 조립에 반영하고 회원·비회원에서 같은 의미로 적용했습니다.</li>
+                <li>유료 후보는 별도 영역으로 떼지 않고 FPR 점수 가산에 포함했습니다.</li>
+                <li>재게시된 같은 공고는 FPR에서 contentHash 기반으로 다시 접었습니다.</li>
+                <li>검색 인덱스 전환, read/write 계정 경계, strict mapping 이슈를 함께 다뤘습니다.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section class="case-section" id="test" aria-labelledby="test-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">04</span>
+            <div>
+              <p class="section-kicker">Engineering Platform · Test Support</p>
+              <h2 class="case-title" id="test-title">테스트 준비 코드를 공통 진입점으로 옮겼습니다.</h2>
+              <p class="case-lede">
+                fixture와 mock 초기화 방식이 프로젝트마다 다르면 리뷰가 검증 내용보다 setup 차이를 먼저 읽게 됩니다.
+                목적별 시작점을 나누고 공통 준비 코드는 test-support로 모았습니다.
+              </p>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt>주요 커밋</dt><dd>test-support를 확장한 19개 변경</dd></div>
+            <div class="fact-cell"><dt>모듈 구성</dt><dd>fixture·mock·Web·JPA 등 29개 helper</dd></div>
+            <div class="fact-cell"><dt>테스트</dt><dd>공통 진입점과 helper를 다룬 43개 테스트</dd></div>
+            <div class="fact-cell"><dt>공개 활동</dt><dd>YouthCon 2025 Spring Test 발표</dd></div>
+          </dl>
+
+          <details class="diagram-disclosure" open>
+            <summary>test-support 구성 전체 보기</summary>
+            <figure class="system-figure is-architecture">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b>module:test-support의 진입점과 공통 도구</b>
+                <span>상속 구조와 helper 책임을 분리한 모듈 맵</span>
+              </div>
+            </figcaption>
+            <div class="architecture-board" role="group" aria-label="test-support의 테스트 기본 클래스와 fixture, mock, web, database helper 구성">
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>진입점</b><span>테스트 목적별 base class</span></header>
+                <div class="architecture-cluster-grid is-four">
+                  <div class="architecture-node is-service"><em>Base</em><b>AbstractTest</b><small>공통 fixture와 기본 설정</small></div>
+                  <div class="architecture-node is-service"><em>Mock</em><b>AbstractMockTest</b><small>mock 생성·초기화</small></div>
+                  <div class="architecture-node is-service"><em>Web</em><b>AbstractWebMvcTest</b><small>MVC request·response</small></div>
+                  <div class="architecture-node is-service"><em>Database</em><b>AbstractDataBaseTest</b><small>JPA·transaction 환경</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>공통 도구</b><span>반복 setup을 모듈 내부로 이동</span></header>
+                <div class="architecture-cluster-grid is-four">
+                  <div class="architecture-node"><em>Fixture</em><b>FixtureMonkeyFactory</b><small>fixture 생성 규칙</small></div>
+                  <div class="architecture-node"><em>Extension</em><b>AutoMockExtension</b><small>mock 주입과 reset</small></div>
+                  <div class="architecture-node"><em>Web</em><b>WrappedMockMvc</b><small>요청·응답 검증 wrapper</small></div>
+                  <div class="architecture-node"><em>JPA</em><b>DB Initializer · Tx Support</b><small>데이터 초기화와 트랜잭션 제어</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>계약</b><span>사용 규칙을 코드와 테스트로 유지</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-store"><em>29 helpers</em><b>module:test-support</b><small>프로젝트 공통 test fixture</small></div>
+                  <div class="architecture-link"><span>used by</span></div>
+                  <div class="architecture-node is-service"><em>Project tests</em><b>Web · Domain · Repository</b><small>목적별 base class 선택</small></div>
+                  <div class="architecture-link"><span>guard</span></div>
+                  <div class="architecture-node is-result"><em>43 tests</em><b>회귀 테스트와 JavaDoc</b><small>공통 동작과 사용법 유지</small></div>
+                </div>
+              </section>
+            </div>
+            </figure>
+          </details>
+
+          <div class="case-outcome">
+            <b>공통 진입점</b>
+            <p>19개 주요 커밋으로 29개 helper를 추가하고 43개 테스트에서 fixture, mock, WebMvc, JPA, transaction 진입점을 확인했습니다.</p>
+          </div>
+
+          <details class="case-details">
+            <summary>제공 기능과 CI 처리</summary>
+            <div class="details-content">
+              <ul class="bullet-list">
+                <li>기본 테스트, mock 테스트, WebMvc 테스트, JPA 테스트의 시작점을 분리했습니다.</li>
+                <li>공통 fixture 설정과 자동 mock 주입·초기화로 반복 setup을 helper로 옮겼습니다.</li>
+                <li>MockMvc 요청 빌더, query string null 처리, 응답 검증 래퍼를 제공했습니다.</li>
+                <li>JPA test initializer, Spring utils, transaction helper로 데이터 테스트 준비를 정리했습니다.</li>
+                <li>느린 테스트 제외, active profile 기본값, unsafe warning 제거, JavaDoc을 반영했습니다.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section class="case-section" id="agent" aria-labelledby="agent-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">05</span>
+            <div>
+              <p class="section-kicker">Engineering Platform · Agent Lab</p>
+              <h2 class="case-title" id="agent-title">개인 자동화를 설치하고 검증할 수 있는 개발 자산으로 묶었습니다.</h2>
+              <p class="case-lede">
+                프롬프트 파일만 늘리면 환경이 바뀔 때 누락을 찾기 어렵습니다. 설치 목록을 manifest 한 곳에서 관리하고,
+                실제 적용 전후를 같은 명령으로 확인하도록 만들었습니다.
+              </p>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt>구성</dt><dd>15개 agent, 32개 skill</dd></div>
+            <div class="fact-cell"><dt>구조 평가</dt><dd>7/7 통과</dd></div>
+            <div class="fact-cell"><dt>행동 검증</dt><dd>7/7 통과</dd></div>
+            <div class="fact-cell"><dt>설치 테스트</dt><dd>32/32 통과</dd></div>
+          </dl>
+
+          <details class="diagram-disclosure" open>
+            <summary>agent-lab 설치와 검증 구조 전체 보기</summary>
+            <figure class="system-figure is-architecture">
+            <figcaption>
+              <div class="diagram-caption-title">
+                <b>Agent Lab 자산·설치기·평가 게이트</b>
+                <span>manifest.txt를 중심으로 한 배포 구조</span>
+              </div>
+              <div class="diagram-legend" aria-label="연결선 범례">
+                <span><i class="legend-line"></i>설치</span>
+                <span><i class="legend-line is-recovery"></i>실패 시 중단</span>
+              </div>
+            </figcaption>
+            <div class="architecture-board" role="group" aria-label="Agent Lab의 자산 목록, 선택 설치, 정합성 검사와 평가 구조">
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>자산</b><span>repository inventory</span></header>
+                <div class="architecture-cluster-grid is-five">
+                  <div class="architecture-node is-service"><em>15</em><b>Agents</b><small>정의와 지식 bundle</small></div>
+                  <div class="architecture-node is-service"><em>32</em><b>Skills</b><small>반복 가능한 workflow</small></div>
+                  <div class="architecture-node"><em>Contracts</em><b>Memory</b><small>schema와 policy</small></div>
+                  <div class="architecture-node"><em>Runtime</em><b>NL-SQL MCP</b><small>read-only multi-dialect</small></div>
+                  <div class="architecture-node"><em>Fixtures</em><b>Evals</b><small>구조·행동 평가 case</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane">
+                <header class="architecture-lane-head"><b>설치</b><span>install/install.sh</span></header>
+                <div class="architecture-path">
+                  <div class="architecture-node is-store"><em>SSOT</em><b>manifest.txt</b><small>자산·bundle·의존 skill 선언</small></div>
+                  <div class="architecture-link"><span>plan</span></div>
+                  <div class="architecture-node is-service"><em>List · Dry-run</em><b>복사 계획 확인</b><small>대상과 경로를 먼저 출력</small></div>
+                  <div class="architecture-link"><span>apply</span></div>
+                  <div class="architecture-node is-service"><em>Runtime adapter</em><b>선택 설치</b><small>Claude · OpenCode · Codex 경로</small></div>
+                  <div class="architecture-link"><span>verify</span></div>
+                  <div class="architecture-node is-result"><em>Target repo</em><b>정의 + bundle + skill</b><small>상대경로 의존성을 함께 배포</small></div>
+                </div>
+              </section>
+              <section class="architecture-lane is-recovery-lane">
+                <header class="architecture-lane-head"><b>게이트</b><span>드리프트나 회귀가 있으면 설치 중단</span></header>
+                <div class="architecture-cluster-grid is-three">
+                  <div class="architecture-node is-risk"><em>Manifest</em><b>check-manifest.sh</b><small>미등록·끊긴 경로 탐지</small></div>
+                  <div class="architecture-node is-risk"><em>Structure · Behavior</em><b>Eval 7/7 · 7/7</b><small>fixture와 runtime contract 검사</small></div>
+                  <div class="architecture-node is-risk"><em>Installer</em><b>test-install 32/32</b><small>dry-run·apply·verify 회귀 검사</small></div>
+                </div>
+              </section>
+            </div>
+            </figure>
+          </details>
+
+          <div class="case-outcome">
+            <b>배포 기준</b>
+            <p>15개 agent와 32개 skill을 같은 설치 절차로 관리하고, 구조·행동·설치 검증을 통과한 자산만 재사용 흐름에 남겼습니다.</p>
+          </div>
+
+          <details class="case-details">
+            <summary>도구 범위와 안전 경계</summary>
+            <div class="details-content">
+              <ul class="bullet-list">
+                <li>manifest를 설치 자산의 단일 목록으로 두고 정의 파일, 지식 번들, 연결 skill을 함께 관리했습니다.</li>
+                <li>install.sh의 list, dry-run, apply, verify와 check-manifest 정합성 검사를 구현했습니다.</li>
+                <li>memory recall, retrieval gate, memory poisoning, stale memory, skill replay를 평가 항목으로 정의했습니다.</li>
+                <li>행동 평가 런타임 메트릭과 safety gate로 동작 회귀를 확인했습니다.</li>
+                <li>NL-SQL MCP에 multi-dialect와 읽기 전용 경계를 두고 위험한 쿼리 실행을 막았습니다.</li>
+                <li>code cartographer와 diagram extract skill로 코드 이해 결과를 다이어그램으로 공유하게 했습니다.</li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section class="case-section" id="previous" aria-labelledby="previous-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">06</span>
+            <div>
+              <p class="section-kicker">Previous Experience</p>
+              <h2 class="case-title" id="previous-title">최근 작업으로 이어진 이전 경험</h2>
+              <p class="case-lede">테스트 신뢰성, 인증·인가, 검색 API를 다룬 경험이 현재의 이벤트 복구와 서빙 구조 작업으로 이어졌습니다.</p>
+            </div>
+          </header>
+
+          <div class="timeline-table">
+            <article class="timeline-row">
+              <div>
+                <h3>토스랩 · JANDI</h3>
+                <time datetime="2024-06">2024.06 — 2025.04</time>
+              </div>
+              <p>테스트가 있어도 배포 판단이 어려운 원인을 작성 규칙과 CI 실행 구조에서 찾았습니다. 테스트 스타일을 정리하고 의미 없는 성공 테스트를 덜어냈으며, CI 메모리 문제는 리소스 증설보다 컨텍스트 재사용과 실행 순서를 먼저 분석했습니다.</p>
+            </article>
+            <article class="timeline-row">
+              <div>
+                <h3>오케스트로 · IDP / Vista</h3>
+                <time datetime="2023-09">2023.09 — 2024.05</time>
+              </div>
+              <p>신용정보원 IDP에서 Spring Cloud API Gateway, Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. 하나금융그룹 Vista에서는 VM metric 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
+            </article>
+            <article class="timeline-row">
+              <div>
+                <h3>즐거운 · Backend</h3>
+                <time datetime="2022-11">2022.11 — 2023.02</time>
+              </div>
+              <p>자사 서비스의 백엔드 기능을 개발하고 운영 중 발생한 이슈를 유지보수했습니다.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="case-section" id="evidence" aria-labelledby="evidence-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">07</span>
+            <div>
+              <p class="section-kicker">Engineering Ownership</p>
+              <h2 class="case-title" id="evidence-title">대표 프로젝트별 책임 범위</h2>
+            </div>
+          </header>
+
+          <div class="scope-grid">
+            <article class="scope-item">
+              <h3>포인트 이벤트 신뢰성</h3>
+              <p>이벤트 상태, 발행 실패, 처리 실패, 타입별 재처리, 장기 미처리 집계 알림을 담당했습니다.</p>
+            </article>
+            <article class="scope-item">
+              <h3>포인트 원장·배치</h3>
+              <p>원장 조회, 소멸 처리, 아카이브, 만료 안내, 회원 상태 이벤트와 동시성 검증을 다뤘습니다.</p>
+            </article>
+            <article class="scope-item">
+              <h3>피드 서빙·검색</h3>
+              <p>후보 수집, FPR·SPR·Re-Rank, 세션 캐시, 요청 지문, 노출 이력, 장애 우회를 구현했습니다.</p>
+            </article>
+            <article class="scope-item">
+              <h3>테스트 기반</h3>
+              <p>fixture, mock, WebMvc, JPA, transaction helper와 CI·문서화 규칙을 공통 모듈에 정리했습니다.</p>
+            </article>
+            <article class="scope-item">
+              <h3>Agent Lab</h3>
+              <p>agent·skill manifest, 설치 명령, 검증 절차, 구조·행동 평가, 안전 경계를 구현했습니다.</p>
+            </article>
+            <article class="scope-item">
+              <h3>기술 스택</h3>
+              <ul class="tag-list" aria-label="기술 스택">
+                <li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>Kafka</li><li>Redis</li><li>OpenSearch</li><li>Spring Batch</li><li>JPA</li><li>QueryDSL</li><li>Testcontainers</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+      </article>
+    </div>
+  </main>
+
+  <footer class="page-footer">
+    <div class="container page-footer-inner">
+      <div>
+        <h2>서민재 · Backend Engineer</h2>
+        <p>Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
+      </div>
+      <div class="page-footer-links">
+        <a href="../resume/">Resume</a>
+        <a href="mailto:ch4570@naver.com">Email</a>
+        <a href="https://github.com/ch4570">GitHub</a>
+        <a href="https://velog.io/@ch4570/posts">Velog</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
