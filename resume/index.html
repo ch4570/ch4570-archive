@@ -45,7 +45,7 @@
           </p>
         </div>
         <address class="resume-contact">
-          <a href="mailto:ch4570@naver.com">ch4570@naver.com</a>
+          <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
           <a href="https://github.com/ch4570">github.com/ch4570</a>
           <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
           <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
@@ -172,14 +172,14 @@
 
               <div class="project-entry">
                 <p class="project-kicker">Engineering Platform · Test Support / Agent Lab</p>
-                <h4>반복하던 테스트 준비를 모으고, 개발 도구는 설치 후 동작까지 검사</h4>
+                <h4>반복하던 테스트 준비를 모으고, 개발 도구의 설치 경로와 검증 기준을 고정</h4>
                 <ul class="bullet-list">
                   <li>19개 주요 커밋으로 29개 helper와 43개 테스트를 추가해 fixture, mock, WebMvc, JPA, transaction 테스트 진입점을 통일했습니다.</li>
-                  <li>15개 agent와 32개 skill을 manifest에 묶고 list, dry-run, apply, verify 절차를 마련했습니다.</li>
-                  <li>7/7 구조 평가, 7/7 행동 검증, 32/32 설치 테스트로 agent-lab의 설치 결과와 동작을 확인했습니다.</li>
+                  <li>15개 agent와 32개 skill을 manifest에 묶고 연결된 skill 의존성까지 재귀적으로 따라가 설치했습니다.</li>
+                  <li>구조 fixture 7개와 행동 케이스 10개를 정적으로 검증했습니다. 설치 회귀 52개와 Codex skill 탐색 32개도 모두 통과했습니다.</li>
                   <li>NL-SQL guardian, index migration architect, search relevance evaluator, code cartographer 등 검색·DB·코드 이해 도구를 추가했습니다.</li>
                 </ul>
-                <p class="impact-line"><b>함께 쓰는 조건</b> test-support는 43개 테스트로, agent-lab은 구조·행동·설치 검사로 변경 후에도 같은 쓰임을 유지했습니다.</p>
+                <p class="impact-line"><b>함께 쓰는 조건</b> test-support 변경은 43개 테스트로 확인합니다. agent-lab도 설치 결과와 런타임 탐색을 같은 절차로 다시 검증할 수 있습니다.</p>
               </div>
             </article>
           </section>

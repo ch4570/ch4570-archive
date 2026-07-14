@@ -46,7 +46,7 @@
           <div class="portfolio-profile">
             <b>서민재 · Rex Seo</b>
             <span>Backend Engineer</span>
-            <a href="mailto:ch4570@naver.com">ch4570@naver.com</a>
+            <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
             <a href="https://github.com/ch4570">GitHub</a>
             <a href="https://velog.io/@ch4570/posts">Velog</a>
             <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
@@ -73,8 +73,8 @@
           </div>
           <div class="metric-item">
             <strong class="metric-value">32/32</strong>
-            <span class="metric-label">agent-lab 설치 테스트</span>
-            <span class="metric-detail">15개 agent와 32개 skill이 설치 뒤에도 의도대로 동작하는지 검사했습니다.</span>
+            <span class="metric-label">Codex skill 탐색</span>
+            <span class="metric-detail">공식 경로에 설치한 skill 32개를 Codex CLI가 빠짐없이 찾는지 확인했습니다.</span>
           </div>
         </div>
       </div>
@@ -700,126 +700,250 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">05</span>
             <div>
-              <p class="section-kicker">Engineering Platform · Agent Lab</p>
-              <h2 class="case-title" id="agent-title">프롬프트를 복사하는 데서 끝내지 않고, 설치 후 동작까지 검사했습니다.</h2>
+              <p class="section-kicker">Engineering Platform · Agent Lab v0.1.0.0</p>
+              <h2 class="case-title" id="agent-title">잘 만든 프롬프트 하나에 그치지 않고, 다시 검증할 수 있는 실행 자산을 만들었습니다.</h2>
               <p class="case-lede">
-                파일을 하나씩 복사하는 방식으로는 무엇이 빠졌는지, 새 환경에서도 같은 결과가 나오는지 알기 어려웠습니다.
-                manifest를 기준으로 설치하고 실제 행동까지 확인해야 재사용 가능한 도구라고 봤습니다.
+                에이전트 역할만 적어 둔 문서는 오래 쓰기 어려웠습니다. 어떤 근거를 읽고 어떤 skill을 호출할지,
+                변경 뒤에도 같은 방식으로 설치되고 발견되는지까지 한 묶음으로 관리했습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt>구성</dt><dd>15개 agent, 32개 skill</dd></div>
-            <div class="fact-cell"><dt>구조 평가</dt><dd>7/7 통과</dd></div>
-            <div class="fact-cell"><dt>행동 검증</dt><dd>7/7 통과</dd></div>
-            <div class="fact-cell"><dt>설치 테스트</dt><dd>32/32 통과</dd></div>
+            <div class="fact-cell"><dt>실행 자산</dt><dd>15 agents · 32 skills</dd></div>
+            <div class="fact-cell"><dt>연결 구조</dt><dd>24 agent→skill · 11 deps</dd></div>
+            <div class="fact-cell"><dt>평가 계약</dt><dd>구조 7/7 · 행동 10/10</dd></div>
+            <div class="fact-cell"><dt>실행 검증</dt><dd>설치 52/52 · 탐색 32/32</dd></div>
           </dl>
 
           <details class="diagram-disclosure" open>
-            <summary>설치 흐름과 검증 게이트 보기</summary>
-            <figure class="system-figure system-map system-map--pipeline">
+            <summary>스킬과 에이전트가 실행되는 구조 보기</summary>
+            <figure class="system-figure system-map system-map--agent-runtime">
               <figcaption>
                 <div class="diagram-caption-title">
-                  <b>manifest 하나로 설치 대상을 정하고 검증하는 흐름</b>
-                  <span>목록을 먼저 확정하고 세 검증을 통과한 자산만 배포합니다.</span>
+                  <b>Agent가 역할을 정하고, skill이 절차를 제공하며, KB가 판단 근거를 보탭니다.</b>
+                  <span>Agent Lab이 직접 작업을 실행하지는 않습니다. 자산과 의존성을 묶어 각 런타임에 설치합니다.</span>
                 </div>
                 <div class="diagram-legend" aria-label="연결선 범례">
-                  <span><i class="legend-line"></i>설치</span>
-                  <span><i class="legend-line is-recovery"></i>실패 시 중단</span>
+                  <span><i class="legend-line"></i>실행 순서</span>
+                  <span><i class="legend-line is-async"></i>런타임 경계</span>
                 </div>
               </figcaption>
-              <div class="system-map__canvas" role="group" aria-label="Agent Lab의 자산 목록, 설치 계획, 검증 게이트, 환경별 배포 흐름">
-                <div class="map-inventory" aria-label="Agent Lab 배포 자산">
-                  <div><b>15 Agents</b><span>정의 · 지식 번들</span></div>
-                  <div><b>32 Skills</b><span>반복 workflow</span></div>
-                  <div><b>Memory</b><span>schema · policy</span></div>
-                  <div><b>NL-SQL MCP</b><span>read-only · multi-dialect</span></div>
-                  <div><b>Evals</b><span>구조 · 행동 검증 fixture</span></div>
+              <div class="system-map__canvas" role="group" aria-label="Agent Lab 자산을 Claude Code와 Codex에서 발견하고 실행하는 구조">
+                <section class="agent-registry" aria-label="Agent Lab 자산 목록">
+                  <div class="agent-registry__copy">
+                    <span>Asset registry · v0.1.0.0</span>
+                    <b>manifest.txt</b>
+                    <small>선택한 자산과 연결된 의존성을 한곳에서 찾습니다.</small>
+                  </div>
+                  <dl class="agent-registry__stats">
+                    <div><dt>Agents</dt><dd>15</dd></div>
+                    <div><dt>Bundles</dt><dd>14</dd></div>
+                    <div><dt>Skills</dt><dd>32</dd></div>
+                  </dl>
+                </section>
+
+                <div class="agent-runtime-fork"><span>설치된 자산을 런타임이 탐색·선택</span></div>
+
+                <div class="agent-runtime-lanes">
+                  <section class="runtime-lane runtime-lane--claude">
+                    <header class="runtime-lane__head">
+                      <span>Agent + Skill</span>
+                      <div><b>Claude Code</b><small>역할과 절차를 함께 설치</small></div>
+                    </header>
+                    <div class="map-sequence runtime-route">
+                      <div class="map-node map-node--external">
+                        <span class="map-node__type">01 · Runtime routing</span>
+                        <strong>Agent 선택</strong>
+                        <small>작업 내용으로 고르거나 이름으로 호출</small>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>참조</span></div>
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">02 · Role + knowledge</span>
+                        <strong>정의와 지식 번들</strong>
+                        <code>.claude/agents/</code>
+                        <small>SOUL · principles · KB</small>
+                      </div>
+                      <div class="map-edge"><span>호출</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">03 · Procedure</span>
+                        <strong>연결된 skill 실행</strong>
+                        <code>.claude/skills/</code>
+                        <small>workflow · project tools</small>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="runtime-lane runtime-lane--codex">
+                    <header class="runtime-lane__head">
+                      <span>Skill lane</span>
+                      <div><b>Codex</b><small>32/32 skill discovery 확인</small></div>
+                    </header>
+                    <div class="map-sequence runtime-route">
+                      <div class="map-node map-node--external">
+                        <span class="map-node__type">01 · Discovery</span>
+                        <strong>Skill 탐색과 호출</strong>
+                        <code>/skills · $skill-name</code>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>로드</span></div>
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">02 · Workflow</span>
+                        <strong>절차와 참고 지식</strong>
+                        <code>.agents/skills/</code>
+                        <small>SKILL.md · reference</small>
+                      </div>
+                      <div class="map-edge"><span>실행</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">03 · Project context</span>
+                        <strong>현재 저장소에서 작업</strong>
+                        <small>file · shell · git · test</small>
+                      </div>
+                    </div>
+                  </section>
                 </div>
 
-                <section class="map-band">
-                  <header class="map-band__head">
-                    <span class="map-index">01</span>
-                    <div><b>설치 계획</b><small>복사하기 전에 무엇이 어디로 가는지 확인합니다.</small></div>
-                  </header>
-                  <div class="map-sequence">
-                    <div class="map-node map-node--store">
-                      <span class="map-node__type">Single source of truth</span>
-                      <strong>manifest.txt</strong>
-                      <small>자산 · 번들 · 의존 skill</small>
-                    </div>
-                    <div class="map-edge"><span>계획</span></div>
-                    <div class="map-node">
-                      <span class="map-node__type">List · Dry-run</span>
-                      <strong>설치 대상과 경로 확인</strong>
-                      <code>install/install.sh</code>
-                    </div>
+                <div class="agent-execution-rail" aria-label="공통 실행 결과">
+                  <div>
+                    <span>Shared execution</span>
+                    <b>현재 코드와 도구를 읽고</b>
+                    <small>추측 대신 저장소 상태를 기준으로 작업합니다.</small>
                   </div>
-                </section>
-
-                <section class="map-gate">
-                  <header class="map-gate__head">
-                    <span class="map-index">02</span>
-                    <div><b>검증 게이트</b><small>드리프트나 회귀가 하나라도 있으면 적용하지 않습니다.</small></div>
-                  </header>
-                  <div class="map-gate__grid">
-                    <div class="map-node map-node--risk">
-                      <span class="map-node__type">Manifest</span>
-                      <strong>목록 정합성</strong>
-                      <code>check-manifest.sh</code>
-                      <small>미등록 자산 · 끊긴 경로</small>
-                    </div>
-                    <div class="map-node map-node--risk">
-                      <span class="map-node__type">Structure · Behavior</span>
-                      <strong>Eval 7/7 · 7/7</strong>
-                      <small>fixture · runtime contract</small>
-                    </div>
-                    <div class="map-node map-node--risk">
-                      <span class="map-node__type">Installer</span>
-                      <strong>설치 테스트 32/32</strong>
-                      <small>dry-run · apply · verify</small>
-                    </div>
+                  <i aria-hidden="true">→</i>
+                  <div class="agent-execution-rail__result">
+                    <span>Output contract</span>
+                    <b>수정 근거와 검증 결과까지 남깁니다.</b>
+                    <small>file:line · test result · risk · next action</small>
                   </div>
-                  <div class="map-gate__result"><span>모두 통과</span><b>환경별 설치 허용</b></div>
-                </section>
+                </div>
 
-                <section class="map-band map-band--observe">
-                  <header class="map-band__head">
+                <ol class="agent-install-flow" aria-label="설치와 검증 순서">
+                  <li><span>01</span><b>자산 선택</b><small>agent · skill · all-*</small></li>
+                  <li><span>02</span><b>연결 항목 확인</b><small>연결 skill을 재귀 탐색</small></li>
+                  <li><span>03</span><b>런타임 경로에 설치</b><small>dry-run · apply · verify</small></li>
+                  <li><span>04</span><b>회귀 검사</b><small>설치 52/52 · Codex 32/32</small></li>
+                </ol>
+
+                <aside class="runtime-caveat" role="note">
+                  <b>OpenCode</b>
+                  <span><code>.opencode</code> 경로 배치는 검사했습니다. agent 포맷 변환과 실제 선택·실행은 아직 검증하지 않았습니다.</span>
+                </aside>
+              </div>
+            </figure>
+          </details>
+
+          <details class="diagram-disclosure" open>
+            <summary>실행 경험이 다음 작업에 반영되는 과정 보기</summary>
+            <figure class="system-figure system-map system-map--agent-learning">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>실행 경험은 곧바로 규칙이 되지 않습니다.</b>
+                  <span>후보의 신뢰·재현성·위험을 확인하고, 사람이 승인한 변경만 다음 실행에 쓰도록 설계했습니다.</span>
+                </div>
+                <div class="diagram-legend" aria-label="평가 경로 범례">
+                  <span><i class="legend-line"></i>승격 후보</span>
+                  <span><i class="legend-line is-recovery"></i>격리</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="실행 근거를 후보로 분류하고 평가와 사람 승인을 거쳐 다음 작업에 제한적으로 반영하는 흐름">
+                <div class="map-sequence learning-intake">
+                  <div class="map-node">
+                    <span class="map-node__type">01 · Evidence</span>
+                    <strong>실행 근거 수집</strong>
+                    <small>run trace · test · reviewer feedback · 사용자 수정</small>
+                  </div>
+                  <div class="map-edge"><span>추출</span></div>
+                  <div class="map-node map-node--store">
+                    <span class="map-node__type">02 · Candidate</span>
+                    <strong>후보로만 분류</strong>
+                    <small>knowledge · episode · skill draft</small>
+                  </div>
+                </div>
+
+                <div class="learning-drop"><span>신뢰 검사</span></div>
+
+                <section class="learning-trust-gate">
+                  <header>
                     <span class="map-index">03</span>
-                    <div><b>환경별 배포</b><small>상대경로 의존성까지 묶어 대상 저장소로 보냅니다.</small></div>
+                    <div><b>쓰기·검색 게이트</b><small>비슷해 보인다는 이유만으로 행동 지침에 넣지 않습니다.</small></div>
                   </header>
-                  <div class="map-sequence">
-                    <div class="map-node map-node--external">
-                      <span class="map-node__type">Runtime adapter</span>
-                      <strong>Claude · OpenCode · Codex</strong>
-                      <small>환경에 맞는 경로 선택</small>
-                    </div>
-                    <div class="map-edge map-edge--async"><span>설치</span></div>
-                    <div class="map-node map-node--result">
-                      <span class="map-node__type">Target repository</span>
-                      <strong>정의 + bundle + skill</strong>
-                      <small>상대경로 의존성 포함</small>
+                  <div class="learning-trust-gate__body">
+                    <ul class="learning-checks" aria-label="기억 신뢰 검사 항목">
+                      <li>Scope</li>
+                      <li>Trust</li>
+                      <li>Freshness</li>
+                      <li>Conflict</li>
+                      <li>Provenance</li>
+                      <li>Risk</li>
+                      <li>Citation</li>
+                    </ul>
+                    <div class="learning-gate-outcomes">
+                      <div class="learning-gate-pass"><span>근거 있음</span><b>평가 대상으로 이동</b></div>
+                      <div class="learning-quarantine"><span>출처 누락 · 외부 지시 · 충돌</span><b>Quarantine</b><small>검증 전에는 행동에 영향을 주지 않습니다.</small></div>
                     </div>
                   </div>
                 </section>
+
+                <div class="learning-drop learning-drop--pass"><span>재현·비교</span></div>
+
+                <section class="learning-evaluation">
+                  <header>
+                    <span class="map-index">04</span>
+                    <div><b>결과와 실행 흔적을 함께 평가</b><small>정적 계약과 실제 런타임 평가는 같은 점수로 섞지 않습니다.</small></div>
+                  </header>
+                  <div class="learning-evaluation__grid">
+                    <div><span>Structure</span><b>7/7</b><small>memory fixture 정합성</small></div>
+                    <div><span>Behavior contract</span><b>10/10</b><small>case dry validation</small></div>
+                    <div><span>Agent eval</span><b>5 axes</b><small>규약 · 기술 · 범용성 · 주장 · 보안</small></div>
+                    <div><span>Baseline</span><b>A → B → C → D</b><small>plain · agent · +skill · +memory</small></div>
+                  </div>
+                </section>
+
+                <div class="map-sequence learning-promotion">
+                  <div class="map-node map-node--external">
+                    <span class="map-node__type">05 · Proposal</span>
+                    <strong>변경안으로 남김</strong>
+                    <small>source evidence · risk · eval · rollback</small>
+                  </div>
+                  <div class="map-edge map-edge--async"><span>검토</span></div>
+                  <div class="map-node map-node--risk">
+                    <span class="map-node__type">06 · Human gate</span>
+                    <strong>사람이 승인</strong>
+                    <small>reviewer verdict · audit event</small>
+                  </div>
+                  <div class="map-edge"><span>승격</span></div>
+                  <div class="map-node map-node--result">
+                    <span class="map-node__type">07 · Promoted asset</span>
+                    <strong>승인된 기억과 skill</strong>
+                    <small>다음 설치에 반영</small>
+                  </div>
+                </div>
+
+                <div class="learning-return">
+                  <span>Next run</span>
+                  <b>다음 실행에 쓰려면 retrieval gate를 다시 통과해야 합니다.</b>
+                </div>
+
+                <p class="learning-contract-note">
+                  <b>현재 경계</b> 5개 schema, 6개 policy, fixture와 runner까지 구현했습니다. 장기 memory backend와 자동 prompt 수정·skill 승격은 아직 없습니다.
+                </p>
               </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>다음 프로젝트에서 쓰는 조건</b>
-            <p>15개 agent와 32개 skill을 같은 설치기로 배포합니다. 구조 7/7, 행동 7/7, 설치 32/32를 모두 통과한 버전만 다음 프로젝트에 적용합니다.</p>
+            <b>지금 쓸 수 있는 범위</b>
+            <p>Claude Code에는 agent와 skill을 함께, Codex에는 32개 skill을 설치해 쓸 수 있습니다. 개선안은 자동 반영하지 않습니다. 제안과 평가 기록을 남기고, 사람이 승인한 변경만 다음 프로젝트에 적용하도록 설계했습니다.</p>
           </div>
 
           <details class="case-details">
             <summary>도구 범위와 안전 경계</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li>manifest를 설치 자산의 단일 목록으로 두고 정의 파일, 지식 번들, 연결 skill을 함께 관리했습니다.</li>
-                <li>install.sh의 list, dry-run, apply, verify와 check-manifest 정합성 검사를 구현했습니다.</li>
-                <li>memory recall, retrieval gate, memory poisoning, stale memory, skill replay를 평가 항목으로 정의했습니다.</li>
-                <li>행동 평가 런타임 메트릭과 safety gate로 동작 회귀를 확인했습니다.</li>
+                <li>manifest에 15개 agent, 14개 지식 번들, 32개 skill과 연결 의존성을 등록했습니다.</li>
+                <li>설치 회귀 52개를 통과했고, Codex CLI에서 32개 skill을 모두 탐색했습니다.</li>
+                <li>구조 fixture 7개와 행동 케이스 10개의 입력·임계값·안전 계약을 정적 검증했습니다.</li>
+                <li>행동 평가는 output과 metrics sidecar를 따로 받아 결과·과정·안전·비용을 비교합니다. 실제 에이전트 실행에는 별도 런타임 adapter가 필요합니다.</li>
+                <li>메모리 5개 schema와 6개 policy로 기억을 쓰고 읽는 조건, 격리·승격·교체, 자기 수정의 경계를 먼저 정했습니다.</li>
                 <li>NL-SQL MCP에 multi-dialect와 읽기 전용 경계를 두고 위험한 쿼리 실행을 막았습니다.</li>
                 <li>code cartographer와 diagram extract skill로 코드 이해 결과를 다이어그램으로 공유하게 했습니다.</li>
               </ul>
@@ -911,7 +1035,7 @@
       </div>
       <div class="page-footer-links">
         <a href="../resume/">Resume</a>
-        <a href="mailto:ch4570@naver.com">Email</a>
+        <a href="mailto:ckdekrn88@gmail.com">Email</a>
         <a href="https://github.com/ch4570">GitHub</a>
         <a href="https://velog.io/@ch4570/posts">Velog</a>
         <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>

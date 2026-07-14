@@ -18,7 +18,7 @@
 
   document.querySelectorAll("[data-copy-email]").forEach((button) => {
     button.addEventListener("click", async () => {
-      const email = "ch4570@naver.com";
+      const email = "ckdekrn88@gmail.com";
       let copied = false;
 
       try {
