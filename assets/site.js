@@ -54,9 +54,11 @@
   const details = [...document.querySelectorAll(".case-details")];
   const detailsToggle = document.querySelector("[data-toggle-details]");
   const diagramDetails = [...document.querySelectorAll(".diagram-disclosure")];
-  const mobileDiagramQuery = window.matchMedia("(max-width: 420px)");
+  const mobileDiagramQuery = window.matchMedia("(max-width: 900px)");
+  let isPrinting = false;
 
   const syncDiagramDetails = ({ matches }) => {
+    if (isPrinting) return;
     diagramDetails.forEach((item) => {
       item.open = !matches;
     });
@@ -83,6 +85,7 @@
   const printableDetails = [...details, ...diagramDetails];
   let printState = [];
   window.addEventListener("beforeprint", () => {
+    isPrinting = true;
     printState = printableDetails.map((item) => item.open);
     printableDetails.forEach((item) => {
       item.open = true;
@@ -93,6 +96,8 @@
     printableDetails.forEach((item, index) => {
       item.open = printState[index] ?? false;
     });
+    isPrinting = false;
+    syncDiagramDetails(mobileDiagramQuery);
   });
 
   const localLinks = [...document.querySelectorAll(".case-nav a[href^='#']")];

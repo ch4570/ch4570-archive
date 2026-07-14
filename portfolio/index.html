@@ -26,7 +26,7 @@
         <a href="./" aria-current="page">포트폴리오</a>
       </nav>
       <div class="site-utilities">
-        <button class="button" type="button" data-print>인쇄 · PDF</button>
+        <a class="button pdf-download" href="../pdf/seo-minjae-backend-portfolio.pdf" download="서민재_백엔드_포트폴리오.pdf">PDF 다운로드</a>
       </div>
     </div>
   </header>
@@ -130,71 +130,107 @@
           </div>
 
           <details class="diagram-disclosure" open>
-            <summary>이벤트 처리와 복구 구조 전체 보기</summary>
-            <figure class="system-figure is-architecture">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b>내부 이벤트 생성·처리·복구 구조</b>
-                <span>실제 모듈과 저장소 경계</span>
+            <summary>멈춘 위치와 복구 경로 보기</summary>
+            <figure class="system-figure system-map system-map--flow">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>멈춘 위치에서 다시 시작하는 복구 흐름</b>
+                  <span>생성부터 처리, 수동 복구와 정체 감지까지</span>
+                </div>
+                <div class="diagram-legend" aria-label="연결선 범례">
+                  <span><i class="legend-line"></i>호출</span>
+                  <span><i class="legend-line is-async"></i>비동기</span>
+                  <span><i class="legend-line is-recovery"></i>복구</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="포인트 내부 이벤트의 정상 처리, 수동 복구, 정체 감지 흐름">
+                <section class="map-band">
+                  <header class="map-band__head">
+                    <span class="map-index">01</span>
+                    <div><b>정상 처리</b><small>업무 요청과 처리 상태를 기록한 뒤 Kafka로 전달합니다.</small></div>
+                  </header>
+                  <div class="map-sequence">
+                    <div class="map-node">
+                      <span class="map-node__type">업무 요청</span>
+                      <strong>API · Admin · Batch</strong>
+                      <small>차감 · 회수 · 사용 · 만료</small>
+                    </div>
+                    <div class="map-edge"><span>기록</span></div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">상태 기록</span>
+                      <strong>internal_event_record</strong>
+                      <code>InternalEventCreator</code>
+                      <small>CREATED · JSONB payload</small>
+                    </div>
+                    <div class="map-edge map-edge--async"><span>전달</span></div>
+                    <div class="map-node map-node--external">
+                      <span class="map-node__type">Kafka</span>
+                      <strong>내부 이벤트 topic 9개</strong>
+                      <small>발행 실패는 SEND_FAILED로 분리</small>
+                    </div>
+                    <div class="map-edge map-edge--async"><span>처리</span></div>
+                    <div class="map-node map-node--result">
+                      <span class="map-node__type">업무 처리</span>
+                      <strong>Listener 9개 · EventProcessor</strong>
+                      <small>IN_PROGRESS → 완료 · 실패</small>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="map-split">
+                  <section class="map-band map-band--recovery">
+                    <header class="map-band__head">
+                      <span class="map-index">02</span>
+                      <div><b>수동 복구</b><small>Kafka에 다시 넣지 않고 실패한 업무만 실행합니다.</small></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">복구 대상 조회</span>
+                        <strong>type · status로 검색</strong>
+                        <small>저장된 payload 복원</small>
+                      </div>
+                      <div class="map-edge map-edge--recovery"><span>선택</span></div>
+                      <div class="map-node map-node--risk">
+                        <span class="map-node__type">복구 전략</span>
+                        <strong>Retry Strategy 8개</strong>
+                        <small>이벤트 타입별 업무 분기</small>
+                      </div>
+                      <div class="map-edge map-edge--recovery"><span>재실행</span></div>
+                      <div class="map-node">
+                        <span class="map-node__type">Domain service</span>
+                        <strong>업무 서비스 직접 호출</strong>
+                        <small>차감 · 회수 · 사용 · 알림</small>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="map-band map-band--observe">
+                    <header class="map-band__head">
+                      <span class="map-index">03</span>
+                      <div><b>정체 감지</b><small>15분 넘게 처리 중인 이벤트를 Slack으로 알립니다.</small></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">QueryDSL</span>
+                        <strong>IN_PROGRESS 15분 초과</strong>
+                        <small>추적 대상 이벤트 8종</small>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>집계</span></div>
+                      <div class="map-node map-node--external">
+                        <span class="map-node__type">Slack</span>
+                        <strong>이벤트 타입별 요약</strong>
+                        <small>운영 채널로 건수 전송</small>
+                      </div>
+                    </div>
+                  </section>
+                </div>
               </div>
-              <div class="diagram-legend" aria-label="연결선 범례">
-                <span><i class="legend-line"></i>호출</span>
-                <span><i class="legend-line is-async"></i>비동기</span>
-                <span><i class="legend-line is-recovery"></i>복구</span>
-              </div>
-            </figcaption>
-            <div class="architecture-board" role="group" aria-label="포인트 내부 이벤트의 생성, Kafka 처리, 수동 복구, 정체 알림 구조">
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>생성</b><span>point-application</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>Use case</em><b>API · Admin · Batch</b><small>차감·회수·사용·만료 업무</small></div>
-                  <div class="architecture-link"><span>create</span></div>
-                  <div class="architecture-node is-service"><em>Application</em><b>InternalEventCreator</b><small>payload 직렬화 · eventId 발급</small></div>
-                  <div class="architecture-link"><span>save</span></div>
-                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>internal_event_record</b><small>CREATED · JSONB payload</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>처리</b><span>infrastructure → worker</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>Producer</em><b>InternalEvent<wbr>KafkaProducer</b><small>발행 실패 → SEND_FAILED</small></div>
-                  <div class="architecture-link is-async"><span>send</span></div>
-                  <div class="architecture-node is-external"><em>Kafka</em><b>9개 내부 이벤트 topic</b><small>eventId와 payload 전달</small></div>
-                  <div class="architecture-link is-async"><span>consume</span></div>
-                  <div class="architecture-node is-service"><em>point-worker</em><b>9개 Listener</b><small>CREATED 확인 → IN_PROGRESS</small></div>
-                  <div class="architecture-link"><span>execute</span></div>
-                  <div class="architecture-node is-result"><em>Worker service</em><b>EventProcessor</b><small>COMPLETED · FAILED · NOT_RECOVERABLE_FAILED</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane is-recovery-lane">
-                <header class="architecture-lane-head"><b>수동 복구</b><span>Kafka 재발행 없이 업무 서비스 재실행</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-risk"><em>POST</em><b>/v1/internal-events/retry</b><small>event type · status 지정</small></div>
-                  <div class="architecture-link is-recovery"><span>query</span></div>
-                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>대상 이벤트 조회</b><small>저장된 payload 복원</small></div>
-                  <div class="architecture-link is-recovery"><span>route</span></div>
-                  <div class="architecture-node is-risk"><em>Coordinator</em><b>8개 Retry Strategy</b><small>타입별 업무 서비스 선택</small></div>
-                  <div class="architecture-link is-recovery"><span>rerun</span></div>
-                  <div class="architecture-node is-service"><em>Domain</em><b>업무 서비스 직접 호출</b><small>차감 · 회수 · 사용 · 알림</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>관측</b><span>point-worker batch</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>Batch trigger</em><b>Notification Job</b><small>외부 스케줄러가 HTTP로 실행</small></div>
-                  <div class="architecture-link"><span>find</span></div>
-                  <div class="architecture-node is-store"><em>QueryDSL</em><b>IN_PROGRESS · 15분 초과</b><small>추적 가능한 8종만 조회</small></div>
-                  <div class="architecture-link is-async"><span>group</span></div>
-                  <div class="architecture-node is-external"><em>APM client</em><b>Slack 요약 알림</b><small>이벤트 타입별 건수 전송</small></div>
-                </div>
-              </section>
-            </div>
             </figure>
           </details>
 
           <div class="case-outcome">
             <b>달라진 운영</b>
-            <p>전송 실패와 처리 실패를 따로 조회하고, 15분 넘게 멈춘 이벤트는 먼저 알림을 받습니다. 담당자는 실패 위치에 맞는 복구부터 시작할 수 있습니다.</p>
+            <p>전송 실패와 처리 실패를 서로 다른 상태로 기록합니다. 처리 중 15분 넘게 멈춘 이벤트는 Slack으로 알리고, 저장된 payload로 실패한 업무만 다시 실행합니다.</p>
           </div>
 
           <details class="case-details">
@@ -246,64 +282,114 @@
           </div>
 
           <details class="diagram-disclosure" open>
-            <summary>원장 배치 구조 전체 보기</summary>
-            <figure class="system-figure is-architecture">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b>원장 소멸·만료 안내·아카이브 배치</b>
-                <span>point-worker의 독립된 Job과 공통 데이터 경계</span>
+            <summary>세 배치의 재시작 기준 보기</summary>
+            <figure class="system-figure system-map system-map--compare">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>세 배치, 세 가지 재시작 기준</b>
+                  <span>같은 원장을 다뤄도 다시 시작할 기준은 서로 다릅니다.</span>
+                </div>
+                <div class="diagram-legend" aria-label="연결선 범례">
+                  <span><i class="legend-line"></i>순차 처리</span>
+                  <span><i class="legend-line is-async"></i>후속 이벤트</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="포인트 소멸, 만료 알림, 원장 보관 배치의 단계와 재시작 기준 비교">
+                <div class="map-compare">
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">01</span>
+                      <div><b>소멸 처리</b><code>PointExpireJob</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">대상 조회</span>
+                        <strong>pointUserId 기준 페이지</strong>
+                        <small>만료 원장 · 회원 매핑</small>
+                      </div>
+                      <div class="map-edge"><span>차감</span></div>
+                      <div class="map-node">
+                        <span class="map-node__type">Transaction</span>
+                        <strong>유료·무료 잔액과 원장</strong>
+                        <code>PointExpireAppService</code>
+                      </div>
+                      <div class="map-edge"><span>저장</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">소멸 결과</span>
+                        <strong>expire_notification_record</strong>
+                        <small>후속 알림의 입력</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>재시작 기준</span><b>페이지</b></footer>
+                  </section>
+
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">02</span>
+                      <div><b>만료 알림</b><code>PointExpireAlarmJob</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node">
+                        <span class="map-node__type">Partition</span>
+                        <strong>origin site별 Step</strong>
+                        <small>beforeStep에서 대상 분리</small>
+                      </div>
+                      <div class="map-edge"><span>수집</span></div>
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">500건씩 조회</span>
+                        <strong>기업 회원 필터 · PENDING 적재</strong>
+                        <code>PointExpireAlarmAppService</code>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>발행</span></div>
+                      <div class="map-node map-node--external">
+                        <span class="map-node__type">Kafka</span>
+                        <strong>POINT_EXPIRATION_ALARM_SEND</strong>
+                        <small>회원 이메일과 발송 대상 전달</small>
+                      </div>
+                      <div class="map-edge map-edge--async"><span>완료</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">Worker</span>
+                        <strong>메일 전송 · SUCCESS</strong>
+                        <small>발송 상태 반영</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>재시작 기준</span><b>발송 상태</b></footer>
+                  </section>
+
+                  <section class="map-panel">
+                    <header class="map-panel__head">
+                      <span class="map-index">03</span>
+                      <div><b>원장 보관</b><code>LedgerArchiveJob</code></div>
+                    </header>
+                    <div class="map-stack">
+                      <div class="map-node map-node--store">
+                        <span class="map-node__type">Paging reader</span>
+                        <strong>보관 대상 원장</strong>
+                        <small>삭제한 뒤 0페이지부터 반복</small>
+                      </div>
+                      <div class="map-edge"><span>이관</span></div>
+                      <div class="map-node">
+                        <span class="map-node__type">Application</span>
+                        <strong>operator 10개를 순서대로 실행</strong>
+                        <code>LedgerArchiveAppService</code>
+                      </div>
+                      <div class="map-edge"><span>보관</span></div>
+                      <div class="map-node map-node--result">
+                        <span class="map-node__type">point_core · point_service</span>
+                        <strong>archive 테이블 10개</strong>
+                        <small>원장 · 상태 · 거래 · 매핑</small>
+                      </div>
+                    </div>
+                    <footer class="map-restart"><span>재시작 기준</span><b>테이블 순서</b></footer>
+                  </section>
+                </div>
               </div>
-              <div class="diagram-legend" aria-label="연결선 범례">
-                <span><i class="legend-line"></i>chunk 처리</span>
-                <span><i class="legend-line is-async"></i>후속 이벤트</span>
-              </div>
-            </figcaption>
-            <div class="architecture-board" role="group" aria-label="포인트 원장의 소멸, 만료 안내, 아카이브 배치 구조">
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>소멸</b><span>PointExpireJob</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>Spring Batch</em><b>PointExpireJob</b><small>외부 호출로 Job 시작</small></div>
-                  <div class="architecture-link"><span>page</span></div>
-                  <div class="architecture-node is-store"><em>Reader</em><b>pointUserId 기반 조회</b><small>만료 원장과 회원 매핑 수집</small></div>
-                  <div class="architecture-link"><span>chunk</span></div>
-                  <div class="architecture-node is-service"><em>Transaction</em><b>PointExpireAppService</b><small>유료·무료 잔액과 원장 차감</small></div>
-                  <div class="architecture-link"><span>persist</span></div>
-                  <div class="architecture-node is-store"><em>PostgreSQL</em><b>ExpireAlarmService</b><small>소멸 결과를 expire_notification_record에 저장</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>만료 안내</b><span>PointExpireAlarmJob</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>Partition</em><b>사이트별 Step</b><small>origin site 단위 분리</small></div>
-                  <div class="architecture-link is-wide-label"><span>beforeStep</span></div>
-                  <div class="architecture-node is-service"><em>Application</em><b>PointExpireAlarm<wbr>AppService</b><small>500건 paging·기업 회원 필터·알림 레코드 적재</small></div>
-                  <div class="architecture-link"><span>read</span></div>
-                  <div class="architecture-node is-store"><em>Reader</em><b>PENDING 알림</b><small>회원 이메일과 발송 대상 조회</small></div>
-                  <div class="architecture-link"><span>chunk</span></div>
-                  <div class="architecture-node is-service"><em>Writer</em><b>Kafka 이벤트 발행</b><small>POINT_<wbr>EXPIRATION_<wbr>ALARM_<wbr>SEND</small></div>
-                  <div class="architecture-link is-async"><span>publish</span></div>
-                  <div class="architecture-node is-result"><em>Worker</em><b>메일 전송</b><small>발송 후 SUCCESS 상태 반영</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>아카이브</b><span>LedgerArchiveJob</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>POST</em><b>/v1/ledgers/archive</b><small>상태·origin site·회원 유형·경과일 지정</small></div>
-                  <div class="architecture-link"><span>page 0</span></div>
-                  <div class="architecture-node is-store"><em>Paging reader</em><b>보관 대상 원장</b><small>삭제하며 읽어 항상 첫 페이지 조회</small></div>
-                  <div class="architecture-link"><span>chunk</span></div>
-                  <div class="architecture-node is-service"><em>Application</em><b>LedgerArchive<wbr>AppService</b><small>Facade로 10개 operator를 정해진 순서로 실행</small></div>
-                  <div class="architecture-link"><span>copy</span></div>
-                  <div class="architecture-node is-result"><em>point_core · point_service</em><b>10개 archive 테이블</b><small>원장·상태·거래·임시 사용·매핑 데이터</small></div>
-                </div>
-              </section>
-            </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>다시 시작할 단위</b>
-            <p>소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서로 진행 지점을 확인합니다. 세 배치가 실패해도 확인 범위가 섞이지 않습니다.</p>
+            <b>실패 후 재시작 기준</b>
+            <p>소멸은 페이지, 만료 안내는 발송 상태, 아카이브는 테이블 순서를 기준으로 다시 시작합니다. 세 Job마다 확인할 지점이 다릅니다.</p>
           </div>
 
           <details class="case-details">
@@ -354,82 +440,121 @@
           </div>
 
           <details class="diagram-disclosure" open>
-            <summary>피드 캐시와 장애 우회 구조 전체 보기</summary>
-            <figure class="system-figure is-architecture">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b>Feed 조회의 cache hit·refill·fail-open 경로</b>
-                <span>feed-job-api · feed-job-core · OpenSearch · Redis</span>
+            <summary>캐시 분기와 장애 우회 보기</summary>
+            <figure class="system-figure system-map system-map--decision">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>피드 캐시를 이어 쓰고, 비우고, 우회하는 기준</b>
+                  <span>Snapshot의 상태와 요청 지문에 따라 네 경로로 나뉩니다.</span>
+                </div>
+                <div class="diagram-legend" aria-label="연결선 범례">
+                  <span><i class="legend-line"></i>정상 흐름</span>
+                  <span><i class="legend-line is-async"></i>외부 조회</span>
+                  <span><i class="legend-line is-recovery"></i>무효화 · 우회</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="피드 요청의 Snapshot 적중, 후보 보충, 조건 변경, Redis 장애 분기">
+                <section class="map-band">
+                  <header class="map-band__head">
+                    <span class="map-index">01</span>
+                    <div><b>요청 판별</b><small>같은 세션에서도 좌표와 필터가 달라지면 다른 요청입니다.</small></div>
+                  </header>
+                  <div class="map-sequence">
+                    <div class="map-node">
+                      <span class="map-node__type">GET /feed</span>
+                      <strong>Feed API</strong>
+                      <small>actor · cursor · page size</small>
+                    </div>
+                    <div class="map-edge"><span>세션</span></div>
+                    <div class="map-node">
+                      <span class="map-node__type">Session</span>
+                      <strong>guest · member</strong>
+                      <small>TTL 30분</small>
+                    </div>
+                    <div class="map-edge"><span>비교</span></div>
+                    <div class="map-node">
+                      <span class="map-node__type">SHA-256</span>
+                      <strong>Request Fingerprint</strong>
+                      <small>좌표 · 4축 필터</small>
+                    </div>
+                    <div class="map-edge"><span>확인</span></div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Redis List</span>
+                      <strong>Snapshot Queue</strong>
+                      <small>100건 보관 · 20건씩 소비</small>
+                    </div>
+                  </div>
+                </section>
+
+                <div class="map-decision">
+                  <b>Snapshot과 요청 조건은 지금도 유효한가?</b>
+                  <span>hit · empty · changed · unavailable</span>
+                </div>
+
+                <div class="map-branch-grid">
+                  <section class="map-branch map-branch--hit">
+                    <header class="map-branch__head">
+                      <span class="map-index">H</span>
+                      <div><b>캐시 적중</b><small>검색과 랭킹을 건너뜁니다.</small></div>
+                    </header>
+                    <div class="map-branch__steps">
+                      <div class="map-branch-step"><b>LPOP 20건</b><small>정렬된 Snapshot</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>Feed page</b><small>cursor와 후보 응답</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>Global Seen</b><small>회원 24시간 · 비회원 30분</small></div>
+                    </div>
+                  </section>
+
+                  <section class="map-branch map-branch--refill">
+                    <header class="map-branch__head">
+                      <span class="map-index">R</span>
+                      <div><b>후보 보충</b><small>Snapshot이 비었을 때만 랭킹을 다시 계산합니다.</small></div>
+                    </header>
+                    <ol class="map-funnel" aria-label="피드 후보 축소 단계">
+                      <li><b>2,700</b><span>9개 소스 검색</span></li>
+                      <li><b>500</b><span>FPR</span></li>
+                      <li><b>100</b><span>SPR · 재정렬</span></li>
+                      <li><b>20</b><span>첫 페이지</span></li>
+                    </ol>
+                    <p class="map-funnel-note">최종 100건을 RPUSH하고 첫 20건은 바로 응답합니다.</p>
+                  </section>
+
+                  <section class="map-branch map-branch--invalidate">
+                    <header class="map-branch__head">
+                      <span class="map-index">I</span>
+                      <div><b>조건 변경</b><small>세션과 Seen은 두고 후보 풀만 비웁니다.</small></div>
+                    </header>
+                    <div class="map-branch__steps">
+                      <div class="map-branch-step"><b>지문 변경</b><small>좌표 · 필터 · 로그인 전환</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>후보 3종 삭제</b><small>Snapshot · FPR · SPR</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>다음 요청에서 보충</b><small>OpenSearch부터 재실행</small></div>
+                    </div>
+                  </section>
+
+                  <section class="map-branch map-branch--fail">
+                    <header class="map-branch__head">
+                      <span class="map-index">F</span>
+                      <div><b>Redis 장애</b><small>캐시 기록은 건너뛰고 이번 요청에 먼저 응답합니다.</small></div>
+                    </header>
+                    <div class="map-branch__steps">
+                      <div class="map-branch-step"><b>Snapshot 조회 실패</b><small>현재 요청에서 Redis 우회</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>메모리 랭킹</b><small>같은 정책으로 offset 계산</small></div>
+                      <span class="map-branch-arrow" aria-hidden="true">→</span>
+                      <div class="map-branch-step"><b>Feed page</b><small>캐시 · Seen 기록 없이 반환</small></div>
+                    </div>
+                  </section>
+                </div>
               </div>
-              <div class="diagram-legend" aria-label="연결선 범례">
-                <span><i class="legend-line"></i>데이터 흐름</span>
-                <span><i class="legend-line is-recovery"></i>무효화·우회</span>
-              </div>
-            </figcaption>
-            <div class="architecture-board" role="group" aria-label="피드 요청이 Redis snapshot을 우선 사용하고, 소진 시 OpenSearch와 랭킹 파이프라인으로 보충하며, 장애 시 메모리에서 계산하는 구조">
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>요청</b><span>feed-job-api</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-service"><em>GET /feed</em><b>Feed API</b><small>actor · cursor · page size 정규화</small></div>
-                  <div class="architecture-link"><span>resolve</span></div>
-                  <div class="architecture-node is-service"><em>Session</em><b>Session Manager</b><small>guest/member · 30분 TTL</small></div>
-                  <div class="architecture-link"><span>hash</span></div>
-                  <div class="architecture-node is-service"><em>SHA-256</em><b>Request Fingerprint</b><small>좌표와 4축 필터 비교</small></div>
-                  <div class="architecture-link"><span>pop</span></div>
-                  <div class="architecture-node is-store"><em>Redis List</em><b>Snapshot Queue</b><small>최종 후보 100건을 20건씩 소비</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>Cache hit</b><span>검색·랭킹 생략</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-store"><em>LPOP</em><b>Snapshot 20건</b><small>이미 정렬된 page</small></div>
-                  <div class="architecture-link"><span>serve</span></div>
-                  <div class="architecture-node is-result"><em>Response</em><b>Feed page</b><small>다음 cursor와 후보 반환</small></div>
-                  <div class="architecture-link is-async"><span>record</span></div>
-                  <div class="architecture-node is-store"><em>Redis Hash</em><b>Global Seen</b><small>회원 24시간 · 비회원 30분</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>Refill</b><span>Snapshot empty일 때 pull pipeline 실행</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-external"><em>OpenSearch K-NN</em><b>9개 소스 병렬 조회</b><small>source당 설정 300 · 최대 2,700건</small></div>
-                  <div class="architecture-link"><span>rank</span></div>
-                  <div class="architecture-node is-service"><em>FPR · 500</em><b>정책·중복·Seen</b><small>차단 · contentHash · 유료 가산</small></div>
-                  <div class="architecture-link"><span>pull</span></div>
-                  <div class="architecture-node is-service"><em>SPR · 100</em><b>source quota</b><small>종류별 Top-K와 점수 정규화</small></div>
-                  <div class="architecture-link"><span>re-rank</span></div>
-                  <div class="architecture-node is-service"><em>Window · 100</em><b>회사 연속 노출 조정</b><small>같은 회사 최대 2개 연속</small></div>
-                  <div class="architecture-link"><span>RPUSH</span></div>
-                  <div class="architecture-node is-store"><em>Redis List</em><b>Snapshot refill</b><small>첫 20건 즉시 응답</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane is-recovery-lane">
-                <header class="architecture-lane-head"><b>무효화</b><span>세션과 Seen은 유지</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-risk"><em>Fingerprint changed</em><b>좌표·필터 변경</b><small>이전 후보를 재사용하지 않음</small></div>
-                  <div class="architecture-link is-recovery"><span>delete</span></div>
-                  <div class="architecture-node is-store"><em>Redis</em><b>Snapshot · FPR · SPR</b><small>후보 풀 3종만 삭제</small></div>
-                  <div class="architecture-link is-recovery"><span>next miss</span></div>
-                  <div class="architecture-node is-service"><em>Cold path</em><b>새 조건으로 refill</b><small>OpenSearch부터 다시 실행</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane is-recovery-lane">
-                <header class="architecture-lane-head"><b>Fail-open</b><span>Redis unavailable</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-risk"><em>Cache error</em><b>Snapshot unavailable</b><small>요청 cycle에서 Redis 우회</small></div>
-                  <div class="architecture-link is-recovery"><span>bypass</span></div>
-                  <div class="architecture-node is-service"><em>In-memory</em><b>같은 랭킹 파이프라인</b><small>offset page를 메모리에서 계산</small></div>
-                  <div class="architecture-link is-recovery"><span>skip write</span></div>
-                  <div class="architecture-node is-result"><em>Response first</em><b>Feed page</b><small>cache와 seen 기록 없이 반환</small></div>
-                </div>
-              </section>
-            </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>캐시를 버리는 기준</b>
-            <p>cache hit, queue refill, 조건 변경, 로그인 전환, Redis 장애를 한 가지 miss로 다루지 않았습니다. 다시 쓸 때와 비울 때, 우회할 때가 코드에서 갈립니다.</p>
+            <b>캐시 판단 기준</b>
+            <p>정상 스크롤에서는 남은 Snapshot을 이어 쓰고, 조건이 바뀌면 후보 풀만 지웁니다. Redis를 쓸 수 없을 때도 같은 랭킹을 메모리에서 계산해 응답부터 보냅니다.</p>
           </div>
 
           <details class="case-details">
@@ -472,50 +597,89 @@
           </dl>
 
           <details class="diagram-disclosure" open>
-            <summary>test-support 구성 전체 보기</summary>
-            <figure class="system-figure is-architecture">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b>module:test-support의 진입점과 공통 도구</b>
-                <span>상속 구조와 helper 책임을 분리한 모듈 맵</span>
+            <summary>test-support의 네 가지 시작점 보기</summary>
+            <figure class="system-figure system-map system-map--matrix">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>테스트 목적에 맞춰 공통 준비를 나눈 구조</b>
+                  <span>base class와 helper를 네 가지 테스트 방식에 맞춰 묶었습니다.</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="test-support의 base, mock, web, database 진입점과 공통 도구 매트릭스">
+                <div class="map-matrix">
+                  <section class="map-matrix__column">
+                    <header><b>공통 기반</b><span>01 · BASE</span></header>
+                    <div class="map-node">
+                      <span class="map-node__type">Base class</span>
+                      <strong>AbstractTest</strong>
+                      <small>공통 fixture · 기본 설정</small>
+                    </div>
+                    <div class="map-matrix__connector" aria-hidden="true">↓</div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Fixture</span>
+                      <strong>FixtureMonkeyFactory</strong>
+                      <small>fixture 생성 규칙</small>
+                    </div>
+                  </section>
+
+                  <section class="map-matrix__column">
+                    <header><b>Mock 테스트</b><span>02 · MOCK</span></header>
+                    <div class="map-node">
+                      <span class="map-node__type">Base class</span>
+                      <strong>AbstractMockTest</strong>
+                      <small>mock 생성 · 초기화</small>
+                    </div>
+                    <div class="map-matrix__connector" aria-hidden="true">↓</div>
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Extension</span>
+                      <strong>AutoMockExtension</strong>
+                      <small>mock 주입 · reset</small>
+                    </div>
+                  </section>
+
+                  <section class="map-matrix__column">
+                    <header><b>MVC 테스트</b><span>03 · WEB</span></header>
+                    <div class="map-node">
+                      <span class="map-node__type">Base class</span>
+                      <strong>AbstractWebMvcTest</strong>
+                      <small>MVC 요청 · 응답</small>
+                    </div>
+                    <div class="map-matrix__connector" aria-hidden="true">↓</div>
+                    <div class="map-node map-node--external">
+                      <span class="map-node__type">Web helper</span>
+                      <strong>WrappedMockMvc</strong>
+                      <small>요청 · 응답 검증용 wrapper</small>
+                    </div>
+                  </section>
+
+                  <section class="map-matrix__column">
+                    <header><b>JPA 테스트</b><span>04 · DATABASE</span></header>
+                    <div class="map-node">
+                      <span class="map-node__type">Base class</span>
+                      <strong>AbstractDataBaseTest</strong>
+                      <small>JPA · transaction 환경</small>
+                    </div>
+                    <div class="map-matrix__connector" aria-hidden="true">↓</div>
+                    <div class="map-node map-node--result">
+                      <span class="map-node__type">Database helper</span>
+                      <strong>DB Initializer · Tx Support</strong>
+                      <small>데이터 초기화 · transaction 제어</small>
+                    </div>
+                  </section>
+                </div>
+
+                <div class="map-contract-rail" aria-label="test-support 공통 계약">
+                  <div><b>module:test-support</b><span>프로젝트 공통 테스트 기반</span></div>
+                  <div><b>29 helpers</b><span>fixture · mock · Web · JPA</span></div>
+                  <div><b>43 tests + JavaDoc</b><span>공통 동작 검증 · 사용법 문서화</span></div>
+                </div>
               </div>
-            </figcaption>
-            <div class="architecture-board" role="group" aria-label="test-support의 테스트 기본 클래스와 fixture, mock, web, database helper 구성">
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>진입점</b><span>테스트 목적별 base class</span></header>
-                <div class="architecture-cluster-grid is-four">
-                  <div class="architecture-node is-service"><em>Base</em><b>AbstractTest</b><small>공통 fixture와 기본 설정</small></div>
-                  <div class="architecture-node is-service"><em>Mock</em><b>AbstractMockTest</b><small>mock 생성·초기화</small></div>
-                  <div class="architecture-node is-service"><em>Web</em><b>AbstractWebMvcTest</b><small>MVC request·response</small></div>
-                  <div class="architecture-node is-service"><em>Database</em><b>AbstractDataBaseTest</b><small>JPA·transaction 환경</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>공통 도구</b><span>반복 setup을 모듈 내부로 이동</span></header>
-                <div class="architecture-cluster-grid is-four">
-                  <div class="architecture-node"><em>Fixture</em><b>FixtureMonkeyFactory</b><small>fixture 생성 규칙</small></div>
-                  <div class="architecture-node"><em>Extension</em><b>AutoMockExtension</b><small>mock 주입과 reset</small></div>
-                  <div class="architecture-node"><em>Web</em><b>WrappedMockMvc</b><small>요청·응답 검증 wrapper</small></div>
-                  <div class="architecture-node"><em>JPA</em><b>DB Initializer · Tx Support</b><small>데이터 초기화와 트랜잭션 제어</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>계약</b><span>사용 규칙을 코드와 테스트로 유지</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-store"><em>29 helpers</em><b>module:test-support</b><small>프로젝트 공통 test fixture</small></div>
-                  <div class="architecture-link"><span>used by</span></div>
-                  <div class="architecture-node is-service"><em>Project tests</em><b>Web · Domain · Repository</b><small>목적별 base class 선택</small></div>
-                  <div class="architecture-link"><span>guard</span></div>
-                  <div class="architecture-node is-result"><em>43 tests</em><b>회귀 테스트와 JavaDoc</b><small>공통 동작과 사용법 유지</small></div>
-                </div>
-              </section>
-            </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>팀이 쓰는 시작점</b>
-            <p>19개 주요 변경에서 29개 helper를 만들었습니다. fixture, mock, WebMvc, JPA, transaction의 공통 동작은 43개 테스트가 확인합니다.</p>
+            <b>공통화한 범위</b>
+            <p>19개 주요 변경에서 29개 helper를 정리했습니다. 43개 테스트로 fixture·mock·WebMvc·JPA·transaction의 공통 동작을 검증합니다.</p>
           </div>
 
           <details class="case-details">
@@ -553,56 +717,99 @@
           </dl>
 
           <details class="diagram-disclosure" open>
-            <summary>agent-lab 설치와 검증 구조 전체 보기</summary>
-            <figure class="system-figure is-architecture">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b>Agent Lab 자산·설치기·평가 게이트</b>
-                <span>manifest.txt를 중심으로 한 배포 구조</span>
+            <summary>설치 흐름과 검증 게이트 보기</summary>
+            <figure class="system-figure system-map system-map--pipeline">
+              <figcaption>
+                <div class="diagram-caption-title">
+                  <b>manifest 하나로 설치 대상을 정하고 검증하는 흐름</b>
+                  <span>목록을 먼저 확정하고 세 검증을 통과한 자산만 배포합니다.</span>
+                </div>
+                <div class="diagram-legend" aria-label="연결선 범례">
+                  <span><i class="legend-line"></i>설치</span>
+                  <span><i class="legend-line is-recovery"></i>실패 시 중단</span>
+                </div>
+              </figcaption>
+              <div class="system-map__canvas" role="group" aria-label="Agent Lab의 자산 목록, 설치 계획, 검증 게이트, 환경별 배포 흐름">
+                <div class="map-inventory" aria-label="Agent Lab 배포 자산">
+                  <div><b>15 Agents</b><span>정의 · 지식 번들</span></div>
+                  <div><b>32 Skills</b><span>반복 workflow</span></div>
+                  <div><b>Memory</b><span>schema · policy</span></div>
+                  <div><b>NL-SQL MCP</b><span>read-only · multi-dialect</span></div>
+                  <div><b>Evals</b><span>구조 · 행동 검증 fixture</span></div>
+                </div>
+
+                <section class="map-band">
+                  <header class="map-band__head">
+                    <span class="map-index">01</span>
+                    <div><b>설치 계획</b><small>복사하기 전에 무엇이 어디로 가는지 확인합니다.</small></div>
+                  </header>
+                  <div class="map-sequence">
+                    <div class="map-node map-node--store">
+                      <span class="map-node__type">Single source of truth</span>
+                      <strong>manifest.txt</strong>
+                      <small>자산 · 번들 · 의존 skill</small>
+                    </div>
+                    <div class="map-edge"><span>계획</span></div>
+                    <div class="map-node">
+                      <span class="map-node__type">List · Dry-run</span>
+                      <strong>설치 대상과 경로 확인</strong>
+                      <code>install/install.sh</code>
+                    </div>
+                  </div>
+                </section>
+
+                <section class="map-gate">
+                  <header class="map-gate__head">
+                    <span class="map-index">02</span>
+                    <div><b>검증 게이트</b><small>드리프트나 회귀가 하나라도 있으면 적용하지 않습니다.</small></div>
+                  </header>
+                  <div class="map-gate__grid">
+                    <div class="map-node map-node--risk">
+                      <span class="map-node__type">Manifest</span>
+                      <strong>목록 정합성</strong>
+                      <code>check-manifest.sh</code>
+                      <small>미등록 자산 · 끊긴 경로</small>
+                    </div>
+                    <div class="map-node map-node--risk">
+                      <span class="map-node__type">Structure · Behavior</span>
+                      <strong>Eval 7/7 · 7/7</strong>
+                      <small>fixture · runtime contract</small>
+                    </div>
+                    <div class="map-node map-node--risk">
+                      <span class="map-node__type">Installer</span>
+                      <strong>설치 테스트 32/32</strong>
+                      <small>dry-run · apply · verify</small>
+                    </div>
+                  </div>
+                  <div class="map-gate__result"><span>모두 통과</span><b>환경별 설치 허용</b></div>
+                </section>
+
+                <section class="map-band map-band--observe">
+                  <header class="map-band__head">
+                    <span class="map-index">03</span>
+                    <div><b>환경별 배포</b><small>상대경로 의존성까지 묶어 대상 저장소로 보냅니다.</small></div>
+                  </header>
+                  <div class="map-sequence">
+                    <div class="map-node map-node--external">
+                      <span class="map-node__type">Runtime adapter</span>
+                      <strong>Claude · OpenCode · Codex</strong>
+                      <small>환경에 맞는 경로 선택</small>
+                    </div>
+                    <div class="map-edge map-edge--async"><span>설치</span></div>
+                    <div class="map-node map-node--result">
+                      <span class="map-node__type">Target repository</span>
+                      <strong>정의 + bundle + skill</strong>
+                      <small>상대경로 의존성 포함</small>
+                    </div>
+                  </div>
+                </section>
               </div>
-              <div class="diagram-legend" aria-label="연결선 범례">
-                <span><i class="legend-line"></i>설치</span>
-                <span><i class="legend-line is-recovery"></i>실패 시 중단</span>
-              </div>
-            </figcaption>
-            <div class="architecture-board" role="group" aria-label="Agent Lab의 자산 목록, 선택 설치, 정합성 검사와 평가 구조">
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>자산</b><span>repository inventory</span></header>
-                <div class="architecture-cluster-grid is-five">
-                  <div class="architecture-node is-service"><em>15</em><b>Agents</b><small>정의와 지식 bundle</small></div>
-                  <div class="architecture-node is-service"><em>32</em><b>Skills</b><small>반복 가능한 workflow</small></div>
-                  <div class="architecture-node"><em>Contracts</em><b>Memory</b><small>schema와 policy</small></div>
-                  <div class="architecture-node"><em>Runtime</em><b>NL-SQL MCP</b><small>read-only multi-dialect</small></div>
-                  <div class="architecture-node"><em>Fixtures</em><b>Evals</b><small>구조·행동 평가 case</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane">
-                <header class="architecture-lane-head"><b>설치</b><span>install/install.sh</span></header>
-                <div class="architecture-path">
-                  <div class="architecture-node is-store"><em>SSOT</em><b>manifest.txt</b><small>자산·bundle·의존 skill 선언</small></div>
-                  <div class="architecture-link"><span>plan</span></div>
-                  <div class="architecture-node is-service"><em>List · Dry-run</em><b>복사 계획 확인</b><small>대상과 경로를 먼저 출력</small></div>
-                  <div class="architecture-link"><span>apply</span></div>
-                  <div class="architecture-node is-service"><em>Runtime adapter</em><b>선택 설치</b><small>Claude · OpenCode · Codex 경로</small></div>
-                  <div class="architecture-link"><span>verify</span></div>
-                  <div class="architecture-node is-result"><em>Target repo</em><b>정의 + bundle + skill</b><small>상대경로 의존성을 함께 배포</small></div>
-                </div>
-              </section>
-              <section class="architecture-lane is-recovery-lane">
-                <header class="architecture-lane-head"><b>게이트</b><span>드리프트나 회귀가 있으면 설치 중단</span></header>
-                <div class="architecture-cluster-grid is-three">
-                  <div class="architecture-node is-risk"><em>Manifest</em><b>check-manifest.sh</b><small>미등록·끊긴 경로 탐지</small></div>
-                  <div class="architecture-node is-risk"><em>Structure · Behavior</em><b>Eval 7/7 · 7/7</b><small>fixture와 runtime contract 검사</small></div>
-                  <div class="architecture-node is-risk"><em>Installer</em><b>test-install 32/32</b><small>dry-run·apply·verify 회귀 검사</small></div>
-                </div>
-              </section>
-            </div>
             </figure>
           </details>
 
           <div class="case-outcome">
-            <b>재사용 조건</b>
-            <p>15개 agent와 32개 skill이 같은 명령으로 설치됩니다. 구조 7/7, 행동 7/7, 설치 32/32 검사를 통과해야 다음 프로젝트에서 쓸 수 있습니다.</p>
+            <b>다음 프로젝트에서 쓰는 조건</b>
+            <p>15개 agent와 32개 skill을 같은 설치기로 배포합니다. 구조 7/7, 행동 7/7, 설치 32/32를 모두 통과한 버전만 다음 프로젝트에 적용합니다.</p>
           </div>
 
           <details class="case-details">
