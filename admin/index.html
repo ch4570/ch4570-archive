@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11150f">
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="googlebot" content="noindex, nofollow, noarchive">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <title>문서 편집기 · 서민재</title>
+  <link rel="stylesheet" href="../assets/design-system.css">
+  <link rel="stylesheet" href="./admin.css">
+  <script type="module" src="./admin.js"></script>
+</head>
+<body class="admin-body">
+  <a class="skip-link" href="#editor-pane">편집기로 건너뛰기</a>
+
+  <div class="admin-app" id="admin-app" data-mobile-view="editor">
+    <header class="admin-header">
+      <div class="admin-brand">
+        <a class="admin-brand-mark" href="../" aria-label="공개 사이트로 이동">SM</a>
+        <div class="admin-brand-copy">
+          <strong>문서 편집기</strong>
+          <span>서민재 · AI-Native Backend Engineer</span>
+        </div>
+      </div>
+
+      <div class="admin-header-actions">
+        <div class="admin-save-summary" aria-live="polite">
+          <span class="save-indicator" aria-hidden="true"></span>
+          <span id="save-state">불러오는 중</span>
+          <span class="change-count" id="change-count" hidden>0</span>
+        </div>
+        <button class="admin-button admin-button-quiet admin-icon-button" id="reload-content" type="button" title="원본 다시 불러오기" aria-label="원본 다시 불러오기">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"></path>
+            <path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"></path>
+          </svg>
+        </button>
+        <button class="admin-button admin-button-quiet" id="reset-draft" type="button">초안 초기화</button>
+        <button class="admin-button admin-button-primary" id="publish-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 16V4"></path>
+            <path d="m7 9 5-5 5 5"></path>
+            <path d="M5 20h14"></path>
+          </svg>
+          변경사항 게시
+        </button>
+      </div>
+    </header>
+
+    <nav class="document-bar" aria-label="편집할 문서">
+      <div class="document-tabs" id="document-tabs" role="tablist" aria-label="문서 선택">
+        <button class="document-tab" type="button" role="tab" aria-selected="false" data-document="home">
+          <span>홈</span>
+          <small>Home</small>
+        </button>
+        <button class="document-tab" type="button" role="tab" aria-selected="true" data-document="resume">
+          <span>이력서</span>
+          <small>Resume</small>
+        </button>
+        <button class="document-tab" type="button" role="tab" aria-selected="false" data-document="career">
+          <span>경력기술서</span>
+          <small>Career Description</small>
+        </button>
+        <button class="document-tab" type="button" role="tab" aria-selected="false" data-document="portfolio">
+          <span>포트폴리오</span>
+          <small>Portfolio</small>
+        </button>
+      </div>
+
+      <div class="mobile-pane-tabs" role="tablist" aria-label="작업 화면">
+        <button id="mobile-editor-tab" type="button" role="tab" aria-selected="true" aria-controls="editor-pane">
+          편집
+        </button>
+        <button id="mobile-preview-tab" type="button" role="tab" aria-selected="false" aria-controls="preview-pane">
+          미리보기
+        </button>
+      </div>
+    </nav>
+
+    <main class="admin-workspace">
+      <aside class="admin-rail" aria-label="문서 섹션">
+        <div class="rail-heading">
+          <span>문서 구성</span>
+          <span class="rail-document-name" data-active-document-name>이력서</span>
+        </div>
+        <label class="admin-search" for="copy-search">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-4-4"></path>
+          </svg>
+          <span class="sr-only">문구 검색</span>
+          <input id="copy-search" type="search" placeholder="문구 검색" autocomplete="off" spellcheck="false">
+        </label>
+        <nav class="section-list" id="section-list" aria-label="현재 문서의 섹션">
+          <button class="section-link is-active" type="button" data-section="loading" aria-current="true">
+            <span class="section-index">00</span>
+            <span>불러오는 중</span>
+          </button>
+        </nav>
+      </aside>
+
+      <section class="editor-pane" id="editor-pane" aria-label="문구 편집" tabindex="-1">
+        <header class="pane-header editor-pane-header">
+          <div>
+            <p class="pane-kicker">Copy Editor</p>
+            <h1 id="editor-title">이력서 문구 편집</h1>
+          </div>
+          <p class="pane-meta" id="editor-section-meta">섹션을 불러오고 있습니다.</p>
+        </header>
+
+        <div class="admin-error" id="admin-error" role="alert" hidden>
+          <strong>문서를 불러오지 못했습니다.</strong>
+          <span data-error-message>잠시 후 다시 시도해 주세요.</span>
+        </div>
+
+        <div class="editor-empty" id="editor-empty" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+            <path d="M14 2v6h6M8 13h8M8 17h6"></path>
+          </svg>
+          <strong>편집할 문구가 없습니다.</strong>
+          <span>다른 섹션을 선택해 주세요.</span>
+        </div>
+
+        <form class="editor-fields" id="editor-fields" autocomplete="off">
+          <div class="field-skeleton" aria-hidden="true">
+            <span></span>
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+          <div class="field-skeleton field-skeleton-tall" aria-hidden="true">
+            <span></span>
+            <i></i>
+            <i></i>
+            <i></i>
+            <i></i>
+          </div>
+        </form>
+      </section>
+
+      <section class="preview-pane" id="preview-pane" aria-label="실시간 미리보기">
+        <header class="pane-header preview-pane-header">
+          <div>
+            <p class="pane-kicker">Live Preview</p>
+            <h2>미리보기</h2>
+          </div>
+          <div class="preview-controls" role="group" aria-label="미리보기 너비">
+            <button type="button" data-preview-mode="desktop" aria-pressed="true" title="데스크톱 너비">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="12" rx="1"></rect>
+                <path d="M8 20h8M12 16v4"></path>
+              </svg>
+              <span>Desktop</span>
+            </button>
+            <button type="button" data-preview-mode="mobile" aria-pressed="false" title="모바일 너비">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="2" width="10" height="20" rx="2"></rect>
+                <path d="M11 18h2"></path>
+              </svg>
+              <span>Mobile</span>
+            </button>
+            <button type="button" data-preview-mode="a4" aria-pressed="false" title="A4 너비">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                <path d="M14 2v6h6"></path>
+              </svg>
+              <span>A4</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="preview-stage" id="preview-stage" data-mode="desktop">
+          <div class="preview-viewport" id="preview-viewport">
+            <iframe id="preview-frame" title="선택한 문서 미리보기" src="about:blank" loading="eager" sandbox="allow-same-origin"></iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="publish-dialog" id="publish-dialog" aria-labelledby="publish-title">
+    <form class="publish-form" id="publish-form" method="dialog">
+      <header class="dialog-header">
+        <div>
+          <p class="pane-kicker">Publish</p>
+          <h2 id="publish-title">변경사항 게시</h2>
+        </div>
+        <button class="dialog-close" id="publish-cancel" type="button" aria-label="닫기" title="닫기">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="m6 6 12 12M18 6 6 18"></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="publish-summary">
+        <span>게시 대상</span>
+        <strong>ch4570/ch4570-archive · main</strong>
+      </div>
+
+      <label class="admin-field" for="github-token">
+        <span class="admin-field-label">GitHub 토큰</span>
+        <span class="token-input-wrap">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="15" r="4"></circle>
+            <path d="m11 12 8-8M16 7l2 2M15 8l2 2"></path>
+          </svg>
+          <input id="github-token" name="github-token" type="password" placeholder="github_pat_…" required autocomplete="off" autocapitalize="off" spellcheck="false">
+        </span>
+        <small>
+          토큰은 게시 요청에만 사용하며 브라우저에 저장하지 않습니다.
+          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">토큰 만들기</a>
+          <span>· ch4570-archive의 Contents·Actions 쓰기</span>
+        </small>
+      </label>
+
+      <div class="publish-feedback" aria-live="polite">
+        <progress id="publish-progress" max="100" value="0" hidden>0%</progress>
+        <p id="publish-status">게시 준비가 되었습니다.</p>
+        <a id="publish-run-link" href="#" target="_blank" rel="noreferrer" hidden>배포 진행 상황 보기 <span aria-hidden="true">↗</span></a>
+      </div>
+
+      <footer class="dialog-actions">
+        <button class="admin-button" type="button" data-dialog-cancel>취소</button>
+        <button class="admin-button admin-button-primary" id="publish-submit" type="submit">
+          <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 16V4"></path>
+            <path d="m7 9 5-5 5 5"></path>
+            <path d="M5 20h14"></path>
+          </svg>
+          GitHub에 게시
+        </button>
+      </footer>
+    </form>
+  </dialog>
+</body>
+</html>

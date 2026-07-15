@@ -80,7 +80,6 @@ trap cleanup EXIT HUP INT TERM
 verify_pdf() {
   pdf_path=$1
   document_name=$2
-  shift 2
 
   if [ ! -s "$pdf_path" ]; then
     printf 'PDF export failed: %s is empty or missing.\n' "$pdf_path" >&2
@@ -104,6 +103,11 @@ verify_pdf() {
       printf 'PDF validation failed: %s is not A4.\n' "$document_name" >&2
       exit 1
     fi
+    if pdfinfo -url "$pdf_path" | awk 'NR > 1 && $3 ~ /^file:/ { found = 1 } END { exit !found }'; then
+      printf 'PDF validation failed: %s contains a local file link.\n' \
+        "$document_name" >&2
+      exit 1
+    fi
 
     case "$document_name" in
       resume) expected_pages=2 ;;
@@ -121,16 +125,6 @@ verify_pdf() {
   fi
 
   if command -v pdftotext >/dev/null 2>&1; then
-    text_path="$tmp_root/$document_name.txt"
-    pdftotext "$pdf_path" "$text_path"
-    for expected_text in "$@"; do
-      if ! grep -Fq "$expected_text" "$text_path"; then
-        printf 'PDF validation failed: "%s" is missing from %s.\n' \
-          "$expected_text" "$document_name" >&2
-        exit 1
-      fi
-    done
-
     case "$pages" in
       *[!0-9]*|'')
         ;;
@@ -158,7 +152,6 @@ export_pdf() {
   source_path=$1
   target_path=$2
   document_name=$3
-  shift 3
 
   active_profile=$(mktemp -d "$tmp_root/chrome-profile.XXXXXX")
   rm -f "$target_path"
@@ -209,31 +202,20 @@ export_pdf() {
 
   cleanup_active_browser
 
-  verify_pdf "$target_path" "$document_name" "$@"
+  verify_pdf "$target_path" "$document_name"
 }
 
 export_pdf \
   "$project_root/resume/index.html" \
   "$output_dir/seo-minjae-resume.pdf" \
-  'resume' \
-  '웍스피어' \
-  'AGENT LAB'
+  'resume'
 
 export_pdf \
   "$project_root/career/index.html" \
   "$output_dir/seo-minjae-career-description.pdf" \
-  'career-description' \
-  '경력 요약' \
-  '웍스피어' \
-  'Agent Lab' \
-  '약 200만 건'
+  'career-description'
 
 export_pdf \
   "$project_root/portfolio/index.html" \
   "$output_dir/seo-minjae-backend-portfolio.pdf" \
-  'portfolio' \
-  'POINT PLATFORM' \
-  'PointExpireJob' \
-  'FeedRequestContext' \
-  'AbstractMockTest' \
-  'manifest.txt'
+  'portfolio'

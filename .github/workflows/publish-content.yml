@@ -1,0 +1,233 @@
+name: Publish edited portfolio content
+
+on:
+  workflow_dispatch:
+    inputs:
+      draft_ref:
+        description: Full content draft ref created by the admin editor
+        required: true
+        type: string
+      draft_sha:
+        description: Exact commit SHA at the tip of the content draft
+        required: true
+        type: string
+      base_sha:
+        description: Main commit SHA the draft was created from
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+    env:
+      DRAFT_REF: ${{ inputs.draft_ref }}
+      DRAFT_SHA: ${{ inputs.draft_sha }}
+      BASE_SHA: ${{ inputs.base_sha }}
+    steps:
+      - name: Verify publisher identity
+        shell: bash
+        env:
+          ACTOR_ID: ${{ github.actor_id }}
+        run: |
+          if [[ "$ACTOR_ID" != "91787050" ]]; then
+            echo "Only the repository owner may publish edited content." >&2
+            exit 1
+          fi
+
+      - name: Checkout current main
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Validate and fetch content draft
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
+            echo "Run this publishing workflow from the main branch." >&2
+            exit 1
+          fi
+          if [[ ! "$DRAFT_REF" =~ ^refs/heads/content-drafts/admin-[A-Za-z0-9._-]+$ ]]; then
+            echo "Invalid content draft ref." >&2
+            exit 1
+          fi
+          if [[ ! "$DRAFT_SHA" =~ ^[0-9a-f]{40}$ ]] || [[ ! "$BASE_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Draft and base revisions must be full lowercase commit SHAs." >&2
+            exit 1
+          fi
+          if [[ "$GITHUB_SHA" != "$BASE_SHA" ]]; then
+            echo "The workflow revision no longer matches the draft base." >&2
+            exit 1
+          fi
+
+          remote_main=$(git ls-remote --exit-code origin refs/heads/main | awk '{print $1}')
+          if [[ "$remote_main" != "$BASE_SHA" ]]; then
+            echo "Main changed after this draft was opened. Refresh the editor before publishing." >&2
+            exit 1
+          fi
+
+          git fetch --no-tags origin \
+            "$DRAFT_REF:refs/remotes/origin/admin-content-draft"
+          fetched_draft=$(git rev-parse refs/remotes/origin/admin-content-draft^{commit})
+          if [[ "$fetched_draft" != "$DRAFT_SHA" ]]; then
+            echo "The draft ref no longer points to the requested commit." >&2
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor "$BASE_SHA" "$DRAFT_SHA"; then
+            echo "The draft was not created from the declared main revision." >&2
+            exit 1
+          fi
+
+          editable_files=(
+            index.html
+            resume/index.html
+            career/index.html
+            portfolio/index.html
+          )
+          for editable_file in "${editable_files[@]}"; do
+            git cat-file -e "$DRAFT_SHA:$editable_file"
+            draft_mode=$(git ls-tree "$DRAFT_SHA" -- "$editable_file" | awk '{print $1}')
+            if [[ "$draft_mode" != "100644" ]]; then
+              echo "$editable_file must remain a regular, non-executable file." >&2
+              exit 1
+            fi
+          done
+          git checkout "$DRAFT_SHA" -- "${editable_files[@]}"
+          if git diff --quiet HEAD -- "${editable_files[@]}"; then
+            echo "The draft does not change any editable HTML content." >&2
+            exit 1
+          fi
+
+      - name: Validate editable content boundaries
+        run: node scripts/validate-editables.mjs
+
+      - name: Install PDF fonts and validation tools
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes fonts-noto-cjk poppler-utils
+          fc-cache --force
+
+      - name: Export submission PDFs
+        run: sh scripts/export-pdfs.sh
+
+      - name: Configure Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+
+      - name: Build static site
+        run: INCLUDE_ADMIN=false sh scripts/build-static.sh
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: _site
+
+      - name: Commit published documents
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git add -- \
+            index.html \
+            resume/index.html \
+            career/index.html \
+            portfolio/index.html \
+            output/pdf/seo-minjae-resume.pdf \
+            output/pdf/seo-minjae-career-description.pdf \
+            output/pdf/seo-minjae-backend-portfolio.pdf
+
+          if git diff --cached --quiet; then
+            echo "The draft does not change any publishable content." >&2
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit --file=- <<EOF
+          Publish the content reviewed in the portfolio editor
+
+          The editor draft is applied only to the four public HTML documents.
+          Submission PDFs are regenerated from that validated content before release.
+
+          Constraint: The draft base must still be the current main commit
+          Rejected: Merge the draft branch | it may contain files outside the editable document boundary
+          Confidence: high
+          Scope-risk: narrow
+          Reversibility: clean
+          Directive: Keep editable copy inside the validated document markers
+          Tested: Editable-boundary validation, fixed-page PDF export, and static-site build
+          Co-authored-by: OmX <omx@oh-my-codex.dev>
+          EOF
+
+          git push origin HEAD:refs/heads/main
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: publish
+    permissions:
+      pages: write
+      id-token: write
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0
+
+  cleanup-draft:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [publish, deploy]
+    if: ${{ always() && needs.publish.result == 'success' && needs.deploy.result == 'success' && github.actor_id == '91787050' }}
+    continue-on-error: true
+    permissions:
+      contents: write
+    env:
+      DRAFT_REF: ${{ inputs.draft_ref }}
+      DRAFT_SHA: ${{ inputs.draft_sha }}
+    steps:
+      - name: Checkout published main
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Delete the published draft ref
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$DRAFT_REF" =~ ^refs/heads/content-drafts/admin-[A-Za-z0-9._-]+$ ]]; then
+            echo "Invalid content draft ref." >&2
+            exit 1
+          fi
+          if [[ ! "$DRAFT_SHA" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "The draft revision must be a full lowercase commit SHA." >&2
+            exit 1
+          fi
+
+          remote_draft=$(git ls-remote origin "$DRAFT_REF" | awk '{print $1}')
+          if [[ -z "$remote_draft" ]]; then
+            echo "The published draft ref was already removed."
+            exit 0
+          fi
+          if [[ "$remote_draft" != "$DRAFT_SHA" ]]; then
+            echo "The draft ref moved after publication; leaving it in place." >&2
+            exit 1
+          fi
+
+          git push origin ":$DRAFT_REF"
