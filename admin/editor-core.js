@@ -60,6 +60,7 @@ const ATTRIBUTE_ENTITY_VALUES = new Map([
   ["tab", "\t"],
 ]);
 const EDITABLE_MASK = "\u0000EDITABLE_CONTENT\u0000";
+const EDITABLE_TIME_DATETIME_MASK = "EDITABLE-TIME-DATETIME";
 
 export class EditableDocumentError extends Error {
   constructor(code, message, details = {}) {
@@ -669,6 +670,108 @@ export function validateInlineHtml(fragment) {
   return true;
 }
 
+function inlineTextContent(fragment) {
+  let text = "";
+  for (const token of tokenizeHtml(fragment)) {
+    if (token.type === "text") {
+      text += decodeAttributeEntities(fragment.slice(token.start, token.end));
+    } else if (token.type === "start" && token.tagName === "br") {
+      text += " ";
+    }
+  }
+  return text.replace(/\s+/gu, " ").trim();
+}
+
+export function inferEditableTimeDatetime(fragment) {
+  validateInlineHtml(fragment);
+  const text = inlineTextContent(fragment);
+  const match = text.match(/\b(\d{4})\s*(?:[./-]|년\s*)\s*(\d{1,2})(?:\s*월)?\b/u);
+  const month = Number(match?.[2]);
+  if (!match || month < 1 || month > 12) {
+    fail(
+      "INVALID_TIME_VALUE",
+      "기간은 2025.06처럼 연도와 월로 시작해야 합니다.",
+      { text },
+    );
+  }
+  return `${match[1]}-${String(month).padStart(2, "0")}`;
+}
+
+function editableTimeAttribute(source, region) {
+  const token = readMarkupToken(source, region.startTagStart);
+  const attributes = token?.type === "start"
+    ? token.attributes.filter((attribute) => attribute.name === "datetime")
+    : [];
+  if (attributes.length !== 1 || !attributes[0].hasValue) {
+    fail(
+      "INVALID_TIME_ATTRIBUTE",
+      `Editable time region "${region.id}" must have one datetime attribute.`,
+      { id: region.id, offset: region.startTagStart },
+    );
+  }
+  return decodeAttributeEntities(attributes[0].value);
+}
+
+function replaceEditableTimeAttributes(source, valueForRegion) {
+  const timeRegions = scanEditableRegions(source)
+    .filter((region) => region.tagName === "time")
+    .sort((left, right) => right.startTagStart - left.startTagStart);
+  let result = source;
+
+  for (const region of timeRegions) {
+    editableTimeAttribute(source, region);
+    const startTag = source.slice(region.startTagStart, region.startTagEnd);
+    const replacementValue = valueForRegion(region);
+    let attributeMatched = false;
+    const replacedStartTag = startTag.replace(
+      /(\bdatetime\s*=\s*)(["'])(.*?)\2/iu,
+      (match, prefix, quote) => {
+        attributeMatched = true;
+        return `${prefix}${quote}${replacementValue}${quote}`;
+      },
+    );
+    if (!attributeMatched) {
+      fail(
+        "INVALID_TIME_ATTRIBUTE",
+        `Editable time region "${region.id}" must use a quoted datetime attribute.`,
+        { id: region.id, offset: region.startTagStart },
+      );
+    }
+    result =
+      result.slice(0, region.startTagStart) +
+      replacedStartTag +
+      result.slice(region.startTagEnd);
+  }
+  return result;
+}
+
+export function synchronizeEditableTimeDatetimes(source) {
+  assertString(source, "HTML source");
+  return replaceEditableTimeAttributes(
+    source,
+    (region) => inferEditableTimeDatetime(region.innerHTML),
+  );
+}
+
+function assertEditableTimeDatetimes(source, regions) {
+  for (const region of regions) {
+    if (region.tagName !== "time") continue;
+    const expected = inferEditableTimeDatetime(region.innerHTML);
+    const actual = editableTimeAttribute(source, region);
+    if (actual !== expected) {
+      fail(
+        "STALE_TIME_ATTRIBUTE",
+        `Editable time region "${region.id}" has datetime="${actual}"; expected "${expected}".`,
+        { actual, expected, id: region.id },
+      );
+    }
+  }
+}
+
+function maskEditableTimeDatetimes(source) {
+  return replaceEditableTimeAttributes(source, () => EDITABLE_TIME_DATETIME_MASK);
+}
+
 function normalizeReplacements(replacements) {
   if (replacements instanceof Map) {
     return [...replacements.entries()];
@@ -740,7 +843,9 @@ export function replaceEditableContents(
     }
   }
 
-  return replaceRegionContents(source, regions, replacementById);
+  return synchronizeEditableTimeDatetimes(
+    replaceRegionContents(source, regions, replacementById),
+  );
 }
 
 export function maskEditableContents(source) {
@@ -779,8 +884,11 @@ export function assertEditableOnlyChanges(baselineSource, workingSource) {
     validateInlineHtml(region.innerHTML);
   }
 
-  const maskedBaseline = maskEditableContents(baselineSource);
-  const maskedWorking = maskEditableContents(workingSource);
+  assertEditableTimeDatetimes(baselineSource, baselineRegions);
+  assertEditableTimeDatetimes(workingSource, workingRegions);
+
+  const maskedBaseline = maskEditableTimeDatetimes(maskEditableContents(baselineSource));
+  const maskedWorking = maskEditableTimeDatetimes(maskEditableContents(workingSource));
   if (maskedBaseline !== maskedWorking) {
     const offset = firstDifference(maskedBaseline, maskedWorking);
     fail(

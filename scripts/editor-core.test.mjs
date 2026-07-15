@@ -10,10 +10,12 @@ import {
   ALLOWED_INLINE_TAGS,
   EditableDocumentError,
   assertEditableOnlyChanges,
+  inferEditableTimeDatetime,
   isSafeHref,
   maskEditableContents,
   replaceEditableContents,
   scanEditableRegions,
+  synchronizeEditableTimeDatetimes,
   validateInlineHtml,
 } from "../admin/editor-core.js";
 
@@ -154,6 +156,34 @@ test("masked comparison accepts content edits and rejects locked outer changes",
   assertEditorError(
     () => assertEditableOnlyChanges(baseline, outerChange),
     "LOCKED_MARKUP_CHANGED",
+  );
+});
+
+test("keeps editable period text and machine-readable datetime in sync", () => {
+  const baseline =
+    '<time class="period" datetime="2025-06" data-edit-id="career-period">2025.06 — 현재</time>';
+  const edited = replaceEditableContents(baseline, {
+    "career-period": "2026년 7월 — 현재",
+  });
+
+  assert.equal(
+    edited,
+    '<time class="period" datetime="2026-07" data-edit-id="career-period">2026년 7월 — 현재</time>',
+  );
+  assert.deepEqual(assertEditableOnlyChanges(baseline, edited).changedIds, [
+    "career-period",
+  ]);
+  assert.equal(inferEditableTimeDatetime("<strong>2024.9</strong> — 2025.04"), "2024-09");
+  assert.equal(synchronizeEditableTimeDatetimes(edited), edited);
+
+  const stale = edited.replace('datetime="2026-07"', 'datetime="2025-06"');
+  assertEditorError(
+    () => assertEditableOnlyChanges(baseline, stale),
+    "STALE_TIME_ATTRIBUTE",
+  );
+  assertEditorError(
+    () => inferEditableTimeDatetime("현재"),
+    "INVALID_TIME_VALUE",
   );
 });
 

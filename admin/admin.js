@@ -1,5 +1,6 @@
 import {
   assertEditableOnlyChanges,
+  inferEditableTimeDatetime,
   replaceEditableContents,
   scanEditableRegions,
   validateInlineHtml,
@@ -246,6 +247,11 @@ const getFieldValue = (documentKey, field) =>
 
 const fieldKey = (documentKey, editId) => `${documentKey}:${editId}`;
 
+const validateFieldValue = (field, value) => {
+  validateInlineHtml(value);
+  if (field.tagName === "time") inferEditableTimeDatetime(value);
+};
+
 const countChanges = () =>
   [...state.changes.values()].reduce((total, documentChanges) => total + documentChanges.size, 0);
 
@@ -411,7 +417,7 @@ const restoreDraft = (draft) => {
 
       const key = fieldKey(documentKey, id);
       try {
-        validateInlineHtml(savedChange.value);
+        validateFieldValue(field, savedChange.value);
       } catch (error) {
         state.invalidFields.set(key, error.message);
         continue;
@@ -459,7 +465,7 @@ const loadDocuments = async ({ force = false } = {}) => {
       setSaveState("원본 충돌 확인 필요", "error");
     } else if (state.invalidFields.size) {
       showAdminError(
-        `허용되지 않는 서식이 포함된 문구가 ${state.invalidFields.size}개 있습니다. 표시된 문구를 다시 입력해 주세요.`,
+        `형식을 확인해야 하는 문구가 ${state.invalidFields.size}개 있습니다. 표시된 문구를 다시 입력해 주세요.`,
         "문구 형식을 확인해 주세요.",
       );
       setSaveState("문구 형식 확인 필요", "error");
@@ -541,11 +547,15 @@ const insertPlainText = (control, text, singleLine) => {
   control.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: normalized }));
 };
 
-const updatePreviewField = (editId, value) => {
+const updatePreviewField = (field, value) => {
   const previewDocument = elements.previewFrame.contentDocument;
   if (!previewDocument) return;
-  const target = previewDocument.querySelector(`[data-edit-id="${escapeSelector(editId)}"]`);
-  if (target) target.innerHTML = value;
+  const target = previewDocument.querySelector(`[data-edit-id="${escapeSelector(field.id)}"]`);
+  if (!target) return;
+  target.innerHTML = value;
+  if (field.tagName === "time") {
+    target.setAttribute("datetime", inferEditableTimeDatetime(value));
+  }
 };
 
 const selectPreviewField = (editId, { scroll = true } = {}) => {
@@ -582,7 +592,12 @@ const applyPreview = () => {
 
   for (const field of model.fields) {
     const target = previewDocument.querySelector(`[data-edit-id="${escapeSelector(field.id)}"]`);
-    if (target) target.innerHTML = getFieldValue(state.activeDocument, field);
+    if (!target) continue;
+    const value = getFieldValue(state.activeDocument, field);
+    target.innerHTML = value;
+    if (field.tagName === "time") {
+      target.setAttribute("datetime", inferEditableTimeDatetime(value));
+    }
   }
   if (state.selectedEditId) selectPreviewField(state.selectedEditId, { scroll: false });
 };
@@ -607,7 +622,7 @@ const handleFieldInput = (control, field, fieldElement) => {
   const value = control.innerHTML;
   let validationError = "";
   try {
-    validateInlineHtml(value);
+    validateFieldValue(field, value);
     state.invalidFields.delete(key);
   } catch (error) {
     validationError = error.message || "허용되지 않는 서식이 포함되어 있습니다.";
@@ -639,7 +654,7 @@ const handleFieldInput = (control, field, fieldElement) => {
     meta.textContent = `${plainLength}자`;
   }
 
-  updatePreviewField(field.id, value);
+  if (!validationError) updatePreviewField(field, value);
   if (state.conflicts.size) {
     showAdminError(
       `최신 원본과 겹친 문구가 ${state.conflicts.size}개 있습니다. 문서와 섹션의 표시를 따라가 내용을 다시 확인해 주세요.`,
@@ -647,7 +662,7 @@ const handleFieldInput = (control, field, fieldElement) => {
     );
   } else if (state.invalidFields.size) {
     showAdminError(
-      `허용되지 않는 서식이 포함된 문구가 ${state.invalidFields.size}개 있습니다. 표시된 문구를 다시 입력해 주세요.`,
+      `형식을 확인해야 하는 문구가 ${state.invalidFields.size}개 있습니다. 표시된 문구를 다시 입력해 주세요.`,
       "문구 형식을 확인해 주세요.",
     );
   } else {
