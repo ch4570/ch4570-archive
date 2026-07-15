@@ -591,6 +591,7 @@ const applyPreview = () => {
   }
 
   for (const field of model.fields) {
+    if (state.invalidFields.has(fieldKey(state.activeDocument, field.id))) continue;
     const target = previewDocument.querySelector(`[data-edit-id="${escapeSelector(field.id)}"]`);
     if (!target) continue;
     const value = getFieldValue(state.activeDocument, field);
