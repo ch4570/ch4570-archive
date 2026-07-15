@@ -5,3 +5,9 @@ _workspace/
 .vercel/
 _site/
 .env*
+.next/
+node_modules/
+*.tsbuildinfo
+.data/
+public/assets/
+public/pdf/

@@ -13,6 +13,7 @@ import {
   inferEditableTimeDatetime,
   isSafeHref,
   maskEditableContents,
+  mergeDraftPayloads,
   replaceEditableContents,
   scanEditableRegions,
   synchronizeEditableTimeDatetimes,
@@ -56,6 +57,39 @@ test("scans Korean text, entities, and inline markup without normalizing bytes",
     source.slice(regions[0].startTagStart, regions[0].startTagEnd),
     '<p data-edit-id="resume-summary">',
   );
+});
+
+test("merges disjoint draft fields and flags only overlapping edits", () => {
+  const localDraft = {
+    version: 1,
+    updatedAt: "2026-07-15T01:00:00.000Z",
+    documents: {
+      resume: {
+        "resume-001": { original: "원문 1", value: "로컬 수정" },
+        "resume-002": { original: "원문 2", value: "같은 수정" },
+      },
+    },
+  };
+  const serverDraft = {
+    version: 1,
+    updatedAt: "2026-07-15T02:00:00.000Z",
+    documents: {
+      resume: {
+        "resume-001": { original: "원문 1", value: "서버 수정" },
+        "resume-002": { original: "원문 2", value: "같은 수정" },
+      },
+      career: {
+        "career-001": { original: "원문 3", value: "서버 전용 수정" },
+      },
+    },
+  };
+
+  const merged = mergeDraftPayloads(localDraft, serverDraft);
+  assert.deepEqual(merged.conflicts, ["resume:resume-001"]);
+  assert.equal(merged.draft.documents.resume["resume-001"].value, "로컬 수정");
+  assert.equal(merged.draft.documents.resume["resume-002"].value, "같은 수정");
+  assert.equal(merged.draft.documents.career["career-001"].value, "서버 전용 수정");
+  assert.equal(merged.draft.updatedAt, serverDraft.updatedAt);
 });
 
 test("rejects duplicate and nested editable IDs", async (t) => {

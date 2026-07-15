@@ -11,9 +11,11 @@ cp resume/index.html "$output_dir/resume/index.html"
 cp career/index.html "$output_dir/career/index.html"
 cp portfolio/index.html "$output_dir/portfolio/index.html"
 
-if [ "${INCLUDE_ADMIN:-true}" != "false" ] && [ -d admin ]; then
+if [ "${INCLUDE_ADMIN:-false}" = "true" ] && [ -d admin ]; then
   mkdir -p "$output_dir/admin"
   cp -R admin/. "$output_dir/admin/"
+elif [ -d "$output_dir/admin" ]; then
+  find "$output_dir/admin" -depth -delete
 fi
 
 if [ -d output/pdf ]; then

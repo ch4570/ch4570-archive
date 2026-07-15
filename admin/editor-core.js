@@ -71,6 +71,57 @@ export class EditableDocumentError extends Error {
   }
 }
 
+export function mergeDraftPayloads(localDraft, serverDraft) {
+  if (!localDraft) return { draft: serverDraft || null, conflicts: [] };
+  if (!serverDraft) return { draft: localDraft, conflicts: [] };
+
+  const documents = {};
+  const conflicts = [];
+  const documentKeys = new Set([
+    ...Object.keys(localDraft.documents || {}),
+    ...Object.keys(serverDraft.documents || {}),
+  ]);
+
+  for (const documentKey of documentKeys) {
+    const localChanges = localDraft.documents?.[documentKey] || {};
+    const serverChanges = serverDraft.documents?.[documentKey] || {};
+    const mergedChanges = {};
+    const editIds = new Set([...Object.keys(localChanges), ...Object.keys(serverChanges)]);
+
+    for (const editId of editIds) {
+      const localChange = localChanges[editId];
+      const serverChange = serverChanges[editId];
+      if (!localChange) {
+        mergedChanges[editId] = serverChange;
+      } else if (!serverChange) {
+        mergedChanges[editId] = localChange;
+      } else if (
+        localChange.original === serverChange.original &&
+        localChange.value === serverChange.value
+      ) {
+        mergedChanges[editId] = serverChange;
+      } else {
+        mergedChanges[editId] = localChange;
+        conflicts.push(`${documentKey}:${editId}`);
+      }
+    }
+
+    if (Object.keys(mergedChanges).length) documents[documentKey] = mergedChanges;
+  }
+
+  const localUpdatedAt = Date.parse(localDraft.updatedAt || "") || 0;
+  const serverUpdatedAt = Date.parse(serverDraft.updatedAt || "") || 0;
+  return {
+    draft: {
+      version: 1,
+      updatedAt:
+        localUpdatedAt >= serverUpdatedAt ? localDraft.updatedAt : serverDraft.updatedAt,
+      documents,
+    },
+    conflicts,
+  };
+}
+
 function fail(code, message, details) {
   throw new EditableDocumentError(code, message, details);
 }

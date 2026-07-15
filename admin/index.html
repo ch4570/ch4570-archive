@@ -7,11 +7,11 @@
   <meta name="robots" content="noindex, nofollow, noarchive">
   <meta name="googlebot" content="noindex, nofollow, noarchive">
   <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; frame-src 'self'; base-uri 'self'; form-action 'none'; object-src 'none'">
+  <meta name="admin-csrf-token" content="__ADMIN_CSRF_META__">
   <title>문서 편집기 · 서민재</title>
-  <link rel="stylesheet" href="../assets/design-system.css">
-  <link rel="stylesheet" href="./admin.css">
-  <script type="module" src="./admin.js"></script>
+  <link rel="stylesheet" href="/assets/design-system.css">
+  <link rel="stylesheet" href="/api/admin/assets/admin.css">
+  <script type="module" src="/api/admin/assets/admin.js"></script>
 </head>
 <body class="admin-body">
   <a class="skip-link" href="#editor-pane">편집기로 건너뛰기</a>
@@ -19,7 +19,7 @@
   <div class="admin-app" id="admin-app" data-mobile-view="editor">
     <header class="admin-header">
       <div class="admin-brand">
-        <a class="admin-brand-mark" href="../" aria-label="공개 사이트로 이동">SM</a>
+        <a class="admin-brand-mark" href="/" aria-label="공개 사이트로 이동">SM</a>
         <div class="admin-brand-copy">
           <strong>문서 편집기</strong>
           <span>서민재 · AI-Native Backend Engineer</span>
@@ -47,6 +47,16 @@
           </svg>
           변경사항 게시
         </button>
+        <form class="admin-logout-form" action="/api/admin/logout/" method="post">
+          <input type="hidden" name="csrf" value="__ADMIN_CSRF_FORM__">
+          <button class="admin-button admin-button-quiet admin-icon-button" type="submit" title="로그아웃" aria-label="로그아웃">
+            <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 17l5-5-5-5"></path>
+              <path d="M15 12H3"></path>
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+            </svg>
+          </button>
+        </form>
       </div>
     </header>
 
@@ -201,21 +211,9 @@
         <strong>ch4570/ch4570-archive · main</strong>
       </div>
 
-      <label class="admin-field" for="github-token">
-        <span class="admin-field-label">GitHub 토큰</span>
-        <span class="token-input-wrap">
-          <svg aria-hidden="true" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="8" cy="15" r="4"></circle>
-            <path d="m11 12 8-8M16 7l2 2M15 8l2 2"></path>
-          </svg>
-          <input id="github-token" name="github-token" type="password" placeholder="github_pat_…" required autocomplete="off" autocapitalize="off" spellcheck="false">
-        </span>
-        <small>
-          토큰은 게시 요청에만 사용하며 브라우저에 저장하지 않습니다.
-          <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noreferrer">토큰 만들기</a>
-          <span>· ch4570-archive의 Contents·Actions 쓰기</span>
-        </small>
-      </label>
+      <p class="publish-note">
+        저장된 초안을 서버에서 다시 검증한 뒤 GitHub Actions가 HTML과 PDF를 함께 게시합니다.
+      </p>
 
       <div class="publish-feedback" aria-live="polite">
         <progress id="publish-progress" max="100" value="0" hidden>0%</progress>
@@ -231,7 +229,7 @@
             <path d="m7 9 5-5 5 5"></path>
             <path d="M5 20h14"></path>
           </svg>
-          GitHub에 게시
+          게시 시작
         </button>
       </footer>
     </form>

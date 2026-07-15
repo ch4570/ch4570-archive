@@ -95,6 +95,10 @@
   gap: 7px;
 }
 
+.admin-logout-form {
+  display: contents;
+}
+
 .admin-save-summary {
   display: inline-flex;
   min-height: 32px;
@@ -869,35 +873,12 @@
   text-align: right;
 }
 
-.publish-form > .admin-field {
-  padding: 20px;
-}
-
-.token-input-wrap {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 11px;
-  border: 1px solid var(--line-strong);
+.publish-note {
+  margin: 0;
+  padding: 18px 20px;
   color: var(--muted);
-}
-
-.token-input-wrap:focus-within {
-  border-color: var(--focus);
-  box-shadow: 0 0 0 2px rgba(0, 108, 120, 0.12);
-}
-
-.token-input-wrap input {
-  width: 100%;
-  min-width: 0;
-  height: 43px;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--ink);
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 13px;
+  line-height: 1.7;
 }
 
 .publish-feedback {

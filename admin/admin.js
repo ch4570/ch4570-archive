@@ -1,18 +1,15 @@
 import {
-  assertEditableOnlyChanges,
   inferEditableTimeDatetime,
-  replaceEditableContents,
+  mergeDraftPayloads,
   scanEditableRegions,
   validateInlineHtml,
 } from "./editor-core.js";
 
-const REPOSITORY = "ch4570/ch4570-archive";
-const REPOSITORY_OWNER_ID = 91787050;
-const MAIN_BRANCH = "main";
-const API_VERSION = "2026-03-10";
-const API_ROOT = `https://api.github.com/repos/${REPOSITORY}`;
+const ADMIN_API_ROOT = "/api/admin";
+const csrfToken = document.querySelector('meta[name="admin-csrf-token"]')?.content || "";
 const DRAFT_KEY = "ch4570-copy-admin-draft-v1";
 const CACHE_KEY = "ch4570-copy-admin-source-v1";
+const PUBLISH_KEY = "ch4570-copy-admin-publish-v1";
 const DOCUMENTS = {
   home: {
     key: "home",
@@ -44,8 +41,6 @@ const DOCUMENTS = {
   },
 };
 
-const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "[::1]"]);
-const isLocalDevelopment = LOCAL_HOSTS.has(window.location.hostname);
 const state = {
   activeDocument: "resume",
   activeSections: {},
@@ -55,8 +50,14 @@ const state = {
   conflicts: new Set(),
   invalidFields: new Map(),
   selectedEditId: "",
+  baseSha: "",
+  serverRevisionId: null,
+  serverRevisionVersion: null,
+  publishEnabled: false,
+  serverAvailable: true,
   loading: true,
   publishing: false,
+  publishMonitorJobId: null,
 };
 
 const elements = {
@@ -84,7 +85,6 @@ const elements = {
   mobilePreviewTab: document.querySelector("#mobile-preview-tab"),
   publishDialog: document.querySelector("#publish-dialog"),
   publishForm: document.querySelector("#publish-form"),
-  githubToken: document.querySelector("#github-token"),
   publishCancel: document.querySelector("#publish-cancel"),
   publishSubmit: document.querySelector("#publish-submit"),
   publishProgress: document.querySelector("#publish-progress"),
@@ -118,6 +118,53 @@ const storage = {
       // The editor still works for the current tab when storage is unavailable.
     }
   },
+};
+
+const readDraftEnvelope = () => {
+  const stored = storage.read(DRAFT_KEY);
+  if (stored?.draft?.version === 1) return stored;
+  if (stored?.version === 1) {
+    return { draft: stored, revisionId: null, revisionVersion: null };
+  }
+  return null;
+};
+
+const writeDraftEnvelope = (draft) =>
+  storage.write(DRAFT_KEY, {
+    draft,
+    revisionId: state.serverRevisionId,
+    revisionVersion: state.serverRevisionVersion,
+  });
+
+const adminRequest = async (path, { method = "GET", body } = {}) => {
+  const response = await fetch(`${ADMIN_API_ROOT}${path}`, {
+    method,
+    cache: "no-store",
+    credentials: "same-origin",
+    headers: {
+      Accept: "application/json",
+      ...(body === undefined ? {} : { "Content-Type": "application/json" }),
+      ...(method === "GET" ? {} : { "X-CSRF-Token": csrfToken }),
+    },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  });
+  const responseText = await response.text();
+  let payload = null;
+  if (responseText) {
+    try {
+      payload = JSON.parse(responseText);
+    } catch {
+      payload = null;
+    }
+  }
+  if (!response.ok) {
+    if (response.status === 401) window.location.assign("/admin/");
+    const error = new Error(payload?.error?.message || `서버 요청이 실패했습니다. (${response.status})`);
+    error.status = response.status;
+    error.code = payload?.error?.code || "REQUEST_FAILED";
+    throw error;
+  }
+  return payload;
 };
 
 const escapeSelector = (value) => {
@@ -271,13 +318,20 @@ const updateGlobalStatus = () => {
   const blocked =
     state.loading ||
     state.publishing ||
-    isLocalDevelopment ||
+    !state.serverAvailable ||
+    !state.publishEnabled ||
     changeTotal === 0 ||
     state.invalidFields.size > 0 ||
     state.conflicts.size > 0;
   elements.publishButton.disabled = blocked;
-  if (isLocalDevelopment) {
-    elements.publishButton.title = "실제 배포 주소의 관리자 화면에서 게시할 수 있습니다.";
+  elements.fields.querySelectorAll("[contenteditable]").forEach((control) => {
+    control.contentEditable = String(!state.loading && !state.publishing);
+    control.setAttribute("aria-disabled", String(state.loading || state.publishing));
+  });
+  if (!state.publishEnabled) {
+    elements.publishButton.title = "운영 관리자 화면에서만 게시할 수 있습니다.";
+  } else if (!state.serverAvailable) {
+    elements.publishButton.title = "서버 연결을 확인한 뒤 게시할 수 있습니다.";
   } else if (state.conflicts.size) {
     elements.publishButton.title = "원본과 충돌한 문구를 먼저 확인해 주세요.";
   } else if (state.invalidFields.size) {
@@ -301,13 +355,87 @@ const serializeDraft = () => {
 };
 
 let saveTimer = 0;
+let pendingDraftSync;
+let draftSyncRunning = false;
+let draftSyncPromise = Promise.resolve();
+
+const syncDraftToServer = async (draft) => {
+  if (!state.serverAvailable) return;
+  if (!draft) {
+    if (!state.serverRevisionId || !state.serverRevisionVersion) return;
+    await adminRequest("/draft/", {
+      method: "DELETE",
+      body: {
+        revisionId: state.serverRevisionId,
+        revisionVersion: state.serverRevisionVersion,
+      },
+    });
+    state.serverRevisionId = null;
+    state.serverRevisionVersion = null;
+    setSaveState("원본과 동일");
+    return;
+  }
+
+  const response = await adminRequest("/draft/", {
+    method: "PUT",
+    body: {
+      baseSha: state.baseSha,
+      draft,
+      revisionId: state.serverRevisionId,
+      revisionVersion: state.serverRevisionVersion,
+    },
+  });
+  state.serverRevisionId = response.revision.id;
+  state.serverRevisionVersion = response.revision.version;
+  writeDraftEnvelope(response.revision.draft);
+  setSaveState("클라우드에 초안 저장됨");
+};
+
+const drainDraftSync = async () => {
+  while (pendingDraftSync !== undefined) {
+    const draft = pendingDraftSync;
+    pendingDraftSync = undefined;
+    try {
+      await syncDraftToServer(draft);
+    } catch (error) {
+      state.serverAvailable = error.status === 409;
+      showAdminError(
+        error.message || "서버에 초안을 저장하지 못했습니다.",
+        error.status === 409 ? "다른 창에서 초안이 변경되었습니다." : "초안을 저장하지 못했습니다.",
+      );
+      setSaveState(error.status === 409 ? "초안 충돌 확인 중" : "브라우저에만 초안 저장됨", "error");
+      pendingDraftSync = undefined;
+      if (error.status === 409) await loadDocuments({ force: true });
+    }
+  }
+};
+
+const queueDraftSync = (draft) => {
+  if (!state.serverAvailable) return;
+  pendingDraftSync = draft;
+  if (draftSyncRunning) return;
+  draftSyncRunning = true;
+  draftSyncPromise = drainDraftSync().finally(() => {
+    draftSyncRunning = false;
+    if (pendingDraftSync !== undefined) queueDraftSync(pendingDraftSync);
+  });
+};
+
+const flushDraftSync = () => draftSyncPromise;
+
 const persistDraft = () => {
   window.clearTimeout(saveTimer);
   saveTimer = 0;
   const changeTotal = countChanges();
-  const saved = changeTotal === 0 ? (storage.remove(DRAFT_KEY), true) : storage.write(DRAFT_KEY, serializeDraft());
+  const draft = changeTotal === 0 ? null : serializeDraft();
+  const saved = draft ? writeDraftEnvelope(draft) : (storage.remove(DRAFT_KEY), true);
   if (saved) {
-    setSaveState(changeTotal ? "브라우저에 초안 저장됨" : "원본과 동일");
+    if (state.invalidFields.size || state.conflicts.size) {
+      setSaveState("브라우저에 초안 저장됨", "error");
+    } else {
+      setSaveState(changeTotal ? "서버에 저장 중" : "원본과 동일", changeTotal ? "saving" : "saved");
+      queueDraftSync(draft);
+    }
   } else {
     setSaveState("초안을 저장하지 못함", "error");
   }
@@ -318,7 +446,7 @@ const persistDraft = () => {
 const saveDraft = () => {
   window.clearTimeout(saveTimer);
   setSaveState("저장 중", "saving");
-  saveTimer = window.setTimeout(persistDraft, 140);
+  saveTimer = window.setTimeout(persistDraft, 500);
 };
 
 const showAdminError = (message, title = "문서를 불러오지 못했습니다.") => {
@@ -368,38 +496,78 @@ const updateConflictIndicators = () => {
   });
 };
 
-const fetchSource = async (documentConfig) => {
-  const url = new URL(`../${documentConfig.path}`, import.meta.url);
-  const response = await fetch(url, { cache: "no-store" });
-  if (!response.ok) throw new Error(`${documentConfig.name} 원본을 불러오지 못했습니다. (${response.status})`);
-  return response.text();
-};
-
-const fetchBundle = async ({ force = false } = {}) => {
+const fetchBundle = async () => {
   const cached = storage.read(CACHE_KEY);
-  let sources;
-  let fromCache = false;
   try {
-    const entries = await Promise.all(
-      Object.values(DOCUMENTS).map(async (documentConfig) => [
-        documentConfig.key,
-        await fetchSource(documentConfig),
-      ]),
-    );
-    sources = Object.fromEntries(entries);
+    const response = await adminRequest("/documents/");
+    state.baseSha = response.baseSha;
+    state.serverRevisionId = response.revision?.id || null;
+    state.serverRevisionVersion = response.revision?.version || null;
+    state.publishEnabled = Boolean(response.publishEnabled);
+    state.serverAvailable = true;
+    storage.write(CACHE_KEY, {
+      baseSha: response.baseSha,
+      sources: response.sources,
+      savedAt: new Date().toISOString(),
+    });
+    return {
+      sources: response.sources,
+      serverDraft: response.revision?.draft || null,
+      revisionStatus: response.revision?.status || null,
+      revisionError: response.revision?.error || null,
+      activeJob: response.activeJob || null,
+      fromCache: false,
+    };
   } catch (error) {
     if (!cached?.sources) throw error;
-    sources = cached.sources;
-    fromCache = true;
+    state.baseSha = cached.baseSha || "";
+    state.serverRevisionId = null;
+    state.serverRevisionVersion = null;
+    state.publishEnabled = false;
+    state.serverAvailable = false;
+    return {
+      sources: cached.sources,
+      serverDraft: null,
+      revisionStatus: null,
+      revisionError: null,
+      activeJob: null,
+      fromCache: true,
+    };
   }
-
-  if (!isLocalDevelopment || force) {
-    storage.write(CACHE_KEY, { sources, savedAt: new Date().toISOString() });
-  }
-  return { sources, fromCache };
 };
 
-const restoreDraft = (draft) => {
+const selectDraft = (localEnvelope, bundle) => {
+  if (!localEnvelope) {
+    return { draft: bundle.serverDraft, conflicts: [], needsSync: false };
+  }
+  if (bundle.fromCache) {
+    return { draft: localEnvelope.draft, conflicts: [], needsSync: false };
+  }
+  if (!bundle.serverDraft) {
+    return localEnvelope.revisionId
+      ? { draft: null, conflicts: [], needsSync: false }
+      : { draft: localEnvelope.draft, conflicts: [], needsSync: true };
+  }
+  if (
+    localEnvelope.revisionId === state.serverRevisionId &&
+    localEnvelope.revisionVersion === state.serverRevisionVersion
+  ) {
+    return {
+      draft: localEnvelope.draft,
+      conflicts: [],
+      needsSync: JSON.stringify(localEnvelope.draft) !== JSON.stringify(bundle.serverDraft),
+    };
+  }
+  const merged = mergeDraftPayloads(localEnvelope.draft, bundle.serverDraft);
+  return {
+    ...merged,
+    needsSync:
+      merged.conflicts.length === 0 &&
+      JSON.stringify(merged.draft) !== JSON.stringify(bundle.serverDraft),
+  };
+};
+
+const restoreDraft = (draft, mergeConflicts = []) => {
   state.changes.clear();
   state.conflicts.clear();
   state.invalidFields.clear();
@@ -432,9 +600,18 @@ const restoreDraft = (draft) => {
 
     if (!documentChanges.size) state.changes.delete(documentKey);
   }
+
+  for (const key of mergeConflicts) {
+    const separator = key.indexOf(":");
+    const documentKey = key.slice(0, separator);
+    const editId = key.slice(separator + 1);
+    if (getDocumentChanges(documentKey)?.has(editId)) state.conflicts.add(key);
+  }
 };
 
 const loadDocuments = async ({ force = false } = {}) => {
+  let activeJob = null;
+  let needsSync = false;
   state.loading = true;
   updateGlobalStatus();
   clearAdminError();
@@ -442,8 +619,13 @@ const loadDocuments = async ({ force = false } = {}) => {
   setSaveState("원본 불러오는 중", "saving");
 
   try {
-    const draft = storage.read(DRAFT_KEY);
+    const localEnvelope = readDraftEnvelope();
     const bundle = await fetchBundle({ force });
+    const selected = selectDraft(localEnvelope, bundle);
+    const draft = selected.draft;
+    activeJob = bundle.activeJob;
+    needsSync = selected.needsSync;
+    if (activeJob) state.publishing = true;
     state.sources.clear();
     state.models.clear();
 
@@ -455,7 +637,9 @@ const loadDocuments = async ({ force = false } = {}) => {
       state.activeSections[documentConfig.key] ||= model.sections[0]?.id || "";
     }
 
-    restoreDraft(draft);
+    restoreDraft(draft, selected.conflicts);
+    if (draft) writeDraftEnvelope(draft);
+    else storage.remove(DRAFT_KEY);
     const conflictCount = state.conflicts.size;
     if (conflictCount) {
       showAdminError(
@@ -469,10 +653,15 @@ const loadDocuments = async ({ force = false } = {}) => {
         "문구 형식을 확인해 주세요.",
       );
       setSaveState("문구 형식 확인 필요", "error");
+    } else if (bundle.revisionError) {
+      showAdminError(bundle.revisionError, "이전 게시 작업을 확인해 주세요.");
+      setSaveState("게시 작업 확인 필요", "error");
+    } else if (bundle.revisionStatus === "publishing") {
+      setSaveState("게시 작업 확인 중", "saving");
     } else if (bundle.fromCache) {
       setSaveState(countChanges() ? "저장된 초안 복원됨" : "저장된 원본 사용 중");
     } else {
-      setSaveState(countChanges() ? "저장된 초안 복원됨" : "최신 원본");
+      setSaveState(countChanges() ? "클라우드 초안 복원됨" : "최신 원본");
     }
     renderActiveDocument({ reloadPreview: true });
   } catch (error) {
@@ -485,6 +674,8 @@ const loadDocuments = async ({ force = false } = {}) => {
     elements.fields.removeAttribute("aria-busy");
     updateGlobalStatus();
   }
+  if (needsSync && !state.conflicts.size && !activeJob) saveDraft();
+  if (activeJob) void resumePublishJob(activeJob);
 };
 
 const renderSectionList = () => {
@@ -807,11 +998,30 @@ const setMobileView = (view) => {
   });
 };
 
-const resetDraft = () => {
+const resetDraft = async () => {
   if (!countChanges() && !state.invalidFields.size && !state.conflicts.size) return;
-  if (!window.confirm("브라우저에 저장한 모든 문구 수정을 지우고 현재 공개 원본으로 되돌릴까요?")) return;
+  if (!window.confirm("저장한 모든 문구 수정을 지우고 현재 공개 원본으로 되돌릴까요?")) return;
   window.clearTimeout(saveTimer);
   saveTimer = 0;
+  const storedRevisionId = readDraftEnvelope()?.revisionId;
+  if (!state.serverAvailable && storedRevisionId) {
+    showAdminError(
+      "서버에 연결한 뒤 다시 시도해 주세요. 서버 초안을 남긴 채 브라우저 내용만 지우지는 않습니다.",
+      "초안을 아직 초기화하지 않았습니다.",
+    );
+    setSaveState("서버 연결 필요", "error");
+    return;
+  }
+  try {
+    if (state.serverRevisionId) {
+      setSaveState("초안 초기화 중", "saving");
+      await syncDraftToServer(null);
+    }
+  } catch (error) {
+    showAdminError(error.message || "서버 초안을 초기화하지 못했습니다.", "초안을 아직 초기화하지 않았습니다.");
+    setSaveState("초안 초기화 실패", "error");
+    return;
+  }
   state.changes.clear();
   state.conflicts.clear();
   state.invalidFields.clear();
@@ -823,108 +1033,12 @@ const resetDraft = () => {
 };
 
 const reloadContent = async () => {
-  if (countChanges() && !window.confirm("저장한 초안은 유지한 채 GitHub의 최신 원본과 다시 비교할까요?")) return;
+  if (countChanges() && !window.confirm("저장한 초안은 유지한 채 최신 공개 원본과 다시 비교할까요?")) return;
   persistDraft();
+  await flushDraftSync();
   storage.remove(CACHE_KEY);
   await loadDocuments({ force: true });
 };
-
-const githubRequest = async (path, token, { method = "GET", body } = {}) => {
-  const response = await fetch(path.startsWith("http") ? path : `${API_ROOT}${path}`, {
-    method,
-    cache: "no-store",
-    headers: {
-      Accept: "application/vnd.github+json",
-      Authorization: `Bearer ${token}`,
-      "X-GitHub-Api-Version": API_VERSION,
-      ...(body === undefined ? {} : { "Content-Type": "application/json" }),
-    },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const responseText = await response.text();
-  let payload = null;
-  if (responseText) {
-    try {
-      payload = JSON.parse(responseText);
-    } catch {
-      payload = null;
-    }
-  }
-  if (!response.ok) {
-    const error = new Error(payload?.message || `GitHub 요청이 실패했습니다. (${response.status})`);
-    error.status = response.status;
-    throw error;
-  }
-  return payload;
-};
-
-const decodeBase64Utf8 = (encoded) => {
-  const binary = window.atob(encoded.replace(/\s+/g, ""));
-  const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
-  return new TextDecoder().decode(bytes);
-};
-
-const buildTrustedWorkingSources = async (token, baseSha) => {
-  const workingSources = new Map();
-  for (const [documentKey, changes] of state.changes) {
-    if (!changes.size) continue;
-    const documentConfig = DOCUMENTS[documentKey];
-    const content = await githubRequest(
-      `/contents/${documentConfig.path}?ref=${encodeURIComponent(baseSha)}`,
-      token,
-    );
-    if (content?.type !== "file" || content.encoding !== "base64" || typeof content.content !== "string") {
-      throw new Error(`${documentConfig.name} 원본을 GitHub에서 확인하지 못했습니다.`);
-    }
-    const source = decodeBase64Utf8(content.content);
-    const trustedRegions = new Map(scanEditableRegions(source).map((region) => [region.id, region]));
-    for (const [id, change] of changes) {
-      if (trustedRegions.get(id)?.innerHTML !== change.original) {
-        const error = new Error(`${id} 문구의 원본이 바뀌었습니다.`);
-        error.status = 409;
-        throw error;
-      }
-    }
-    const replacements = new Map([...changes].map(([id, change]) => [id, change.value]));
-    const workingSource = replaceEditableContents(source, replacements);
-    assertEditableOnlyChanges(source, workingSource);
-    workingSources.set(documentKey, workingSource);
-  }
-  return workingSources;
-};
-
-const deleteDraftRef = async (token, draftRef, expectedSha) => {
-  const refPath = draftRef.replace(/^refs\//u, "");
-  let currentRef;
-  try {
-    currentRef = await githubRequest(`/git/ref/${refPath}`, token);
-  } catch (error) {
-    if (error.status === 404) return true;
-    throw error;
-  }
-  if (currentRef.object.sha !== expectedSha) return false;
-  await githubRequest(`/git/refs/${refPath}`, token, { method: "DELETE" });
-  return true;
-};
-
-const randomDraftRef = () => {
-  const bytes = new Uint8Array(4);
-  window.crypto.getRandomValues(bytes);
-  const suffix = [...bytes].map((value) => value.toString(16).padStart(2, "0")).join("");
-  const timestamp = new Date().toISOString().replace(/[-:TZ.]/g, "").slice(0, 14);
-  return `refs/heads/content-drafts/admin-${timestamp}-${suffix}`;
-};
-
-const draftCommitMessage = (changeTotal) => `Stage owner-authored application copy
-
-Prepare ${changeTotal} reviewed copy block${changeTotal === 1 ? "" : "s"} for the guarded publication workflow.
-
-Constraint: Editable prose only; layout and diagram markup remain locked
-Confidence: high
-Scope-risk: narrow
-Reversibility: clean
-Tested: Client-side editable-boundary validation and live preview
-Not-tested: PDF pagination before the publication workflow`;
 
 const setPublishFeedback = ({ message, progress, link, error = false }) => {
   elements.publishStatus.textContent = message;
@@ -940,163 +1054,156 @@ const setPublishFeedback = ({ message, progress, link, error = false }) => {
 };
 
 const friendlyPublishError = (error) => {
-  if (error.status === 401) return "GitHub 토큰을 확인해 주세요. 토큰은 저장되지 않았습니다.";
-  if (error.status === 403) return "토큰에 이 저장소의 Contents·Actions 쓰기 권한이 있는지 확인해 주세요.";
-  if (error.status === 409) return "게시하는 동안 원본이 바뀌었습니다. 원본을 다시 불러온 뒤 확인해 주세요.";
-  if (error.status === 422) return "GitHub가 초안 브랜치를 만들지 못했습니다. 잠시 후 다시 시도해 주세요.";
+  if (error.status === 401) return "로그인 세션이 만료되었습니다. 다시 로그인해 주세요.";
+  if (error.status === 403) return "게시 권한을 확인하지 못했습니다.";
+  if (error.status === 409) return "공개 원본이나 초안이 바뀌었습니다. 다시 불러온 뒤 확인해 주세요.";
   return error.message || "게시 중 오류가 발생했습니다.";
 };
 
-const pollWorkflow = async (runUrl, token) => {
+const pollPublishJob = async (initialJob) => {
   const deadline = Date.now() + 45 * 60 * 1000;
+  let job = initialJob;
   while (Date.now() < deadline) {
-    const run = await githubRequest(runUrl, token);
-    if (run.status === "completed") return run;
-    const message = run.status === "queued" ? "게시 작업이 대기 중입니다." : "문구와 PDF를 검증하고 있습니다.";
-    setPublishFeedback({ message, progress: run.status === "queued" ? 58 : 72, link: run.html_url });
+    if (["published", "warning", "failed"].includes(job.status)) return job;
+    setPublishFeedback({
+      message: job.message,
+      progress: job.progress,
+      link: job.htmlUrl,
+    });
     await sleep(6000);
+    try {
+      const response = await adminRequest(`/publish/${encodeURIComponent(job.id)}/`);
+      job = response.job;
+    } catch (error) {
+      if ([401, 403, 404, 409].includes(error.status)) throw error;
+      setPublishFeedback({
+        message: "서버 연결을 다시 시도하고 있습니다. 이 창을 닫아도 다음 접속에서 이어집니다.",
+        progress: job.progress,
+        link: job.htmlUrl,
+        error: true,
+      });
+    }
   }
   throw new Error("게시 검증이 45분 안에 끝나지 않았습니다. GitHub Actions에서 진행 상황을 확인해 주세요.");
+};
+
+const setPublishControlsLocked = (locked) => {
+  elements.publishSubmit.disabled = locked;
+  elements.publishCancel.disabled = locked;
+  document.querySelectorAll("[data-dialog-cancel]").forEach((button) => {
+    button.disabled = locked;
+  });
+};
+
+const completePublishJob = async (job) => {
+  if (job.status === "failed") {
+    const error = new Error(job.error || job.message);
+    error.terminal = true;
+    error.htmlUrl = job.htmlUrl;
+    throw error;
+  }
+
+  const pagesDeploymentSucceeded = job.status === "published";
+  storage.remove(DRAFT_KEY);
+  storage.remove(CACHE_KEY);
+  storage.remove(PUBLISH_KEY);
+  state.changes.clear();
+  state.conflicts.clear();
+  state.invalidFields.clear();
+  state.serverRevisionId = null;
+  state.serverRevisionVersion = null;
+  setPublishFeedback({
+    message: pagesDeploymentSucceeded
+      ? "게시가 완료되었습니다. 공개 사이트 배포가 이어서 반영됩니다."
+      : "콘텐츠와 PDF는 게시되었습니다. GitHub Pages 배포만 실패해 Actions에서 다시 실행해야 합니다.",
+    progress: 100,
+    link: job.htmlUrl,
+    error: !pagesDeploymentSucceeded,
+  });
+  await loadDocuments({ force: true });
+};
+
+const resumePublishJob = async (initialJob) => {
+  if (state.publishMonitorJobId === initialJob.id) return;
+  state.publishMonitorJobId = initialJob.id;
+  state.publishing = true;
+  setPublishControlsLocked(true);
+  updateGlobalStatus();
+  elements.publishProgress.hidden = false;
+  if (!elements.publishDialog.open) elements.publishDialog.showModal();
+
+  try {
+    const job = await pollPublishJob(initialJob);
+    await completePublishJob(job);
+  } catch (error) {
+    if (error.terminal) storage.remove(PUBLISH_KEY);
+    setPublishFeedback({
+      message: friendlyPublishError(error),
+      progress: elements.publishProgress.value || 0,
+      link: error.htmlUrl || initialJob.htmlUrl,
+      error: true,
+    });
+    await loadDocuments({ force: true }).catch(() => undefined);
+  } finally {
+    state.publishMonitorJobId = null;
+    state.publishing = false;
+    setPublishControlsLocked(false);
+    updateGlobalStatus();
+  }
 };
 
 const publishChanges = async (event) => {
   event.preventDefault();
   if (state.publishing || elements.publishButton.disabled) return;
 
-  const token = elements.githubToken.value.trim();
-  elements.githubToken.value = "";
-  if (!token) {
-    setPublishFeedback({ message: "GitHub 토큰을 입력해 주세요.", progress: 0, error: true });
-    elements.githubToken.focus();
-    return;
-  }
-
   state.publishing = true;
-  elements.publishSubmit.disabled = true;
-  elements.publishCancel.disabled = true;
-  document.querySelectorAll("[data-dialog-cancel]").forEach((button) => {
-    button.disabled = true;
-  });
+  setPublishControlsLocked(true);
   updateGlobalStatus();
   let runLink = "";
-  let draftRef = "";
-  let draftCommitSha = "";
-  let workflowStarted = false;
 
   try {
-    setPublishFeedback({ message: "GitHub 계정을 확인하고 있습니다.", progress: 5 });
-    const user = await githubRequest("https://api.github.com/user", token);
-    if (user.id !== REPOSITORY_OWNER_ID) {
-      const error = new Error("이 저장소 소유자 계정의 토큰만 사용할 수 있습니다.");
-      error.status = 401;
-      throw error;
+    persistDraft();
+    await flushDraftSync();
+    if (!state.serverAvailable || !state.serverRevisionId || !state.serverRevisionVersion) {
+      throw new Error("초안이 서버에 저장되지 않았습니다. 원본을 다시 불러온 뒤 시도해 주세요.");
     }
-
-    setPublishFeedback({ message: "최신 원본과 초안을 비교하고 있습니다.", progress: 12 });
-    const mainRef = await githubRequest(`/git/ref/heads/${MAIN_BRANCH}`, token);
-    const publishBaseSha = mainRef.object.sha;
-    const workingSources = await buildTrustedWorkingSources(token, publishBaseSha);
-    const baseCommit = await githubRequest(`/git/commits/${publishBaseSha}`, token);
-    setPublishFeedback({ message: "검증용 초안을 만들고 있습니다.", progress: 22 });
-
-    const treeEntries = await Promise.all(
-      [...workingSources].map(async ([documentKey, source]) => {
-        const blob = await githubRequest("/git/blobs", token, {
-          method: "POST",
-          body: { content: source, encoding: "utf-8" },
-        });
-        return {
-          path: DOCUMENTS[documentKey].path,
-          mode: "100644",
-          type: "blob",
-          sha: blob.sha,
-        };
-      }),
-    );
-    const tree = await githubRequest("/git/trees", token, {
-      method: "POST",
-      body: { base_tree: baseCommit.tree.sha, tree: treeEntries },
+    const rememberedPublish = storage.read(PUBLISH_KEY);
+    const idempotencyKey =
+      rememberedPublish?.revisionId === state.serverRevisionId &&
+      typeof rememberedPublish.idempotencyKey === "string"
+        ? rememberedPublish.idempotencyKey
+        : window.crypto.randomUUID();
+    storage.write(PUBLISH_KEY, {
+      revisionId: state.serverRevisionId,
+      idempotencyKey,
     });
-    const draftCommit = await githubRequest("/git/commits", token, {
+    setPublishFeedback({ message: "서버에서 최신 원본과 초안을 비교하고 있습니다.", progress: 12 });
+    const response = await adminRequest("/publish/", {
       method: "POST",
       body: {
-        message: draftCommitMessage(countChanges()),
-        tree: tree.sha,
-        parents: [publishBaseSha],
+        revisionId: state.serverRevisionId,
+        revisionVersion: state.serverRevisionVersion,
+        idempotencyKey,
       },
     });
-    draftCommitSha = draftCommit.sha;
-    draftRef = randomDraftRef();
-    await githubRequest("/git/refs", token, {
-      method: "POST",
-      body: { ref: draftRef, sha: draftCommit.sha },
-    });
-
-    setPublishFeedback({ message: "자동 검증과 PDF 생성을 시작합니다.", progress: 48 });
-    const dispatch = await githubRequest("/actions/workflows/publish-content.yml/dispatches", token, {
-      method: "POST",
-      body: {
-        ref: MAIN_BRANCH,
-        inputs: {
-          draft_ref: draftRef,
-          draft_sha: draftCommit.sha,
-          base_sha: publishBaseSha,
-        },
-      },
-    });
-    if (!dispatch?.workflow_run_id || !dispatch?.run_url) {
-      throw new Error("게시 작업 ID를 받지 못했습니다. GitHub Actions에서 실행 여부를 확인해 주세요.");
-    }
-    workflowStarted = true;
-    runLink = dispatch.html_url;
-    setPublishFeedback({ message: "게시 작업이 대기 중입니다.", progress: 55, link: runLink });
-
-    const run = await pollWorkflow(dispatch.run_url, token);
-    runLink = run.html_url || runLink;
-    let pagesDeploymentSucceeded = true;
-    if (run.conclusion !== "success") {
-      const jobs = await githubRequest(run.jobs_url, token);
-      const publishJob = jobs.jobs?.find((job) => job.name === "publish");
-      if (publishJob?.conclusion !== "success") {
-        throw new Error(`자동 검증이 통과하지 못했습니다. (${run.conclusion || "unknown"})`);
-      }
-      pagesDeploymentSucceeded = false;
-    }
-
-    await deleteDraftRef(token, draftRef, draftCommitSha).catch(() => false);
-
-    storage.remove(DRAFT_KEY);
-    storage.remove(CACHE_KEY);
-    state.changes.clear();
-    state.conflicts.clear();
-    state.invalidFields.clear();
-    setPublishFeedback({
-      message: pagesDeploymentSucceeded
-        ? "게시가 완료되었습니다. 공개 사이트 배포가 이어서 반영됩니다."
-        : "콘텐츠와 PDF는 게시되었습니다. GitHub Pages 배포만 실패해 Actions에서 다시 실행해야 합니다.",
-      progress: 100,
-      link: runLink,
-      error: !pagesDeploymentSucceeded,
-    });
-    await loadDocuments({ force: true });
+    const job = await pollPublishJob(response.job);
+    runLink = job.htmlUrl || "";
+    await completePublishJob(job);
   } catch (error) {
-    if (draftRef && !workflowStarted) {
-      await deleteDraftRef(token, draftRef, draftCommitSha).catch(() => false);
-    }
+    if (error.terminal || error.status) storage.remove(PUBLISH_KEY);
     setPublishFeedback({
       message: friendlyPublishError(error),
       progress: elements.publishProgress.value || 0,
       link: runLink,
       error: true,
     });
+    await loadDocuments({ force: true }).catch(() => undefined);
   } finally {
-    state.publishing = false;
-    elements.publishSubmit.disabled = false;
-    elements.publishCancel.disabled = false;
-    document.querySelectorAll("[data-dialog-cancel]").forEach((button) => {
-      button.disabled = false;
-    });
-    updateGlobalStatus();
+    if (!state.publishMonitorJobId) {
+      state.publishing = false;
+      setPublishControlsLocked(false);
+      updateGlobalStatus();
+    }
   }
 };
 
@@ -1109,7 +1216,7 @@ const openPublishDialog = () => {
   elements.publishStatus.classList.remove("is-error");
   elements.publishStatus.textContent = `${countChanges()}개 문구를 검증한 뒤 HTML과 PDF를 함께 게시합니다.`;
   elements.publishDialog.showModal();
-  window.setTimeout(() => elements.githubToken.focus(), 0);
+  window.setTimeout(() => elements.publishSubmit.focus(), 0);
 };
 
 elements.documentTabs.addEventListener("click", (event) => {

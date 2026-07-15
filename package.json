@@ -1,0 +1,40 @@
+{
+  "name": "ch4570-archive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node scripts/prepare-next-public.mjs && next dev",
+    "build": "node scripts/prepare-next-public.mjs && next build",
+    "start": "next start",
+    "lint": "eslint app lib tests next.config.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test scripts/editor-core.test.mjs && tsx --test tests/*.test.ts",
+    "validate:content": "node scripts/validate-editables.mjs",
+    "db:init": "tsx scripts/init-database.ts",
+    "auth:hash": "tsx scripts/generate-admin-password.ts",
+    "auth:setup-local": "tsx scripts/setup-local-admin.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "0.17.4",
+    "jose": "6.2.3",
+    "next": "16.2.10",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.13.3",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.2.10",
+    "tsx": "4.23.1",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "postcss": "8.5.19"
+  }
+}

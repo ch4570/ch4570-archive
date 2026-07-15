@@ -1,8 +1,13 @@
 name: Publish edited portfolio content
+run-name: Publish admin draft ${{ inputs.publish_job_id }}
 
 on:
   workflow_dispatch:
     inputs:
+      publish_job_id:
+        description: Stable admin publish job ID used for response recovery
+        required: true
+        type: string
       draft_ref:
         description: Full content draft ref created by the admin editor
         required: true
@@ -33,6 +38,7 @@ jobs:
       DRAFT_REF: ${{ inputs.draft_ref }}
       DRAFT_SHA: ${{ inputs.draft_sha }}
       BASE_SHA: ${{ inputs.base_sha }}
+      PUBLISH_JOB_ID: ${{ inputs.publish_job_id }}
     steps:
       - name: Verify publisher identity
         shell: bash
@@ -57,6 +63,10 @@ jobs:
 
           if [[ "$GITHUB_REF" != "refs/heads/main" ]]; then
             echo "Run this publishing workflow from the main branch." >&2
+            exit 1
+          fi
+          if [[ ! "$PUBLISH_JOB_ID" =~ ^[0-9a-f-]{36}$ ]]; then
+            echo "Invalid publish job ID." >&2
             exit 1
           fi
           if [[ ! "$DRAFT_REF" =~ ^refs/heads/content-drafts/admin-[A-Za-z0-9._-]+$ ]]; then
