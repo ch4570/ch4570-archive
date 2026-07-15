@@ -63,7 +63,9 @@ export async function editorPageResponse(csrf: string) {
   const rendered = source
     .replace("__ADMIN_CSRF_META__", escapeAttribute(csrf))
     .replace("__ADMIN_CSRF_FORM__", escapeAttribute(csrf));
-  return htmlResponse(rendered, EDITOR_CSP);
+  const response = htmlResponse(rendered, EDITOR_CSP);
+  response.headers.set("Referrer-Policy", "same-origin");
+  return response;
 }
 
 export function loginPageResponse(errorCode: string | null = null, csrf = "") {

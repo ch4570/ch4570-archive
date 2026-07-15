@@ -12,6 +12,7 @@ import {
   setLoginCsrfCookie,
 } from "@/lib/admin/login-csrf";
 import { hashPassword, verifyPassword } from "@/lib/admin/password";
+import { editorPageResponse } from "@/lib/admin/page";
 import {
   adminCookieName,
   clearAdminSessionCookie,
@@ -118,4 +119,14 @@ test("mutation origin checks require an exact configured origin", () => {
       (error) => error instanceof AdminError && error.status === 403,
     );
   }
+});
+
+test("editor keeps same-origin form metadata for native logout", async () => {
+  const response = await editorPageResponse("csrf-token-for-test");
+  const source = await response.text();
+
+  assert.equal(response.headers.get("referrer-policy"), "same-origin");
+  assert.match(source, /<meta name="referrer" content="same-origin">/u);
+  assert.match(source, /name="csrf" value="csrf-token-for-test"/u);
+  assert.doesNotMatch(source, /__ADMIN_CSRF_/u);
 });
