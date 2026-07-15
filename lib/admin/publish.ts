@@ -20,6 +20,11 @@ import {
 import type { PublishJob } from "@/lib/admin/types";
 
 const ACTIVE_PUBLISH_STATUSES = ["preparing", "queued", "in_progress"] as const;
+const BEFORE_QUEUED_PUBLISH_STATUSES = ["preparing", "queued"] as const;
+
+export function statusesBeforeWorkflowRun(status: "queued" | "in_progress") {
+  return status === "queued" ? BEFORE_QUEUED_PUBLISH_STATUSES : ACTIVE_PUBLISH_STATUSES;
+}
 
 export async function startPublish(input: {
   revisionId: string;
@@ -95,10 +100,8 @@ export async function startPublish(input: {
         { status: "failed", error: normalized.message },
         { statuses: ["preparing"], draftRef },
       );
-      if (failed.updated || failed.job?.status === "failed") {
-        await finishRevisionForJob(job.id, job.revisionId, "draft", {
-          error: normalized.message,
-        });
+      if (failed.job && isTerminalPublishJob(failed.job)) {
+        await reconcileTerminalJob(failed.job);
       }
     }
     throw normalized;
@@ -109,7 +112,7 @@ export function isTerminalPublishJob(job: PublishJob) {
   return ["published", "warning", "failed"].includes(job.status);
 }
 
-async function reconcileTerminalJob(job: PublishJob) {
+export async function reconcileTerminalJob(job: PublishJob) {
   if (job.status === "published" || job.status === "warning") {
     await finishRevisionForJob(job.id, job.revisionId, "published", {
       publishedSha: job.publishedSha,
@@ -153,8 +156,8 @@ export async function refreshPublishJob(jobId: string) {
         { status: "failed", error: message },
         { statuses: ["preparing"], runId: null },
       );
-      if (failed.updated || failed.job?.status === "failed") {
-        await finishRevisionForJob(job.id, job.revisionId, "draft", { error: message });
+      if (failed.job && isTerminalPublishJob(failed.job)) {
+        await reconcileTerminalJob(failed.job);
       }
       return failed.job || job;
     }
@@ -169,7 +172,7 @@ export async function refreshPublishJob(jobId: string) {
         status: run.status === "queued" ? "queued" : "in_progress",
         htmlUrl: run.html_url || job.htmlUrl,
       },
-      { statuses: ACTIVE_PUBLISH_STATUSES, runId: job.runId },
+      { statuses: statusesBeforeWorkflowRun(run.status), runId: job.runId },
     );
     return updated.job || job;
   }
@@ -197,8 +200,8 @@ export async function refreshPublishJob(jobId: string) {
       },
       { statuses: ACTIVE_PUBLISH_STATUSES, runId: job.runId },
     );
-    if (completed.updated || completed.job?.status === "published" || completed.job?.status === "warning") {
-      await finishRevisionForJob(job.id, job.revisionId, "published", { publishedSha });
+    if (completed.job && isTerminalPublishJob(completed.job)) {
+      await reconcileTerminalJob(completed.job);
     }
   } else {
     const message = `자동 검증이 통과하지 못했습니다. (${run.conclusion || "unknown"})`;
@@ -207,8 +210,8 @@ export async function refreshPublishJob(jobId: string) {
       { status: "failed", htmlUrl: run.html_url, error: message },
       { statuses: ACTIVE_PUBLISH_STATUSES, runId: job.runId },
     );
-    if (failed.updated || failed.job?.status === "failed") {
-      await finishRevisionForJob(job.id, job.revisionId, "draft", { error: message });
+    if (failed.job && isTerminalPublishJob(failed.job)) {
+      await reconcileTerminalJob(failed.job);
     }
   }
 

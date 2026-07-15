@@ -12,11 +12,15 @@ import {
   recordLoginFailure,
 } from "@/lib/admin/rate-limit";
 import {
+  reconcileTerminalJob,
+  statusesBeforeWorkflowRun,
+} from "@/lib/admin/publish";
+import {
   beginPublish,
   deleteDraftRevision,
   finishRevisionForJob,
   getActiveRevision,
-  getPublishJob,
+  getRevision,
   saveDraftRevision,
   updatePublishJob,
 } from "@/lib/admin/store";
@@ -101,29 +105,42 @@ test("draft revisions use optimistic locking and idempotent publish jobs", async
   );
   assert.equal(queued.updated, true);
   assert.equal(queued.job?.status, "queued");
-  const stalePoll = await updatePublishJob(
+  assert.deepEqual(statusesBeforeWorkflowRun("queued"), ["preparing", "queued"]);
+  assert.deepEqual(statusesBeforeWorkflowRun("in_progress"), [
+    "preparing",
+    "queued",
+    "in_progress",
+  ]);
+  const inProgress = await updatePublishJob(
     job.id,
     { status: "in_progress" },
-    { statuses: ["preparing"], runId: 123 },
+    { statuses: statusesBeforeWorkflowRun("in_progress"), runId: 123 },
+  );
+  assert.equal(inProgress.updated, true);
+  const stalePoll = await updatePublishJob(
+    job.id,
+    { status: "queued" },
+    { statuses: statusesBeforeWorkflowRun("queued"), runId: 123 },
   );
   assert.equal(stalePoll.updated, false);
-  assert.equal(stalePoll.job?.status, "queued");
+  assert.equal(stalePoll.job?.status, "in_progress");
   const published = await updatePublishJob(
     job.id,
     { status: "published", publishedSha: "b".repeat(40) },
-    { statuses: ["queued"], runId: 123 },
+    { statuses: ["in_progress"], runId: 123 },
   );
   assert.equal(published.updated, true);
-  const regressed = await updatePublishJob(
+  const losingTerminalPoll = await updatePublishJob(
     job.id,
-    { status: "in_progress" },
+    { status: "published", publishedSha: "c".repeat(40) },
     { statuses: ["preparing", "queued", "in_progress"], runId: 123 },
   );
-  assert.equal(regressed.updated, false);
-  assert.equal((await getPublishJob(job.id))?.status, "published");
-  await finishRevisionForJob(job.id, updated.id, "published", {
-    publishedSha: "b".repeat(40),
-  });
+  assert.equal(losingTerminalPoll.updated, false);
+  assert.equal(losingTerminalPoll.job?.publishedSha, "b".repeat(40));
+  await reconcileTerminalJob(
+    losingTerminalPoll.job as NonNullable<typeof losingTerminalPoll.job>,
+  );
+  assert.equal((await getRevision(updated.id))?.publishedSha, "b".repeat(40));
   assert.equal(await getActiveRevision(), null);
 
   const identicalDrafts = await Promise.all([
@@ -194,14 +211,19 @@ test("draft revisions use optimistic locking and idempotent publish jobs", async
     { statuses: ["preparing"] },
   );
   assert.equal(oldFailure.updated, true);
-  assert.equal(
-    await finishRevisionForJob(oldJob.id, second.id, "draft", {
-      error: "first attempt failed",
-    }),
-    true,
+  const losingFailurePoll = await updatePublishJob(
+    oldJob.id,
+    { status: "failed", error: "different local error" },
+    { statuses: ["preparing", "queued", "in_progress"] },
+  );
+  assert.equal(losingFailurePoll.updated, false);
+  assert.equal(losingFailurePoll.job?.error, "first attempt failed");
+  await reconcileTerminalJob(
+    losingFailurePoll.job as NonNullable<typeof losingFailurePoll.job>,
   );
   const retryRevision = await getActiveRevision();
   assert.equal(retryRevision?.status, "draft");
+  assert.equal(retryRevision?.error, "first attempt failed");
   const retryJob = await beginPublish({
     revisionId: second.id,
     revisionVersion: retryRevision?.version as number,
