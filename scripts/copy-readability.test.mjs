@@ -16,6 +16,14 @@ function visibleText(fragment) {
     .trim();
 }
 
+function caseSection(source, id) {
+  const opening = `<section class="case-section" id="${id}"`;
+  const start = source.indexOf(opening);
+  assert.notEqual(start, -1, `expected #${id} case section`);
+  const next = source.indexOf('<section class="case-section"', start + opening.length);
+  return source.slice(start, next === -1 ? source.length : next);
+}
+
 test("resume list items stay concise enough to scan", async () => {
   const source = await readFile(resolve(repositoryRoot, "resume/index.html"), "utf8");
   const listItems = scanEditableRegions(source).filter(
@@ -41,11 +49,9 @@ test("portfolio story cards lead with concise nominal bullets", async () => {
     ["portfolio-019", "portfolio-020"],
     ["portfolio-039", "portfolio-040"],
     ["portfolio-041", "portfolio-042"],
-    ["portfolio-059", "portfolio-060"],
-    ["portfolio-061", "portfolio-062"],
   ];
 
-  assert.equal(storyPairs.length, 6, "expected all six portfolio story cards");
+  assert.equal(storyPairs.length, 4, "expected the four retained portfolio story cards");
   for (const [headingId, summaryId] of storyPairs) {
     const heading = editableById.get(headingId);
     const summary = editableById.get(summaryId);
@@ -80,7 +86,7 @@ test("portfolio story cards lead with concise nominal bullets", async () => {
   }
 });
 
-test("portfolio detail evidence uses compact labeled phrases", async () => {
+test("portfolio omits low-signal detail drawers and their editable fields", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(
     scanEditableRegions(source).map((region) => [region.id, region]),
@@ -99,18 +105,44 @@ test("portfolio detail evidence uses compact labeled phrases", async () => {
     ),
   );
 
-  assert.equal(detailIds.length, 35, "expected all portfolio detail evidence items");
+  assert.equal(detailIds.length, 35, "expected the complete removed detail-id contract");
+  assert.doesNotMatch(source, /class="case-details"/u);
+  assert.doesNotMatch(source, /data-toggle-details/u);
   for (const detailId of detailIds) {
-    const item = editableById.get(detailId);
-    assert.equal(item?.tagName, "li", `expected detail evidence item ${detailId}`);
-    assert.match(
-      item.innerHTML,
-      /^<strong>[^<]{1,18}<\/strong>\s/u,
-      `${detailId} should start with a short evidence label`,
-    );
-
-    const text = visibleText(item.innerHTML);
-    assert.ok(text.length <= 95, `${detailId} is ${text.length} characters: ${text}`);
-    assert.doesNotMatch(text, /[가-힣]니다[.!?]?/u, `${detailId} should use nominal copy`);
+    assert.equal(editableById.has(detailId), false, `${detailId} should stay retired`);
   }
+});
+
+test("feed keeps one Archify diagram without duplicate narrative layers", async () => {
+  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
+  const feed = caseSection(source, "feed");
+
+  assert.match(feed, /data-diagram-tool="archify@2\.11\.0"/u);
+  assert.equal(feed.match(/<figure\b/gu)?.length, 1, "feed should keep one figure");
+  assert.doesNotMatch(feed, /feed-print-spine|story-grid|case-outcome/u);
+});
+
+test("each flagship case keeps at most one diagram and previous experience stays elsewhere", async () => {
+  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
+
+  for (const id of ["event", "point", "feed", "test", "agent"]) {
+    const section = caseSection(source, id);
+    assert.ok(
+      (section.match(/<figure\b/gu) ?? []).length <= 1,
+      `#${id} should not repeat diagrams`,
+    );
+  }
+  assert.doesNotMatch(source, /id="previous"|href="#previous"/u);
+});
+
+test("Archify output stays a self-contained light SVG", async () => {
+  const source = await readFile(
+    resolve(repositoryRoot, "assets/diagrams/feed-serving.svg"),
+    "utf8",
+  );
+
+  assert.match(source, /<svg\b[^>]*data-theme="light"/u);
+  assert.match(source, /data-generator="archify 2\.11\.0"/u);
+  assert.match(source, /<title>피드 서빙 책임 경계<\/title>/u);
+  assert.doesNotMatch(source, /<script\b|<foreignObject\b/iu);
 });

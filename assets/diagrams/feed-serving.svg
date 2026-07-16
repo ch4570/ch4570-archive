@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" data-theme="light" data-generator="archify 2.11.0" viewBox="0 0 1250 393" role="img" aria-label="피드 서빙 책임 경계 — Snapshot 상태가 흐름을 정하고 계산·조회는 pull 계약 뒤로 분리 (architecture diagram)">
+    <style>
+      :root, svg {
+        --bg: #f8fafc;
+              --grid: #e2e8f0;
+              --text: #0f172a;
+              --text-muted: #64748b;
+              --text-dim: #94a3b8;
+              --text-faint: #64748b;
+
+              --panel: #ffffff;
+              --panel-border: #e2e8f0;
+              --lane-fill: rgba(248, 250, 252, 0.65);
+              --lane-stroke: #cbd5e1;
+
+              --arrow: #94a3b8;
+              --arrow-emphasis: #059669;
+
+              --mask: #ffffff;
+
+              --frontend-fill:    rgba(34, 211, 238, 0.15);
+              --frontend-stroke:  #0891b2;
+              --backend-fill:     rgba(52, 211, 153, 0.18);
+              --backend-stroke:   #059669;
+              --database-fill:    rgba(167, 139, 250, 0.2);
+              --database-stroke:  #7c3aed;
+              --cloud-fill:       rgba(251, 191, 36, 0.18);
+              --cloud-stroke:     #d97706;
+              --security-fill:    rgba(251, 113, 133, 0.15);
+              --security-stroke:  #e11d48;
+              --messagebus-fill:  rgba(251, 146, 60, 0.15);
+              --messagebus-stroke:#ea580c;
+              --external-fill:    rgba(148, 163, 184, 0.18);
+              --external-stroke:  #64748b;
+
+              --toolbar-bg:       rgba(255, 255, 255, 0.92);
+              --toolbar-border:   #cbd5e1;
+              --toolbar-text:     #334155;
+              --toolbar-hover:    #ffffff;
+              --toolbar-menu-bg:  #ffffff;
+        color-scheme: light;
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+          "DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono CJK SC",
+          "Apple SD Gothic Neo", "Malgun Gothic", monospace;
+      }
+
+      .c-grid       { stroke: var(--grid); fill: none; }
+          .c-mask       { fill: var(--mask); stroke: none; }
+
+          .c-frontend   { fill: var(--frontend-fill);   stroke: var(--frontend-stroke); }
+          .c-backend    { fill: var(--backend-fill);    stroke: var(--backend-stroke); }
+          .c-database   { fill: var(--database-fill);   stroke: var(--database-stroke); }
+          .c-cloud      { fill: var(--cloud-fill);      stroke: var(--cloud-stroke); }
+          .c-security   { fill: var(--security-fill);   stroke: var(--security-stroke); }
+          .c-messagebus { fill: var(--messagebus-fill); stroke: var(--messagebus-stroke); }
+          .c-external   { fill: var(--external-fill);   stroke: var(--external-stroke); }
+
+          /* Text helpers */
+          .t-primary { fill: var(--text); }
+          .t-muted   { fill: var(--text-muted); }
+          .t-dim     { fill: var(--text-dim); }
+          .t-frontend   { fill: var(--frontend-stroke); }
+          .t-backend    { fill: var(--backend-stroke); }
+          .t-database   { fill: var(--database-stroke); }
+          .t-cloud      { fill: var(--cloud-stroke); }
+          .t-security   { fill: var(--security-stroke); }
+          .t-messagebus { fill: var(--messagebus-stroke); }
+          .t-external   { fill: var(--external-stroke); }
+
+          /* Arrows */
+          .a-default   { stroke: var(--arrow); fill: none; }
+          .a-emphasis  { stroke: var(--arrow-emphasis); fill: none; }
+          .a-security  { stroke: var(--security-stroke); fill: none; stroke-dasharray: 5,5; }
+          .a-dashed    { stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4; }
+
+          /* Arrowhead markers reference these */
+          .m-default   { fill: var(--arrow); }
+          .m-emphasis  { fill: var(--arrow-emphasis); }
+          .m-security  { fill: var(--security-stroke); }
+          .m-dashed    { fill: var(--database-stroke); }
+
+          /* Dashed boundary variants */
+          .c-security-group { fill: transparent; stroke: var(--security-stroke); stroke-dasharray: 4,4; }
+          .c-region         { fill: rgba(251, 191, 36, 0.05); stroke: var(--cloud-stroke); stroke-dasharray: 8,4; }
+          .c-lane           { fill: var(--lane-fill); stroke: var(--lane-stroke); stroke-dasharray: 6,6; }
+    </style>
+    <title>피드 서빙 책임 경계</title>
+    <desc>Snapshot 상태가 흐름을 정하고 계산·조회는 pull 계약 뒤로 분리</desc>
+    <metadata>Generated from design/archify/feed-serving.architecture.json with Archify 2.11.0.</metadata>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default" />
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis" />
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security" />
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" class="c-grid" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <!-- Background Grid -->
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- Boundaries (behind everything) -->
+        <rect x="370" y="225" width="500" height="100" rx="12" class="c-region" stroke-width="1"/>
+        <text x="378" y="243" class="t-cloud" font-size="9" font-weight="600">Ranking stages</text>
+
+        <rect x="880" y="225" width="330" height="100" rx="8" class="c-security-group" stroke-width="1"/>
+        <text x="888" y="243" class="t-security" font-size="9" font-weight="600">Query boundary</text>
+
+        <!-- Connection paths (before components for correct z-order) -->
+        <path d="M 160 140 L 210 140" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 340 140 L 390 140" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 455 170 L 455 205 Q 455 207.5 452.5 207.5 L 452.5 207.5 Q 450 207.5 450 210 L 450 245" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 275 170 L 275 327 Q 275 335 283 335 L 352 335 Q 360 335 360 327 L 360 283 Q 360 275 368 275 L 390 275" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        <path d="M 510 275 L 560 275" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 680 275 L 730 275" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 850 275 L 900 275" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path d="M 1020 275 L 1070 275" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+
+        <!-- Components -->
+        <rect x="40" y="110" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="40" y="110" width="120" height="60" rx="6" class="c-frontend" stroke-width="1.5"/>
+        <text x="100" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Feed API</text>
+        <text x="100" y="154" class="t-muted" font-size="9" text-anchor="middle">request context</text>
+
+        <rect x="210" y="110" width="130" height="60" rx="6" class="c-mask"/>
+        <rect x="210" y="110" width="130" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+        <text x="275" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Orchestrator</text>
+        <text x="275" y="154" class="t-muted" font-size="9" text-anchor="middle">route · refill · bypass</text>
+
+        <rect x="390" y="110" width="130" height="60" rx="6" class="c-mask"/>
+        <rect x="390" y="110" width="130" height="60" rx="6" class="c-database" stroke-width="1.5"/>
+        <text x="455" y="138" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Snapshot</text>
+        <text x="455" y="154" class="t-muted" font-size="9" text-anchor="middle">Hit · Empty · Unavailable</text>
+
+        <rect x="390" y="245" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="390" y="245" width="120" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+        <text x="450" y="273" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Re-Rank</text>
+        <text x="450" y="289" class="t-muted" font-size="9" text-anchor="middle">exposure order</text>
+
+        <rect x="560" y="245" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="560" y="245" width="120" height="60" rx="6" class="c-database" stroke-width="1.5"/>
+        <text x="620" y="273" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">SPR</text>
+        <text x="620" y="289" class="t-muted" font-size="9" text-anchor="middle">precise score · pool</text>
+
+        <rect x="730" y="245" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="730" y="245" width="120" height="60" rx="6" class="c-database" stroke-width="1.5"/>
+        <text x="790" y="273" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">FPR</text>
+        <text x="790" y="289" class="t-muted" font-size="9" text-anchor="middle">dedupe · seen · pool</text>
+
+        <rect x="900" y="245" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="900" y="245" width="120" height="60" rx="6" class="c-backend" stroke-width="1.5"/>
+        <text x="960" y="273" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Candidate</text>
+        <text x="960" y="289" class="t-muted" font-size="9" text-anchor="middle">9 source ports</text>
+
+        <rect x="1070" y="245" width="120" height="60" rx="6" class="c-mask"/>
+        <rect x="1070" y="245" width="120" height="60" rx="6" class="c-external" stroke-width="1.5"/>
+        <text x="1130" y="273" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OpenSearch</text>
+        <text x="1130" y="289" class="t-muted" font-size="9" text-anchor="middle">query-api adapter</text>
+
+        <!-- Connection labels -->
+
+
+        <rect x="464" y="174" width="34" height="14" rx="3" class="c-mask"/>
+        <text x="481" y="184" class="t-backend" font-size="8" text-anchor="middle">Empty</text>
+        <rect x="282.2" y="316" width="67.6" height="14" rx="3" class="c-mask"/>
+        <text x="316" y="326" class="t-messagebus" font-size="8" text-anchor="middle">cache bypass</text>
+
+
+
+        <rect x="1030" y="241" width="30" height="14" rx="3" class="c-mask"/>
+        <text x="1045" y="251" class="t-messagebus" font-size="8" text-anchor="middle">I/O</text>
+
+        <!-- Legend -->
+        <text x="40" y="364" class="t-primary" font-size="9" font-weight="600">Legend</text>
+        <rect x="40" y="369" width="14" height="9" rx="2" class="c-frontend" stroke-width="1"/>
+        <text x="60" y="377" class="t-muted" font-size="8">Frontend</text>
+        <rect x="138" y="369" width="14" height="9" rx="2" class="c-backend" stroke-width="1"/>
+        <text x="158" y="377" class="t-muted" font-size="8">Backend</text>
+        <rect x="231" y="369" width="14" height="9" rx="2" class="c-database" stroke-width="1"/>
+        <text x="251" y="377" class="t-muted" font-size="8">Database</text>
+        <rect x="329" y="369" width="14" height="9" rx="2" class="c-external" stroke-width="1"/>
+        <text x="349" y="377" class="t-muted" font-size="8">External</text>
+      </svg>

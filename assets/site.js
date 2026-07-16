@@ -51,8 +51,6 @@
     });
   });
 
-  const details = [...document.querySelectorAll(".case-details")];
-  const detailsToggle = document.querySelector("[data-toggle-details]");
   const diagramDetails = [...document.querySelectorAll(".diagram-disclosure")];
   const mobileDiagramQuery = window.matchMedia("(max-width: 900px)");
   let isPrinting = false;
@@ -71,18 +69,7 @@
     mobileDiagramQuery.addListener(syncDiagramDetails);
   }
 
-  if (detailsToggle && details.length) {
-    detailsToggle.addEventListener("click", () => {
-      const shouldOpen = details.some((item) => !item.open);
-      details.forEach((item) => {
-        item.open = shouldOpen;
-      });
-      detailsToggle.textContent = shouldOpen ? "상세 접기" : "상세 펼치기";
-      detailsToggle.setAttribute("aria-expanded", String(shouldOpen));
-    });
-  }
-
-  const printableDetails = [...details, ...diagramDetails];
+  const printableDetails = diagramDetails;
   let printState = [];
   window.addEventListener("beforeprint", () => {
     isPrinting = true;
