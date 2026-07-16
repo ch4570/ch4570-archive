@@ -4,8 +4,11 @@ set -eu
 
 script_dir=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 project_root=$(CDPATH= cd -- "$script_dir/.." && pwd)
-output_dir=${1:-"$project_root/output/pdf"}
-tmp_root="$project_root/tmp/pdfs"
+default_output_dir="$project_root/output/pdf"
+output_dir=${1:-"$default_output_dir"}
+tmp_parent="$project_root/tmp/pdfs"
+stylesheet_path="$project_root/assets/design-system.css"
+prepare_document="$script_dir/prepare-pdf-document.mjs"
 
 find_browser() {
   if [ -n "${BROWSER_BIN:-}" ]; then
@@ -35,8 +38,9 @@ find_browser() {
 }
 
 browser_bin=$(find_browser)
-mkdir -p "$output_dir" "$tmp_root"
+mkdir -p "$output_dir" "$tmp_parent"
 output_dir=$(CDPATH= cd -- "$output_dir" && pwd)
+tmp_root=$(mktemp -d "$tmp_parent/export.XXXXXX")
 
 chrome_log="$tmp_root/chrome.log"
 active_profile=''
@@ -71,8 +75,12 @@ cleanup_active_browser() {
 
 cleanup() {
   cleanup_active_browser
-  rm -f "$chrome_log" "$tmp_root"/*.txt
-  rmdir "$tmp_root" "$project_root/tmp" 2>/dev/null || true
+  case "$tmp_root" in
+    "$tmp_parent"/export.*)
+      rm -r "$tmp_root"
+      ;;
+  esac
+  rmdir "$tmp_parent" "$project_root/tmp" 2>/dev/null || true
 }
 
 trap cleanup EXIT HUP INT TERM
@@ -145,16 +153,22 @@ verify_pdf() {
   fi
 
   file_size=$(wc -c < "$pdf_path" | tr -d ' ')
-  printf 'Created %s (%s pages, %s bytes)\n' "$pdf_path" "$pages" "$file_size"
 }
 
 export_pdf() {
   source_path=$1
   target_path=$2
   document_name=$3
+  prepared_path="$tmp_root/$document_name.html"
+  staged_path="$tmp_root/$document_name.pdf"
+
+  node "$prepare_document" \
+    "$source_path" \
+    "$stylesheet_path" \
+    "$prepared_path"
 
   active_profile=$(mktemp -d "$tmp_root/chrome-profile.XXXXXX")
-  rm -f "$target_path"
+  rm -f "$staged_path"
   : > "$chrome_log"
   "$browser_bin" \
     --headless=new \
@@ -171,8 +185,8 @@ export_pdf() {
     --virtual-time-budget=2500 \
     --window-size=1440,1800 \
     --user-data-dir="$active_profile" \
-    --print-to-pdf="$target_path" \
-    "file://$source_path" >> "$chrome_log" 2>&1 &
+    --print-to-pdf="$staged_path" \
+    "file://$prepared_path" >> "$chrome_log" 2>&1 &
   active_pid=$!
 
   write_complete=0
@@ -184,7 +198,7 @@ export_pdf() {
     fi
 
     if ! kill -0 "$active_pid" 2>/dev/null; then
-      if [ -s "$target_path" ]; then
+      if [ -s "$staged_path" ]; then
         write_complete=1
       fi
       break
@@ -194,7 +208,7 @@ export_pdf() {
     sleep 1
   done
 
-  if [ ! -s "$target_path" ] || [ "$write_complete" -ne 1 ]; then
+  if [ ! -s "$staged_path" ] || [ "$write_complete" -ne 1 ]; then
     printf 'PDF export timed out for %s. Chrome output:\n' "$document_name" >&2
     sed -n '1,80p' "$chrome_log" >&2
     exit 1
@@ -202,7 +216,9 @@ export_pdf() {
 
   cleanup_active_browser
 
-  verify_pdf "$target_path" "$document_name"
+  verify_pdf "$staged_path" "$document_name"
+  mv "$staged_path" "$target_path"
+  printf 'Created %s (%s pages, %s bytes)\n' "$target_path" "$pages" "$file_size"
 }
 
 export_pdf \
@@ -219,3 +235,7 @@ export_pdf \
   "$project_root/portfolio/index.html" \
   "$output_dir/seo-minjae-backend-portfolio.pdf" \
   'portfolio'
+
+if [ "$output_dir" = "$default_output_dir" ]; then
+  node "$script_dir/prepare-next-public.mjs"
+fi

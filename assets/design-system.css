@@ -1860,7 +1860,7 @@ h4 {
   background: var(--blue);
 }
 
-@media (hover: hover) {
+@media screen and (hover: hover) {
   .map-node:hover {
     border-color: #7f8c7b;
     box-shadow: 0 1px 0 rgba(17, 21, 15, 0.08), 0 8px 20px rgba(20, 32, 16, 0.08);
@@ -2968,6 +2968,112 @@ h4 {
   margin-top: 0;
 }
 
+@media screen {
+  .case-details {
+    margin-top: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--surface);
+  }
+
+  .case-details summary {
+    min-height: 46px;
+    padding: 10px 15px;
+    background: var(--surface-raised);
+    text-wrap: pretty;
+  }
+
+  .case-details summary:focus-visible {
+    outline-offset: -4px;
+  }
+
+  .case-details[open] summary {
+    border-bottom: 0;
+  }
+
+  .case-details summary::after,
+  .case-details[open] summary::after {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    content: "";
+  }
+
+  .case-details summary::after {
+    transform: rotate(45deg);
+  }
+
+  .case-details[open] summary::after {
+    transform: rotate(225deg);
+  }
+
+  .case-details .details-content {
+    padding: 10px;
+    background: var(--surface-soft);
+  }
+
+  .case-details .bullet-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .case-details .bullet-list li {
+    min-width: 0;
+    margin: 0;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--lime);
+    border-radius: 4px;
+    background: var(--surface);
+    font-size: 12.5px;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .case-details .bullet-list li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .case-details .bullet-list strong {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--ink);
+    font-size: 11.5px;
+    line-height: 1.35;
+  }
+}
+
+@media screen and (hover: hover) {
+  .case-details summary:hover {
+    background: var(--surface-soft);
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .case-details .bullet-list {
+    grid-template-columns: 1fr;
+  }
+
+  .case-details .bullet-list li:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  .case-details .details-content {
+    padding: 8px;
+  }
+
+  .case-details .bullet-list li {
+    padding: 10px 12px;
+  }
+}
+
 .timeline-table {
   border-top: 1px solid var(--ink);
 }
@@ -3026,7 +3132,7 @@ h4 {
   font-size: 13px;
 }
 
-@media (max-width: 1000px) {
+@media screen and (max-width: 1000px) {
   .hero-title,
   .portfolio-title {
     font-size: 50px;
@@ -3066,7 +3172,7 @@ h4 {
   }
 }
 
-@media (max-width: 900px) {
+@media screen and (max-width: 900px) {
   :root {
     --header-height: 58px;
   }
@@ -3635,7 +3741,7 @@ h4 {
   }
 }
 
-@media (max-width: 700px) {
+@media screen and (max-width: 700px) {
   .site-utilities [data-copy-email] {
     display: none;
   }
@@ -3649,7 +3755,7 @@ h4 {
   }
 }
 
-@media (max-width: 420px) {
+@media screen and (max-width: 420px) {
   .site-header-inner {
     gap: 8px;
   }
@@ -3804,7 +3910,7 @@ h4 {
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media screen and (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
@@ -3824,6 +3930,9 @@ h4 {
   }
 
   :root {
+    --canvas: #ffffff;
+    --surface-soft: #f3f5f1;
+    --surface-raised: #fafbf9;
     --ink: #000000;
     --ink-soft: #222222;
     --muted: #505050;
@@ -3833,12 +3942,15 @@ h4 {
 
   html {
     scroll-padding-top: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   body {
     background: #ffffff;
-    font-size: 9.2pt;
-    line-height: 1.42;
+    font-size: 9.5pt;
+    line-height: 1.46;
+    text-rendering: optimizeLegibility;
   }
 
   .site-header,
@@ -3867,9 +3979,9 @@ h4 {
   .resume-hero {
     grid-template-columns: minmax(0, 1fr) 180px;
     padding: 22px 26px 18px;
-    border-top: 0;
+    border-top: 3px solid var(--lime);
     border-bottom: 2px solid #000000;
-    background: #ffffff;
+    background: var(--surface-raised);
     color: #000000;
   }
 
@@ -4061,7 +4173,7 @@ h4 {
   .resume-project-highlight {
     padding: 12px 14px;
     border-top-width: 2px;
-    background: #ffffff;
+    background: var(--lime-soft);
     break-inside: avoid;
   }
 
@@ -4257,7 +4369,7 @@ h4 {
     margin-top: 8px;
     padding: 7px 9px;
     border-left-color: #000000;
-    background: #ffffff;
+    background: var(--surface-soft);
     font-size: 8.4pt;
     line-height: 1.48;
     break-inside: avoid;
@@ -4303,6 +4415,11 @@ h4 {
     gap: 14px;
   }
 
+  .career-previous-grid .career-company-head {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
   .career-previous-grid--compact .career-project {
     padding-top: 8px;
   }
@@ -4322,7 +4439,7 @@ h4 {
   .career-evidence-grid .credential-list li,
   .career-evidence-grid .activity-list li {
     padding: 6px 0;
-    font-size: 7.2pt;
+    font-size: 7.5pt;
     line-height: 1.42;
   }
 
@@ -4405,7 +4522,7 @@ h4 {
     gap: 1px;
     padding: 5px 8px;
     color: var(--muted);
-    font-size: 6.5pt;
+    font-size: 7pt;
     line-height: 1.35;
   }
 
@@ -4415,7 +4532,7 @@ h4 {
 
   .feed-print-spine b {
     color: var(--ink);
-    font-size: 7pt;
+    font-size: 7.4pt;
   }
 
   #test .case-details {
@@ -4445,6 +4562,10 @@ h4 {
 
   .case-header {
     margin-bottom: 18px;
+    break-after: avoid;
+    break-inside: avoid;
+    page-break-after: avoid;
+    page-break-inside: avoid;
   }
 
   .fact-grid {
@@ -4512,7 +4633,7 @@ h4 {
     display: flex;
     padding: 8px 10px;
     border-bottom-width: 2px;
-    background: #ffffff;
+    background: var(--surface-raised);
   }
 
   .system-figure {
@@ -4544,7 +4665,7 @@ h4 {
 
   .diagram-caption-title span,
   .diagram-legend {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .map-sequence {
@@ -4575,7 +4696,7 @@ h4 {
     width: 20px;
     height: 20px;
     flex-basis: 20px;
-    font-size: 6pt;
+    font-size: 6.6pt;
   }
 
   .map-band__head b,
@@ -4592,7 +4713,7 @@ h4 {
   .map-gate__head small,
   .map-panel__head code,
   .map-matrix__column > header span {
-    font-size: 6pt;
+    font-size: 6.6pt;
   }
 
   .map-node {
@@ -4604,12 +4725,12 @@ h4 {
   .map-node__type,
   .map-node code,
   .map-node small {
-    font-size: 6pt;
-    line-height: 1.3;
+    font-size: 6.5pt;
+    line-height: 1.35;
   }
 
   .map-node strong {
-    font-size: 7.2pt;
+    font-size: 7.8pt;
     line-height: 1.25;
   }
 
@@ -4640,7 +4761,7 @@ h4 {
   .map-edge span {
     top: calc(50% - 12px);
     left: auto;
-    font-size: 5.5pt;
+    font-size: 6.2pt;
   }
 
   .map-split,
@@ -4683,7 +4804,7 @@ h4 {
 
   .map-restart span,
   .map-restart b {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .map-decision {
@@ -4692,11 +4813,11 @@ h4 {
   }
 
   .map-decision b {
-    font-size: 7.5pt;
+    font-size: 8pt;
   }
 
   .map-decision span {
-    font-size: 6pt;
+    font-size: 6.5pt;
   }
 
   .map-branch,
@@ -4713,7 +4834,7 @@ h4 {
   .map-branch-step b,
   .map-branch-step small,
   .map-funnel-note {
-    font-size: 6pt;
+    font-size: 6.5pt;
   }
 
   .map-branch-arrow {
@@ -4732,7 +4853,7 @@ h4 {
   }
 
   .map-funnel span {
-    font-size: 5.5pt;
+    font-size: 6.2pt;
   }
 
   .map-matrix {
@@ -4769,7 +4890,7 @@ h4 {
 
   .map-flow-rail b,
   .map-flow-rail span {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .map-contract-rail > div {
@@ -4779,7 +4900,7 @@ h4 {
 
   .map-contract-rail b,
   .map-contract-rail span {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .map-inventory {
@@ -4793,13 +4914,13 @@ h4 {
   }
 
   .map-inventory b {
-    font-size: 7pt;
+    font-size: 7.5pt;
   }
 
   .map-inventory span,
   .map-gate__result span,
   .map-gate__result b {
-    font-size: 6pt;
+    font-size: 6.5pt;
   }
 
   .map-gate__grid {
@@ -4848,7 +4969,7 @@ h4 {
   .learning-evaluation__grid small,
   .learning-return span,
   .learning-contract-note {
-    font-size: 5.5pt;
+    font-size: 6.5pt;
   }
 
   .agent-registry__copy b {
@@ -4866,7 +4987,7 @@ h4 {
   }
 
   .agent-registry__stats dt {
-    font-size: 5pt;
+    font-size: 6.2pt;
   }
 
   .agent-registry__stats dd {
@@ -4880,7 +5001,7 @@ h4 {
 
   .agent-runtime-fork span,
   .learning-drop span {
-    font-size: 5.5pt;
+    font-size: 6.3pt;
   }
 
   .agent-runtime-lanes {
@@ -4899,11 +5020,11 @@ h4 {
 
   .runtime-lane__head > span,
   .runtime-lane__head small {
-    font-size: 5pt;
+    font-size: 6.2pt;
   }
 
   .runtime-lane__head b {
-    font-size: 7pt;
+    font-size: 7.5pt;
   }
 
   .runtime-route .map-node,
@@ -4940,7 +5061,7 @@ h4 {
   }
 
   .agent-execution-rail b {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .agent-install-flow {
@@ -4963,7 +5084,7 @@ h4 {
   .agent-install-flow li > span {
     top: 6px;
     left: 5px;
-    font-size: 5pt;
+    font-size: 6.2pt;
   }
 
   .agent-install-flow li:not(:last-child)::after {
@@ -4971,13 +5092,13 @@ h4 {
   }
 
   .agent-install-flow b {
-    font-size: 6.5pt;
+    font-size: 7pt;
   }
 
   .agent-install-flow small,
   .runtime-caveat span,
   .runtime-caveat b {
-    font-size: 5.5pt;
+    font-size: 6.3pt;
   }
 
   .runtime-caveat {
@@ -5000,12 +5121,12 @@ h4 {
 
   .learning-trust-gate > header b,
   .learning-evaluation > header b {
-    font-size: 7pt;
+    font-size: 7.5pt;
   }
 
   .learning-trust-gate > header small,
   .learning-evaluation > header small {
-    font-size: 5.5pt;
+    font-size: 6.5pt;
   }
 
   .learning-trust-gate__body {
@@ -5021,7 +5142,7 @@ h4 {
   .learning-checks li {
     min-height: 28px;
     padding: 3px;
-    font-size: 5pt;
+    font-size: 6.2pt;
   }
 
   .learning-gate-outcomes {
@@ -5042,7 +5163,7 @@ h4 {
   .learning-quarantine span,
   .learning-quarantine b,
   .learning-quarantine small {
-    font-size: 5pt;
+    font-size: 6.2pt;
   }
 
   .learning-gate-pass b {
@@ -5082,7 +5203,7 @@ h4 {
   }
 
   .learning-return b {
-    font-size: 5.5pt;
+    font-size: 6.3pt;
   }
 
   .learning-contract-note {
@@ -5108,7 +5229,7 @@ h4 {
   #agent .system-map--agent-runtime .agent-install-flow small,
   #agent .system-map--agent-runtime .runtime-caveat span,
   #agent .system-map--agent-runtime .runtime-caveat b {
-    font-size: 6.2pt;
+    font-size: 6.8pt;
   }
 
   #agent .system-map--agent-runtime .agent-registry__copy b {
@@ -5212,7 +5333,7 @@ h4 {
 
   #agent .system-map--agent-runtime .agent-execution-rail b,
   #agent .system-map--agent-runtime .agent-install-flow b {
-    font-size: 7.2pt;
+    font-size: 7.8pt;
   }
 
   #agent .system-map--agent-runtime .agent-install-flow {
@@ -5233,12 +5354,12 @@ h4 {
     margin: 16px 0;
     padding: 12px 0;
     border-left-color: #000000;
-    background: #ffffff;
+    background: var(--lime-soft);
   }
 
   .case-number {
-    border-color: #000000;
-    background: #ffffff;
+    border-color: var(--lime);
+    background: var(--lime);
     color: #000000;
   }
 

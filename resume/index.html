@@ -34,9 +34,8 @@
           <h1 data-edit-id="resume-002">서민재</h1>
           <p class="resume-hero-role" data-edit-id="resume-003">Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
           <p class="resume-hero-copy" data-edit-id="resume-004">
-            Java·Kotlin·Spring으로 이벤트·배치·검색·캐시 시스템을 설계하고 운영했습니다.
-            장애를 고친 뒤에는 실패 상태, 재시작 기준, 회귀 테스트를 코드에 남겼습니다.
-            최근에는 반복되는 개발 절차를 에이전트와 스킬로 만들고, 설치·구조·행동 계약을 검증하고 있습니다.
+            Java·Kotlin·Spring으로 이벤트·배치·검색·캐시를 설계·운영했습니다.
+            실패 상태·재시작 기준·회귀 테스트를 코드에 남기고, 반복 개발 절차는 에이전트·스킬로 만들고 설치·구조·행동 계약으로 검증합니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -71,10 +70,10 @@
               <time datetime="2025-06" data-edit-id="resume-012">2025.06 — 현재</time>
             </header>
             <ul class="bullet-list resume-achievement-list">
-              <li data-edit-id="resume-013">포인트 이벤트 9종을 6개 상태로 추적하고, 저장된 payload로 실패 업무만 재실행하는 복구 전략 8개와 15분 정체 알림을 구현했습니다.</li>
-              <li data-edit-id="resume-014">포인트 소멸은 페이지 단위로, 원장 아카이브는 10개 테이블 순서로 재시작 기준을 나눴습니다. 9개 API의 동시성 계약을 13개 시나리오로 검증했습니다.</li>
-              <li data-edit-id="resume-015">개인화 채용 피드의 온라인 서빙 구조를 설계했습니다. 9개 검색 소스는 후보 조회 포트 뒤로 분리하고, FPR·SPR·Re-Rank는 공통 pull 계약으로 연결했습니다. Snapshot·FPR·SPR 캐시는 상태 포트로 나눠 Redis 장애 시에도 같은 랭킹 흐름을 캐시 없이 실행하도록 했습니다.</li>
-              <li data-edit-id="resume-016">Fixture·Mock·WebMvc·JPA 테스트의 반복 설정을 test-support로 모으고, 구축 당시 구현 파일 29개의 공통 동작을 테스트 소스 43개로 검증했습니다.</li>
+              <li data-edit-id="resume-013"><strong>실패 업무만 재실행</strong>하도록 이벤트 9종을 6개 상태로 추적했습니다. 저장된 payload 기반 복구 전략 8개와 15분 정체 알림을 구현했습니다.</li>
+              <li data-edit-id="resume-014"><strong>9개 API·13개 동시성 시나리오</strong>로 동시성 계약을 검증했습니다. 포인트 소멸은 페이지 단위, 원장 아카이브는 10개 테이블 순서로 재시작 기준을 나눴습니다.</li>
+              <li data-edit-id="resume-015"><strong>Redis 장애에도 캐시 없이 같은 랭킹을 실행</strong>했습니다. 9개 소스는 후보 조회 포트, FPR·SPR·Re-Rank는 공통 pull, Snapshot·FPR·SPR 캐시는 상태 포트로 분리했습니다.</li>
+              <li data-edit-id="resume-016"><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>로 공통 동작을 검증했습니다. Fixture·Mock·WebMvc·JPA 설정은 test-support로 통합했습니다.</li>
             </ul>
           </article>
         </section>
@@ -87,9 +86,9 @@
               <h3 data-edit-id="resume-019">백엔드 판단과 개발 절차를 이식 가능한 에이전트·스킬 자산으로 구조화</h3>
             </div>
             <ul class="bullet-list resume-achievement-list">
-              <li data-edit-id="resume-020">Agent Lab에서 15개 에이전트와 32개 스킬을 manifest로 연결해 의존 자산까지 함께 설치하도록 만들었습니다.</li>
-              <li data-edit-id="resume-021">설치 회귀 52개와 Codex 탐색 32개를 통과했습니다. 구조 케이스 7개와 행동 케이스 10개는 정적 계약으로 검증했습니다.</li>
-              <li data-edit-id="resume-022">메모리와 자가 수정은 자동화하지 않고, 변경 근거·평가 결과·사람 승인이 있어야 다음 설치에 반영되도록 계약을 정의했습니다.</li>
+              <li data-edit-id="resume-020">의존 자산까지 함께 설치하도록 Agent Lab의 15개 에이전트·32개 스킬을 manifest로 연결했습니다.</li>
+              <li data-edit-id="resume-021">설치 회귀 52개·Codex 탐색 32개를 통과하고, 구조 케이스 7개·행동 케이스 10개를 정적 계약으로 검증했습니다.</li>
+              <li data-edit-id="resume-022">메모리·자가 수정은 자동화하지 않았습니다. 변경 근거·평가 결과·사람 승인이 있어야 다음 설치에 반영됩니다.</li>
             </ul>
           </article>
         </section>
@@ -103,9 +102,9 @@
                 <time datetime="2024-06" data-edit-id="resume-026">2024.06 — 2025.04</time>
               </header>
               <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-027">Drive-Service를 Spring Boot 2.3.8에서 3.3.3으로 올리며 테스트를 0개에서 160개 이상으로 늘렸습니다.</li>
-                <li data-edit-id="resume-028">Mock 테스트가 놓친 JPA 변경 감지 오류를 실제 구현 테스트로 재현하고 보정 스크립트를 작성해 약 200만 건의 데이터를 바로잡았습니다.</li>
-                <li data-edit-id="resume-029">CI 메모리 부족을 실행·컨텍스트 재사용과 초기화 구조 개선으로 해결해 자원 증설 없이 테스트를 안정적으로 돌렸습니다.</li>
+                <li data-edit-id="resume-027">Drive-Service 테스트를 0개에서 160개 이상으로 늘리고 Spring Boot를 2.3.8에서 3.3.3으로 올렸습니다.</li>
+                <li data-edit-id="resume-028">약 200만 건의 데이터를 바로잡았습니다. Mock 테스트가 놓친 JPA 변경 감지 오류를 실제 구현 테스트로 재현하고 보정 스크립트를 작성했습니다.</li>
+                <li data-edit-id="resume-029">자원 증설 없이 CI 테스트를 안정화했습니다. 실행·컨텍스트 재사용과 초기화 구조를 개선해 메모리 부족을 해결했습니다.</li>
               </ul>
             </article>
 
@@ -115,8 +114,8 @@
                 <time datetime="2023-09" data-edit-id="resume-032">2023.09 — 2024.05</time>
               </header>
               <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-033">Spring Cloud API Gateway와 Spring Security·JWT 기반 인증·인가, SonarQube·Jenkins 연동 API를 개발했습니다.</li>
-                <li data-edit-id="resume-034">VM 메트릭 조회 API와 조건에 따라 달라지는 OpenSearch 쿼리를 구현했습니다.</li>
+                <li data-edit-id="resume-033">Spring Cloud API Gateway와 Spring Security·JWT 인증·인가를 구현했습니다. SonarQube·Jenkins 연동 API도 개발했습니다.</li>
+                <li data-edit-id="resume-034">VM 메트릭 조회 API와 조건별 OpenSearch 쿼리를 구현했습니다.</li>
               </ul>
             </article>
 
@@ -126,7 +125,7 @@
                 <time datetime="2022-11" data-edit-id="resume-037">2022.11 — 2023.02</time>
               </header>
               <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-038">자사 서비스의 백엔드 기능을 개발하고 운영 과정에서 발생한 문제를 수정했습니다.</li>
+                <li data-edit-id="resume-038">자사 서비스 백엔드 기능을 개발·운영하고 운영 이슈를 해결했습니다.</li>
               </ul>
             </article>
           </div>
