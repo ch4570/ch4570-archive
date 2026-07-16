@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "피드 서빙 책임 경계",
+    "subtitle": "Snapshot 상태가 흐름을 정하고 계산·조회는 pull 계약 뒤로 분리",
+    "output": "feed-serving.html"
+  },
+  "components": [
+    {
+      "id": "feed-api",
+      "type": "frontend",
+      "label": "Feed API",
+      "sublabel": "request context",
+      "pos": [40, 110],
+      "size": [120, 60]
+    },
+    {
+      "id": "orchestrator",
+      "type": "backend",
+      "label": "Orchestrator",
+      "sublabel": "route · refill · bypass",
+      "pos": [210, 110],
+      "size": [130, 60]
+    },
+    {
+      "id": "snapshot",
+      "type": "database",
+      "label": "Snapshot",
+      "sublabel": "Hit · Empty · Unavailable",
+      "pos": [390, 110],
+      "size": [130, 60]
+    },
+    {
+      "id": "rerank",
+      "type": "backend",
+      "label": "Re-Rank",
+      "sublabel": "exposure order",
+      "pos": [390, 245],
+      "size": [120, 60]
+    },
+    {
+      "id": "spr",
+      "type": "database",
+      "label": "SPR",
+      "sublabel": "precise score · pool",
+      "pos": [560, 245],
+      "size": [120, 60]
+    },
+    {
+      "id": "fpr",
+      "type": "database",
+      "label": "FPR",
+      "sublabel": "dedupe · seen · pool",
+      "pos": [730, 245],
+      "size": [120, 60]
+    },
+    {
+      "id": "candidate",
+      "type": "backend",
+      "label": "Candidate",
+      "sublabel": "9 source ports",
+      "pos": [900, 245],
+      "size": [120, 60]
+    },
+    {
+      "id": "opensearch",
+      "type": "external",
+      "label": "OpenSearch",
+      "sublabel": "query-api adapter",
+      "pos": [1070, 245],
+      "size": [120, 60]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Ranking stages",
+      "wraps": ["rerank", "spr", "fpr"],
+      "pad": 20
+    },
+    {
+      "kind": "security-group",
+      "label": "Query boundary",
+      "wraps": ["candidate", "opensearch"],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "feed-api",
+      "to": "orchestrator",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "orchestrator",
+      "to": "snapshot",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "snapshot",
+      "to": "rerank",
+      "label": "Empty",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "orthogonal-v",
+      "labelAt": [481, 184]
+    },
+    {
+      "from": "orchestrator",
+      "to": "rerank",
+      "label": "cache bypass",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [[275, 335], [360, 335], [360, 275]],
+      "labelAt": [316, 326]
+    },
+    {
+      "from": "rerank",
+      "to": "spr",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "spr",
+      "to": "fpr",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "fpr",
+      "to": "candidate",
+      "variant": "emphasis",
+      "route": "straight"
+    },
+    {
+      "from": "candidate",
+      "to": "opensearch",
+      "label": "I/O",
+      "variant": "dashed",
+      "route": "straight",
+      "labelDy": -14
+    }
+  ],
+  "cards": []
+}

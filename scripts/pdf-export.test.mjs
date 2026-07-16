@@ -3,7 +3,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 
-import { buildPdfDocument } from "./prepare-pdf-document.mjs";
+import {
+  buildPdfDocument,
+  loadSvgAssetReplacements,
+} from "./prepare-pdf-document.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 
@@ -59,6 +62,20 @@ test("PDF preparation expands every printable disclosure without site JavaScript
     detailElements.every((element) => /\sopen(?:\s|>)/.test(element)),
     "every disclosure should be open before Chrome starts printing",
   );
+});
+
+test("PDF preparation embeds local Archify SVG assets", async () => {
+  const sourcePath = path.join(projectRoot, "portfolio/index.html");
+  const [sourceHtml, stylesheet] = await Promise.all([
+    readFile(sourcePath, "utf8"),
+    readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
+  ]);
+  const replacements = await loadSvgAssetReplacements(sourceHtml, sourcePath);
+  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, replacements);
+
+  assert.equal(replacements.size, 1);
+  assert.match(preparedHtml, /src="data:image\/svg\+xml;base64,/);
+  assert.doesNotMatch(preparedHtml, /\.\.\/assets\/diagrams\/feed-serving\.svg/);
 });
 
 test("PDF preparation handles quoted delimiters and similarly named attributes", () => {

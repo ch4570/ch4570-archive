@@ -9,6 +9,7 @@ const copies = [
   ["assets/design-system.css", "public/assets/design-system.css"],
   ["assets/site.js", "public/assets/site.js"],
   ["assets/profile.jpg", "public/assets/profile.jpg"],
+  ["assets/diagrams/feed-serving.svg", "public/assets/diagrams/feed-serving.svg"],
   ["output/pdf/seo-minjae-resume.pdf", "public/pdf/seo-minjae-resume.pdf"],
   [
     "output/pdf/seo-minjae-career-description.pdf",

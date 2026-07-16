@@ -103,7 +103,23 @@ function expandDetailsElements(sourceHtml) {
   return expandedHtml;
 }
 
-export function buildPdfDocument(sourceHtml, stylesheet) {
+export async function loadSvgAssetReplacements(sourceHtml, sourcePath) {
+  const replacements = new Map();
+  const sourceDirectory = path.dirname(path.resolve(sourcePath));
+  const svgSourcePattern = /\bsrc=(["'])([^"'<>]+\.svg)\1/giu;
+
+  for (const match of sourceHtml.matchAll(svgSourcePattern)) {
+    const source = match[2];
+    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|\/)/iu.test(source)) continue;
+
+    const svg = await readFile(path.resolve(sourceDirectory, source));
+    replacements.set(source, `data:image/svg+xml;base64,${svg.toString("base64")}`);
+  }
+
+  return replacements;
+}
+
+export function buildPdfDocument(sourceHtml, stylesheet, assetReplacements = new Map()) {
   if (!sourceHtml.includes(canonicalStylesheetLink)) {
     throw new Error("The document does not load the canonical design-system stylesheet.");
   }
@@ -119,7 +135,12 @@ export function buildPdfDocument(sourceHtml, stylesheet) {
 
   const embeddedStylesheet = `<style data-pdf-export-style>\n${stylesheet}\n</style>`;
 
-  return expandDetailsElements(sourceHtml)
+  let preparedHtml = expandDetailsElements(sourceHtml);
+  for (const [source, replacement] of assetReplacements) {
+    preparedHtml = preparedHtml.replaceAll(source, replacement);
+  }
+
+  return preparedHtml
     .replace(canonicalStylesheetLink, embeddedStylesheet)
     .replace(runtimeScript, "");
 }
@@ -138,7 +159,8 @@ async function main() {
     readFile(sourcePath, "utf8"),
     readFile(stylesheetPath, "utf8"),
   ]);
-  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet);
+  const assetReplacements = await loadSvgAssetReplacements(sourceHtml, sourcePath);
+  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, assetReplacements);
 
   await mkdir(path.dirname(targetPath), { recursive: true });
   await writeFile(targetPath, preparedHtml, "utf8");
