@@ -34,9 +34,9 @@
           <h1 data-edit-id="career-002">서민재</h1>
           <p class="resume-hero-role" data-edit-id="career-003">BE Engineering · Reliability · Search &amp; Data · AI Engineering</p>
           <p class="resume-hero-copy" data-edit-id="career-004">
-            Java와 Kotlin, Spring으로 이벤트·배치·검색·캐시 시스템을 설계하고 운영해 왔습니다.
-            <strong>실패 지점과 재시작 기준</strong>을 코드에 남기는 백엔드 설계를 바탕으로,
-            코드 탐색·설계 검토·테스트를 <strong>에이전트와 스킬</strong>로 구조화합니다.
+            Java·Kotlin·Spring으로 이벤트·배치·검색·캐시 시스템을 설계·운영했습니다.
+            <strong>실패 지점과 재시작 기준</strong>은 코드에 남기고,
+            코드 탐색·설계 검토·테스트는 <strong>에이전트와 스킬</strong>로 구조화해 재사용합니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -67,7 +67,7 @@
             <article>
               <span>03 · AI-Native</span>
               <h3 data-edit-id="career-010">반복한 개발 절차를 다른 저장소에 설치 가능한 자산으로 만듭니다.</h3>
-              <p data-edit-id="career-011">에이전트·스킬·평가 계약을 manifest로 연결하고, 변경 전 사람 검토를 요구하는 계약을 정의했습니다.</p>
+              <p data-edit-id="career-011">에이전트·스킬·평가 계약을 manifest로 연결하고, 변경 전 사람 검토를 필수화했습니다.</p>
             </article>
           </div>
 
@@ -120,7 +120,7 @@
             <div>
               <p class="project-kicker" data-edit-id="career-024">Current Role · BE Engineering</p>
               <h2 id="worksphere-title" data-edit-id="career-025">웍스피어(유) · Backend Engineer</h2>
-              <p data-edit-id="career-026">JOBKOREA·Albamon Platform의 이벤트 신뢰성, 배치, 검색·캐시, 공통 테스트 기반을 설계·구현합니다.</p>
+              <p data-edit-id="career-026">JOBKOREA·Albamon Platform에서 이벤트 신뢰성·배치·검색·캐시·공통 테스트 기반을 설계·구현합니다.</p>
             </div>
             <time datetime="2025-06" data-edit-id="career-027">2025.06 — 현재</time>
           </header>
@@ -130,7 +130,7 @@
               <p class="project-kicker" data-edit-id="career-028">Point Platform · Event Reliability</p>
               <h3 data-edit-id="career-029">이벤트 실패 지점을 6개 상태로 남기고 8개 복구 전략을 연결했습니다.</h3>
             </header>
-            <p data-edit-id="career-030">발행 실패와 소비 중 실패는 다시 시작할 위치가 다르므로 처리 단계 자체를 이벤트 레코드에 남겼습니다.</p>
+            <p data-edit-id="career-030">발행 실패와 소비 중 실패의 재시작 위치를 구분하도록 처리 단계를 이벤트 레코드에 기록했습니다.</p>
             <ul class="bullet-list">
               <li data-edit-id="career-031"><strong>내부 이벤트 9종·6개 상태</strong>로 생성부터 복구 불가 실패까지 기록했습니다.</li>
               <li data-edit-id="career-032"><strong>8개 수동 복구 전략</strong>으로 저장된 payload를 이벤트 유형별 처리 경로에 전달했습니다.</li>
@@ -142,9 +142,9 @@
           <article class="career-project">
             <header>
               <p class="project-kicker" data-edit-id="career-035">Point Ledger · Batch / Archive</p>
-              <h3 data-edit-id="career-036">배치는 다시 시작할 위치를, 분산락은 경쟁 후 상태를 테스트로 고정했습니다.</h3>
+              <h3 data-edit-id="career-036">배치 재시작 위치와 분산락 경쟁 후 상태를 테스트로 고정했습니다.</h3>
             </header>
-            <p data-edit-id="career-037">배치는 멈춘 위치를, 동시 요청은 처리가 끝난 뒤의 잔액과 상태를 확인했습니다.</p>
+            <p data-edit-id="career-037">동시 요청은 처리 완료 후 잔액·상태로 결과를 검증했습니다.</p>
             <ul class="bullet-list">
               <li data-edit-id="career-038"><strong>페이지 기반 Chunk 처리</strong>로 포인트 소멸의 조회와 쓰기 단위를 나눴습니다.</li>
               <li data-edit-id="career-039"><strong>archive 테이블 10개</strong>의 이관 순서와 재시작 기준을 테스트로 고정했습니다.</li>
@@ -166,13 +166,13 @@
               <p class="project-kicker" data-edit-id="career-043">Feed &amp; Search · Serving / Retrieval</p>
               <h3 data-edit-id="career-044">후보 수집부터 노출까지, 개인화 피드의 온라인 서빙 구조를 세웠습니다.</h3>
             </header>
-            <p data-edit-id="career-045">검색·랭킹·캐시를 포트와 단계별 계약으로 나눴습니다. 오케스트레이터는 캐시 적중·소진·장애에 따라 서빙 흐름을 조정하고, 각 랭킹 단계는 자기 계산을, FPR·SPR는 후보 풀 캐시까지 맡습니다.</p>
+            <p data-edit-id="career-045">캐시 상태에 따라 서빙 흐름을 바꾸도록 검색·랭킹·캐시를 포트와 단계별 계약으로 분리했습니다. 각 랭킹 단계는 계산을, FPR·SPR는 후보 풀 캐시를 담당합니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-046"><strong>9개 검색 소스</strong>의 필터·정렬 규칙과 사용할 벡터를 소스별로 나누고, OpenSearch 호출은 공통 어댑터 뒤로 감췄습니다. 한 소스가 늦거나 실패해도 나머지 후보는 유지합니다.</li>
-              <li data-edit-id="career-047"><strong>FPR·SPR·Re-Rank</strong>를 하나의 pull 계약으로 연결하고 Snapshot·FPR·SPR 3종 캐시의 적재·소비 책임을 단계별로 나눴습니다.</li>
-              <li data-edit-id="career-048"><strong>query-api 모듈</strong>은 OpenSearch 연동만 맡도록 격리하고, ArchUnit으로 모듈 의존 방향과 순환 금지를 검증했습니다.</li>
+              <li data-edit-id="career-046"><strong>한 소스가 지연·실패해도 나머지 후보를 유지</strong>하도록 9개 검색 소스의 필터·정렬·벡터 규칙을 분리하고 OpenSearch 호출을 공통 어댑터로 격리했습니다.</li>
+              <li data-edit-id="career-047"><strong>FPR·SPR·Re-Rank</strong>를 공통 pull 계약으로 연결하고, Snapshot·FPR·SPR 3종 캐시의 적재·소비 책임을 단계별로 분리했습니다.</li>
+              <li data-edit-id="career-048"><strong>query-api 모듈</strong>을 OpenSearch 연동 전용으로 격리하고, ArchUnit으로 의존 방향과 순환 금지를 검증했습니다.</li>
             </ul>
-            <p class="career-note" data-edit-id="career-049"><b>설계 기준</b> 후보 수보다 검색 소스, 랭킹 정책, 캐시 장애가 바뀔 때 수정 범위가 어디까지 번지는지를 먼저 봤습니다.</p>
+            <p class="career-note" data-edit-id="career-049"><b>설계 기준</b> 후보 수보다 검색 소스·랭킹 정책 변경과 캐시 장애의 파급 범위를 먼저 봤습니다.</p>
           </article>
 
           <article class="career-project">
@@ -182,7 +182,7 @@
             </header>
             <p data-edit-id="career-052">반복 설정을 공통화하고, 테스트 선택 기준과 CI 실행 범위를 문서로 남겼습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-053"><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>로 fixture·mock·WebMvc·JPA·트랜잭션 공통 동작을 묶었습니다.</li>
+              <li data-edit-id="career-053"><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>의 fixture·mock·WebMvc·JPA·트랜잭션 공통 동작을 통합했습니다.</li>
               <li data-edit-id="career-054"><strong>4개 진입점·5개 공통 도구와 정책</strong>으로 테스트 목적에 맞는 준비 코드와 실행 기준을 제공했습니다.</li>
               <li data-edit-id="career-055"><strong>테스트 작성 원칙</strong>을 제안하고 느린 동시성 테스트를 skip.slow.test 설정으로 분리했습니다.</li>
             </ul>
@@ -194,7 +194,7 @@
             <div>
               <p class="project-kicker" data-edit-id="career-056">웍스피어 · AI Engineering</p>
               <h2 id="agent-lab-title" data-edit-id="career-057">Agent Lab · 개발 판단을 설치·평가 가능한 자산으로 만들었습니다.</h2>
-              <p data-edit-id="career-058">코드 탐색·설계 검토·테스트·리뷰 절차를 다른 프로젝트에서도 다시 쓸 수 있는 단위로 정리했습니다.</p>
+              <p data-edit-id="career-058">코드 탐색·설계 검토·테스트·리뷰 절차를 프로젝트 간 재사용 단위로 정리했습니다.</p>
             </div>
             <span class="career-version">v0.1.0.0</span>
           </header>
@@ -203,10 +203,10 @@
             <header><h3 data-edit-id="career-059">역할·지식·절차·평가를 나눠 manifest로 연결했습니다.</h3></header>
             <ul class="bullet-list">
               <li data-edit-id="career-060"><strong>15개 에이전트·14개 지식 번들·32개 스킬</strong>과 24개 연결, 11개 의존성을 선언했습니다.</li>
-              <li data-edit-id="career-061"><strong>설치 회귀 52/52·Codex 탐색 32/32</strong>로 자산과 의존성이 공식 경로에 설치되는지 확인했습니다.</li>
-              <li data-edit-id="career-062"><strong>구조 7/7·행동 계약 10/10</strong>을 정적으로 검증하고 사람이 승인해야 다음 설치에 반영되도록 계약했습니다.</li>
+              <li data-edit-id="career-061"><strong>설치 회귀 52/52·Codex 탐색 32/32</strong>로 자산·의존성의 공식 경로 설치를 검증했습니다.</li>
+              <li data-edit-id="career-062"><strong>구조 7/7·행동 계약 10/10</strong>을 정적으로 검증하고, 다음 설치 반영에는 사람 승인을 필수화했습니다.</li>
             </ul>
-            <p class="career-note" data-edit-id="career-063"><b>현재 경계</b> 실행 런타임이 아닌 이식 가능한 자산 저장소입니다. 장기 메모리, 프롬프트 자동 수정, 스킬 자동 승격은 포함하지 않았습니다.</p>
+            <p class="career-note" data-edit-id="career-063"><b>현재 경계</b> 이식 가능한 자산 저장소이며 실행 런타임은 아닙니다. 장기 메모리·프롬프트 자동 수정·스킬 자동 승격은 제외했습니다.</p>
           </article>
 
           <article class="career-project career-project--previous" id="tosslab">

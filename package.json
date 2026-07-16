@@ -12,7 +12,7 @@
     "start": "next start",
     "lint": "eslint app lib tests next.config.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/editor-core.test.mjs && tsx --test tests/*.test.ts",
+    "test": "node --test scripts/editor-core.test.mjs scripts/copy-readability.test.mjs scripts/pdf-export.test.mjs && tsx --test tests/*.test.ts",
     "validate:content": "node scripts/validate-editables.mjs",
     "db:init": "tsx scripts/init-database.ts",
     "auth:hash": "tsx scripts/generate-admin-password.ts",

@@ -34,8 +34,8 @@
             <p class="eyebrow eyebrow-coral" data-edit-id="portfolio-001">AI-Native Backend Engineering Portfolio · 2026</p>
             <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">백엔드에서 쌓은 판단을 AI Native 개발 방식으로 구조화합니다</h1>
             <p class="hero-copy" data-edit-id="portfolio-003">
-              Java와 Kotlin으로 이벤트·배치·검색·캐시 시스템을 설계하고 운영해 왔습니다.
-              그 과정에서 쌓은 판단을 에이전트·스킬·평가로 구조화해 실제 개발 흐름에서 재사용합니다.
+              Java·Kotlin으로 이벤트·배치·검색·캐시 시스템을 설계·운영했습니다.
+              이때의 판단을 에이전트·스킬·평가에 담아 개발 흐름에서 재사용합니다.
             </p>
           </div>
           <div class="portfolio-profile">
@@ -74,10 +74,10 @@
             <span class="case-number" aria-hidden="true">01</span>
             <div>
               <p class="section-kicker" data-edit-id="portfolio-006">Point Platform · Event Reliability</p>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">발행 실패와 처리 실패, 같은 방식으로 복구할 수 없었습니다.</h2>
+              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">발행 실패와 처리 실패에 서로 다른 복구 경로를 적용했습니다.</h2>
               <p class="case-lede" data-edit-id="portfolio-008">
-                포인트 차감이나 회수가 늦게 실패하면 정산 확인과 고객 응대도 함께 늦어집니다.
-                실패 지점과 복구 대상을 이벤트 레코드에 남겨, 로그를 처음부터 추적하지 않고 멈춘 업무부터 다시 실행할 수 있게 했습니다.
+                이벤트 레코드에 실패 지점과 복구 대상을 남겨 멈춘 업무부터 재실행했습니다.
+                포인트 차감·회수 실패 때 로그를 처음부터 추적할 필요가 없습니다.
               </p>
             </div>
           </header>
@@ -92,13 +92,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-017">‘실패’ 하나로 묶자, 원인을 찾는 일부터 다시 시작해야 했습니다.</h3>
-              <p data-edit-id="portfolio-018">메시지를 보내지 못한 경우와 소비자가 처리 중 멈춘 경우는 확인할 데이터도, 재시도할 위치도 다릅니다. 상태가 같으면 운영자가 로그와 원장을 일일이 맞춰 봐야 했습니다.</p>
+              <h3 data-edit-id="portfolio-017">단일 ‘실패’ 상태: 원인 탐색부터 재시작</h3>
+              <p data-edit-id="portfolio-018">• 발행 실패·소비자 처리 중단: 확인 데이터·재시도 위치가 다름<br>• 단일 상태: 운영자가 로그·원장을 처음부터 수동 대조</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3 data-edit-id="portfolio-019">멈춘 지점을 기록하고, 복구 로직은 업무별로 나눴습니다.</h3>
-              <p data-edit-id="portfolio-020">생성부터 복구 불가 실패까지 6개 상태를 두었습니다. 포인트 차감·회수·만료 알림처럼 조건이 다른 8개 작업은 저장된 payload로 각 업무 서비스를 다시 호출합니다.</p>
+              <h3 data-edit-id="portfolio-019">실패 지점 기록과 업무별 복구 로직 분리</h3>
+              <p data-edit-id="portfolio-020">• 상태 6개: 생성부터 복구 불가 실패까지 구분<br>• 포인트 차감·회수·만료 알림 등 작업 8개: 저장된 payload로 각 업무 서비스 재호출</p>
             </div>
           </div>
 
@@ -210,12 +210,12 @@
             <summary>세부 구현과 예외 처리</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li data-edit-id="portfolio-022">내부 이벤트 9종을 생성, 발행 실패, 처리 중, 완료, 처리 실패, 복구 불가 실패의 6개 상태로 기록했습니다.</li>
-                <li data-edit-id="portfolio-023">수동 복구 API가 타입과 상태로 레코드를 찾고 저장된 payload로 8개 전략 중 하나를 실행하도록 구성했습니다.</li>
-                <li data-edit-id="portfolio-024">Kafka에 다시 넣지 않고 타입별 업무 서비스를 직접 호출해 복구 범위를 실패한 업무로 제한했습니다.</li>
-                <li data-edit-id="portfolio-025">IN_PROGRESS 상태로 15분 이상 멈춘 추적 대상 8종만 조회해 타입별 건수를 Slack에 전송했습니다.</li>
-                <li data-edit-id="portfolio-026">상태 전환 타이밍 오류, 잘못된 상태 검사, 이벤트 발송 실패 로깅 누락을 수정했습니다.</li>
-                <li data-edit-id="portfolio-027">배치 재시도와 프록시 기반 재시도 호출 문제를 수정하고 포인트 선점 복구 경로를 보강했습니다.</li>
+                <li data-edit-id="portfolio-022"><strong>이벤트 상태 6개</strong> 내부 이벤트 9종의 생성·발행 실패·처리 중·완료·처리 실패·복구 불가 실패 기록</li>
+                <li data-edit-id="portfolio-023"><strong>복구 전략 8개</strong> 수동 복구 API가 타입·상태로 레코드를 찾고 저장된 payload로 전략 선택·실행</li>
+                <li data-edit-id="portfolio-024"><strong>실패 업무만 복구</strong> Kafka 재투입 없이 타입별 업무 서비스를 직접 호출해 복구 범위 제한</li>
+                <li data-edit-id="portfolio-025"><strong>15분 이상 정체 감지</strong> IN_PROGRESS 추적 대상 8종만 조회해 타입별 건수를 Slack으로 전송</li>
+                <li data-edit-id="portfolio-026"><strong>이벤트 결함 3종</strong> 상태 전환 타이밍·잘못된 상태 검사·발송 실패 로깅 누락 수정</li>
+                <li data-edit-id="portfolio-027"><strong>재시도·복구 보강</strong> 배치 재시도·프록시 기반 재시도 호출 문제 수정, 포인트 선점 복구 경로 보강</li>
               </ul>
             </div>
           </details>
@@ -244,13 +244,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-039">세 Job이 같은 데이터를 만진다고 같은 방식으로 돌릴 수는 없었습니다.</h3>
-              <p data-edit-id="portfolio-040">소멸은 잔액과 원장을 바꾸고, 만료 안내는 알림을 쌓아 발송하며, 아카이브는 참조 순서대로 테이블을 옮깁니다. 전체 적재 방식은 데이터가 늘수록 실패 범위도 함께 커졌습니다.</p>
+              <h3 data-edit-id="portfolio-039">같은 데이터, 서로 다른 세 Job의 처리 기준</h3>
+              <p data-edit-id="portfolio-040">• 소멸: 잔액·원장 변경<br>• 만료 안내: 알림 적재·발송<br>• 아카이브: 참조 순서대로 테이블 이관 · 데이터 증가 시 전체 적재 실패 범위 확대</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3 data-edit-id="portfolio-041">배치에는 재시작 기준을, 동시 요청에는 결과 불변식을 뒀습니다.</h3>
-              <p data-edit-id="portfolio-042">소멸·알림·아카이브는 진행 위치를 남겼습니다. 포인트 거래와 예산 차감은 락 획득 여부뿐 아니라 경쟁이 끝난 뒤 잔액·원장 상태·이벤트 수가 맞는지 확인했습니다.</p>
+              <h3 data-edit-id="portfolio-041">배치는 재시작 위치, 동시 요청은 결과 불변식</h3>
+              <p data-edit-id="portfolio-042">• 소멸·알림·아카이브: 진행 위치 기록<br>• 포인트 거래·예산 차감: 락 획득 여부와 경쟁 종료 후 잔액·원장 상태·이벤트 수 모두 검증</p>
             </div>
           </div>
 
@@ -489,11 +489,11 @@
             <summary>정합성과 회원 식별 처리</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li data-edit-id="portfolio-043">만료 대상 수집, 날짜 계산, 기업 회원 필터, 만료 알림 레코드 일괄 저장 순서를 검증했습니다.</li>
-                <li data-edit-id="portfolio-044">point_core 6개와 point_service 4개 테이블의 아카이브 흐름과 테스트를 추가했습니다.</li>
-                <li data-edit-id="portfolio-045">같은 락 키와 서로 다른 거래 참조값, 같은 예산을 둘러싼 동시 요청을 각각 검증했습니다.</li>
-                <li data-edit-id="portfolio-046">유료·무료 원장 혼합 사용 케이스를 별도로 검증했습니다.</li>
-                <li data-edit-id="portfolio-047">회원-워크스페이스 매핑, master/member 분리, 회원 탈퇴 이벤트, globalUserRef 중복 처리를 보강했습니다.</li>
+                <li data-edit-id="portfolio-043"><strong>만료 처리 순서</strong> 대상 수집→날짜 계산→기업 회원 필터→알림 레코드 일괄 저장 검증</li>
+                <li data-edit-id="portfolio-044"><strong>10개 테이블 아카이브</strong> point_core 6개·point_service 4개 흐름과 테스트 추가</li>
+                <li data-edit-id="portfolio-045"><strong>동시성 경계</strong> 같은 락 키·서로 다른 거래 참조값 조합과 동일 예산의 동시 요청을 각각 검증</li>
+                <li data-edit-id="portfolio-046"><strong>혼합 원장</strong> 유료·무료 원장 혼합 사용 케이스 분리 검증</li>
+                <li data-edit-id="portfolio-047"><strong>회원 식별 경계</strong> 회원-워크스페이스 매핑·master/member 분리·탈퇴 이벤트·globalUserRef 중복 처리 보강</li>
               </ul>
             </div>
           </details>
@@ -506,7 +506,7 @@
               <p class="section-kicker" data-edit-id="portfolio-048">Feed &amp; Search · Serving / Retrieval</p>
               <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">후보 수보다, 검색·랭킹·서빙의 경계를 먼저 설계했습니다.</h2>
               <p class="case-lede" data-edit-id="portfolio-050">
-                개인화 채용 피드의 온라인 경로를 후보 수집, FPR, SPR, Re-Rank, Snapshot으로 나눴습니다. 세 랭킹 단계는 같은 pull 계약으로 잇고, OpenSearch 조회와 Redis 캐시는 포트 뒤로 분리했습니다.
+                개인화 피드는 후보 수집·FPR·SPR·Re-Rank·Snapshot으로 경로를 나눴습니다. 랭킹은 pull 계약, OpenSearch 조회·Redis 캐시는 포트로 격리했습니다.
               </p>
               <div class="feed-print-spine" aria-label="피드 서빙 구조 요약">
                 <span><b>9개 검색 소스</b>후보 조회 포트</span>
@@ -526,13 +526,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-059">후보 소스와 랭킹 정책, 캐시 수명은 서로 다른 이유로 바뀝니다.</h3>
-              <p data-edit-id="portfolio-060">한 오케스트레이터가 검색 쿼리와 점수 계산, Redis 처리까지 모두 알면 작은 정책 변경도 전체 피드 경로를 건드립니다.</p>
+              <h3 data-edit-id="portfolio-059">작은 정책 변경도 전체 피드 경로로 전파</h3>
+              <p data-edit-id="portfolio-060">• 변경 축: 후보 소스·랭킹 정책·캐시 수명<br>• 단일 오케스트레이터: 검색 쿼리·점수 계산·Redis 처리 결합</p>
             </div>
             <div class="story-block">
               <span class="story-label">판단</span>
-              <h3 data-edit-id="portfolio-061">오케스트레이터는 서빙 흐름을 조정하고, 계산과 캐시는 단계별 계약 뒤로 분리했습니다.</h3>
-              <p data-edit-id="portfolio-062">Snapshot이 비면 Re-Rank가 SPR→FPR→후보 수집 순서로 필요한 후보를 당겨옵니다. Redis 장애 시에는 같은 랭킹 흐름을 캐시 없이 실행합니다.</p>
+              <h3 data-edit-id="portfolio-061">오케스트레이터는 서빙 흐름만 조정</h3>
+              <p data-edit-id="portfolio-062">• 계산·캐시: 단계별 계약으로 분리<br>• Snapshot Empty: Re-Rank가 SPR→FPR→후보 수집 순으로 필요한 후보 pull<br>• Redis 장애: 동일 랭킹 흐름 · 캐시 우회</p>
             </div>
           </div>
 
@@ -641,27 +641,27 @@
 
           <div class="case-outcome">
             <b>바뀌는 이유가 다른 코드를 서로 떼어냈습니다.</b>
-            <p data-edit-id="portfolio-063">OpenSearch 필터·정렬 규칙과 호출은 query-api에, FPR·SPR·Re-Rank 계산은 각 랭킹 단계에, Snapshot·FPR·SPR 캐시는 포트 뒤에 뒀습니다. 오케스트레이터는 캐시 상태에 따라 서빙 흐름과 페이지 입출력을 조정합니다.</p>
+            <p data-edit-id="portfolio-063">캐시 상태에 따라 서빙 흐름과 페이지 입출력을 조정합니다. OpenSearch 필터·정렬·호출은 query-api, FPR·SPR·Re-Rank는 랭킹 단계, Snapshot·FPR·SPR 캐시는 포트로 분리했습니다.</p>
           </div>
 
           <details class="case-details">
             <summary>랭킹·캐시·검색 정책 상세</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li data-edit-id="portfolio-064">후보 수집은 별도 조회 포트로 두고, FPR·SPR·Re-Rank는 공통 pull 계약으로 연결했습니다.</li>
-                <li data-edit-id="portfolio-065">Snapshot·FPR·SPR 캐시 포트가 Hit·Empty·Unavailable 상태를 같은 방식으로 표현합니다.</li>
-                <li data-edit-id="portfolio-066">OpenSearch 검색 소스 9개의 필터·정렬 규칙과 사용할 벡터를 분리했습니다. 한 소스의 타임아웃이나 실패는 나머지 후보 조회에 영향을 주지 않습니다.</li>
-                <li data-edit-id="portfolio-067">Redis 장애에는 별도 랭킹을 만들지 않고 같은 흐름을 캐시 없이 실행합니다.</li>
-                <li data-edit-id="portfolio-068">query-api는 OpenSearch 연동만 맡도록 격리하고, 모듈 방향과 순환 금지는 ArchUnit으로 검증합니다.</li>
-                <li data-edit-id="portfolio-069"><code>@SearchDocument</code> 기반 프로세서로 검색 문서 38개 필드 경로를 생성하고, 직렬화 결과와 상수를 계약 테스트로 맞췄습니다.</li>
-                <li data-edit-id="portfolio-070">좌표와 4축 필터의 지문이 바뀌면 Snapshot·FPR·SPR만 무효화하고 세션과 global seen은 유지합니다.</li>
-                <li data-edit-id="portfolio-071">Snapshot, FPR pool, SPR pool, user vector, global seen은 서로 다른 Redis key와 TTL로 관리했습니다.</li>
-                <li data-edit-id="portfolio-072">seen은 노출한 페이지마다 기록하고 FPR에서 감점 신호로 사용했습니다.</li>
-                <li data-edit-id="portfolio-073">위치 기준 거리 가중치와 10km 반경, 좌표가 없는 공고의 보존·제외 정책을 반영했습니다.</li>
-                <li data-edit-id="portfolio-074">메인 4축 필터를 색인과 질의 조립에 반영하고 회원·비회원에서 같은 의미로 적용했습니다.</li>
-                <li data-edit-id="portfolio-075">유료 후보는 별도 영역으로 떼지 않고 FPR 점수 가산에 포함했습니다.</li>
-                <li data-edit-id="portfolio-076">재게시된 같은 공고는 FPR에서 contentHash로 중복을 제거했습니다.</li>
-                <li data-edit-id="portfolio-077">검색 인덱스 전환, read/write 계정 경계, strict mapping 이슈를 함께 다뤘습니다.</li>
+                <li data-edit-id="portfolio-064"><strong>후보·랭킹 경계</strong> 후보 수집은 별도 조회 포트, FPR·SPR·Re-Rank는 공통 pull 계약으로 연결</li>
+                <li data-edit-id="portfolio-065"><strong>캐시 상태 계약</strong> Snapshot·FPR·SPR 포트의 Hit·Empty·Unavailable 공통 표현</li>
+                <li data-edit-id="portfolio-066"><strong>검색 소스 9개 격리</strong> OpenSearch 소스별 필터·정렬·벡터 분리, 한 소스의 타임아웃·실패가 나머지 후보 조회에 미치는 영향 차단</li>
+                <li data-edit-id="portfolio-067"><strong>Redis 장애 우회</strong> 별도 랭킹 없이 동일 흐름을 캐시 없이 실행</li>
+                <li data-edit-id="portfolio-068"><strong>query-api 경계</strong> OpenSearch 연동만 담당, 모듈 방향·순환 금지는 ArchUnit으로 검증</li>
+                <li data-edit-id="portfolio-069"><strong>검색 문서 38개 필드</strong> <code>@SearchDocument</code> 기반 프로세서로 경로 생성, 계약 테스트로 직렬화 결과·상수 일치 검증</li>
+                <li data-edit-id="portfolio-070"><strong>선택적 캐시 무효화</strong> 좌표·4축 필터 지문 변경 시 Snapshot·FPR·SPR만 무효화, 세션·global seen 유지</li>
+                <li data-edit-id="portfolio-071"><strong>Redis 수명 분리</strong> Snapshot·FPR pool·SPR pool·user vector·global seen을 서로 다른 key·TTL로 관리</li>
+                <li data-edit-id="portfolio-072"><strong>반복 노출 감점</strong> 페이지 노출마다 seen 기록, FPR 감점 신호로 사용</li>
+                <li data-edit-id="portfolio-073"><strong>거리 정책</strong> 위치 기준 거리 가중치·10km 반경·좌표 없는 공고의 보존·제외 기준 반영</li>
+                <li data-edit-id="portfolio-074"><strong>메인 4축 필터</strong> 색인·질의 조립에 반영, 회원·비회원에 동일 의미 적용</li>
+                <li data-edit-id="portfolio-075"><strong>유료 후보 통합</strong> 별도 영역 분리 없이 FPR 점수 가산에 포함</li>
+                <li data-edit-id="portfolio-076"><strong>재게시 중복 제거</strong> 동일 공고를 FPR에서 contentHash로 제거</li>
+                <li data-edit-id="portfolio-077"><strong>검색 운영 이슈</strong> 인덱스 전환·read/write 계정 경계·strict mapping 이슈를 함께 처리</li>
               </ul>
             </div>
           </details>
@@ -674,8 +674,8 @@
               <p class="section-kicker" data-edit-id="portfolio-078">Engineering Platform · Test Support</p>
               <h2 class="case-title" id="test-title" data-edit-id="portfolio-079">테스트마다 반복하던 준비 코드를 test-support로 모았습니다.</h2>
               <p class="case-lede" data-edit-id="portfolio-080">
-                fixture와 mock 준비 방식이 프로젝트마다 달라 테스트 설정부터 다시 읽어야 했습니다.
-                네 가지 진입점과 다섯 가지 공통 도구·정책을 만들고, 테스트 선택 기준과 CI 실행 범위를 문서화했습니다.
+                테스트 진입점 4개와 공통 도구·정책 5개를 만들었습니다.
+                프로젝트마다 달랐던 fixture·mock 준비 방식을 통합하고 테스트 선택·CI 실행 기준을 문서화했습니다.
               </p>
             </div>
           </header>
@@ -770,9 +770,9 @@
             <summary>제공 기능과 CI 처리</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li data-edit-id="portfolio-082">기본·mock·WebMvc·JPA 네 진입점에 FixtureMonkey와 mock 생명주기를 연결했습니다.</li>
-                <li data-edit-id="portfolio-083">Controller·Repository 자동 등록, 응답 검증, REQUIRES_NEW 트랜잭션 도우미를 공통화했습니다.</li>
-                <li data-edit-id="portfolio-084">테스트 작성 원칙을 제안하고 느린 동시성 테스트를 skip.slow.test 설정으로 분리했습니다.</li>
+                <li data-edit-id="portfolio-082"><strong>테스트 진입점 4종</strong> 기본·mock·WebMvc·JPA에 FixtureMonkey·mock 생명주기 연결</li>
+                <li data-edit-id="portfolio-083"><strong>도우미 공통화</strong> Controller·Repository 자동 등록·응답 검증·REQUIRES_NEW 트랜잭션</li>
+                <li data-edit-id="portfolio-084"><strong>느린 테스트 분리</strong> 테스트 작성 원칙 제안, 동시성 테스트를 skip.slow.test 설정으로 격리</li>
               </ul>
             </div>
           </details>
@@ -785,8 +785,8 @@
               <p class="section-kicker" data-edit-id="portfolio-085">웍스피어 · AI Engineering · Agent Lab v0.1.0.0</p>
               <h2 class="case-title" id="agent-title" data-edit-id="portfolio-086">에이전트·스킬을 설치 가능한 자산으로 묶고, 구조와 행동 계약을 나눠 검증했습니다.</h2>
               <p class="case-lede" data-edit-id="portfolio-087">
-                코드 탐색·설계 검토·테스트 절차를 15개 에이전트와 32개 스킬로 나눴습니다.
-                manifest로 의존성을 설치하고, 구조 케이스 7개·행동 케이스 10개·설치 회귀 52개를 검증했습니다.
+                코드 탐색·설계 검토·테스트 절차를 15개 에이전트·32개 스킬로 나눴습니다.
+                구조 케이스 7개·행동 케이스 10개·설치 회귀 52개로 의존성과 계약을 검증했습니다.
               </p>
             </div>
           </header>
@@ -908,7 +908,7 @@
 
           <div class="case-outcome">
             <b>현재 설치 범위</b>
-            <p data-edit-id="portfolio-088">Claude Code에는 에이전트와 스킬을, Codex에는 스킬 32개를 설치할 수 있습니다. 메모리와 자가 수정은 스키마·정책·평가 계약으로 경계를 정의한 단계이며, 실제 반영 전에 사람 승인을 요구하는 계약을 정의했습니다.</p>
+            <p data-edit-id="portfolio-088">Claude Code에는 에이전트·스킬을, Codex에는 스킬 32개를 설치할 수 있습니다. 메모리·자가 수정은 스키마·정책·평가 계약으로 경계만 정의하고 실제 반영에는 사람 승인을 요구합니다.</p>
           </div>
 
           <details class="diagram-disclosure" open>
@@ -1014,13 +1014,13 @@
             <summary>도구 범위와 안전 경계</summary>
             <div class="details-content">
               <ul class="bullet-list">
-                <li data-edit-id="portfolio-089">manifest에 15개 agent, 14개 지식 번들, 32개 skill과 연결 의존성을 등록했습니다.</li>
-                <li data-edit-id="portfolio-090">설치 회귀 52개를 통과했고, Codex CLI에서 32개 skill을 모두 탐색했습니다.</li>
-                <li data-edit-id="portfolio-091">구조 fixture 7개와 행동 케이스 10개의 입력·임계값·안전 계약을 정적 검증했습니다.</li>
-                <li data-edit-id="portfolio-092">행동 평가에서는 결과와 실행 지표를 따로 받아 결과·과정·안전·비용을 비교합니다. 실제 에이전트를 실행하려면 런타임별 adapter가 더 필요합니다.</li>
-                <li data-edit-id="portfolio-093">메모리 5개 schema와 6개 policy로 기억을 쓰고 읽는 조건, 격리·승격·교체, 자기 수정의 경계를 먼저 정했습니다.</li>
-                <li data-edit-id="portfolio-094">NL-SQL MCP에 multi-dialect와 읽기 전용 경계를 두고 위험한 쿼리 실행을 막았습니다.</li>
-                <li data-edit-id="portfolio-095">code cartographer와 diagram extract skill로 코드 이해 결과를 다이어그램으로 공유하게 했습니다.</li>
+                <li data-edit-id="portfolio-089"><strong>도구 구성 명세</strong> manifest에 agent 15개·지식 번들 14개·skill 32개와 연결 의존성 등록</li>
+                <li data-edit-id="portfolio-090"><strong>설치·탐색 회귀</strong> 설치 회귀 52개 통과, Codex CLI에서 skill 32개 전수 탐색</li>
+                <li data-edit-id="portfolio-091"><strong>구조·행동 계약</strong> 구조 fixture 7개·행동 케이스 10개의 입력·임계값·안전 계약 정적 검증</li>
+                <li data-edit-id="portfolio-092"><strong>행동 평가 축</strong> 결과·실행 지표를 분리해 결과·과정·안전·비용 비교, 실제 실행은 런타임별 adapter 필요</li>
+                <li data-edit-id="portfolio-093"><strong>메모리 안전 경계</strong> schema 5개·policy 6개로 쓰기·읽기 조건, 격리·승격·교체, 자기 수정 범위 정의</li>
+                <li data-edit-id="portfolio-094"><strong>위험 쿼리 차단</strong> NL-SQL MCP에 multi-dialect·읽기 전용 경계 적용</li>
+                <li data-edit-id="portfolio-095"><strong>코드 이해 시각화</strong> code cartographer·diagram extract skill로 다이어그램 공유</li>
               </ul>
             </div>
           </details>
@@ -1032,7 +1032,7 @@
             <div>
               <p class="section-kicker" data-edit-id="portfolio-096">Previous Experience</p>
               <h2 class="case-title" id="previous-title" data-edit-id="portfolio-097">테스트, 인증, 검색 경험이 지금의 설계 기준이 됐습니다.</h2>
-              <p class="case-lede" data-edit-id="portfolio-098">실제 구현을 검증하는 테스트, 인증·인가 경계, OpenSearch 동적 쿼리를 직접 다뤘습니다. 이 경험은 이벤트 신뢰성, 배치 재시작, 피드 캐시와 검색 정책을 설계할 때의 기준이 됐습니다.</p>
+              <p class="case-lede" data-edit-id="portfolio-098">실제 구현 테스트·인증·인가 경계·OpenSearch 동적 쿼리 경험을 이벤트 신뢰성, 배치 재시작, 피드 캐시·검색 정책의 설계 기준으로 삼았습니다.</p>
             </div>
           </header>
 
@@ -1042,14 +1042,14 @@
                 <h3 data-edit-id="portfolio-099">토스랩 · JANDI</h3>
                 <time datetime="2024-06" data-edit-id="portfolio-100">2024.06 — 2025.04</time>
               </div>
-              <p data-edit-id="portfolio-101">커버리지 70%인데도 배포가 불안한 이유를 테스트 기준과 CI 실행 방식에서 찾았습니다. Drive-Service를 Spring Boot 2.3.8→3.3.3으로 올리며 테스트를 0→160개 이상으로 늘렸고, Mock 테스트가 놓친 JPA 변경 감지 오류는 실제 구현 테스트로 재현해 약 200만 건의 데이터를 보정했습니다.</p>
+              <p data-edit-id="portfolio-101">약 200만 건을 보정했습니다. Mock 테스트가 놓친 JPA 변경 감지 오류는 실제 구현 테스트로 재현했습니다.<br>Drive-Service를 Spring Boot 2.3.8→3.3.3으로 전환하며 테스트를 0→160개 이상으로 늘렸습니다.<br>커버리지 70%에도 불안했던 배포 원인은 테스트 기준·CI 실행 방식에서 찾았습니다.</p>
             </article>
             <article class="timeline-row">
               <div>
                 <h3 data-edit-id="portfolio-102">오케스트로 · IDP / Vista</h3>
                 <time datetime="2023-09" data-edit-id="portfolio-103">2023.09 — 2024.05</time>
               </div>
-              <p data-edit-id="portfolio-104">신용정보원 IDP에서 Spring Cloud API Gateway, Spring Security·JWT 인증/인가, SonarQube·Jenkins 연동 API를 개발했습니다. 하나금융그룹 Vista에서는 VM 메트릭 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
+              <p data-edit-id="portfolio-104">신용정보원 IDP에서 Spring Cloud API Gateway와 Spring Security·JWT 인증·인가, SonarQube·Jenkins 연동 API를 개발했습니다.<br>하나금융그룹 Vista에서는 VM 메트릭 조회 API와 OpenSearch 동적 쿼리 분기를 구현했습니다.</p>
             </article>
             <article class="timeline-row">
               <div>
@@ -1082,15 +1082,15 @@
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-115">Spring OSS · 개선 제안 3건 반영</h3>
-              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a>에 제안한 개선 3건이 반영됐습니다. 불변 컬렉션 처리, 하드코딩 제거, 자원 정리 로직을 개선했습니다.</p>
+              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a>에 제안한 불변 컬렉션 처리·하드코딩 제거·자원 정리 로직 개선 3건이 반영됐습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 분석 플러그인</a></h3>
-              <p data-edit-id="portfolio-118">JavaCafe의 Elasticsearch 플러그인을 바탕으로 한·영 자판 변환, 초성·자모 검색을 OpenSearch 2.19와 Kotlin으로 옮기고 16개 예시로 확인했습니다.</p>
+              <p data-edit-id="portfolio-118">JavaCafe Elasticsearch 플러그인의 한·영 자판 변환과 초성·자모 검색을 OpenSearch 2.19·Kotlin으로 이식해 16개 예시로 검증했습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-119"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">화면에 없던 7만+ 건의 오류</a></h3>
-              <p data-edit-id="portfolio-120">응답은 정상이었지만 S3에서는 삭제되고 DB에는 남은 데이터가 6년 동안 7만 건 넘게 쌓여 있었습니다. 이를 발견하고 원인을 좁혀 간 과정을 공개했습니다.</p>
+              <p data-edit-id="portfolio-120">S3에서는 삭제됐지만 DB에는 6년 동안 7만 건 넘게 쌓인 데이터를 발견했습니다. 응답이 정상인 상황에서 원인을 좁혀 간 과정을 공개했습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-121"><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">테스트로 찾은 약 200만 건</a></h3>
