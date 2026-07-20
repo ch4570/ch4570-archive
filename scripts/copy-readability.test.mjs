@@ -81,6 +81,58 @@ test("submission copy keeps verified scope, attribution, and version cues", asyn
   );
 });
 
+test("career copy assigns CI memory work to Worksphere and keeps prior roles compact", async () => {
+  const [resume, career] = await Promise.all([
+    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
+  ]);
+  const ciResourceIssue = /CI.{0,80}메모리 부족|메모리 부족.{0,80}CI/su;
+  const worksphereCareerSource = career.slice(
+    career.indexOf('id="worksphere-core"'),
+    career.indexOf('id="previous-experience"'),
+  );
+  const tosslabCareerSource = career.slice(
+    career.indexOf('id="previous-experience"'),
+  );
+  const worksphereResumeSource = resume.slice(
+    resume.indexOf('data-edit-id="resume-010"'),
+    resume.indexOf('id="previous-title"'),
+  );
+  const previousResumeSource = resume.slice(
+    resume.indexOf('id="previous-title"'),
+  );
+  const worksphereCareer = visibleText(worksphereCareerSource);
+  const tosslabCareer = visibleText(tosslabCareerSource);
+  const worksphereResume = visibleText(worksphereResumeSource);
+  const previousResume = visibleText(previousResumeSource);
+
+  assert.match(worksphereCareer, ciResourceIssue);
+  assert.doesNotMatch(tosslabCareer, ciResourceIssue);
+  assert.match(worksphereResume, ciResourceIssue);
+  assert.doesNotMatch(previousResume, ciResourceIssue);
+  assert.match(worksphereCareerSource, /data-edit-id="career-070"/u);
+  assert.doesNotMatch(tosslabCareerSource, /data-edit-id="career-070"/u);
+  assert.match(worksphereResumeSource, /data-edit-id="resume-029"/u);
+  assert.doesNotMatch(previousResumeSource, /data-edit-id="resume-029"/u);
+
+  const careerEditable = new Map(
+    scanEditableRegions(career).map((region) => [region.id, region]),
+  );
+  for (const [headingId, detailId] of [
+    ["career-072", "career-073"],
+    ["career-077", "career-078"],
+  ]) {
+    assert.doesNotMatch(
+      visibleText(careerEditable.get(headingId).innerHTML),
+      /Backend Engineer/u,
+    );
+    assert.match(
+      visibleText(careerEditable.get(detailId).innerHTML),
+      /Backend Engineer/u,
+    );
+  }
+});
+
 test("portfolio story cards use short plain sentences", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(

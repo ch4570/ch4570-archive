@@ -72,6 +72,7 @@
               <li data-edit-id="resume-013"><strong>내부 이벤트의 발행과 처리 상태를 6단계로 구분</strong>했습니다. Kafka로 처리하는 내부 이벤트 9종 가운데 실패한 업무만 다시 실행하고, 15분 이상 멈추면 알리도록 했습니다.</li>
               <li data-edit-id="resume-014"><strong>같은 락 키와 동일 예산 요청을 13개 동시성 시나리오로 테스트</strong>했습니다. 9개 API의 요청이 끝난 뒤 잔액·원장·후속 이벤트가 맞는지 확인했습니다.</li>
               <li data-edit-id="resume-015"><strong>개인화 피드의 검색·랭킹·캐시 책임을 나누고</strong>, 검색 소스 9개의 실패 처리와 Redis 캐시 우회 경로를 구현했습니다.</li>
+              <li data-edit-id="resume-029"><strong>CI에서 테스트가 메모리 부족으로 멈추자</strong> 자원을 늘리는 대신 느린 테스트를 분리하고 Spring 컨텍스트의 재사용·초기화 방식을 바꿨습니다.</li>
             </ul>
           </article>
         </section>
@@ -81,12 +82,11 @@
           <div class="resume-role-list">
             <article class="resume-role-block">
               <header class="experience-head">
-                <div><h3 data-edit-id="resume-024">토스랩 · JANDI Backend · 2024.06 — 2025.04</h3><p data-edit-id="resume-025">Test Architecture · Spring Boot Migration · CI</p></div>
+                <div><h3 data-edit-id="resume-024">토스랩 · JANDI Backend · 2024.06 — 2025.04</h3><p data-edit-id="resume-025">Test Architecture · Spring Boot Migration</p></div>
               </header>
               <ul class="bullet-list resume-achievement-list">
                 <li data-edit-id="resume-028"><strong>Mock 테스트로 드러나지 않던 JPA 변경 감지 오류</strong>를 실제 영속성 컨텍스트에서 재현하고, 보정 스크립트로 약 200만 건을 바로잡았습니다.</li>
                 <li data-edit-id="resume-027"><strong>Spring Boot 2.3.8에서 3.3.3으로 옮기며</strong> Drive-Service 테스트를 0개에서 160개 이상으로 늘렸습니다.</li>
-                <li data-edit-id="resume-029"><strong>CI가 메모리 부족으로 깨질 때</strong> 자원을 늘리지 않고 테스트 실행 방식과 컨텍스트 초기화 방식을 바꿨습니다.</li>
               </ul>
             </article>
 
