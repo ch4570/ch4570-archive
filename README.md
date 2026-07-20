@@ -1,4 +1,8 @@
-# 서민재 이력서 아카이브
+# ch4570-archive
+
+[이력서](https://ch4570-archive.vercel.app/resume/) · [경력기술서](https://ch4570-archive.vercel.app/career/) · [포트폴리오](https://ch4570-archive.vercel.app/portfolio/) · [기술 블로그](https://velog.io/@ch4570/posts)
+
+## 이 저장소
 
 이력서, 경력기술서, 포트폴리오를 한 저장소에서 관리하는 Next.js 애플리케이션입니다. 공개 문서는 정적 HTML과 제출용 PDF로 제공하고, 문구 수정은 비밀번호로 보호된 `/admin/`에서 처리합니다.
 
@@ -10,7 +14,7 @@
 - `/portfolio/` - 포트폴리오
 - `/pdf/` - 제출용 PDF 파일
 
-Vercel이 운영 서비스입니다. GitHub Pages는 공개 HTML과 PDF만 제공하는 정적 대체 경로이며 관리자 화면은 포함하지 않습니다.
+Vercel이 운영 서비스입니다. 제출 전 원본 HTML·PDF와 Vercel 배포본의 핵심 문구·페이지 수가 일치하는지 확인합니다. GitHub Pages는 공개 HTML과 PDF만 제공하는 정적 대체 경로이며 관리자 화면은 포함하지 않습니다.
 
 ## 구조
 
@@ -65,7 +69,7 @@ npm run build
 sh scripts/export-pdfs.sh
 ```
 
-PDF는 이력서 2쪽, 경력기술서 3쪽, 포트폴리오 7쪽을 기준으로 회귀 확인합니다.
+PDF는 이력서 1쪽, 경력기술서 2쪽, 포트폴리오 3쪽을 기준으로 회귀 확인합니다.
 내보내기 스크립트는 현재 디자인 시스템 CSS와 로컬 SVG를 PDF용 임시 HTML에 직접 포함하고, 기본 출력 경로를 사용할 때 Next.js의 `public/` 사본도 함께 갱신합니다.
 
 피드 도식은 Archify `v2.11.0` (`ed0efcc763d358b78df845182b5ed24a9d165a1c`) CLI를 준비한 뒤 아래 명령으로 재생성합니다. 프로젝트 런타임 의존성은 추가하지 않습니다.

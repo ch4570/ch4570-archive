@@ -982,6 +982,10 @@ h4 {
   margin-bottom: 0;
 }
 
+.resume-role-compact .experience-head > .resume-compact-company {
+  grid-column: 1 / -1;
+}
+
 .resume-achievement-list {
   margin-top: 0;
 }
@@ -1037,6 +1041,33 @@ h4 {
 .resume-meta-grid h3 {
   margin-bottom: 6px;
   font-size: 13px;
+}
+
+.resume-meta-lines {
+  border-top: 2px solid var(--ink);
+}
+
+.resume-meta-lines p {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 18px;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
+.resume-meta-lines b {
+  color: var(--green-ink);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.resume-meta-lines a {
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-underline-offset: 3px;
 }
 
 /* Career description */
@@ -3605,9 +3636,9 @@ h4 {
   }
 
   .resume-document--ats .resume-hero {
-    grid-template-columns: minmax(0, 1fr) 160px;
-    gap: 24px;
-    padding: 16px 22px 14px;
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 12px 18px 10px;
   }
 
   .resume-document--ats .resume-hero h1 {
@@ -3626,44 +3657,51 @@ h4 {
   }
 
   .resume-document--ats .resume-contact {
-    gap: 1px;
-    padding-top: 5px;
-    font-size: 8.2pt;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1px 12px;
+    padding-top: 0;
+    border-top: 0;
+    font-size: 8pt;
+    text-align: left;
   }
 
   .resume-document--ats .resume-contact a,
   .resume-document--ats .resume-contact span {
-    min-height: 16px;
+    display: inline;
+    min-height: 0;
   }
 
   .resume-ats-body {
-    padding: 14px 22px 0;
+    padding: 10px 18px 0;
   }
 
   .resume-document--ats .resume-section {
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   .resume-document--ats .resume-section-title {
-    margin-bottom: 7px;
+    margin-bottom: 5px;
     font-size: 10pt;
   }
 
   .resume-capability-list p {
-    grid-template-columns: 140px minmax(0, 1fr);
-    gap: 12px;
-    padding: 6px 0;
-    font-size: 9pt;
-    line-height: 1.4;
+    display: block;
+    padding: 4px 0;
+    font-size: 9.2pt;
+    line-height: 1.35;
   }
 
   .resume-capability-list b {
-    font-size: 8pt;
+    display: inline;
+    margin-right: 8px;
+    font-size: 8.4pt;
   }
 
   .resume-document--ats .experience-head {
-    margin-bottom: 5px;
-    padding-bottom: 6px;
+    display: block;
+    margin-bottom: 4px;
+    padding-bottom: 4px;
   }
 
   .resume-document--ats .experience-head h3 {
@@ -3676,18 +3714,17 @@ h4 {
   }
 
   .resume-document--ats .bullet-list li {
-    margin: 3px 0;
-    font-size: 9pt;
-    line-height: 1.45;
+    margin: 2px 0;
+    font-size: 9.2pt;
+    line-height: 1.38;
   }
 
   .resume-page-two {
-    padding-top: 2mm;
-    break-before: page;
+    padding-top: 0;
   }
 
   .resume-role-list {
-    gap: 14px;
+    gap: 9px;
   }
 
   .resume-project-highlight {
@@ -3703,7 +3740,7 @@ h4 {
   }
 
   .resume-project-list article {
-    padding: 6px 0;
+    padding: 4px 0;
     break-inside: avoid;
   }
 
@@ -3737,6 +3774,19 @@ h4 {
     padding: 5px 0;
     font-size: 8.8pt;
     line-height: 1.45;
+  }
+
+  .resume-meta-lines p {
+    display: block;
+    padding: 4px 0;
+    font-size: 8.2pt;
+    line-height: 1.35;
+  }
+
+  .resume-meta-lines b {
+    display: inline;
+    margin-right: 8px;
+    font-size: 7.6pt;
   }
 
   .career-body {
@@ -3816,7 +3866,9 @@ h4 {
     break-before: page;
   }
 
-  #worksphere-serving.career-print-page {
+  #worksphere-core.career-print-page,
+  #worksphere-serving.career-print-page,
+  #previous-experience.career-print-page {
     break-before: auto;
   }
 
@@ -3855,6 +3907,11 @@ h4 {
   .career-project {
     padding: 14px 0;
     break-inside: auto;
+  }
+
+  #worksphere-core .career-project {
+    break-inside: avoid;
+    page-break-inside: avoid;
   }
 
   .career-project > header:not(.career-company-head) {
@@ -3996,10 +4053,14 @@ h4 {
   }
 
   #feed.case-section,
-  #test.case-section,
   #agent.case-section {
     break-before: auto;
     page-break-before: auto;
+  }
+
+  #test.case-section {
+    break-before: page;
+    page-break-before: always;
   }
 
   #feed .case-header {
@@ -4692,8 +4753,8 @@ h4 {
 
   #evidence.case-section {
     padding-top: 16px;
-    break-before: page;
-    page-break-before: always;
+    break-before: auto;
+    page-break-before: auto;
   }
 
   #evidence .case-header {
