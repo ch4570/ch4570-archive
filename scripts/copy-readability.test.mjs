@@ -39,7 +39,49 @@ test("resume list items stay concise enough to scan", async () => {
   }
 });
 
-test("portfolio story cards lead with concise nominal bullets", async () => {
+test("submission copy keeps verified scope, attribution, and version cues", async () => {
+  const [home, resume, career, portfolio, answerBank] = await Promise.all([
+    readFile(resolve(repositoryRoot, "index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8"),
+    readFile(
+      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
+      "utf8",
+    ),
+  ]);
+  const packet = [home, resume, career, portfolio, answerBank].join("\n");
+
+  assert.doesNotMatch(packet, /AI[- ]?Native|Agent Lab/iu);
+  assert.match(
+    resume,
+    /한국방송통신대학교 컴퓨터과학과 졸업[^<]*2023\.03[^<]*2025\.03/u,
+  );
+  assert.match(resume, /Kafka로 처리하는 내부 이벤트 9종/u);
+  assert.match(career, /Kafka로 처리하는 내부 이벤트 9종/u);
+  assert.match(portfolio, /Kafka로 처리하는 내부 이벤트 9종/u);
+  assert.match(
+    resume,
+    /https:\/\/github\.com\/javacafe-project\/elasticsearch-plugin/u,
+  );
+  assert.match(
+    portfolio,
+    /https:\/\/github\.com\/javacafe-project\/elasticsearch-plugin/u,
+  );
+  assert.match(
+    portfolio,
+    /<dt data-edit-id="portfolio-055">담당<\/dt>/u,
+  );
+  assert.match(packet, /웍스피어\(유\) 소속으로 JOBKOREA·Albamon/u);
+  assert.doesNotMatch(portfolio, /S3에서는 지워졌지만 DB에 남은/u);
+  assert.doesNotMatch(packet, /Spring 오픈소스 PR 3건/u);
+  assert.doesNotMatch(
+    packet,
+    /멈춘 지점부터|해당 지점부터|장애가 날 때마다 로그와 원장을 대조|internal_event_record|point_core|point_service|query-api|FPR·SPR/u,
+  );
+});
+
+test("portfolio story cards use short plain sentences", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(
     scanEditableRegions(source).map((region) => [region.id, region]),
@@ -61,28 +103,21 @@ test("portfolio story cards lead with concise nominal bullets", async () => {
 
     const headingText = visibleText(heading.innerHTML);
     const summaryText = visibleText(summary.innerHTML);
-    assert.ok(
-      headingText.length <= 32,
-      `${heading.id} is ${headingText.length} characters: ${headingText}`,
-    );
+    assert.ok(headingText.length <= 46, `${heading.id} is too long: ${headingText}`);
+    assert.ok(summaryText.length <= 150, `${summaryId} is too long: ${summaryText}`);
+    assert.match(`${headingText} ${summaryText}`, /습니다[.!]?/u);
+    assert.doesNotMatch(summary.innerHTML, /<br\s*\/?\s*>|^\s*•/iu);
     assert.doesNotMatch(
       `${headingText} ${summaryText}`,
-      /[가-힣]니다[.!?]?/u,
-      `${headingId}/${summaryId} should use nominal copy`,
+      /정합성 계약|책임 경계|설계 기준|결과 불변식/u,
+      `${headingId}/${summaryId} should avoid abstract portfolio jargon`,
     );
 
-    const bulletLines = summary.innerHTML
-      .split(/<br\s*\/?\s*>/giu)
-      .map((line) => visibleText(line))
-      .filter(Boolean);
+    const sentences = summaryText.split(/[.!?](?:\s|$)/u).filter(Boolean);
     assert.ok(
-      bulletLines.length >= 2 && bulletLines.length <= 3,
-      `${summaryId} should contain two or three scan-friendly bullets`,
+      sentences.length >= 1 && sentences.length <= 3,
+      `${summaryId} should contain one to three short sentences`,
     );
-    for (const line of bulletLines) {
-      assert.match(line, /^•\s/u, `${summaryId} bullet should start with •: ${line}`);
-      assert.ok(line.length <= 58, `${summaryId} bullet is ${line.length} characters: ${line}`);
-    }
   }
 });
 
@@ -122,10 +157,10 @@ test("feed keeps one Archify diagram without duplicate narrative layers", async 
   assert.doesNotMatch(feed, /feed-print-spine|story-grid|case-outcome/u);
 });
 
-test("each flagship case keeps at most one diagram and previous experience stays elsewhere", async () => {
+test("each backend case keeps at most one diagram and omits unrelated sections", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
 
-  for (const id of ["event", "point", "feed", "test", "agent"]) {
+  for (const id of ["event", "point", "feed", "test"]) {
     const section = caseSection(source, id);
     assert.ok(
       (section.match(/<figure\b/gu) ?? []).length <= 1,
@@ -133,6 +168,7 @@ test("each flagship case keeps at most one diagram and previous experience stays
     );
   }
   assert.doesNotMatch(source, /id="previous"|href="#previous"/u);
+  assert.doesNotMatch(source, /id="agent"|href="#agent"/u);
 });
 
 test("Archify output stays a self-contained light SVG", async () => {

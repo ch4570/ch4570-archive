@@ -975,7 +975,7 @@ const renderActiveDocument = ({ reloadPreview = false } = {}) => {
   elements.activeDocumentNames.forEach((element) => {
     element.textContent = config.name;
   });
-  elements.editorTitle.textContent = `${config.name} 문구 편집`;
+  elements.editorTitle.textContent = `${config.name} 편집`;
   elements.search.value = "";
   renderSectionList();
   renderEditorFields();
