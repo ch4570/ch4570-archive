@@ -130,3 +130,28 @@ test("print styles preserve color and do not inherit screen breakpoints", async 
   assert.match(stylesheet, /-webkit-print-color-adjust:\s*exact/);
   assert.match(stylesheet, /print-color-adjust:\s*exact/);
 });
+
+test("previous-career cards keep equal columns and print the lead period in order", async () => {
+  const stylesheet = await readFile(
+    path.join(projectRoot, "assets/design-system.css"),
+    "utf8",
+  );
+  const previousCareerRules = [
+    ...stylesheet.matchAll(/\.career-previous-grid\s*\{([^}]*)\}/gu),
+  ];
+
+  assert.equal(previousCareerRules.length, 2, "expected screen and print grid rules");
+  for (const [, declarations] of previousCareerRules) {
+    assert.match(
+      declarations,
+      /grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/u,
+      "previous-career cards should use balanced columns",
+    );
+  }
+
+  assert.match(
+    stylesheet,
+    /#previous-experience\s*>\s*\.career-company-head\s*\{[^}]*grid-template-columns:\s*1fr[^}]*\}/su,
+    "the print lead period should stay beside its own role in extracted text",
+  );
+});
