@@ -3876,6 +3876,11 @@ h4 {
     break-before: auto;
   }
 
+  #worksphere-serving .career-project:nth-of-type(2) {
+    break-before: page;
+    page-break-before: always;
+  }
+
   .career-company-block {
     padding: 14px 0 0;
     border-top: 0 !important;
@@ -4253,7 +4258,7 @@ h4 {
   .map-panel__head b,
   .map-branch__head b,
   .map-matrix__column > header b {
-    font-size: 8pt;
+    font-size: 8.6pt;
   }
 
   .map-band__head small,
@@ -4261,24 +4266,24 @@ h4 {
   .map-branch__head small,
   .map-panel__head code,
   .map-matrix__column > header span {
-    font-size: 6.6pt;
+    font-size: 7.2pt;
   }
 
   .map-node {
-    min-height: 52px;
-    padding: 6px 6px 6px 9px;
+    min-height: 56px;
+    padding: 7px 7px 7px 9px;
     box-shadow: none;
   }
 
   .map-node__type,
   .map-node code,
   .map-node small {
-    font-size: 6.5pt;
+    font-size: 7.2pt;
     line-height: 1.35;
   }
 
   .map-node strong {
-    font-size: 7.8pt;
+    font-size: 8.6pt;
     line-height: 1.25;
   }
 
