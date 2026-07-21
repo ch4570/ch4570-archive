@@ -133,6 +133,55 @@ test("career copy assigns CI memory work to Worksphere and keeps prior roles com
   }
 });
 
+test("final packet keeps company context, evidence, and document-specific wording", async () => {
+  const [resume, career, answerBank] = await Promise.all([
+    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
+    readFile(
+      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
+      "utf8",
+    ),
+  ]);
+  const careerEditable = new Map(
+    scanEditableRegions(career).map((region) => [region.id, region]),
+  );
+  const resumeEditable = new Map(
+    scanEditableRegions(resume).map((region) => [region.id, region]),
+  );
+  const careerText = (id) => visibleText(careerEditable.get(id).innerHTML);
+  const resumeText = (id) => visibleText(resumeEditable.get(id).innerHTML);
+
+  assert.match(resumeText("resume-014"), /^9개 API에/u);
+  assert.match(careerText("career-036"), /^배치는 중단한 위치부터/u);
+  assert.match(careerText("career-042"), /^웍스피어\(유\)/u);
+  assert.match(careerText("career-044"), /검색 소스마다 타임아웃/u);
+  assert.match(careerText("career-070"), /자원 증설 없이/u);
+  assert.notEqual(
+    careerText("career-070"),
+    resumeText("resume-029"),
+    "career and resume should not repeat the same CI sentence verbatim",
+  );
+  assert.ok(
+    career.indexOf('data-edit-id="career-050"') <
+      career.indexOf('data-edit-id="career-044"'),
+    "the page-two continuation label should introduce the search project",
+  );
+
+  assert.doesNotMatch(answerBank, /회귀 테스트도 남겼습니다/u);
+  assert.doesNotMatch(answerBank, /3단계 랭킹/u);
+  assert.match(answerBank, /중복 제거·점수화·재정렬/u);
+  assert.match(answerBank, /웍스피어\(유\).{0,80}test-support/su);
+  const jpaAnswer = answerBank.slice(
+    answerBank.indexOf("### 7."),
+    answerBank.indexOf("### 8."),
+  );
+  assert.equal(
+    jpaAnswer.match(/약 200만 건/gu)?.length,
+    1,
+    "the short JPA answer should not repeat the same metric",
+  );
+});
+
 test("portfolio story cards use short plain sentences", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(
@@ -231,6 +280,19 @@ test("Archify output stays a self-contained light SVG", async () => {
 
   assert.match(source, /<svg\b[^>]*data-theme="light"/u);
   assert.match(source, /data-generator="archify 2\.11\.0"/u);
-  assert.match(source, /<title>피드 서빙 책임 경계<\/title>/u);
+  assert.match(source, /<title\b[^>]*>피드 서빙 책임 경계<\/title>/u);
   assert.doesNotMatch(source, /<script\b|<foreignObject\b/iu);
+
+  const viewBox = source.match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/u);
+  assert.ok(viewBox, "expected a numeric SVG viewBox");
+  assert.ok(Number(viewBox[1]) <= 1000, "the A4 diagram should stay compact enough to read");
+
+  const fontSizes = [
+    ...source.matchAll(/font-size(?:\s*:\s*|=")([\d.]+)(?:px)?/gu),
+  ].map((match) => Number(match[1]));
+  assert.ok(fontSizes.length > 0, "expected explicit diagram font sizes");
+  assert.ok(
+    Math.min(...fontSizes) >= 14,
+    "the smallest A4 diagram label should remain readable",
+  );
 });

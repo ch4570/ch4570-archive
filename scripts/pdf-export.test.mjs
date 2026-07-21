@@ -154,4 +154,9 @@ test("previous-career cards keep equal columns and print the lead period in orde
     /#previous-experience\s*>\s*\.career-company-head\s*\{[^}]*grid-template-columns:\s*1fr[^}]*\}/su,
     "the print lead period should stay beside its own role in extracted text",
   );
+  assert.match(
+    stylesheet,
+    /#worksphere-serving\s+\.career-project:nth-of-type\(2\)\s*\{[^}]*break-before:\s*page[^}]*\}/su,
+    "the search project should open the balanced second career page",
+  );
 });
