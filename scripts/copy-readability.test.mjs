@@ -151,11 +151,11 @@ test("final packet keeps company context, evidence, and document-specific wordin
   const careerText = (id) => visibleText(careerEditable.get(id).innerHTML);
   const resumeText = (id) => visibleText(resumeEditable.get(id).innerHTML);
 
-  assert.match(resumeText("resume-014"), /^9개 API에/u);
-  assert.match(careerText("career-036"), /^배치는 중단한 위치부터/u);
+  assert.match(resumeText("resume-014"), /^9개 API를 대상으로/u);
+  assert.match(careerText("career-036"), /^중단된 배치는/u);
   assert.match(careerText("career-042"), /^웍스피어\(유\)/u);
-  assert.match(careerText("career-044"), /검색 소스마다 타임아웃/u);
-  assert.match(careerText("career-070"), /자원 증설 없이/u);
+  assert.match(careerText("career-044"), /^검색 소스별로/u);
+  assert.match(careerText("career-070"), /자원을 늘리지 않고 문제를 해결/u);
   assert.notEqual(
     careerText("career-070"),
     resumeText("resume-029"),
@@ -179,6 +179,63 @@ test("final packet keeps company context, evidence, and document-specific wordin
     jpaAnswer.match(/약 200만 건/gu)?.length,
     1,
     "the short JPA answer should not repeat the same metric",
+  );
+});
+
+test("Korean copy keeps subjects, actions, and technical terms in context", async () => {
+  const [home, resume, career, portfolio, answerBank] = await Promise.all([
+    readFile(resolve(repositoryRoot, "index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
+    readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8"),
+    readFile(
+      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
+      "utf8",
+    ),
+  ]);
+  const textById = (source) =>
+    new Map(
+      scanEditableRegions(source).map((region) => [
+        region.id,
+        visibleText(region.innerHTML),
+      ]),
+    );
+  const homeText = textById(home);
+  const resumeText = textById(resume);
+  const careerText = textById(career);
+  const portfolioText = textById(portfolio);
+  const packet = [home, resume, career, portfolio, answerBank].join("\n");
+
+  assert.equal(
+    homeText.get("home-012"),
+    "대표 작업 네 가지에서 마주한 문제와 해결 과정을 설명합니다.",
+  );
+  assert.match(homeText.get("home-021"), /실제 영속성 컨텍스트에서/u);
+  assert.match(
+    homeText.get("home-024"),
+    /VM 메트릭 조회 API와 OpenSearch 동적 쿼리/u,
+  );
+  assert.match(
+    resumeText.get("resume-013"),
+    /^Kafka로 처리하는 내부 이벤트 9종의 상태를 6개로 나눠/u,
+  );
+  assert.match(resumeText.get("resume-033"), /^Spring Cloud Gateway에/u);
+  assert.match(resumeText.get("resume-041"), /OpenSearch 2\.19에서 동작하도록 Kotlin으로/u);
+  assert.match(careerText.get("career-030"), /발행 후 처리 과정에서 실패한 경우/u);
+  assert.match(careerText.get("career-032"), /복구 로직 8개/u);
+  assert.match(careerText.get("career-039"), /^아카이브 테이블 10개를/u);
+  assert.match(careerText.get("career-045"), /맡았습니다\. OpenSearch/u);
+  assert.equal(
+    portfolioText.get("portfolio-019"),
+    "실패 상태에 따라 복구할 업무를 나눴습니다",
+  );
+  assert.match(portfolioText.get("portfolio-039"), /^세 배치는/u);
+  assert.match(portfolioText.get("portfolio-050"), /^검색 소스마다 정책과 타임아웃/u);
+  assert.match(portfolioText.get("portfolio-080"), /test-support에서 관리했습니다/u);
+  assert.match(answerBank, /### 9\. 오케스트로 API·인증 경험/u);
+  assert.doesNotMatch(
+    packet,
+    /소비자가 처리하다|발행된 이벤트를 처리하다 실패|발행 실패와 소비 실패|책임을 나누|동시 요청 뒤|예산에 요청이 겹친|단계에 필요한 업무|캐시를 거치지 않는 경로|archive 테이블|CI의 메모리 부족|실패 처리를 다르게 두고|OpenSearch 2\.19·Kotlin으로|과정을 썼습니다|네 답을|Spring Cloud API Gateway|API Gateway·Security/u,
   );
 });
 
