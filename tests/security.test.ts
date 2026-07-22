@@ -12,7 +12,7 @@ import {
   setLoginCsrfCookie,
 } from "@/lib/admin/login-csrf";
 import { hashPassword, verifyPassword } from "@/lib/admin/password";
-import { editorPageResponse } from "@/lib/admin/page";
+import { editorPageResponse, loginPageResponse } from "@/lib/admin/page";
 import {
   adminCookieName,
   clearAdminSessionCookie,
@@ -129,4 +129,11 @@ test("editor keeps same-origin form metadata for native logout", async () => {
   assert.match(source, /<meta name="referrer" content="same-origin">/u);
   assert.match(source, /name="csrf" value="csrf-token-for-test"/u);
   assert.doesNotMatch(source, /__ADMIN_CSRF_/u);
+});
+
+test("admin login declares the shared inline favicon", async () => {
+  const response = loginPageResponse();
+  const source = await response.text();
+
+  assert.match(source, /<link rel="icon" href="data:image\/svg\+xml,[^"]+">/u);
 });

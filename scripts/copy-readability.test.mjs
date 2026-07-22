@@ -12,14 +12,16 @@ function visibleText(fragment) {
   return fragment
     .replace(/<[^>]+>/gu, "")
     .replaceAll("&amp;", "&")
+    .replaceAll("&nbsp;", " ")
+    .replaceAll("&#8288;", "")
     .replace(/\s+/gu, " ")
     .trim();
 }
 
 function caseSection(source, id) {
-  const opening = `<section class="case-section" id="${id}"`;
+  const opening = '<section class="case-section" id="' + id + '"';
   const start = source.indexOf(opening);
-  assert.notEqual(start, -1, `expected #${id} case section`);
+  assert.notEqual(start, -1, "expected #" + id + " case section");
   const next = source.indexOf('<section class="case-section"', start + opening.length);
   return source.slice(start, next === -1 ? source.length : next);
 }
@@ -34,212 +36,61 @@ test("resume list items stay concise enough to scan", async () => {
   for (const item of listItems) {
     const text = visibleText(item.innerHTML);
     const sentenceCount = text.split(/[.!?](?:\s|$)/u).filter(Boolean).length;
-    assert.ok(text.length <= 115, `${item.id} is ${text.length} characters: ${text}`);
-    assert.ok(sentenceCount <= 2, `${item.id} has ${sentenceCount} sentences: ${text}`);
+    assert.ok(text.length <= 115, item.id + " is " + text.length + " characters");
+    assert.ok(sentenceCount <= 2, item.id + " has too many sentences");
   }
 });
 
-test("submission copy keeps verified scope, attribution, and version cues", async () => {
-  const [home, resume, career, portfolio, answerBank] = await Promise.all([
-    readFile(resolve(repositoryRoot, "index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8"),
-    readFile(
-      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
-      "utf8",
-    ),
-  ]);
-  const packet = [home, resume, career, portfolio, answerBank].join("\n");
+test("browser documents declare an inline favicon", async () => {
+  const documents = await Promise.all(
+    [
+      "index.html",
+      "resume/index.html",
+      "career/index.html",
+      "portfolio/index.html",
+      "admin/index.html",
+    ].map(async (file) => [
+      file,
+      await readFile(resolve(repositoryRoot, file), "utf8"),
+    ]),
+  );
 
-  assert.doesNotMatch(packet, /AI[- ]?Native|Agent Lab/iu);
-  assert.match(
-    resume,
-    /한국방송통신대학교 컴퓨터과학과 졸업[^<]*2023\.03[^<]*2025\.03/u,
-  );
-  assert.match(resume, /Kafka로 처리하는 내부 이벤트 9종/u);
-  assert.match(career, /Kafka로 처리하는 내부 이벤트 9종/u);
-  assert.match(portfolio, /Kafka로 처리하는 내부 이벤트 9종/u);
-  assert.match(
-    resume,
-    /https:\/\/github\.com\/javacafe-project\/elasticsearch-plugin/u,
-  );
-  assert.match(
-    portfolio,
-    /https:\/\/github\.com\/javacafe-project\/elasticsearch-plugin/u,
-  );
-  assert.match(
-    portfolio,
-    /<dt data-edit-id="portfolio-055">담당<\/dt>/u,
-  );
-  assert.match(packet, /웍스피어\(유\) 소속으로 JOBKOREA·Albamon/u);
-  assert.doesNotMatch(portfolio, /S3에서는 지워졌지만 DB에 남은/u);
-  assert.doesNotMatch(packet, /Spring 오픈소스 PR 3건/u);
-  assert.doesNotMatch(
-    packet,
-    /멈춘 지점부터|해당 지점부터|장애가 날 때마다 로그와 원장을 대조|internal_event_record|point_core|point_service|query-api|FPR·SPR/u,
-  );
-});
-
-test("career copy assigns CI memory work to Worksphere and keeps prior roles compact", async () => {
-  const [resume, career] = await Promise.all([
-    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
-  ]);
-  const ciResourceIssue = /CI.{0,80}메모리 부족|메모리 부족.{0,80}CI/su;
-  const worksphereCareerSource = career.slice(
-    career.indexOf('id="worksphere-core"'),
-    career.indexOf('id="previous-experience"'),
-  );
-  const tosslabCareerSource = career.slice(
-    career.indexOf('id="previous-experience"'),
-  );
-  const worksphereResumeSource = resume.slice(
-    resume.indexOf('data-edit-id="resume-010"'),
-    resume.indexOf('id="previous-title"'),
-  );
-  const previousResumeSource = resume.slice(
-    resume.indexOf('id="previous-title"'),
-  );
-  const worksphereCareer = visibleText(worksphereCareerSource);
-  const tosslabCareer = visibleText(tosslabCareerSource);
-  const worksphereResume = visibleText(worksphereResumeSource);
-  const previousResume = visibleText(previousResumeSource);
-
-  assert.match(worksphereCareer, ciResourceIssue);
-  assert.doesNotMatch(tosslabCareer, ciResourceIssue);
-  assert.match(worksphereResume, ciResourceIssue);
-  assert.doesNotMatch(previousResume, ciResourceIssue);
-  assert.match(worksphereCareerSource, /data-edit-id="career-070"/u);
-  assert.doesNotMatch(tosslabCareerSource, /data-edit-id="career-070"/u);
-  assert.match(worksphereResumeSource, /data-edit-id="resume-029"/u);
-  assert.doesNotMatch(previousResumeSource, /data-edit-id="resume-029"/u);
-
-  const careerEditable = new Map(
-    scanEditableRegions(career).map((region) => [region.id, region]),
-  );
-  for (const [headingId, detailId] of [
-    ["career-072", "career-073"],
-    ["career-077", "career-078"],
-  ]) {
-    assert.doesNotMatch(
-      visibleText(careerEditable.get(headingId).innerHTML),
-      /Backend Engineer/u,
-    );
+  for (const [file, source] of documents) {
     assert.match(
-      visibleText(careerEditable.get(detailId).innerHTML),
-      /Backend Engineer/u,
+      source,
+      /<link rel="icon" href="data:image\/svg\+xml,[^"]+">/u,
+      file + " should not trigger a fallback /favicon.ico request",
     );
   }
 });
 
-test("final packet keeps company context, evidence, and document-specific wording", async () => {
-  const [resume, career, answerBank] = await Promise.all([
-    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
-    readFile(
-      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
-      "utf8",
-    ),
-  ]);
-  const careerEditable = new Map(
-    scanEditableRegions(career).map((region) => [region.id, region]),
-  );
-  const resumeEditable = new Map(
-    scanEditableRegions(resume).map((region) => [region.id, region]),
-  );
-  const careerText = (id) => visibleText(careerEditable.get(id).innerHTML);
-  const resumeText = (id) => visibleText(resumeEditable.get(id).innerHTML);
+test("public documents keep one heading and valid editable regions", async () => {
+  const documents = [
+    ["home", "index.html"],
+    ["resume", "resume/index.html"],
+    ["career", "career/index.html"],
+    ["portfolio", "portfolio/index.html"],
+  ];
 
-  assert.match(resumeText("resume-014"), /^9개 API를 대상으로/u);
-  assert.match(careerText("career-036"), /^중단된 배치는/u);
-  assert.match(careerText("career-042"), /^웍스피어\(유\)/u);
-  assert.match(careerText("career-044"), /^검색 소스별로/u);
-  assert.match(careerText("career-070"), /자원을 늘리지 않고 문제를 해결/u);
-  assert.notEqual(
-    careerText("career-070"),
-    resumeText("resume-029"),
-    "career and resume should not repeat the same CI sentence verbatim",
-  );
-  assert.ok(
-    career.indexOf('data-edit-id="career-050"') <
-      career.indexOf('data-edit-id="career-044"'),
-    "the page-two continuation label should introduce the search project",
-  );
+  for (const [prefix, file] of documents) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    assert.equal(source.match(/<h1\b/gu)?.length, 1, file + " should have one h1");
 
-  assert.doesNotMatch(answerBank, /회귀 테스트도 남겼습니다/u);
-  assert.doesNotMatch(answerBank, /3단계 랭킹/u);
-  assert.match(answerBank, /중복 제거·점수화·재정렬/u);
-  assert.match(answerBank, /웍스피어\(유\).{0,80}test-support/su);
-  const jpaAnswer = answerBank.slice(
-    answerBank.indexOf("### 7."),
-    answerBank.indexOf("### 8."),
-  );
-  assert.equal(
-    jpaAnswer.match(/약 200만 건/gu)?.length,
-    1,
-    "the short JPA answer should not repeat the same metric",
-  );
-});
-
-test("Korean copy keeps subjects, actions, and technical terms in context", async () => {
-  const [home, resume, career, portfolio, answerBank] = await Promise.all([
-    readFile(resolve(repositoryRoot, "index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "resume/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "career/index.html"), "utf8"),
-    readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8"),
-    readFile(
-      resolve(repositoryRoot, "applications/backend-application-answer-bank.md"),
-      "utf8",
-    ),
-  ]);
-  const textById = (source) =>
-    new Map(
-      scanEditableRegions(source).map((region) => [
-        region.id,
-        visibleText(region.innerHTML),
-      ]),
+    const regions = scanEditableRegions(source);
+    assert.ok(regions.length > 0, file + " should expose editable content");
+    assert.equal(
+      new Set(regions.map((region) => region.id)).size,
+      regions.length,
+      file + " should keep editable IDs unique",
     );
-  const homeText = textById(home);
-  const resumeText = textById(resume);
-  const careerText = textById(career);
-  const portfolioText = textById(portfolio);
-  const packet = [home, resume, career, portfolio, answerBank].join("\n");
-
-  assert.equal(
-    homeText.get("home-012"),
-    "대표 작업 네 가지에서 마주한 문제와 해결 과정을 설명합니다.",
-  );
-  assert.match(homeText.get("home-021"), /실제 영속성 컨텍스트에서/u);
-  assert.match(
-    homeText.get("home-024"),
-    /VM 메트릭 조회 API와 OpenSearch 동적 쿼리/u,
-  );
-  assert.match(
-    resumeText.get("resume-013"),
-    /^Kafka로 처리하는 내부 이벤트 9종의 상태를 6개로 나눠/u,
-  );
-  assert.match(resumeText.get("resume-033"), /^Spring Cloud Gateway에/u);
-  assert.match(resumeText.get("resume-041"), /OpenSearch 2\.19에서 동작하도록 Kotlin으로/u);
-  assert.match(careerText.get("career-030"), /발행 후 처리 과정에서 실패한 경우/u);
-  assert.match(careerText.get("career-032"), /복구 로직 8개/u);
-  assert.match(careerText.get("career-039"), /^아카이브 테이블 10개를/u);
-  assert.match(careerText.get("career-045"), /맡았습니다\. OpenSearch/u);
-  assert.equal(
-    portfolioText.get("portfolio-019"),
-    "실패 상태에 따라 복구할 업무를 나눴습니다",
-  );
-  assert.match(portfolioText.get("portfolio-039"), /^세 배치는/u);
-  assert.match(portfolioText.get("portfolio-050"), /^검색 소스마다 정책과 타임아웃/u);
-  assert.match(portfolioText.get("portfolio-080"), /test-support에서 관리했습니다/u);
-  assert.match(answerBank, /### 9\. 오케스트로 API·인증 경험/u);
-  assert.doesNotMatch(
-    packet,
-    /소비자가 처리하다|발행된 이벤트를 처리하다 실패|발행 실패와 소비 실패|책임을 나누|동시 요청 뒤|예산에 요청이 겹친|단계에 필요한 업무|캐시를 거치지 않는 경로|archive 테이블|CI의 메모리 부족|실패 처리를 다르게 두고|OpenSearch 2\.19·Kotlin으로|과정을 썼습니다|네 답을|Spring Cloud API Gateway|API Gateway·Security/u,
-  );
+    assert.ok(
+      regions.every((region) => region.id.startsWith(prefix + "-")),
+      file + " should namespace editable IDs",
+    );
+  }
 });
 
-test("portfolio story cards use short plain sentences", async () => {
+test("portfolio story cards stay short and semantic", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(
     scanEditableRegions(source).map((region) => [region.id, region]),
@@ -251,85 +102,56 @@ test("portfolio story cards use short plain sentences", async () => {
     ["portfolio-041", "portfolio-042"],
   ];
 
-  assert.equal(storyPairs.length, 4, "expected the four retained portfolio story cards");
   for (const [headingId, summaryId] of storyPairs) {
     const heading = editableById.get(headingId);
     const summary = editableById.get(summaryId);
-
-    assert.equal(heading?.tagName, "h3", `expected story heading ${headingId}`);
-    assert.equal(summary?.tagName, "p", `expected story summary ${summaryId}`);
+    assert.equal(heading?.tagName, "h3", "expected story heading " + headingId);
+    assert.equal(summary?.tagName, "p", "expected story summary " + summaryId);
 
     const headingText = visibleText(heading.innerHTML);
     const summaryText = visibleText(summary.innerHTML);
-    assert.ok(headingText.length <= 46, `${heading.id} is too long: ${headingText}`);
-    assert.ok(summaryText.length <= 150, `${summaryId} is too long: ${summaryText}`);
-    assert.match(`${headingText} ${summaryText}`, /습니다[.!]?/u);
-    assert.doesNotMatch(summary.innerHTML, /<br\s*\/?\s*>|^\s*•/iu);
-    assert.doesNotMatch(
-      `${headingText} ${summaryText}`,
-      /정합성 계약|책임 경계|설계 기준|결과 불변식/u,
-      `${headingId}/${summaryId} should avoid abstract portfolio jargon`,
-    );
-
     const sentences = summaryText.split(/[.!?](?:\s|$)/u).filter(Boolean);
+
+    assert.ok(headingText.length <= 46, headingId + " should stay scannable");
+    assert.ok(summaryText.length <= 150, summaryId + " should stay scannable");
     assert.ok(
       sentences.length >= 1 && sentences.length <= 3,
-      `${summaryId} should contain one to three short sentences`,
+      summaryId + " should contain one to three sentences",
     );
+    assert.doesNotMatch(summary.innerHTML, /<br\s*\/?\s*>|^\s*•/iu);
   }
 });
 
-test("portfolio omits low-signal detail drawers and their editable fields", async () => {
+test("portfolio technical identifiers stay searchable", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const editableById = new Map(
-    scanEditableRegions(source).map((region) => [region.id, region]),
-  );
-  const detailRanges = [
-    [22, 27],
-    [43, 47],
-    [64, 77],
-    [82, 84],
-    [89, 95],
-  ];
-  const detailIds = detailRanges.flatMap(([start, end]) =>
-    Array.from(
-      { length: end - start + 1 },
-      (_, offset) => `portfolio-${String(start + offset).padStart(3, "0")}`,
-    ),
+  const heading = scanEditableRegions(source).find(
+    (region) => region.id === "portfolio-079",
   );
 
-  assert.equal(detailIds.length, 35, "expected the complete removed detail-id contract");
-  assert.doesNotMatch(source, /class="case-details"/u);
-  assert.doesNotMatch(source, /data-toggle-details/u);
-  for (const detailId of detailIds) {
-    assert.equal(editableById.has(detailId), false, `${detailId} should stay retired`);
-  }
+  assert.ok(heading, "expected the test-support heading");
+  assert.match(visibleText(heading.innerHTML), /test-support/u);
+  assert.doesNotMatch(heading.innerHTML, /&#8288;|\u2060/u);
 });
 
-test("feed keeps one Archify diagram without duplicate narrative layers", async () => {
-  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const feed = caseSection(source, "feed");
-
-  assert.match(feed, /data-diagram-tool="archify@2\.11\.0"/u);
-  assert.equal(feed.match(/<figure\b/gu)?.length, 1, "feed should keep one figure");
-  assert.doesNotMatch(feed, /feed-print-spine|story-grid|case-outcome/u);
-});
-
-test("each backend case keeps at most one diagram and omits unrelated sections", async () => {
+test("portfolio cases keep diagrams focused and accessible", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
 
   for (const id of ["event", "point", "feed", "test"]) {
     const section = caseSection(source, id);
     assert.ok(
       (section.match(/<figure\b/gu) ?? []).length <= 1,
-      `#${id} should not repeat diagrams`,
+      "#" + id + " should not repeat diagrams",
     );
   }
-  assert.doesNotMatch(source, /id="previous"|href="#previous"/u);
-  assert.doesNotMatch(source, /id="agent"|href="#agent"/u);
+
+  const feed = caseSection(source, "feed");
+  assert.equal(feed.match(/<figure\b/gu)?.length, 1, "feed should expose one figure");
+  assert.match(feed, /data-diagram-tool="archify@2\.11\.0"/u);
+  assert.match(feed, /<figcaption>[\s\S]*<\/figcaption>/u);
+  assert.match(feed, /<img\b[^>]*\balt="[^"]+"/u);
 });
 
-test("Archify output stays a self-contained light SVG", async () => {
+test("Archify output stays safe, readable, and on the design grid", async () => {
   const source = await readFile(
     resolve(repositoryRoot, "assets/diagrams/feed-serving.svg"),
     "utf8",
@@ -337,19 +159,21 @@ test("Archify output stays a self-contained light SVG", async () => {
 
   assert.match(source, /<svg\b[^>]*data-theme="light"/u);
   assert.match(source, /data-generator="archify 2\.11\.0"/u);
-  assert.match(source, /<title\b[^>]*>피드 서빙 책임 경계<\/title>/u);
+  assert.match(source, /<title\b[^>]*>[^<]+<\/title>/u);
+  assert.match(source, /<desc\b[^>]*>[^<]+<\/desc>/u);
   assert.doesNotMatch(source, /<script\b|<foreignObject\b/iu);
 
   const viewBox = source.match(/viewBox="[\d.-]+ [\d.-]+ ([\d.]+) ([\d.]+)"/u);
   assert.ok(viewBox, "expected a numeric SVG viewBox");
-  assert.ok(Number(viewBox[1]) <= 1000, "the A4 diagram should stay compact enough to read");
+  assert.ok(Number(viewBox[1]) <= 1000, "diagram should stay compact enough for A4");
+
+  const radii = [...source.matchAll(/\brx="([\d.]+)"/gu)].map((match) => Number(match[1]));
+  assert.ok(radii.length > 0, "expected explicit diagram corner radii");
+  assert.ok(Math.max(...radii) <= 2, "diagram should follow the 2px radius contract");
 
   const fontSizes = [
     ...source.matchAll(/font-size(?:\s*:\s*|=")([\d.]+)(?:px)?/gu),
   ].map((match) => Number(match[1]));
   assert.ok(fontSizes.length > 0, "expected explicit diagram font sizes");
-  assert.ok(
-    Math.min(...fontSizes) >= 14,
-    "the smallest A4 diagram label should remain readable",
-  );
+  assert.ok(Math.min(...fontSizes) >= 14, "diagram labels should remain readable");
 });

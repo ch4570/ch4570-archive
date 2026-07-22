@@ -78,6 +78,7 @@ export function loginPageResponse(errorCode: string | null = null, csrf = "") {
   <meta name="theme-color" content="#f3f5f1">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <title>관리자 로그인 · 서민재</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/design-system.css">
   <link rel="stylesheet" href="/api/admin/assets/login.css">
 </head>

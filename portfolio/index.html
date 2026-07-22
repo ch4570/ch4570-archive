@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#11150f">
   <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 이벤트 복구, 포인트 원장·배치, 검색·캐시, 테스트 공통화 사례를 정리했습니다.">
   <title>서민재 · Backend Engineering Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -31,10 +32,10 @@
       <div class="container">
         <div class="portfolio-hero-grid">
           <div>
-            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">멈춘 작업을 다시 시작하고, 틀어진 데이터를 바로잡았습니다</h1>
+            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">멈춘 작업을 다시&nbsp;시작하고, 틀어진 데이터를 바로잡았습니다</h1>
             <p class="hero-copy" data-edit-id="portfolio-003">
               Java·Kotlin·Spring으로 백엔드를 개발합니다.
-              문제가 생긴 이유와 해결한 과정을 네 가지 작업으로 정리했습니다.
+              문제가&nbsp;생긴&nbsp;이유와 해결한 과정을 네 가지 작업으로 정리했습니다.
             </p>
           </div>
           <div class="portfolio-profile">
@@ -69,7 +70,7 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">01</span>
             <div>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">이벤트가 어디서 실패했는지 기록하고, 필요한 업무만 다시 실행했습니다</h2>
+              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">이벤트가 어디서 실패했는지 기록하고, 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
             </div>
           </header>
 
@@ -99,7 +100,7 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">02</span>
             <div>
-              <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">중단된 배치를 이어 처리하고 포인트 정합성을 검증했습니다</h2>
+              <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">중단된&nbsp;배치를 이어&nbsp;처리하고 포인트&nbsp;정합성을 검증했습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-030">
                 배치별 재시작 기준을 정하고 요청을 동시에 처리한 뒤 잔액·원장·예산이 맞는지 확인했습니다.
               </p>
@@ -132,7 +133,7 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">03</span>
             <div>
-              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스마다 실패를 처리하고 캐시 우회 경로를 만들었습니다</h2>
+              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스마다 실패를 처리하고 캐시&nbsp;우회&nbsp;경로를 만들었습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-050">검색 소스마다 정책과 타임아웃, 실패 처리 방식이 달랐습니다. 후보 조회·랭킹·캐시 저장 단계를 구분하고, 각 단계의 입력과 출력을 정리했습니다.</p>
             </div>
           </header>
@@ -166,16 +167,16 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">04</span>
             <div>
-              <h2 class="case-title" id="test-title" data-edit-id="portfolio-079">테스트마다 반복하던 준비 코드를 test-support로 모았습니다</h2>
+              <h2 class="case-title" id="test-title" data-edit-id="portfolio-079">테스트 준비 코드를 <span lang="en">test-support</span>로 모았습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-080">
                 공통 기반 클래스와 Mock·WebMvc·JPA용 클래스를 분리해 테스트마다 필요한 설정만 사용하게 했습니다.
-                Fixture 생성과 Mock 초기화, 느린 테스트 실행 여부는 test-support에서 관리했습니다.
+                Fixture 생성과 Mock 초기화, 느린 테스트 실행 여부는 <span lang="en">test-support</span>에서 관리했습니다.
               </p>
             </div>
           </header>
 
           <details class="diagram-disclosure" open>
-            <summary>test-support의 네 가지 테스트 진입점 보기</summary>
+            <summary><span lang="en">test-support</span>의 네 가지 테스트 진입점 보기</summary>
             <figure class="system-figure system-map system-map--matrix">
               <figcaption>
                 <div class="diagram-caption-title">
@@ -281,7 +282,7 @@
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">Java Cafe 기반 OpenSearch 한글 플러그인</a></h3>
-              <p data-edit-id="portfolio-118"><a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식하고, 한·영 자판 변환과 초성·자모 검색의 동작을 16개 예시로 확인했습니다.</p>
+              <p data-edit-id="portfolio-118"><a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다. 저장소에는 한·영 자판 변환과 초성·자모 검색을 다루는 assertion 예시 16개가 있습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-119"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">약 7만 건의 삭제 상태 불일치</a></h3>

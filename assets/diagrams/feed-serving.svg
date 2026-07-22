@@ -19,7 +19,7 @@
     </style>
   </defs>
 
-  <rect width="1000" height="360" rx="18" fill="#f8faf6"/>
+  <rect width="1000" height="360" rx="2" fill="#f8faf6"/>
   <text class="lane" x="36" y="28">요청·스냅샷 경로</text>
 
   <path class="flow" d="M222 89H282"/>
@@ -31,19 +31,19 @@
   <path class="flow" d="M722 269H782"/>
   <path class="flow" d="M877 219V174H627V134"/>
 
-  <rect class="node" x="32" y="44" width="190" height="90" rx="10"/>
+  <rect class="node" x="32" y="44" width="190" height="90" rx="2"/>
   <text class="title" x="127" y="82" text-anchor="middle">Feed API</text>
   <text class="detail" x="127" y="108" text-anchor="middle">요청 문맥</text>
 
-  <rect class="node-accent" x="282" y="44" width="190" height="90" rx="10"/>
+  <rect class="node-accent" x="282" y="44" width="190" height="90" rx="2"/>
   <text class="title" x="377" y="82" text-anchor="middle">Orchestrator</text>
   <text class="detail" x="377" y="108" text-anchor="middle">조회·보충·우회 결정</text>
 
-  <rect class="node-data" x="532" y="44" width="190" height="90" rx="10"/>
+  <rect class="node-data" x="532" y="44" width="190" height="90" rx="2"/>
   <text class="title" x="627" y="82" text-anchor="middle">Snapshot</text>
   <text class="detail" x="627" y="108" text-anchor="middle">Hit · Empty · Unavailable</text>
 
-  <rect class="node" x="782" y="44" width="186" height="90" rx="10"/>
+  <rect class="node" x="782" y="44" width="186" height="90" rx="2"/>
   <text class="title" x="875" y="82" text-anchor="middle">Feed response</text>
   <text class="detail" x="875" y="108" text-anchor="middle">스냅샷 결과 반환</text>
 
@@ -51,19 +51,19 @@
   <text class="hint" x="398" y="164">Empty</text>
   <text class="hint" x="677" y="164">새 Snapshot</text>
 
-  <rect class="node" x="32" y="219" width="190" height="100" rx="10"/>
+  <rect class="node" x="32" y="219" width="190" height="100" rx="2"/>
   <text class="title" x="127" y="259" text-anchor="middle">검색 소스 9개</text>
   <text class="detail" x="127" y="286" text-anchor="middle">타임아웃·실패 처리</text>
 
-  <rect class="node-accent" x="282" y="219" width="190" height="100" rx="10"/>
+  <rect class="node-accent" x="282" y="219" width="190" height="100" rx="2"/>
   <text class="title" x="377" y="259" text-anchor="middle">FPR</text>
   <text class="detail" x="377" y="286" text-anchor="middle">중복·노출 이력 제거</text>
 
-  <rect class="node-data" x="532" y="219" width="190" height="100" rx="10"/>
+  <rect class="node-data" x="532" y="219" width="190" height="100" rx="2"/>
   <text class="title" x="627" y="259" text-anchor="middle">SPR</text>
   <text class="detail" x="627" y="286" text-anchor="middle">후보 점수화</text>
 
-  <rect class="node-accent" x="782" y="219" width="186" height="100" rx="10"/>
+  <rect class="node-accent" x="782" y="219" width="186" height="100" rx="2"/>
   <text class="title" x="875" y="259" text-anchor="middle">Re-Rank</text>
   <text class="detail" x="875" y="286" text-anchor="middle">최종 순서 재정렬</text>
 </svg>
