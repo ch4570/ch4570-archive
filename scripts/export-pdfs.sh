@@ -118,9 +118,9 @@ verify_pdf() {
     fi
 
     case "$document_name" in
-      resume) expected_pages=2 ;;
-      career-description) expected_pages=3 ;;
-      portfolio) expected_pages=7 ;;
+      resume) expected_pages=1 ;;
+      career-description) expected_pages=2 ;;
+      portfolio) expected_pages=3 ;;
       *) expected_pages='' ;;
     esac
     if [ -n "$expected_pages" ] && [ "$pages" -ne "$expected_pages" ]; then

@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 백엔드 엔지니어 이력서. Java·Kotlin·Spring 기반의 이벤트, 배치, 검색, 캐시, 테스트 설계 경험과 AI Native Engineering 역량을 소개합니다.">
+  <meta name="description" content="서민재 백엔드 엔지니어 이력서. Java·Kotlin·Spring 기반의 이벤트 복구, 포인트 원장·배치, 검색·캐시, JPA 오류 대응 경험을 담았습니다.">
   <title>서민재 · Backend Engineer Resume</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -30,12 +31,12 @@
     <article class="resume-document resume-document--ats">
       <header class="resume-hero">
         <div>
-          <p class="eyebrow eyebrow-coral" data-edit-id="resume-001">Backend Engineer · AI-Native Engineering</p>
+          <p class="eyebrow eyebrow-coral" data-edit-id="resume-001">Backend Engineer · Java / Kotlin / Spring</p>
           <h1 data-edit-id="resume-002">서민재</h1>
           <p class="resume-hero-role" data-edit-id="resume-003">Java · Kotlin · Spring · Kafka · Redis · OpenSearch</p>
           <p class="resume-hero-copy" data-edit-id="resume-004">
-            Java·Kotlin·Spring으로 이벤트·배치·검색·캐시를 설계·운영했습니다.
-            실패 상태·재시작 기준·회귀 테스트를 코드에 남기고, 반복 개발 절차는 에이전트·스킬로 만들고 설치·구조·행동 계약으로 검증합니다.
+            약 3년 동안 Java·Kotlin·Spring Boot로 백엔드 API를 개발했습니다.
+            Kafka 이벤트 복구와 Spring Batch 재시작을 구현했고, Mock 테스트에서는 드러나지 않던 JPA 오류를 재현해 약 200만 건의 데이터를 바로잡았습니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -43,19 +44,19 @@
           <a href="https://github.com/ch4570">github.com/ch4570</a>
           <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
           <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
-          <a href="https://ch4570.github.io/ch4570-archive/career/">경력기술서</a>
-          <a href="https://ch4570.github.io/ch4570-archive/portfolio/">포트폴리오</a>
+          <a href="https://ch4570-archive.vercel.app/career/">경력기술서</a>
+          <a href="https://ch4570-archive.vercel.app/portfolio/">포트폴리오</a>
           <span>Seoul, Korea</span>
         </address>
       </header>
 
       <div class="resume-ats-body">
         <section class="resume-section resume-scan-section" aria-labelledby="capability-title">
-          <h2 class="resume-section-title" id="capability-title" data-edit-id="resume-005">핵심 역량</h2>
+          <h2 class="resume-section-title" id="capability-title" data-edit-id="resume-005">기술</h2>
           <div class="resume-capability-list">
-            <p data-edit-id="resume-006"><b>Backend Engineering</b> 이벤트 상태 모델, 재시도·복구, Spring Batch, 검색·랭킹, 캐시 무효화, 장애 우회</p>
-            <p data-edit-id="resume-007"><b>Languages &amp; Data</b> Java, Kotlin, SQL, Spring Boot, JPA/Hibernate, Kafka, Redis, OpenSearch, MySQL</p>
-            <p data-edit-id="resume-008"><b>Testing &amp; AI Engineering</b> JUnit 5, Kotest, MockMvc, Testcontainers, Agent/Skill Architecture, MCP, Evaluation Contracts</p>
+            <p data-edit-id="resume-006"><b>Backend</b> Java, Kotlin, Spring Boot, Spring Batch, JPA/Hibernate, SQL</p>
+            <p data-edit-id="resume-007"><b>Data &amp; Messaging</b> Kafka, Redis, OpenSearch, MySQL, PostgreSQL</p>
+            <p data-edit-id="resume-008"><b>Test &amp; Delivery</b> JUnit 5, Kotest, MockMvc, Testcontainers, ArchUnit, Jenkins, CI</p>
           </div>
         </section>
 
@@ -64,31 +65,15 @@
           <article class="experience-block resume-role-block">
             <header class="experience-head">
               <div>
-                <h3 data-edit-id="resume-010">웍스피어(유) · Backend Engineer</h3>
+                <h3 data-edit-id="resume-010">웍스피어(유) · Backend Engineer · 2025.06 — 현재</h3>
                 <p data-edit-id="resume-011">JOBKOREA / Albamon Platform · Backend Engineering</p>
               </div>
-              <time datetime="2025-06" data-edit-id="resume-012">2025.06 — 현재</time>
             </header>
             <ul class="bullet-list resume-achievement-list">
-              <li data-edit-id="resume-013"><strong>실패 업무만 재실행</strong>하도록 이벤트 9종을 6개 상태로 추적했습니다. 저장된 payload 기반 복구 전략 8개와 15분 정체 알림을 구현했습니다.</li>
-              <li data-edit-id="resume-014"><strong>9개 API·13개 동시성 시나리오</strong>로 동시성 계약을 검증했습니다. 포인트 소멸은 페이지 단위, 원장 아카이브는 10개 테이블 순서로 재시작 기준을 나눴습니다.</li>
-              <li data-edit-id="resume-015"><strong>Redis 장애에도 캐시 없이 같은 랭킹을 실행</strong>했습니다. 9개 소스는 후보 조회 포트, FPR·SPR·Re-Rank는 공통 pull, Snapshot·FPR·SPR 캐시는 상태 포트로 분리했습니다.</li>
-              <li data-edit-id="resume-016"><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>로 공통 동작을 검증했습니다. Fixture·Mock·WebMvc·JPA 설정은 test-support로 통합했습니다.</li>
-            </ul>
-          </article>
-        </section>
-
-        <section class="resume-section" aria-labelledby="ai-title">
-          <h2 class="resume-section-title" id="ai-title" data-edit-id="resume-017">AI Engineering · Agent Lab</h2>
-          <article class="resume-project-highlight">
-            <div>
-              <p class="project-kicker" data-edit-id="resume-018">웍스피어 · 팀 개발 시스템</p>
-              <h3 data-edit-id="resume-019">백엔드 판단과 개발 절차를 이식 가능한 에이전트·스킬 자산으로 구조화</h3>
-            </div>
-            <ul class="bullet-list resume-achievement-list">
-              <li data-edit-id="resume-020">의존 자산까지 함께 설치하도록 Agent Lab의 15개 에이전트·32개 스킬을 manifest로 연결했습니다.</li>
-              <li data-edit-id="resume-021">설치 회귀 52개·Codex 탐색 32개를 통과하고, 구조 케이스 7개·행동 케이스 10개를 정적 계약으로 검증했습니다.</li>
-              <li data-edit-id="resume-022">메모리·자가 수정은 자동화하지 않았습니다. 변경 근거·평가 결과·사람 승인이 있어야 다음 설치에 반영됩니다.</li>
+              <li data-edit-id="resume-013"><strong>Kafka로 처리하는 내부 이벤트 9종의 상태를 6개로 나눠</strong> 발행 실패와 처리 실패를 구분했습니다. 실패한 업무만 다시 실행하도록 하고, 15분&nbsp;이상 멈춘 이벤트는 알리도록 했습니다.</li>
+              <li data-edit-id="resume-014"><strong>9개 API를 대상으로 13개 동시성 시나리오를 검증</strong>했습니다. 같은 락 키를 사용하거나 같은 예산을 차감하는 요청을 동시에 보낸 뒤에도 잔액·원장·후속 이벤트가 맞는지 확인했습니다.</li>
+              <li data-edit-id="resume-015"><strong>OpenSearch·Redis 기반 개인화 피드를 후보 검색·랭킹·캐시 단계로 나누고</strong>, 9개 검색 소스의 실패 처리와 Redis 캐시를 우회하는 경로를 구현했습니다.</li>
+              <li data-edit-id="resume-029"><strong>느린 테스트를 분리하고 Spring 컨텍스트의 재사용·초기화 방식을 조정해</strong> CI에서 발생한 메모리 부족 문제를 해소했습니다.</li>
             </ul>
           </article>
         </section>
@@ -98,72 +83,54 @@
           <div class="resume-role-list">
             <article class="resume-role-block">
               <header class="experience-head">
-                <div><h3 data-edit-id="resume-024">토스랩 · JANDI Backend</h3><p data-edit-id="resume-025">Test Architecture · Spring Boot Migration · CI</p></div>
-                <time datetime="2024-06" data-edit-id="resume-026">2024.06 — 2025.04</time>
+                <div><h3 data-edit-id="resume-024">토스랩 · JANDI Backend · 2024.06&nbsp;—&nbsp;2025.04</h3><p data-edit-id="resume-025">Test Architecture · Spring Boot Migration</p></div>
               </header>
               <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-027">Drive-Service 테스트를 0개에서 160개 이상으로 늘리고 Spring Boot를 2.3.8에서 3.3.3으로 올렸습니다.</li>
-                <li data-edit-id="resume-028">약 200만 건의 데이터를 바로잡았습니다. Mock 테스트가 놓친 JPA 변경 감지 오류를 실제 구현 테스트로 재현하고 보정 스크립트를 작성했습니다.</li>
-                <li data-edit-id="resume-029">자원 증설 없이 CI 테스트를 안정화했습니다. 실행·컨텍스트 재사용과 초기화 구조를 개선해 메모리 부족을 해결했습니다.</li>
+                <li data-edit-id="resume-028"><strong>Mock 테스트로는 드러나지 않던 JPA 변경 감지 오류</strong>를 실제 영속성 컨텍스트에서 재현하고, 보정 스크립트로 잘못 저장된 데이터 약 200만&nbsp;건을 바로잡았습니다.</li>
+                <li data-edit-id="resume-027"><strong>Spring Boot 2.3.8에서 3.3.3으로 전환하며</strong> Drive-Service 테스트를 0개에서 160개 이상으로 늘렸습니다.</li>
               </ul>
             </article>
 
             <article class="resume-role-block">
               <header class="experience-head">
-                <div><h3 data-edit-id="resume-030">오케스트로 · Backend Engineer</h3><p data-edit-id="resume-031">IDP · Vista</p></div>
-                <time datetime="2023-09" data-edit-id="resume-032">2023.09 — 2024.05</time>
+                <div><h3 data-edit-id="resume-030">오케스트로 · Backend Engineer · 2023.09 — 2024.05</h3><p data-edit-id="resume-031">IDP · Vista</p></div>
               </header>
               <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-033">Spring Cloud API Gateway와 Spring Security·JWT 인증·인가를 구현했습니다. SonarQube·Jenkins 연동 API도 개발했습니다.</li>
-                <li data-edit-id="resume-034">VM 메트릭 조회 API와 조건별 OpenSearch 쿼리를 구현했습니다.</li>
+                <li data-edit-id="resume-033">Spring Cloud Gateway에 Spring Security·JWT 기반 인증·인가를 적용하고, SonarQube·Jenkins 연동 API를 구현했습니다.</li>
+                <li data-edit-id="resume-034">VM 메트릭 조회 API와 조건별 OpenSearch 동적 쿼리를 구현했습니다.</li>
               </ul>
             </article>
 
             <article class="resume-role-block resume-role-compact">
               <header class="experience-head">
-                <div><h3 data-edit-id="resume-035">즐거운 · Backend Engineer</h3><p data-edit-id="resume-036">자사 서비스 개발·운영</p></div>
-                <time datetime="2022-11" data-edit-id="resume-037">2022.11 — 2023.02</time>
+                <div class="resume-compact-company">
+                  <h3 data-edit-id="resume-035">즐거운 · Backend Engineer · 2022.11 — 2023.02</h3>
+                  <p data-edit-id="resume-036">자사 서비스 개발·운영</p>
+                </div>
               </header>
-              <ul class="bullet-list resume-achievement-list">
-                <li data-edit-id="resume-038">자사 서비스 백엔드 기능을 개발·운영하고 운영 이슈를 해결했습니다.</li>
-              </ul>
             </article>
           </div>
         </section>
 
-        <section class="resume-section" aria-labelledby="opensource-title">
-          <h2 class="resume-section-title" id="opensource-title" data-edit-id="resume-039">오픈소스 프로젝트</h2>
+        <section class="resume-section resume-additional-section" aria-labelledby="opensource-title">
+          <h2 class="resume-section-title" id="opensource-title" data-edit-id="resume-039">추가 프로젝트 · 오픈소스</h2>
           <div class="resume-project-list">
             <article>
-              <h3 data-edit-id="resume-040"><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 분석 플러그인</a></h3>
-              <p data-edit-id="resume-041">한·영 자판 변환과 초성·자모 검색을 OpenSearch 2.19와 Kotlin으로 옮기고 16개 예시로 동작을 확인했습니다.</p>
+              <h3 data-edit-id="resume-042">Spring 오픈소스 · 개선 3건 반영</h3>
+              <p data-edit-id="resume-043"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에 불변 컬렉션 처리 개선, 하드코딩 제거, 자원 정리에 관한 제안을 보냈고 세 건 모두 반영됐습니다.</p>
             </article>
             <article>
-              <h3 data-edit-id="resume-042">Spring OSS · 개선 제안 3건 반영</h3>
-              <p data-edit-id="resume-043"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>의 불변 컬렉션 처리, 하드코딩, 자원 정리 로직을 개선했습니다.</p>
+              <h3 data-edit-id="resume-040"><a href="https://github.com/ch4570/open-search-custom-plugin">Java Cafe 기반 OpenSearch 한글 플러그인</a></h3>
+              <p data-edit-id="resume-041"><a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다. 저장소에는 한·영 자판 변환과 초성·자모 검색을 다루는 assertion 예시 16개가 있습니다.</p>
             </article>
           </div>
         </section>
 
         <section class="resume-section resume-meta-section" aria-labelledby="activity-title">
-          <h2 class="resume-section-title" id="activity-title" data-edit-id="resume-044">발표 · 오픈소스 · 학력</h2>
-          <div class="resume-meta-grid">
-            <div>
-              <h3 data-edit-id="resume-045">공개 활동</h3>
-              <ul class="activity-list">
-                <li data-edit-id="resume-046"><strong><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 Speaker</a></strong>‘우리팀을 위한 Spring Test 만들기’ 발표</li>
-                <li data-edit-id="resume-047"><strong><a href="https://velog.io/@ch4570/posts">기술 글 156편</a></strong>Java·JPA·테스트 중심, 2026.07 기준</li>
-                <li data-edit-id="resume-048"><strong>Spring OSS 개선 3건 반영</strong>Spring Kafka · Boot · Data JPA</li>
-              </ul>
-            </div>
-            <div>
-              <h3 data-edit-id="resume-049">학력 · 자격</h3>
-              <ul class="credential-list">
-                <li data-edit-id="resume-050"><strong>한국방송통신대학교</strong>컴퓨터과학과 졸업 · 2023.03 — 2025.03</li>
-                <li data-edit-id="resume-051"><strong>Certified Kubernetes Administrator</strong>2024.09</li>
-                <li data-edit-id="resume-052"><strong>SQLD</strong>2022.06</li>
-              </ul>
-            </div>
+          <h2 class="resume-section-title" id="activity-title" data-edit-id="resume-044">발표 · 학력 · 자격</h2>
+          <div class="resume-meta-lines">
+            <p data-edit-id="resume-046"><b>발표·글</b><span><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 발표</a> ‘우리팀을 위한 Spring Test 만들기’ · <a href="https://velog.io/@ch4570/posts">기술 글 156편</a></span></p>
+            <p data-edit-id="resume-050"><b>학력·자격</b><span>한국방송통신대학교 컴퓨터과학과 졸업 · 2023.03 — 2025.03 · CKA 2024.09 · SQLD 2022.06</span></p>
           </div>
         </section>
       </div>

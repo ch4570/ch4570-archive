@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 백엔드 엔지니어 경력기술서. 회사별 역할과 이벤트, 배치, 검색, 캐시, 테스트, AI Engineering 프로젝트의 담당 범위와 구현 내용을 정리했습니다.">
+  <meta name="description" content="서민재 백엔드 엔지니어 경력기술서. 이벤트 복구, 포인트 원장·배치, 검색·캐시, JPA 오류 대응에서 맡은 일을 정리했습니다.">
   <title>서민재 · Backend Engineer Career Description</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -30,13 +31,12 @@
     <article class="resume-document career-document">
       <header class="resume-hero career-hero">
         <div>
-          <p class="eyebrow eyebrow-coral" data-edit-id="career-001">Backend Engineer · Career Description</p>
+          <p class="eyebrow eyebrow-coral" data-edit-id="career-001">경력기술서</p>
           <h1 data-edit-id="career-002">서민재</h1>
-          <p class="resume-hero-role" data-edit-id="career-003">BE Engineering · Reliability · Search &amp; Data · AI Engineering</p>
+          <p class="resume-hero-role" data-edit-id="career-003">Backend Engineer · Java / Kotlin / Spring</p>
           <p class="resume-hero-copy" data-edit-id="career-004">
-            Java·Kotlin·Spring으로 이벤트·배치·검색·캐시 시스템을 설계·운영했습니다.
-            <strong>실패 지점과 재시작 기준</strong>은 코드에 남기고,
-            코드 탐색·설계 검토·테스트는 <strong>에이전트와 스킬</strong>로 구조화해 재사용합니다.
+            Java·Kotlin·Spring으로 이벤트 처리와 배치, 검색·캐시 기능을 개발했습니다.
+            이벤트 처리에서는 실패한 단계에 따라 필요한 업무만 다시 실행했고, JPA 오류는 실제 영속성 컨텍스트에서 재현해 수정했습니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -44,33 +44,14 @@
           <a href="https://github.com/ch4570">github.com/ch4570</a>
           <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
           <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
-          <a href="https://ch4570.github.io/ch4570-archive/resume/">이력서</a>
-          <a href="https://ch4570.github.io/ch4570-archive/portfolio/">포트폴리오</a>
+          <a href="https://ch4570-archive.vercel.app/resume/">이력서</a>
+          <a href="https://ch4570-archive.vercel.app/portfolio/">포트폴리오</a>
           <span>Seoul, Korea</span>
         </address>
       </header>
 
       <div class="career-body">
-        <section class="career-overview" aria-labelledby="career-summary-title">
-          <h2 class="resume-section-title" id="career-summary-title" data-edit-id="career-005">경력 요약</h2>
-          <div class="career-strengths">
-            <article>
-              <span>01 · Reliability</span>
-              <h3 data-edit-id="career-006">실패 지점과 재시작 기준을 설계합니다.</h3>
-              <p data-edit-id="career-007">이벤트 상태, 복구 전략, 배치 순서를 코드와 테스트로 관리했습니다.</p>
-            </article>
-            <article>
-              <span>02 · Search &amp; Data</span>
-              <h3 data-edit-id="career-008">검색·랭킹·캐시의 경계를 먼저 세웁니다.</h3>
-              <p data-edit-id="career-009">피드 전 과정을 단계별 계약으로 나누고 의존 방향을 테스트로 고정했습니다.</p>
-            </article>
-            <article>
-              <span>03 · AI-Native</span>
-              <h3 data-edit-id="career-010">반복한 개발 절차를 다른 저장소에 설치 가능한 자산으로 만듭니다.</h3>
-              <p data-edit-id="career-011">에이전트·스킬·평가 계약을 manifest로 연결하고, 변경 전 사람 검토를 필수화했습니다.</p>
-            </article>
-          </div>
-
+        <section class="career-overview" aria-label="경력">
           <div class="career-history" aria-label="전체 경력">
             <article><time datetime="2025-06" data-edit-id="career-012">2025.06 — 현재</time><h3 data-edit-id="career-013">웍스피어(유)</h3><p data-edit-id="career-014">JOBKOREA / Albamon Platform · Backend Engineer</p></article>
             <article><time datetime="2024-06" data-edit-id="career-015">2024.06 — 2025.04</time><h3 data-edit-id="career-016">토스랩</h3><p data-edit-id="career-017">JANDI · Backend Engineer</p></article>
@@ -78,147 +59,88 @@
             <article><time datetime="2022-11" data-edit-id="career-021">2022.11 — 2023.02</time><h3 data-edit-id="career-022">즐거운</h3><p data-edit-id="career-023">Backend Engineer</p></article>
           </div>
 
-          <figure class="system-figure career-decision-map" aria-labelledby="decision-map-title">
-            <figcaption>
-              <div class="diagram-caption-title">
-                <b id="decision-map-title">백엔드 운영과 AI 개발에 같은 판단 순서를 적용합니다.</b>
-                <span>관찰한 문제를 경계로 바꾸고, 실행 결과로 다시 확인합니다.</span>
-              </div>
-            </figcaption>
-            <div class="system-map__canvas" role="group" aria-label="문제 관찰, 경계 설계, 결과 검증으로 이어지는 엔지니어링 판단 흐름">
-              <div class="map-sequence career-decision-flow">
-                <div class="map-node">
-                  <span class="map-node__type">01 · 관찰</span>
-                  <strong>문제가 드러나는 지점을 찾습니다.</strong>
-                  <small>실패 위치 · 조건 변화 · 반복 설정 · 실행 근거</small>
-                </div>
-                <div class="map-edge"><span>구체화</span></div>
-                <div class="map-node map-node--store">
-                  <span class="map-node__type">02 · 경계 설계</span>
-                  <strong>다시 시작할 기준을 코드로 남깁니다.</strong>
-                  <small>상태 · 재시작 · 캐시 무효화 · 승인 계약</small>
-                </div>
-                <div class="map-edge map-edge--async"><span>실행</span></div>
-                <div class="map-node map-node--result">
-                  <span class="map-node__type">03 · 검증</span>
-                  <strong>끝난 뒤의 상태로 판단합니다.</strong>
-                  <small>운영 신호 · 결과 불변식 · 회귀 · 평가 계약</small>
-                </div>
-              </div>
-              <div class="map-contract-rail career-decision-evidence" aria-label="판단 흐름을 검증한 대표 근거">
-                <div><b>운영 신호</b><span>정체 이벤트 집계</span></div>
-                <div><b>동시성</b><span>API별 결과 불변식</span></div>
-                <div><b>설치 회귀</b><span>설치 자산 누락 검사</span></div>
-                <div><b>평가 계약</b><span>구조·행동 계약 검사</span></div>
-              </div>
-            </div>
-          </figure>
         </section>
 
         <section class="career-company-block career-print-page" id="worksphere-core" aria-labelledby="worksphere-title">
           <header class="career-company-head">
             <div>
-              <p class="project-kicker" data-edit-id="career-024">Current Role · BE Engineering</p>
-              <h2 id="worksphere-title" data-edit-id="career-025">웍스피어(유) · Backend Engineer</h2>
-              <p data-edit-id="career-026">JOBKOREA·Albamon Platform에서 이벤트 신뢰성·배치·검색·캐시·공통 테스트 기반을 설계·구현합니다.</p>
+              <h2 id="worksphere-title" data-edit-id="career-025">웍스피어(유) · Backend&nbsp;Engineer</h2>
+              <p data-edit-id="career-026">웍스피어(유) 소속으로 JOBKOREA·Albamon 플랫폼의 이벤트 복구와 포인트 원장·배치, 검색·캐시 업무를 맡고 있습니다.</p>
             </div>
             <time datetime="2025-06" data-edit-id="career-027">2025.06 — 현재</time>
           </header>
 
           <article class="career-project">
             <header>
-              <p class="project-kicker" data-edit-id="career-028">Point Platform · Event Reliability</p>
-              <h3 data-edit-id="career-029">이벤트 실패 지점을 6개 상태로 남기고 8개 복구 전략을 연결했습니다.</h3>
+              <h3 data-edit-id="career-029">이벤트 처리의 실패 단계를 기록하고, 필요한 업무만 다시 실행했습니다.</h3>
             </header>
-            <p data-edit-id="career-030">발행 실패와 소비 중 실패의 재시작 위치를 구분하도록 처리 단계를 이벤트 레코드에 기록했습니다.</p>
+            <p data-edit-id="career-030">이벤트 발행에 실패한 경우와 발행 후 처리 과정에서 실패한 경우는 확인해야 할 데이터와 복구할 업무가 달랐습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-031"><strong>내부 이벤트 9종·6개 상태</strong>로 생성부터 복구 불가 실패까지 기록했습니다.</li>
-              <li data-edit-id="career-032"><strong>8개 수동 복구 전략</strong>으로 저장된 payload를 이벤트 유형별 처리 경로에 전달했습니다.</li>
-              <li data-edit-id="career-033"><strong>15분 정체 알림</strong>으로 오래 멈춘 이벤트를 유형별로 모아 Slack에 알렸습니다.</li>
+              <li data-edit-id="career-031"><strong>Kafka로 처리하는 내부 이벤트 9종의 상태를 6개로 나눠 기록</strong>해 발행 실패와 처리 실패를 구분했습니다.</li>
+              <li data-edit-id="career-032"><strong>저장한 payload로 복구 로직 8개를 구현</strong>해 실패한 업무만 다시 실행하도록 했습니다.</li>
+              <li data-edit-id="career-033"><strong>15분 넘게 멈춘 이벤트</strong>는 유형별로 묶어 Slack으로 알림을 보냈습니다.</li>
             </ul>
-            <p class="career-note" data-edit-id="career-034"><b>운영 기준</b> 전송 실패, 처리 실패, 장기 미처리를 구분해 멈춘 위치부터 복구합니다.</p>
           </article>
 
-          <article class="career-project">
-            <header>
-              <p class="project-kicker" data-edit-id="career-035">Point Ledger · Batch / Archive</p>
-              <h3 data-edit-id="career-036">배치 재시작 위치와 분산락 경쟁 후 상태를 테스트로 고정했습니다.</h3>
-            </header>
-            <p data-edit-id="career-037">동시 요청은 처리 완료 후 잔액·상태로 결과를 검증했습니다.</p>
-            <ul class="bullet-list">
-              <li data-edit-id="career-038"><strong>페이지 기반 Chunk 처리</strong>로 포인트 소멸의 조회와 쓰기 단위를 나눴습니다.</li>
-              <li data-edit-id="career-039"><strong>archive 테이블 10개</strong>의 이관 순서와 재시작 기준을 테스트로 고정했습니다.</li>
-              <li data-edit-id="career-040"><strong>9개 API·13개 동시성 시나리오</strong>에서 잔액·원장 상태·후속 이벤트를 검증했습니다.</li>
-            </ul>
-          </article>
         </section>
 
         <section class="career-company-block career-print-page" id="worksphere-serving" aria-labelledby="serving-title">
           <header class="career-company-head career-company-head--continuation">
             <div>
-              <p class="project-kicker" data-edit-id="career-041">웍스피어 · Backend Engineering</p>
-              <h2 id="serving-title" data-edit-id="career-042">검색·캐시와 테스트 기반</h2>
+              <h2 id="serving-title" data-edit-id="career-042">웍스피어(유) · 배치&#8288;·&#8288;검색&#8288;·&#8288;테스트</h2>
             </div>
           </header>
 
           <article class="career-project">
             <header>
-              <p class="project-kicker" data-edit-id="career-043">Feed &amp; Search · Serving / Retrieval</p>
-              <h3 data-edit-id="career-044">후보 수집부터 노출까지, 개인화 피드의 온라인 서빙 구조를 세웠습니다.</h3>
+              <h3 data-edit-id="career-036">중단된 배치는 이어서 실행하고, 동시&nbsp;요청이 겹쳐도 잔액과 원장이 맞는지 검증했습니다.</h3>
             </header>
-            <p data-edit-id="career-045">캐시 상태에 따라 서빙 흐름을 바꾸도록 검색·랭킹·캐시를 포트와 단계별 계약으로 분리했습니다. 각 랭킹 단계는 계산을, FPR·SPR는 후보 풀 캐시를 담당합니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-046"><strong>한 소스가 지연·실패해도 나머지 후보를 유지</strong>하도록 9개 검색 소스의 필터·정렬·벡터 규칙을 분리하고 OpenSearch 호출을 공통 어댑터로 격리했습니다.</li>
-              <li data-edit-id="career-047"><strong>FPR·SPR·Re-Rank</strong>를 공통 pull 계약으로 연결하고, Snapshot·FPR·SPR 3종 캐시의 적재·소비 책임을 단계별로 분리했습니다.</li>
-              <li data-edit-id="career-048"><strong>query-api 모듈</strong>을 OpenSearch 연동 전용으로 격리하고, ArchUnit으로 의존 방향과 순환 금지를 검증했습니다.</li>
+              <li data-edit-id="career-038"><strong>포인트 소멸 대상</strong>을 한 번에 읽지 않고 페이지 단위로 처리했습니다.</li>
+              <li data-edit-id="career-039"><strong>아카이브 테이블 10개를</strong> 참조 순서대로 옮기고, 작업이 중단돼도 이어서 실행하도록 했습니다.</li>
+              <li data-edit-id="career-040"><strong>9개 API를 대상으로 13개 동시성 시나리오를 구성</strong>했습니다. 같은 락 키를 사용하거나 같은 예산을 차감하는 요청을 동시에 보낸 뒤에도 잔액·원장·후속 이벤트가 맞는지 확인했습니다.</li>
             </ul>
-            <p class="career-note" data-edit-id="career-049"><b>설계 기준</b> 후보 수보다 검색 소스·랭킹 정책 변경과 캐시 장애의 파급 범위를 먼저 봤습니다.</p>
           </article>
 
           <article class="career-project">
             <header>
-              <p class="project-kicker" data-edit-id="career-050">Engineering Platform · Test Support</p>
-              <h3 data-edit-id="career-051">공통 모듈과 사용 규칙으로 테스트 진입점을 정리했습니다.</h3>
+              <p class="project-kicker" data-edit-id="career-050">웍스피어(유) · 계속</p>
+              <h3 data-edit-id="career-044">검색 소스별로 타임아웃과 실패 처리 방식을 정하고, Redis 캐시를 우회하는 경로를 구현했습니다.</h3>
             </header>
-            <p data-edit-id="career-052">반복 설정을 공통화하고, 테스트 선택 기준과 CI 실행 범위를 문서로 남겼습니다.</p>
+            <p data-edit-id="career-045">개인화 피드에서 9개 검색 소스의 정책과 실패 처리를 맡았습니다. OpenSearch 조회부터 랭킹, 캐시 저장까지 처리 단계를 구분했습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-053"><strong>구축 당시 29개 구현 파일·43개 테스트 소스</strong>의 fixture·mock·WebMvc·JPA·트랜잭션 공통 동작을 통합했습니다.</li>
-              <li data-edit-id="career-054"><strong>4개 진입점·5개 공통 도구와 정책</strong>으로 테스트 목적에 맞는 준비 코드와 실행 기준을 제공했습니다.</li>
-              <li data-edit-id="career-055"><strong>테스트 작성 원칙</strong>을 제안하고 느린 동시성 테스트를 skip.slow.test 설정으로 분리했습니다.</li>
+              <li data-edit-id="career-046"><strong>9개 검색 소스</strong>에 필터·정렬·벡터 규칙을 적용하고, 타임아웃과 실패 처리 경로를 구현했습니다.</li>
+              <li data-edit-id="career-047"><strong>후보 필터링·점수화·재정렬·캐시 저장</strong> 단계마다 입력과 출력을 구분하고, Redis 캐시를 우회하는 경로를 구현했습니다.</li>
+              <li data-edit-id="career-048"><strong>OpenSearch 조회 기능을 별도 모듈로 분리</strong>하고, ArchUnit 테스트로 순환 의존을 검출했습니다.</li>
+            </ul>
+          </article>
+
+          <article class="career-project">
+            <header>
+              <h3 data-edit-id="career-051">공통 테스트 모듈로 준비 코드와 실행 기준을 정리했습니다.</h3>
+            </header>
+            <ul class="bullet-list">
+              <li data-edit-id="career-053"><strong>Fixture 생성과 Mock 초기화, WebMvc·JPA·트랜잭션 설정</strong>을 공통 모듈로 옮겼습니다.</li>
+              <li data-edit-id="career-054"><strong>Base·Mock·WebMvc·JPA로 테스트 진입점을 나눠</strong> 필요한 설정만 사용하게 했습니다.</li>
+              <li data-edit-id="career-055"><strong>느린 동시성 테스트는 별도 옵션으로 실행</strong>하도록 하고, CI에서 실행할 범위를 문서로 정리했습니다.</li>
+              <li data-edit-id="career-070"><strong>CI 테스트가 메모리 부족으로 중단되자</strong> 느린 테스트의 실행 범위와 Spring 컨텍스트의 재사용·초기화 방식을 조정해 자원을 늘리지 않고 문제를 해결했습니다.</li>
             </ul>
           </article>
         </section>
 
-        <section class="career-company-block career-print-page" id="agent-lab" aria-labelledby="agent-lab-title">
+        <section class="career-company-block career-print-page" id="previous-experience" aria-labelledby="previous-experience-title">
           <header class="career-company-head">
             <div>
-              <p class="project-kicker" data-edit-id="career-056">웍스피어 · AI Engineering</p>
-              <h2 id="agent-lab-title" data-edit-id="career-057">Agent Lab · 개발 판단을 설치·평가 가능한 자산으로 만들었습니다.</h2>
-              <p data-edit-id="career-058">코드 탐색·설계 검토·테스트·리뷰 절차를 프로젝트 간 재사용 단위로 정리했습니다.</p>
+              <h2 id="previous-experience-title" data-edit-id="career-065">토스랩 · JANDI Backend&nbsp;Engineer</h2>
             </div>
-            <span class="career-version">v0.1.0.0</span>
+            <time datetime="2024-06" data-edit-id="career-066">2024.06 — 2025.04</time>
           </header>
 
           <article class="career-project career-project--featured">
-            <header><h3 data-edit-id="career-059">역할·지식·절차·평가를 나눠 manifest로 연결했습니다.</h3></header>
+            <header><h3 data-edit-id="career-059">잘못 저장된 데이터 약 200만 건을 보정했습니다.</h3></header>
             <ul class="bullet-list">
-              <li data-edit-id="career-060"><strong>15개 에이전트·14개 지식 번들·32개 스킬</strong>과 24개 연결, 11개 의존성을 선언했습니다.</li>
-              <li data-edit-id="career-061"><strong>설치 회귀 52/52·Codex 탐색 32/32</strong>로 자산·의존성의 공식 경로 설치를 검증했습니다.</li>
-              <li data-edit-id="career-062"><strong>구조 7/7·행동 계약 10/10</strong>을 정적으로 검증하고, 다음 설치 반영에는 사람 승인을 필수화했습니다.</li>
-            </ul>
-            <p class="career-note" data-edit-id="career-063"><b>현재 경계</b> 이식 가능한 자산 저장소이며 실행 런타임은 아닙니다. 장기 메모리·프롬프트 자동 수정·스킬 자동 승격은 제외했습니다.</p>
-          </article>
-
-          <article class="career-project career-project--previous" id="tosslab">
-            <header class="career-company-head career-company-head--nested">
-              <div><p class="project-kicker" data-edit-id="career-064">Previous Role</p><h2 data-edit-id="career-065">토스랩 · JANDI Backend Engineer</h2></div>
-              <time datetime="2024-06" data-edit-id="career-066">2024.06 — 2025.04</time>
-            </header>
-            <p data-edit-id="career-067">커버리지 70%에도 배포가 불안해 실제 구현 검증과 CI 재현 조건부터 다시 봤습니다.</p>
-            <ul class="bullet-list">
-              <li data-edit-id="career-068"><strong>Spring Boot 2.3.8 → 3.3.3</strong> 전환과 함께 테스트를 0개에서 160개 이상으로 늘렸습니다.</li>
-              <li data-edit-id="career-069"><strong>약 200만 건 데이터 보정</strong>을 위해 JPA 변경 감지 오류를 실제 구현 테스트로 재현했습니다.</li>
-              <li data-edit-id="career-070"><strong>자원 증설 없이</strong> CI 실행·컨텍스트 재사용·초기화 구조를 바꿔 메모리 부족을 해결했습니다.</li>
+              <li data-edit-id="career-069"><strong>실제 영속성 컨텍스트</strong>에서 오류를 재현한 뒤 보정 스크립트를 작성했습니다.</li>
+              <li data-edit-id="career-068"><strong>Spring Boot 2.3.8 → 3.3.3</strong> 전환과 함께 Drive-Service 테스트를 0개에서 160개 이상으로 늘렸습니다.</li>
             </ul>
           </article>
 
@@ -226,20 +148,20 @@
           <div class="career-previous-grid career-previous-grid--compact">
             <article class="career-project">
               <header class="career-company-head career-company-head--nested">
-                <div><h3 data-edit-id="career-072">오케스트로 · Backend Engineer</h3><p data-edit-id="career-073">IDP / Vista</p></div>
+                <div><h3 data-edit-id="career-072">오케스트로</h3><p data-edit-id="career-073">Backend Engineer · IDP / Vista</p></div>
                 <time datetime="2023-09" data-edit-id="career-074">2023.09 — 2024.05</time>
               </header>
               <ul class="bullet-list">
-                <li data-edit-id="career-075"><strong>API Gateway·Security·JWT</strong> 기반 인증·인가와 SonarQube·Jenkins 연동 API를 개발했습니다.</li>
-                <li data-edit-id="career-076"><strong>VM 메트릭·OpenSearch</strong> 조회 API와 조건별 동적 쿼리를 구현했습니다.</li>
+                <li data-edit-id="career-075"><strong>Spring Cloud Gateway에 Spring Security·JWT 기반 인증·인가를 적용</strong>하고, SonarQube·Jenkins 연동 API를 개발했습니다.</li>
+                <li data-edit-id="career-076"><strong>VM 메트릭 조회 API와 OpenSearch 조회 API</strong>를 개발하고, 조건에 따라 동적 쿼리를 생성하도록 했습니다.</li>
               </ul>
             </article>
             <article class="career-project">
               <header class="career-company-head career-company-head--nested">
-                <div><h3 data-edit-id="career-077">즐거운 · Backend Engineer</h3><p data-edit-id="career-078">자사 서비스 개발·운영</p></div>
+                <div><h3 data-edit-id="career-077">즐거운</h3><p data-edit-id="career-078">Backend Engineer · 자사 서비스 개발·운영</p></div>
                 <time datetime="2022-11" data-edit-id="career-079">2022.11 — 2023.02</time>
               </header>
-              <p data-edit-id="career-080">자사 백엔드 기능을 개발하고 운영 이슈를 대응했습니다.</p>
+              <p data-edit-id="career-080">자사 서비스의 백엔드 기능을 개발했습니다.</p>
             </article>
           </div>
         </section>

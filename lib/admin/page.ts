@@ -78,6 +78,7 @@ export function loginPageResponse(errorCode: string | null = null, csrf = "") {
   <meta name="theme-color" content="#f3f5f1">
   <meta name="robots" content="noindex, nofollow, noarchive">
   <title>관리자 로그인 · 서민재</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/design-system.css">
   <link rel="stylesheet" href="/api/admin/assets/login.css">
 </head>
@@ -86,12 +87,11 @@ export function loginPageResponse(errorCode: string | null = null, csrf = "") {
     <section class="admin-login-panel" aria-labelledby="login-title">
       <header class="admin-login-brand">
         <a href="/" class="admin-login-mark" aria-label="공개 사이트로 이동">SM</a>
-        <span>CH4570 ARCHIVE</span>
+        <span>서민재 문서 편집기</span>
       </header>
       <div class="admin-login-copy">
-        <p>OWNER ACCESS</p>
-        <h1 id="login-title">문서 편집기</h1>
-        <span>관리자 비밀번호로 계속합니다.</span>
+        <h1 id="login-title">로그인</h1>
+        <span>비밀번호를 입력하세요.</span>
       </div>
       ${error ? `<p class="admin-login-error" role="alert">${escapeAttribute(error)}</p>` : ""}
       <form class="admin-login-form" action="/api/admin/login/" method="post">
@@ -112,7 +112,7 @@ export function loginPageResponse(errorCode: string | null = null, csrf = "") {
         </button>
       </form>
       <footer>
-        <span>AI-Native Backend Engineer</span>
+        <span>ch4570-archive</span>
         <a href="/">공개 문서 보기</a>
       </footer>
     </section>

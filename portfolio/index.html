@@ -4,8 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#11150f">
-  <meta name="description" content="서민재 AI Native 백엔드 엔지니어 포트폴리오. 백엔드 설계·운영 사례와 Agent Lab의 agent·skill·평가 구조를 소개합니다.">
-  <title>서민재 · AI-Native Backend Engineering Portfolio</title>
+  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 이벤트 복구, 포인트 원장·배치, 검색·캐시, 테스트 공통화 사례를 정리했습니다.">
+  <title>서민재 · Backend Engineering Portfolio</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
@@ -31,22 +32,21 @@
       <div class="container">
         <div class="portfolio-hero-grid">
           <div>
-            <p class="eyebrow eyebrow-coral" data-edit-id="portfolio-001">AI-Native Backend Engineering Portfolio · 2026</p>
-            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">백엔드 판단을 AI Native 개발 자산으로</h1>
+            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">멈춘 작업을 다시&nbsp;시작하고, 틀어진 데이터를 바로잡았습니다</h1>
             <p class="hero-copy" data-edit-id="portfolio-003">
-              Java·Kotlin 기반 이벤트·배치·검색·캐시 설계·운영.
-              판단 기준은 에이전트·스킬·평가에 담아 개발 흐름에서 재사용.
+              Java·Kotlin·Spring으로 백엔드를 개발합니다.
+              문제가&nbsp;생긴&nbsp;이유와 해결한 과정을 네 가지 작업으로 정리했습니다.
             </p>
           </div>
           <div class="portfolio-profile">
             <b data-edit-id="portfolio-004">서민재 · Rex Seo</b>
-            <span data-edit-id="portfolio-005">AI-Native Backend Engineer</span>
+            <span data-edit-id="portfolio-005">Backend Engineer · Java / Kotlin / Spring</span>
             <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
             <a href="https://github.com/ch4570">GitHub</a>
             <a href="https://velog.io/@ch4570/posts">Velog</a>
             <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
-            <a href="https://ch4570.github.io/ch4570-archive/resume/">이력서</a>
-            <a href="https://ch4570.github.io/ch4570-archive/career/">경력기술서</a>
+            <a href="https://ch4570-archive.vercel.app/resume/">이력서</a>
+            <a href="https://ch4570-archive.vercel.app/career/">경력기술서</a>
           </div>
         </div>
 
@@ -55,14 +55,13 @@
 
     <div class="portfolio-layout">
       <nav class="case-nav" aria-label="포트폴리오 목차">
-        <p class="case-nav-title">Case Index</p>
+        <p class="case-nav-title">작업</p>
         <ol>
           <li><a href="#event" aria-current="true"><span>01</span>이벤트 신뢰성</a></li>
           <li><a href="#point"><span>02</span>포인트 정합성</a></li>
           <li><a href="#feed"><span>03</span>피드 서빙</a></li>
           <li><a href="#test"><span>04</span>테스트 기반</a></li>
-          <li><a href="#agent"><span>05</span>AI Engineering</a></li>
-          <li><a href="#evidence"><span>06</span>공개 기록</a></li>
+          <li><a href="#evidence"><span>05</span>공개 기록</a></li>
         </ol>
       </nav>
 
@@ -71,137 +70,28 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">01</span>
             <div>
-              <p class="section-kicker" data-edit-id="portfolio-006">Point Platform · Event Reliability</p>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">발행 실패와 처리 실패, 복구 경로 분리</h2>
-              <p class="case-lede" data-edit-id="portfolio-008">
-                이벤트 레코드에 실패 지점과 복구 대상을 기록.
-                로그 재추적 없이 포인트 차감·회수 업무만 재실행.
-              </p>
+              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">이벤트가 어디서 실패했는지 기록하고, 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태·수동 복구·정체 알림 설계 및 구현</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-011">구조</dt><dd data-edit-id="portfolio-012">내부 이벤트 9종, 상태 6개, 타입별 복구 전략 8개</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL internal_event_record · JSONB payload</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-015">관측</dt><dd data-edit-id="portfolio-016">IN_PROGRESS 15분 초과 건을 타입별로 집계해 Slack 전송</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 기능 개발</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka로 처리하는 내부 이벤트 9종 · 처리 상태 6개 · 업무별 복구 방식 8개</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 상태 기록 · JSONB에 payload 저장</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">IN_PROGRESS 상태가 15분을 넘긴 이벤트를 유형별로 묶어 Slack으로 알림</dd></div>
           </dl>
 
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-017">단일 ‘실패’ 상태: 원인 탐색부터 재시작</h3>
-              <p data-edit-id="portfolio-018">• 발행 실패·소비자 처리 중단: 확인 데이터·재시도 위치가 다름<br>• 단일 상태: 운영자가 로그·원장을 처음부터 수동 대조</p>
+              <h3 data-edit-id="portfolio-017">실패 상태 하나만으로는 어디서 다시 시작해야 할지 알 수 없었습니다</h3>
+              <p data-edit-id="portfolio-018">이벤트 발행에 실패한 경우와 발행 후 처리 과정에서 실패한 경우는 확인해야 할 데이터와 복구할 업무가 달랐습니다. 하지만 둘 다 같은 실패 상태로 남았습니다.</p>
             </div>
             <div class="story-block">
-              <span class="story-label">판단</span>
-              <h3 data-edit-id="portfolio-019">실패 지점 기록과 업무별 복구 로직 분리</h3>
-              <p data-edit-id="portfolio-020">• 상태 6개: 생성부터 복구 불가 실패까지 구분<br>• 포인트 차감·회수·만료 알림 등 작업 8개: 저장된 payload로 각 업무 서비스 재호출</p>
+              <span class="story-label">바꾼 점</span>
+              <h3 data-edit-id="portfolio-019">실패 상태에 따라 복구할 업무를 나눴습니다</h3>
+              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 구분해 기록했습니다. 저장한 payload로 포인트 차감·회수·만료 알림 중 실패한 업무만 다시 실행하도록 했습니다.</p>
             </div>
-          </div>
-
-          <details class="diagram-disclosure" open>
-            <summary>멈춘 위치와 복구 경로 보기</summary>
-            <figure class="system-figure system-map system-map--flow">
-              <figcaption>
-                <div class="diagram-caption-title">
-                  <b>멈춘 위치에서 다시 시작하는 복구 흐름</b>
-                  <span>생성부터 처리, 수동 복구와 정체 감지까지</span>
-                </div>
-                <div class="diagram-legend" aria-label="연결선 범례">
-                  <span><i class="legend-line"></i>호출</span>
-                  <span><i class="legend-line is-async"></i>비동기</span>
-                  <span><i class="legend-line is-recovery"></i>복구</span>
-                </div>
-              </figcaption>
-              <div class="system-map__canvas" role="group" aria-label="포인트 내부 이벤트의 정상 처리, 수동 복구, 정체 감지 흐름">
-                <section class="map-band">
-                  <header class="map-band__head">
-                    <span class="map-index">01</span>
-                    <div><b>정상 처리</b><small>업무 요청과 처리 상태를 기록한 뒤 Kafka로 전달합니다.</small></div>
-                  </header>
-                  <div class="map-sequence">
-                    <div class="map-node">
-                      <span class="map-node__type">업무 요청</span>
-                      <strong>API · Admin · Batch</strong>
-                      <small>차감 · 회수 · 사용 · 만료</small>
-                    </div>
-                    <div class="map-edge"><span>기록</span></div>
-                    <div class="map-node map-node--store">
-                      <span class="map-node__type">상태 기록</span>
-                      <strong>internal_event_record</strong>
-                      <code>InternalEventCreator</code>
-                      <small>CREATED · JSONB payload</small>
-                    </div>
-                    <div class="map-edge map-edge--async"><span>전달</span></div>
-                    <div class="map-node map-node--external">
-                      <span class="map-node__type">Kafka</span>
-                      <strong>내부 이벤트 topic 9개</strong>
-                      <small>발행 실패는 SEND_FAILED로 분리</small>
-                    </div>
-                    <div class="map-edge map-edge--async"><span>처리</span></div>
-                    <div class="map-node map-node--result">
-                      <span class="map-node__type">업무 처리</span>
-                      <strong>Listener 9개 · EventProcessor</strong>
-                      <small>IN_PROGRESS → 완료 · 실패</small>
-                    </div>
-                  </div>
-                </section>
-
-                <div class="map-split">
-                  <section class="map-band map-band--recovery">
-                    <header class="map-band__head">
-                      <span class="map-index">02</span>
-                      <div><b>수동 복구</b><small>Kafka에 다시 넣지 않고 실패한 업무만 실행합니다.</small></div>
-                    </header>
-                    <div class="map-stack">
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">복구 대상 조회</span>
-                        <strong>type · status로 검색</strong>
-                        <small>저장된 payload 복원</small>
-                      </div>
-                      <div class="map-edge map-edge--recovery"><span>선택</span></div>
-                      <div class="map-node map-node--risk">
-                        <span class="map-node__type">복구 전략</span>
-                        <strong>Retry Strategy 8개</strong>
-                        <small>이벤트 타입별 업무 분기</small>
-                      </div>
-                      <div class="map-edge map-edge--recovery"><span>재실행</span></div>
-                      <div class="map-node">
-                        <span class="map-node__type">Domain service</span>
-                        <strong>업무 서비스 직접 호출</strong>
-                        <small>차감 · 회수 · 사용 · 알림</small>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section class="map-band map-band--observe">
-                    <header class="map-band__head">
-                      <span class="map-index">03</span>
-                      <div><b>정체 감지</b><small>15분 넘게 처리 중인 이벤트를 Slack으로 알립니다.</small></div>
-                    </header>
-                    <div class="map-stack">
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">QueryDSL</span>
-                        <strong>IN_PROGRESS 15분 초과</strong>
-                        <small>추적 대상 이벤트 8종</small>
-                      </div>
-                      <div class="map-edge map-edge--async"><span>집계</span></div>
-                      <div class="map-node map-node--external">
-                        <span class="map-node__type">Slack</span>
-                        <strong>이벤트 타입별 요약</strong>
-                        <small>운영 채널로 건수 전송</small>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-              </div>
-            </figure>
-          </details>
-
-          <div class="case-outcome">
-            <b>달라진 운영</b>
-            <p data-edit-id="portfolio-021">전송·처리 실패 상태 분리 · IN_PROGRESS 15분 초과 Slack 알림 · 저장 payload 기반 업무 단위 재실행</p>
           </div>
 
         </section>
@@ -210,140 +100,32 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">02</span>
             <div>
-              <p class="section-kicker" data-edit-id="portfolio-028">Point Ledger · Balance / Archive</p>
-              <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">배치는 재시작 지점, 동시 요청은 결과 불변식</h2>
+              <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">중단된&nbsp;배치를 이어&nbsp;처리하고 포인트&nbsp;정합성을 검증했습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-030">
-                원장 소멸·만료 알림·아카이브별 재시작 기준.
-                동시 포인트 거래·예산 차감 후 잔액·원장 정합성 검증.
+                배치별 재시작 기준을 정하고 요청을 동시에 처리한 뒤 잔액·원장·예산이 맞는지 확인했습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-031">담당</dt><dd data-edit-id="portfolio-032">원장 소멸 페이지 전환·아카이브 배치 구현·만료 알림 이벤트 개선</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-033">처리 단위</dt><dd data-edit-id="portfolio-034">전체 적재 대신 페이지 단위 반복 처리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-035">보관 대상</dt><dd data-edit-id="portfolio-036">point_core 6개·point_service 4개 archive 테이블</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-031">담당</dt><dd data-edit-id="portfolio-032">포인트 소멸 배치의 페이지 단위 처리·아카이브 배치 구현·만료 알림 개선</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-033">처리 단위</dt><dd data-edit-id="portfolio-034">소멸 대상을 한꺼번에 읽지 않고 페이지 단위로 반복 처리</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-035">보관 대상</dt><dd data-edit-id="portfolio-036">참조 순서대로 옮긴 아카이브 테이블 10개</dd></div>
             <div class="fact-cell"><dt data-edit-id="portfolio-037">동시성</dt><dd data-edit-id="portfolio-038">9개 API · 13개 시나리오 · 3·5·10개 동시 요청</dd></div>
           </dl>
 
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-039">같은 데이터, 서로 다른 세 Job의 처리 기준</h3>
-              <p data-edit-id="portfolio-040">• 소멸: 잔액·원장 변경<br>• 만료 안내: 알림 적재·발송<br>• 아카이브: 참조 순서대로 테이블 이관 · 데이터 증가 시 전체 적재 실패 범위 확대</p>
+              <h3 data-edit-id="portfolio-039">세 배치는 중단된 뒤 다시 시작할 기준이 서로 달랐습니다</h3>
+              <p data-edit-id="portfolio-040">소멸 배치는 잔액과 원장을 바꾸고, 만료 알림 배치는 발송할 알림을 모았습니다. 아카이브 배치는 참조 순서대로 테이블을 옮겨야 했습니다.</p>
             </div>
             <div class="story-block">
-              <span class="story-label">판단</span>
-              <h3 data-edit-id="portfolio-041">배치는 재시작 위치, 동시 요청은 결과 불변식</h3>
-              <p data-edit-id="portfolio-042">• 소멸·알림·아카이브: 진행 위치 기록<br>• 포인트 거래·예산 차감: 락 획득 여부와 경쟁 종료 후 잔액·원장 상태·이벤트 수 모두 검증</p>
+              <span class="story-label">바꾼 점</span>
+              <h3 data-edit-id="portfolio-041">배치별로 재시작 기준을 정했습니다</h3>
+              <p data-edit-id="portfolio-042">각 배치의 진행 위치를 따로 기록했습니다. 같은 락 키를 쓰거나 같은 예산을 차감하는 동시 요청이 끝난 뒤에는 잔액·원장·이벤트 수를 확인했습니다.</p>
             </div>
           </div>
-
-          <details class="diagram-disclosure" open>
-            <summary>세 배치의 재시작 기준 보기</summary>
-            <figure class="system-figure system-map system-map--compare">
-              <figcaption>
-                <div class="diagram-caption-title">
-                  <b>세 배치, 세 가지 재시작 기준</b>
-                  <span>같은 원장을 다뤄도 다시 시작할 기준은 서로 다릅니다.</span>
-                </div>
-                <div class="diagram-legend" aria-label="연결선 범례">
-                  <span><i class="legend-line"></i>순차 처리</span>
-                  <span><i class="legend-line is-async"></i>후속 이벤트</span>
-                </div>
-              </figcaption>
-              <div class="system-map__canvas" role="group" aria-label="포인트 소멸, 만료 알림, 원장 보관 배치의 단계와 재시작 기준 비교">
-                <div class="map-compare">
-                  <section class="map-panel">
-                    <header class="map-panel__head">
-                      <span class="map-index">01</span>
-                      <div><b>소멸 처리</b><code>PointExpireJob</code></div>
-                    </header>
-                    <div class="map-stack">
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">대상 조회</span>
-                        <strong>pointUserId 기준 페이지</strong>
-                        <small>만료 원장 · 회원 매핑</small>
-                      </div>
-                      <div class="map-edge"><span>차감</span></div>
-                      <div class="map-node">
-                        <span class="map-node__type">Transaction</span>
-                        <strong>유료·무료 잔액과 원장</strong>
-                        <code>PointExpireAppService</code>
-                      </div>
-                      <div class="map-edge"><span>저장</span></div>
-                      <div class="map-node map-node--result">
-                        <span class="map-node__type">소멸 결과</span>
-                        <strong>expire_notification_record</strong>
-                        <small>후속 알림의 입력</small>
-                      </div>
-                    </div>
-                    <footer class="map-restart"><span>재시작 기준</span><b>페이지</b></footer>
-                  </section>
-
-                  <section class="map-panel">
-                    <header class="map-panel__head">
-                      <span class="map-index">02</span>
-                      <div><b>만료 알림</b><code>PointExpireAlarmJob</code></div>
-                    </header>
-                    <div class="map-stack">
-                      <div class="map-node">
-                        <span class="map-node__type">Partition</span>
-                        <strong>origin site별 Step</strong>
-                        <small>beforeStep에서 대상 분리</small>
-                      </div>
-                      <div class="map-edge"><span>수집</span></div>
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">500건씩 조회</span>
-                        <strong>기업 회원 필터 · PENDING 적재</strong>
-                        <code>PointExpireAlarmAppService</code>
-                      </div>
-                      <div class="map-edge map-edge--async"><span>발행</span></div>
-                      <div class="map-node map-node--external">
-                        <span class="map-node__type">Kafka</span>
-                        <strong>POINT_EXPIRATION_ALARM_SEND</strong>
-                        <small>회원 이메일과 발송 대상 전달</small>
-                      </div>
-                      <div class="map-edge map-edge--async"><span>완료</span></div>
-                      <div class="map-node map-node--result">
-                        <span class="map-node__type">Worker</span>
-                        <strong>메일 전송 · SUCCESS</strong>
-                        <small>발송 상태 반영</small>
-                      </div>
-                    </div>
-                    <footer class="map-restart"><span>재시작 기준</span><b>발송 상태</b></footer>
-                  </section>
-
-                  <section class="map-panel">
-                    <header class="map-panel__head">
-                      <span class="map-index">03</span>
-                      <div><b>원장 보관</b><code>LedgerArchiveJob</code></div>
-                    </header>
-                    <div class="map-stack">
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">Paging reader</span>
-                        <strong>보관 대상 원장</strong>
-                        <small>삭제한 뒤 0페이지부터 반복</small>
-                      </div>
-                      <div class="map-edge"><span>이관</span></div>
-                      <div class="map-node">
-                        <span class="map-node__type">Application</span>
-                        <strong>operator 10개를 순서대로 실행</strong>
-                        <code>LedgerArchiveAppService</code>
-                      </div>
-                      <div class="map-edge"><span>보관</span></div>
-                      <div class="map-node map-node--result">
-                        <span class="map-node__type">point_core · point_service</span>
-                        <strong>archive 테이블 10개</strong>
-                        <small>원장 · 상태 · 거래 · 매핑</small>
-                      </div>
-                    </div>
-                    <footer class="map-restart"><span>재시작 기준</span><b>테이블 순서</b></footer>
-                  </section>
-                </div>
-              </div>
-            </figure>
-          </details>
 
         </section>
 
@@ -351,33 +133,29 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">03</span>
             <div>
-              <p class="section-kicker" data-edit-id="portfolio-048">Feed &amp; Search · Serving / Retrieval</p>
-              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색·랭킹·서빙 책임 경계</h2>
-              <p class="case-lede" data-edit-id="portfolio-050">
-                Candidate Retrieval → FPR → SPR → Re-Rank → Snapshot.
-                랭킹은 pull 계약, OpenSearch·Redis는 포트로 격리.
-              </p>
+              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스마다 실패를 처리하고 캐시&nbsp;우회&nbsp;경로를 만들었습니다</h2>
+              <p class="case-lede" data-edit-id="portfolio-050">검색 소스마다 정책과 타임아웃, 실패 처리 방식이 달랐습니다. 후보 조회·랭킹·캐시 저장 단계를 구분하고, 각 단계의 입력과 출력을 정리했습니다.</p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-051">전체 흐름</dt><dd data-edit-id="portfolio-052">Candidate Retrieval → FPR → SPR → Re-Rank → Snapshot</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-053">공통 계약</dt><dd data-edit-id="portfolio-054">후보 수집 포트 · 역방향 pull 계약 · 캐시 포트 3개</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-055">검색 경계</dt><dd data-edit-id="portfolio-056">검색 소스 9개 · 소스별 정책·타임아웃·실패 격리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-057">모듈 경계</dt><dd data-edit-id="portfolio-058">query-api는 OpenSearch 연동 전용 · 순환 의존 금지</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-051">처리 순서</dt><dd data-edit-id="portfolio-052">후보 조회 → 중복 제거 → 점수화 → 재정렬 → 캐시 저장</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-053">구성</dt><dd data-edit-id="portfolio-054">후보 수집 인터페이스 · 역방향 조회 방식 · 캐시 3종</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-055">담당</dt><dd data-edit-id="portfolio-056">9개 검색 소스의 정책·타임아웃·실패 처리</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 연동 · Redis 캐시를 우회하는 경로 · 순환 의존 검출</dd></div>
           </dl>
 
           <details class="diagram-disclosure archify-disclosure" open>
-            <summary>피드 서빙 책임 경계 보기</summary>
+            <summary>개인화 피드 처리 흐름 보기</summary>
             <figure class="archify-figure" data-diagram-tool="archify@2.11.0">
               <figcaption>
-                <b>피드 서빙 책임 경계</b>
-                <span>Snapshot 상태가 경로를 정하고, 랭킹·검색은 pull 계약 뒤로 분리</span>
+                <b>후보를 모아 피드로 내보내기까지</b>
+                <span>Snapshot 상태에 따라 캐시를 쓰거나 랭킹을 다시 실행합니다.</span>
               </figcaption>
               <img
                 class="archify-diagram"
                 src="../assets/diagrams/feed-serving.svg"
-                alt="Feed API와 Orchestrator, Snapshot, Re-Rank, SPR, FPR, Candidate, OpenSearch 사이의 피드 서빙 책임 경계"
+                alt="Feed API가 후보를 모아 랭킹하고 Snapshot으로 저장하는 처리 흐름"
                 decoding="async"
               >
             </figure>
@@ -389,38 +167,37 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">04</span>
             <div>
-              <p class="section-kicker" data-edit-id="portfolio-078">Engineering Platform · Test Support</p>
-              <h2 class="case-title" id="test-title" data-edit-id="portfolio-079">반복 테스트 준비를 test-support로 통합</h2>
+              <h2 class="case-title" id="test-title" data-edit-id="portfolio-079">테스트 준비 코드를 <span lang="en">test-support</span>로 모았습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-080">
-                테스트 진입점 4개와 공통 도구·정책 5개.
-                fixture·mock 준비, 테스트 선택, CI 실행 기준 통합.
+                공통 기반 클래스와 Mock·WebMvc·JPA용 클래스를 분리해 테스트마다 필요한 설정만 사용하게 했습니다.
+                Fixture 생성과 Mock 초기화, 느린 테스트 실행 여부는 <span lang="en">test-support</span>에서 관리했습니다.
               </p>
             </div>
           </header>
 
           <details class="diagram-disclosure" open>
-            <summary>test-support의 네 가지 시작점 보기</summary>
+            <summary><span lang="en">test-support</span>의 네 가지 테스트 진입점 보기</summary>
             <figure class="system-figure system-map system-map--matrix">
               <figcaption>
                 <div class="diagram-caption-title">
-                  <b>테스트 목적에 맞춰 공통 준비를 나눈 구조</b>
-                  <span>진입점, 생명주기, 컨텍스트 범위, 실행 정책을 한 기준으로 묶었습니다.</span>
+                  <b>테스트 종류마다 필요한 준비만 사용합니다</b>
+                  <span>공통 Fixture와 Mock·WebMvc·JPA 설정을 테스트 유형별로 나눴습니다.</span>
                 </div>
               </figcaption>
               <div class="system-map__canvas" role="group" aria-label="test-support의 base, mock, web, database 진입점과 공통 도구 매트릭스">
                 <div class="map-matrix">
                   <section class="map-matrix__column">
-                    <header><b>공통 기반</b><span>01 · fixture·생명주기</span></header>
+                    <header><b>공통 기반</b><span>01 · Fixture·생명주기</span></header>
                     <div class="map-node">
                       <span class="map-node__type">Base class</span>
                       <strong>AbstractTest</strong>
-                      <small>PER_CLASS · 공통 fixture</small>
+                      <small>PER_CLASS · 공통 Fixture</small>
                     </div>
                     <div class="map-matrix__connector" aria-hidden="true">↓</div>
                     <div class="map-node map-node--store">
                       <span class="map-node__type">Fixture</span>
                       <strong>FixtureMonkeyFactory</strong>
-                      <small>fixture 생성 규칙</small>
+                      <small>Fixture 생성 규칙</small>
                     </div>
                   </section>
 
@@ -440,7 +217,7 @@
                   </section>
 
                   <section class="map-matrix__column">
-                    <header><b>MVC 테스트</b><span>03 · HTTP 요청·응답 계약</span></header>
+                    <header><b>MVC 테스트</b><span>03 · HTTP 요청·응답</span></header>
                     <div class="map-node">
                       <span class="map-node__type">Base class</span>
                       <strong>AbstractWebMvcTest</strong>
@@ -470,191 +247,50 @@
                   </section>
                 </div>
 
-                <div class="map-contract-rail" aria-label="test-support 공통 계약">
+                <div class="map-contract-rail" aria-label="test-support 공통 설정">
                   <div><b>4개 테스트 진입점</b><span>Base · Mock · WebMvc · JPA</span></div>
                   <div><b>5개 공통 도구·정책</b><span>Fixture · Response · MockMvc · Tx Support · Slow-test</span></div>
-                  <div><b>실행·작성 기준</b><span>skip.slow.test=true 제외 · 테스트 작성 원칙 제안</span></div>
+                  <div><b>실행·작성 기준</b><span>skip.slow.test=true이면 느린 테스트 제외 · 테스트 작성 원칙 제안</span></div>
                 </div>
               </div>
             </figure>
           </details>
-
-          <div class="case-outcome">
-            <b>코드와 사용 기준</b>
-            <p data-edit-id="portfolio-081">테스트 진입점 · mock·컨텍스트 생명주기 · 별도 트랜잭션 · 느린 테스트 실행 기준 문서화</p>
-          </div>
-
-        </section>
-
-        <section class="case-section" id="agent" aria-labelledby="agent-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">05</span>
-            <div>
-              <p class="section-kicker" data-edit-id="portfolio-085">웍스피어 · AI Engineering · Agent Lab v0.1.0.0</p>
-              <h2 class="case-title" id="agent-title" data-edit-id="portfolio-086">에이전트·스킬 패키징과 구조·행동 계약 검증</h2>
-              <p class="case-lede" data-edit-id="portfolio-087">
-                코드 탐색·설계 검토·테스트 절차를 에이전트 15개·스킬 32개로 분리.
-                구조 7개·행동 10개·설치 회귀 52개로 의존성과 계약 검증.
-              </p>
-            </div>
-          </header>
-
-          <details class="diagram-disclosure" open>
-            <summary>스킬과 에이전트가 실행되는 구조 보기</summary>
-            <figure class="system-figure system-map system-map--agent-runtime">
-              <figcaption>
-                <div class="diagram-caption-title">
-                  <b>Agent가 역할을 정하고, skill이 절차를 제공하며, KB가 판단 근거를 보탭니다.</b>
-                  <span>Agent Lab이 직접 작업을 실행하지는 않습니다. 자산과 의존성을 묶어 각 런타임에 설치합니다.</span>
-                </div>
-                <div class="diagram-legend" aria-label="연결선 범례">
-                  <span><i class="legend-line"></i>실행 순서</span>
-                  <span><i class="legend-line is-async"></i>런타임 경계</span>
-                </div>
-              </figcaption>
-              <div class="system-map__canvas" role="group" aria-label="Agent Lab 자산을 Claude Code와 Codex에서 발견하고 실행하는 구조">
-                <section class="agent-registry" aria-label="Agent Lab 자산 목록">
-                  <div class="agent-registry__copy">
-                    <span>Asset registry · v0.1.0.0</span>
-                    <b>manifest.txt</b>
-                    <small>선택한 자산과 연결된 의존성을 한곳에서 찾습니다.</small>
-                  </div>
-                  <dl class="agent-registry__stats">
-                    <div><dt>Agents</dt><dd>15</dd></div>
-                    <div><dt>Bundles</dt><dd>14</dd></div>
-                    <div><dt>Skills</dt><dd>32</dd></div>
-                  </dl>
-                </section>
-
-                <div class="agent-runtime-fork"><span>설치된 자산을 런타임이 탐색·선택</span></div>
-
-                <div class="agent-runtime-lanes">
-                  <section class="runtime-lane runtime-lane--claude">
-                    <header class="runtime-lane__head">
-                      <span>Agent + Skill</span>
-                      <div><b>Claude Code</b><small>역할과 절차를 함께 설치</small></div>
-                    </header>
-                    <div class="map-sequence runtime-route">
-                      <div class="map-node map-node--external">
-                        <span class="map-node__type">01 · Runtime routing</span>
-                        <strong>Agent 선택</strong>
-                        <small>작업 내용으로 고르거나 이름으로 호출</small>
-                      </div>
-                      <div class="map-edge map-edge--async"><span>참조</span></div>
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">02 · Role + knowledge</span>
-                        <strong>정의와 지식 번들</strong>
-                        <code>.claude/agents/</code>
-                        <small>SOUL · principles · KB</small>
-                      </div>
-                      <div class="map-edge"><span>호출</span></div>
-                      <div class="map-node map-node--result">
-                        <span class="map-node__type">03 · Procedure</span>
-                        <strong>연결된 skill 실행</strong>
-                        <code>.claude/skills/</code>
-                        <small>workflow · project tools</small>
-                      </div>
-                    </div>
-                  </section>
-
-                  <section class="runtime-lane runtime-lane--codex">
-                    <header class="runtime-lane__head">
-                      <span>Skill lane</span>
-                      <div><b>Codex</b><small>32/32 skill discovery 확인</small></div>
-                    </header>
-                    <div class="map-sequence runtime-route">
-                      <div class="map-node map-node--external">
-                        <span class="map-node__type">01 · Discovery</span>
-                        <strong>Skill 탐색과 호출</strong>
-                        <code>/skills · $skill-name</code>
-                      </div>
-                      <div class="map-edge map-edge--async"><span>로드</span></div>
-                      <div class="map-node map-node--store">
-                        <span class="map-node__type">02 · Workflow</span>
-                        <strong>절차와 참고 지식</strong>
-                        <code>.agents/skills/</code>
-                        <small>SKILL.md · reference</small>
-                      </div>
-                      <div class="map-edge"><span>실행</span></div>
-                      <div class="map-node map-node--result">
-                        <span class="map-node__type">03 · Project context</span>
-                        <strong>현재 저장소에서 작업</strong>
-                        <small>file · shell · git · test</small>
-                      </div>
-                    </div>
-                  </section>
-                </div>
-
-                <div class="agent-execution-rail" aria-label="공통 실행 결과">
-                  <div>
-                    <span>Shared execution</span>
-                    <b>저장소 상태를 먼저 확인하고</b>
-                    <small>코드·설정·도구를 기준으로 작업 범위를 정합니다.</small>
-                  </div>
-                  <i aria-hidden="true">→</i>
-                  <div class="agent-execution-rail__result">
-                    <span>Output contract</span>
-                    <b>수정 근거와 검증 결과까지 남깁니다.</b>
-                    <small>file:line · test result · risk · next action</small>
-                  </div>
-                </div>
-
-                <ol class="agent-install-flow" aria-label="설치와 검증 순서">
-                  <li><span>01</span><b>자산 선택</b><small>agent · skill · all-*</small></li>
-                  <li><span>02</span><b>연결 항목 확인</b><small>연결 skill을 재귀 탐색</small></li>
-                  <li><span>03</span><b>런타임 경로에 설치</b><small>dry-run · apply · verify</small></li>
-                  <li><span>04</span><b>회귀 검사</b><small>설치 52/52 · Codex 32/32</small></li>
-                </ol>
-
-                <aside class="runtime-caveat" role="note">
-                  <b>OpenCode</b>
-                  <span><code>.opencode</code> 경로 배치는 검사했습니다. agent 포맷 변환과 실제 선택·실행은 아직 검증하지 않았습니다.</span>
-                </aside>
-              </div>
-            </figure>
-          </details>
-
-          <div class="case-outcome">
-            <b>현재 설치 범위</b>
-            <p data-edit-id="portfolio-088">설치 범위 · Claude Code 에이전트·스킬, Codex 스킬 32개 · 메모리·자가 수정은 사람 승인 전제의 스키마·정책·평가 계약으로 제한</p>
-          </div>
 
         </section>
 
         <section class="case-section" id="evidence" aria-labelledby="evidence-title">
           <header class="case-header">
-            <span class="case-number" aria-hidden="true">06</span>
+            <span class="case-number" aria-hidden="true">05</span>
             <div>
-              <p class="section-kicker" data-edit-id="portfolio-108">Writing · Speaking · Open Source</p>
-              <h2 class="case-title" id="evidence-title" data-edit-id="portfolio-109">구현·판단의 공개 기록</h2>
-              <p class="case-lede" data-edit-id="portfolio-110">기술 글 156편 · YouthCon 발표 · Spring OSS 개선 3건</p>
+              <h2 class="case-title" id="evidence-title" data-edit-id="portfolio-109">공개한 코드와 글</h2>
+              <p class="case-lede" data-edit-id="portfolio-110">기술 글 156편과 YouthCon 발표, Spring 오픈소스에 반영된 개선 3건을 한곳에 모았습니다.</p>
             </div>
           </header>
 
           <div class="scope-grid">
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-111"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 연사</a></h3>
-              <p data-edit-id="portfolio-112">‘우리팀을 위한 Spring Test 만들기’ 발표 · 테스트 코드 축소 기준과 팀 그라운드 룰 수립 과정</p>
+              <h3 data-edit-id="portfolio-111"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 발표</a></h3>
+              <p data-edit-id="portfolio-112">‘우리팀을 위한 Spring Test 만들기’ 발표에서 반복되는 테스트 준비 코드를 줄이고 팀의 테스트 작성 규칙을 정한 과정을 다뤘습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-113"><a href="https://velog.io/@ch4570/posts">기술 글 156편 · 2026.07 기준</a></h3>
-              <p data-edit-id="portfolio-114">Java·JPA·테스트·SQL 튜닝 시행착오 기록 · 글또 10기 백엔드·인프라 빌리지 준비위원·연사 참여</p>
+              <p data-edit-id="portfolio-114">Java·JPA·테스트 관련 문제와 SQL 튜닝 경험을 글로 기록했습니다. 글또 10기에서는 준비위원과 연사로 참여했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-115">Spring OSS · 개선 제안 3건 반영</h3>
-              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Kafka</a> · <a href="https://github.com/spring-projects/spring-boot/pull/38029">Boot</a> · <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Data JPA</a> · 불변 컬렉션 처리·하드코딩 제거·자원 정리 로직 개선 3건 반영</p>
+              <h3 data-edit-id="portfolio-115">Spring 오픈소스 · 개선 제안 3건 반영</h3>
+              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에 불변 컬렉션 처리 개선, 하드코딩 제거, 자원 정리에 관한 제안을 보냈고 세 건 모두 반영됐습니다.</p>
             </article>
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 분석 플러그인</a></h3>
-              <p data-edit-id="portfolio-118">JavaCafe Elasticsearch의 한·영 자판 변환·초성·자모 검색을 OpenSearch 2.19·Kotlin으로 이식 · 예시 16개로 검증</p>
+              <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">Java Cafe 기반 OpenSearch 한글 플러그인</a></h3>
+              <p data-edit-id="portfolio-118"><a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다. 저장소에는 한·영 자판 변환과 초성·자모 검색을 다루는 assertion 예시 16개가 있습니다.</p>
             </article>
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-119"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">화면에 없던 7만+ 건의 오류</a></h3>
-              <p data-edit-id="portfolio-120">S3 삭제·DB 잔존 데이터 6년간 7만+ 건 발견 · 정상 응답 뒤 원인을 좁힌 과정 공개</p>
+              <h3 data-edit-id="portfolio-119"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">약 7만 건의 삭제 상태 불일치</a></h3>
+              <p data-edit-id="portfolio-120">파일 삭제 상태와 DB 기록이 어긋난 원인을 분석해 글로 남겼습니다.</p>
             </article>
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-121"><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">테스트로 찾은 약 200만 건</a></h3>
-              <p data-edit-id="portfolio-122">Mock 테스트가 놓친 JPA 변경 감지 오류를 실제 구현 테스트로 재현 · 보정 스크립트로 약 200만 건 수정</p>
+              <h3 data-edit-id="portfolio-121"><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">JPA 오류 재현과 약 200만 건 보정</a></h3>
+              <p data-edit-id="portfolio-122">Mock 테스트에서 드러나지 않던 JPA 변경 감지 오류를 재현하고 보정한 과정을 글로 정리했습니다.</p>
             </article>
           </div>
         </section>

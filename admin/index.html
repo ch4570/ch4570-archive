@@ -9,6 +9,7 @@
   <meta name="referrer" content="same-origin">
   <meta name="admin-csrf-token" content="__ADMIN_CSRF_META__">
   <title>문서 편집기 · 서민재</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="/assets/design-system.css">
   <link rel="stylesheet" href="/api/admin/assets/admin.css">
   <script type="module" src="/api/admin/assets/admin.js"></script>
@@ -21,8 +22,8 @@
       <div class="admin-brand">
         <a class="admin-brand-mark" href="/" aria-label="공개 사이트로 이동">SM</a>
         <div class="admin-brand-copy">
-          <strong>문서 편집기</strong>
-          <span>서민재 · AI-Native Backend Engineer</span>
+          <strong>서민재 문서 편집기</strong>
+          <span>ch4570-archive</span>
         </div>
       </div>
 
@@ -45,7 +46,7 @@
             <path d="m7 9 5-5 5 5"></path>
             <path d="M5 20h14"></path>
           </svg>
-          변경사항 게시
+          게시
         </button>
         <form class="admin-logout-form" action="/api/admin/logout/" method="post">
           <input type="hidden" name="csrf" value="__ADMIN_CSRF_FORM__">
@@ -112,11 +113,10 @@
         </nav>
       </aside>
 
-      <section class="editor-pane" id="editor-pane" aria-label="문구 편집" tabindex="-1">
+      <section class="editor-pane" id="editor-pane" aria-label="편집" tabindex="-1">
         <header class="pane-header editor-pane-header">
           <div>
-            <p class="pane-kicker">Copy Editor</p>
-            <h1 id="editor-title">이력서 문구 편집</h1>
+            <h1 id="editor-title">이력서 편집</h1>
           </div>
           <p class="pane-meta" id="editor-section-meta">섹션을 불러오고 있습니다.</p>
         </header>
@@ -155,7 +155,6 @@
       <section class="preview-pane" id="preview-pane" aria-label="실시간 미리보기">
         <header class="pane-header preview-pane-header">
           <div>
-            <p class="pane-kicker">Live Preview</p>
             <h2>미리보기</h2>
           </div>
           <div class="preview-controls" role="group" aria-label="미리보기 너비">
@@ -196,8 +195,7 @@
     <form class="publish-form" id="publish-form" method="dialog">
       <header class="dialog-header">
         <div>
-          <p class="pane-kicker">Publish</p>
-          <h2 id="publish-title">변경사항 게시</h2>
+          <h2 id="publish-title">변경사항 확인</h2>
         </div>
         <button class="dialog-close" id="publish-cancel" type="button" aria-label="닫기" title="닫기">
           <svg aria-hidden="true" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
