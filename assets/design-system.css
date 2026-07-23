@@ -51,6 +51,10 @@ body {
   overflow-wrap: break-word;
 }
 
+.atomic-text {
+  white-space: nowrap;
+}
+
 body::selection {
   background: #d7eeae;
   color: var(--ink);
@@ -1040,26 +1044,25 @@ h4 {
 }
 
 .career-history article {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.career-history-line {
   display: grid;
   grid-template-columns: 155px 150px minmax(0, 1fr);
   gap: 20px;
-  padding: 12px 0;
-  border-bottom: 1px solid var(--line);
   align-items: baseline;
+  margin: 0;
 }
 
 .career-history time,
-.career-history p {
+.career-history span {
   color: var(--muted);
   font-size: 12px;
 }
 
-.career-history h3,
-.career-history p {
-  margin: 0;
-}
-
-.career-history h3 {
+.career-history strong {
   font-size: 15px;
   font-weight: 800;
 }
@@ -1245,6 +1248,10 @@ h4 {
 .career-previous-grid--compact .career-project {
   padding: 16px 0 0;
   border-bottom: 0;
+}
+
+.career-previous-grid .bullet-list span {
+  white-space: nowrap;
 }
 
 .career-evidence-grid {
@@ -1502,24 +1509,12 @@ h4 {
   font-size: 14px;
 }
 
-.system-figure {
-  overflow: hidden;
-  margin: 34px 0;
-  border: 1px solid #c8d0c5;
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
 .diagram-disclosure {
   margin: 34px 0;
 }
 
 .diagram-disclosure > summary {
   display: none;
-}
-
-.diagram-disclosure > .system-figure {
-  margin: 0;
 }
 
 .diagram-disclosure > .archify-figure {
@@ -1553,244 +1548,6 @@ h4 {
   width: 100%;
   height: auto;
   background: #ffffff;
-}
-
-.system-figure figcaption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 28px;
-  min-height: 76px;
-  padding: 17px 20px;
-  border-bottom: 3px solid var(--lime);
-  background: #ffffff;
-}
-
-.diagram-caption-title {
-  display: grid;
-  gap: 4px;
-}
-
-.diagram-caption-title b {
-  color: var(--ink);
-  font-size: 15px;
-  line-height: 1.35;
-}
-
-.diagram-caption-title span {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.diagram-legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px 14px;
-  color: var(--muted);
-  font-size: 10px;
-  font-weight: 600;
-}
-
-.diagram-legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.legend-line {
-  display: inline-block;
-  width: 24px;
-  border-top: 2px solid var(--ink);
-}
-
-.legend-line.is-async {
-  border-top-style: dashed;
-}
-
-.legend-line.is-recovery {
-  border-top-color: var(--coral);
-}
-
-.system-map__canvas {
-  padding: 20px;
-  background-color: #f3f5f1;
-  background-image:
-    linear-gradient(rgba(17, 21, 15, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 21, 15, 0.035) 1px, transparent 1px);
-  background-size: 20px 20px;
-}
-
-.map-matrix {
-  border: 1px solid #cbd2c8;
-  border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.88);
-}
-
-.map-node {
-  position: relative;
-  display: flex;
-  min-width: 0;
-  min-height: 96px;
-  flex: 1 1 0;
-  flex-direction: column;
-  justify-content: center;
-  padding: 13px 13px 12px 17px;
-  overflow: hidden;
-  border: 1px solid #bec7ba;
-  border-radius: var(--radius);
-  background: #ffffff;
-}
-
-.map-node::before {
-  position: absolute;
-  top: -1px;
-  bottom: -1px;
-  left: -1px;
-  width: 4px;
-  background: var(--ink);
-  content: "";
-}
-
-.map-node__type {
-  margin-bottom: 4px;
-  color: #556052;
-  font-size: 9px;
-  font-weight: 800;
-  line-height: 1.3;
-  text-transform: uppercase;
-}
-
-.map-node strong {
-  margin-bottom: 4px;
-  color: var(--ink);
-  font-size: 12px;
-  line-height: 1.35;
-}
-
-.map-node code {
-  color: #3f4b3d;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 9px;
-  font-weight: 650;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-
-.map-node small {
-  margin-top: 3px;
-  color: #5f695d;
-  font-size: 10px;
-  line-height: 1.42;
-}
-
-.map-node--store {
-  border-color: #a6bd83;
-  background: #f5f9ed;
-}
-
-.map-node--store::before {
-  background: var(--lime-hover);
-}
-
-.map-node--external {
-  border-style: dashed;
-  border-color: #72aeb1;
-  background: #f2f9f8;
-}
-
-.map-node--external::before {
-  background: var(--teal);
-}
-
-.map-node--result {
-  border-color: #86a9c7;
-  background: #f2f7fb;
-}
-
-.map-node--result::before {
-  background: var(--blue);
-}
-
-.map-matrix {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  overflow: hidden;
-}
-
-.map-matrix__column {
-  min-width: 0;
-  padding: 14px;
-}
-
-.map-matrix__column + .map-matrix__column {
-  border-left: 1px solid #cbd2c8;
-}
-
-.map-matrix__column > header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 11px;
-  padding-bottom: 9px;
-  border-bottom: 2px solid var(--ink);
-}
-
-.map-matrix__column > header b {
-  color: var(--ink);
-  font-size: 13px;
-}
-
-.map-matrix__column > header span {
-  color: var(--muted);
-  font-size: 9px;
-  font-weight: 700;
-}
-
-.map-matrix__column .map-node {
-  min-height: 82px;
-}
-
-.map-matrix__connector {
-  display: grid;
-  height: 28px;
-  place-items: center;
-  color: var(--green-ink);
-  font-size: 16px;
-}
-
-.map-contract-rail {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin-top: 14px;
-  overflow: hidden;
-  border: 1px solid var(--ink);
-  background: var(--ink);
-}
-
-.map-contract-rail > div {
-  display: grid;
-  min-height: 62px;
-  align-content: center;
-  gap: 2px;
-  padding: 10px 14px;
-}
-
-.map-contract-rail > div + div {
-  border-left: 1px solid #485145;
-}
-
-.map-contract-rail b {
-  color: #ffffff;
-  font-size: 14px;
-  font-variant-numeric: tabular-nums;
-}
-
-.map-contract-rail span {
-  color: #b9c2b6;
-  font-size: 9px;
 }
 
 .case-outcome {
@@ -2073,7 +1830,7 @@ h4 {
     grid-template-columns: 1fr;
   }
 
-  .career-history article,
+  .career-history-line,
   .career-company-head {
     grid-template-columns: 1fr;
     gap: 5px;
@@ -2190,14 +1947,6 @@ h4 {
     margin-right: 4px;
   }
 
-  .system-figure figcaption {
-    display: grid;
-  }
-
-  .diagram-legend {
-    justify-content: flex-start;
-  }
-
   .diagram-disclosure {
     margin: 28px 0;
     border: 1px solid var(--line);
@@ -2239,12 +1988,6 @@ h4 {
     content: "−";
   }
 
-  .diagram-disclosure > .system-figure {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-
   .archify-disclosure .archify-figure {
     overflow-x: auto;
   }
@@ -2252,23 +1995,6 @@ h4 {
   .archify-disclosure .archify-diagram {
     width: 760px;
     max-width: none;
-  }
-
-  .system-map__canvas {
-    padding: 14px;
-  }
-
-  .map-node {
-    min-height: 76px;
-  }
-
-  .map-matrix {
-    grid-template-columns: 1fr;
-  }
-
-  .map-matrix__column + .map-matrix__column {
-    border-top: 1px solid #cbd2c8;
-    border-left: 0;
   }
 
   .case-section {
@@ -2402,19 +2128,6 @@ h4 {
   .portfolio-profile a,
   .portfolio-profile span {
     min-height: 34px;
-  }
-
-  #test-title {
-    font-size: 26px;
-  }
-
-  .map-contract-rail {
-    grid-template-columns: 1fr;
-  }
-
-  .map-contract-rail > div + div {
-    border-top: 1px solid #485145;
-    border-left: 0;
   }
 
 }
@@ -2597,7 +2310,7 @@ h4 {
 
   .resume-document--ats .resume-hero-copy {
     font-size: 9.5pt;
-    line-height: 1.5;
+    line-height: 1.42;
   }
 
   .resume-document--ats .resume-contact {
@@ -2617,11 +2330,11 @@ h4 {
   }
 
   .resume-ats-body {
-    padding: 10px 18px 0;
+    padding: 8px 18px 0;
   }
 
   .resume-document--ats .resume-section {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .resume-document--ats .resume-section-title {
@@ -2631,7 +2344,7 @@ h4 {
 
   .resume-capability-list p {
     display: block;
-    padding: 4px 0;
+    padding: 2px 0;
     font-size: 9.2pt;
     line-height: 1.35;
   }
@@ -2668,7 +2381,7 @@ h4 {
   }
 
   .resume-role-list {
-    gap: 9px;
+    gap: 7px;
   }
 
   .resume-project-highlight {
@@ -2684,7 +2397,7 @@ h4 {
   }
 
   .resume-project-list article {
-    padding: 4px 0;
+    padding: 3px 0;
     break-inside: avoid;
   }
 
@@ -2722,7 +2435,7 @@ h4 {
 
   .resume-meta-lines p {
     display: block;
-    padding: 4px 0;
+    padding: 2px 0;
     font-size: 8.2pt;
     line-height: 1.35;
   }
@@ -2746,18 +2459,26 @@ h4 {
   }
 
   .career-history article {
-    grid-template-columns: 95px 100px minmax(0, 1fr);
-    gap: 10px;
     padding: 7px 0;
   }
 
-  .career-history h3 {
+  .career-history-line {
+    display: block;
+  }
+
+  .career-history-line time,
+  .career-history-line strong {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  .career-history strong {
     font-size: 9.2pt;
     font-weight: 800;
   }
 
   .career-history time,
-  .career-history p {
+  .career-history span {
     font-size: 7.8pt;
   }
 
@@ -2960,12 +2681,14 @@ h4 {
     break-before: page;
   }
 
-  #feed.case-section {
+  #point.case-section,
+  #evidence.case-section {
     break-before: auto;
     page-break-before: auto;
   }
 
-  #test.case-section {
+  #jpa.case-section,
+  #feed.case-section {
     break-before: page;
     page-break-before: always;
   }
@@ -3041,21 +2764,8 @@ h4 {
     break-inside: avoid;
   }
 
-  .system-figure,
-  .system-figure figcaption,
-  .map-matrix {
-    break-after: avoid;
-    break-inside: avoid;
-  }
-
-  .diagram-disclosure,
-  .system-figure {
+  .diagram-disclosure {
     overflow: visible;
-  }
-
-  .system-figure {
-    break-after: auto;
-    break-inside: auto;
   }
 
   .archify-figure {
@@ -3077,114 +2787,12 @@ h4 {
     font-size: 7pt;
   }
 
-  .system-figure figcaption {
-    display: flex;
-    padding: 8px 10px;
-    border-bottom-width: 2px;
-    background: var(--surface-raised);
-  }
-
-  .system-figure {
-    margin: 16px 0;
-    border-color: #aaaaaa;
-    box-shadow: none;
-  }
-
   .diagram-disclosure {
     margin: 16px 0;
   }
 
   .diagram-disclosure > summary {
     display: none;
-  }
-
-  .diagram-disclosure > .system-figure {
-    margin: 0;
-  }
-
-  .system-map__canvas {
-    padding: 8px;
-    background: #f7f7f7;
-  }
-
-  .diagram-caption-title b {
-    font-size: 9pt;
-  }
-
-  .diagram-caption-title span,
-  .diagram-legend {
-    font-size: 7pt;
-  }
-
-  .map-contract-rail {
-    margin-top: 7px;
-  }
-
-  .map-matrix__column > header b {
-    font-size: 8.6pt;
-  }
-
-  .map-matrix__column > header span {
-    font-size: 7.2pt;
-  }
-
-  .map-node {
-    min-height: 56px;
-    padding: 7px 7px 7px 9px;
-    box-shadow: none;
-  }
-
-  .map-node__type,
-  .map-node code,
-  .map-node small {
-    font-size: 7.2pt;
-    line-height: 1.35;
-  }
-
-  .map-node strong {
-    font-size: 8.6pt;
-    line-height: 1.25;
-  }
-
-  .map-matrix__column + .map-matrix__column {
-    border-top: 0;
-    border-left: 1px solid #cbd2c8;
-  }
-
-  .map-matrix__column {
-    padding: 7px;
-  }
-
-  .map-matrix {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .map-matrix__column > header {
-    margin-bottom: 6px;
-    padding-bottom: 5px;
-  }
-
-  .map-matrix__column .map-node {
-    min-height: 52px;
-  }
-
-  .map-matrix__connector {
-    height: 16px;
-    font-size: 9pt;
-  }
-
-  .map-contract-rail {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .map-contract-rail > div {
-    min-height: 38px;
-    padding: 5px 7px;
-  }
-
-  .map-contract-rail b,
-  .map-contract-rail span {
-    font-size: 7pt;
   }
 
   .case-outcome {
@@ -3206,8 +2814,6 @@ h4 {
 
   #evidence.case-section {
     padding-top: 16px;
-    break-before: auto;
-    page-break-before: auto;
   }
 
   #evidence .case-header {

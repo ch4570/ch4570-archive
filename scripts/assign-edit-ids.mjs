@@ -16,7 +16,6 @@ const voidTags = new Set(["area", "base", "br", "col", "embed", "hr", "img", "in
 const lockedClasses = new Set([
   "site-header",
   "case-nav",
-  "system-figure",
   "hero-actions",
   "toast",
   "skip-link",

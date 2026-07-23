@@ -13,7 +13,6 @@ function visibleText(fragment) {
     .replace(/<[^>]+>/gu, "")
     .replaceAll("&amp;", "&")
     .replaceAll("&nbsp;", " ")
-    .replaceAll("&#8288;", "")
     .replace(/\s+/gu, " ")
     .trim();
 }
@@ -98,6 +97,8 @@ test("portfolio story cards stay short and semantic", async () => {
   const storyPairs = [
     ["portfolio-017", "portfolio-018"],
     ["portfolio-019", "portfolio-020"],
+    ["portfolio-089", "portfolio-090"],
+    ["portfolio-091", "portfolio-092"],
     ["portfolio-039", "portfolio-040"],
     ["portfolio-041", "portfolio-042"],
   ];
@@ -122,21 +123,45 @@ test("portfolio story cards stay short and semantic", async () => {
   }
 });
 
-test("portfolio technical identifiers stay searchable", async () => {
-  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const heading = scanEditableRegions(source).find(
-    (region) => region.id === "portfolio-079",
-  );
+test("submission text stays searchable without invisible joiners", async () => {
+  for (const file of ["resume/index.html", "career/index.html", "portfolio/index.html"]) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    assert.doesNotMatch(source, /&#8288;|\u2060/u, file + " should use literal text");
+  }
+});
 
-  assert.ok(heading, "expected the test-support heading");
-  assert.match(visibleText(heading.innerHTML), /test-support/u);
-  assert.doesNotMatch(heading.innerHTML, /&#8288;|\u2060/u);
+test("career overview preserves period, employer, and role reading order", async () => {
+  const source = await readFile(resolve(repositoryRoot, "career/index.html"), "utf8");
+  const rows = [...source.matchAll(/<article><p class="career-history-line">([\s\S]*?)<\/p><\/article>/gu)];
+
+  assert.equal(rows.length, 4, "expected four semantic career rows");
+  for (const [, row] of rows) {
+    const period = row.indexOf("<time");
+    const employer = row.indexOf("<strong");
+    const role = row.indexOf("<span");
+    assert.ok(period >= 0 && period < employer && employer < role);
+  }
+});
+
+test("portfolio leads with the JPA correction case before supporting work", async () => {
+  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
+  const orderedIds = ["event", "jpa", "point", "feed", "evidence"];
+  const positions = orderedIds.map((id) => source.indexOf('id="' + id + '"'));
+
+  assert.ok(positions.every((position) => position >= 0), "expected every portfolio case");
+  assert.deepEqual(positions, [...positions].sort((left, right) => left - right));
+
+  const jpa = caseSection(source, "jpa");
+  assert.match(jpa, /실제 영속성 컨텍스트/u);
+  assert.match(jpa, /약 200만/u);
+  assert.equal(jpa.match(/<div class="fact-cell">/gu)?.length, 4);
+  assert.equal(jpa.match(/<div class="story-block">/gu)?.length, 2);
 });
 
 test("portfolio cases keep diagrams focused and accessible", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
 
-  for (const id of ["event", "point", "feed", "test"]) {
+  for (const id of ["event", "jpa", "point", "feed"]) {
     const section = caseSection(source, id);
     assert.ok(
       (section.match(/<figure\b/gu) ?? []).length <= 1,
