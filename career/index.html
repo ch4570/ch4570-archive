@@ -35,8 +35,8 @@
           <h1 data-edit-id="career-002">서민재</h1>
           <p class="resume-hero-role" data-edit-id="career-003">Backend Engineer · Java / Kotlin / Spring</p>
           <p class="resume-hero-copy" data-edit-id="career-004">
-            Java·Kotlin·Spring으로 이벤트 처리와 배치, 검색·캐시 기능을 개발했습니다.
-            이벤트 처리에서는 실패한 단계에 따라 필요한 업무만 다시 실행했고, JPA 오류는 실제 영속성 컨텍스트에서 재현해 수정했습니다.
+            실패 지점을 상태로 남기고 저장한 payload로 필요한 업무만 복구해, 전체 처리 과정의 재실행을 줄였습니다.
+            Java·Kotlin·Spring 기반의 배치와 검색·캐시를 개발했고, JPA 오류는 실제 영속성 컨텍스트에서 재현해 데이터 보정까지 맡았습니다.
           </p>
         </div>
         <address class="resume-contact">
@@ -65,20 +65,20 @@
           <header class="career-company-head">
             <div>
               <h2 id="worksphere-title" data-edit-id="career-025">웍스피어(유) · Backend&nbsp;Engineer</h2>
-              <p data-edit-id="career-026">웍스피어(유) 소속으로 JOBKOREA·Albamon 플랫폼의 이벤트 복구와 포인트 원장·배치, 검색·캐시 업무를 맡고 있습니다.</p>
+              <p data-edit-id="career-026">JOBKOREA·Albamon 플랫폼에서 실패 지점별 이벤트 복구, 재시작 가능한 포인트 배치, 검색·캐시 처리와 정합성 검증을 맡고 있습니다.</p>
             </div>
             <time datetime="2025-06" data-edit-id="career-027">2025.06 — 현재</time>
           </header>
 
           <article class="career-project">
             <header>
-              <h3 data-edit-id="career-029">이벤트 처리의 실패 단계를 기록하고, 필요한 업무만 다시 실행했습니다.</h3>
+              <h3 data-edit-id="career-029">실패 지점을 기록해 복구 범위를 좁히고, 전체 처리 과정의 재실행을 줄였습니다.</h3>
             </header>
-            <p data-edit-id="career-030">이벤트 발행에 실패한 경우와 발행 후 처리 과정에서 실패한 경우는 확인해야 할 데이터와 복구할 업무가 달랐습니다.</p>
+            <p data-edit-id="career-030">발행 전에 멈춘 이벤트와 발행 뒤 개별 업무에서 실패한 이벤트는 확인할 데이터와 다시 실행할 범위가 달랐습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-031"><strong>Kafka로 처리하는 내부 이벤트 9종의 상태를 6개로 나눠 기록</strong>해 발행 실패와 처리 실패를 구분했습니다.</li>
-              <li data-edit-id="career-032"><strong>저장한 payload로 복구 로직 8개를 구현</strong>해 실패한 업무만 다시 실행하도록 했습니다.</li>
-              <li data-edit-id="career-033"><strong>15분 넘게 멈춘 이벤트</strong>는 유형별로 묶어 Slack으로 알림을 보냈습니다.</li>
+              <li data-edit-id="career-031"><strong>Kafka 이벤트의 발행·처리 단계를 상태로 기록</strong>해 어느 지점에서 멈췄는지 추적할 수 있게 했습니다.</li>
+              <li data-edit-id="career-032"><strong>저장한 payload를 사용하는 업무별 복구 경로를 구현</strong>해 실패한 업무만 다시 실행하고 전체 처리 과정의 반복 실행을 줄였습니다.</li>
+              <li data-edit-id="career-033"><strong>15분 넘게 멈춘 이벤트</strong>는 유형별로 묶어 Slack으로 알림을 보내 장기 정체를 확인할 수 있게 했습니다.</li>
             </ul>
           </article>
 
@@ -87,30 +87,30 @@
         <section class="career-company-block career-print-page" id="worksphere-serving" aria-labelledby="serving-title">
           <header class="career-company-head career-company-head--continuation">
             <div>
-              <h2 class="atomic-text" id="serving-title" data-edit-id="career-042">웍스피어(유) · 배치·검색·테스트</h2>
+              <h2 class="atomic-text" id="serving-title" data-edit-id="career-042">웍스피어(유) <span>배치·검색·테스트</span></h2>
             </div>
           </header>
 
           <article class="career-project">
             <header>
-              <h3 data-edit-id="career-036">중단된 배치는 이어서 실행하고, 동시&nbsp;요청이 겹쳐도 잔액과 원장이 맞는지 검증했습니다.</h3>
+              <h3 data-edit-id="career-036">배치를 중단 지점부터 재개하고, 동시&nbsp;요청 이후의 잔액·원장 정합성을 검증했습니다.</h3>
             </header>
             <ul class="bullet-list">
               <li data-edit-id="career-038"><strong>포인트 소멸 대상</strong>을 한 번에 읽지 않고 페이지 단위로 처리했습니다.</li>
-              <li data-edit-id="career-039"><strong>아카이브 테이블 10개를</strong> 참조 순서대로 옮기고, 작업이 중단돼도 이어서 실행하도록 했습니다.</li>
-              <li data-edit-id="career-040"><strong>9개 API를 대상으로 13개 동시성 시나리오를 구성</strong>했습니다. 같은 락 키를 사용하거나 같은 예산을 차감하는 요청을 동시에 보낸 뒤에도 잔액·원장·후속 이벤트가 맞는지 확인했습니다.</li>
+              <li data-edit-id="career-039"><strong>아카이브 테이블 10개를</strong> 참조 순서대로 옮기고, 중단 지점부터 재개하도록 했습니다.</li>
+              <li data-edit-id="career-040"><strong>9개 API를 대상으로 13개 동시성 시나리오를 구성</strong>해 같은 락 키나 예산을 공유하는 요청을 동시에 실행했습니다. 완료 후 잔액·원장·후속 이벤트의 정합성을 검증했습니다.</li>
             </ul>
           </article>
 
           <article class="career-project">
             <header>
-              <p class="project-kicker" data-edit-id="career-050">웍스피어(유) · 계속</p>
-              <h3 data-edit-id="career-044">검색 소스별로 타임아웃과 실패 처리 방식을 정하고, Redis 캐시를 우회하는 경로를 구현했습니다.</h3>
+              <p class="project-kicker" data-edit-id="career-050">개인화 피드 · 검색·캐시</p>
+              <h3 data-edit-id="career-044">검색 소스별 실패 경로를 분리하고, Redis 캐시를 우회해도 조회를 이어가도록 했습니다.</h3>
             </header>
-            <p data-edit-id="career-045">개인화 피드에서 9개 검색 소스의 정책과 실패 처리를 맡았습니다. OpenSearch 조회부터 랭킹, 캐시 저장까지 처리 단계를 구분했습니다.</p>
+            <p data-edit-id="career-045">개인화 피드에서 검색 소스별 정책과 실패 처리를 맡고, OpenSearch 후보 조회부터 캐시 저장까지 처리 단계를 구분했습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-046"><strong>9개 검색 소스</strong>에 필터·정렬·벡터 규칙을 적용하고, 타임아웃과 실패 처리 경로를 구현했습니다.</li>
-              <li data-edit-id="career-047"><strong>후보 필터링·점수화·재정렬·캐시 저장</strong> 단계마다 입력과 출력을 구분하고, Redis 캐시를 우회하는 경로를 구현했습니다.</li>
+              <li data-edit-id="career-046"><strong>9개 검색 소스</strong>에 필터·정렬·벡터 규칙과 소스별 타임아웃·실패 경로를 적용했습니다.</li>
+              <li data-edit-id="career-047"><strong>후보 필터링·점수화·재정렬·캐시 저장</strong>의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li>
               <li data-edit-id="career-048"><strong>OpenSearch 조회 기능을 별도 모듈로 분리</strong>하고, ArchUnit 테스트로 순환 의존을 검출했습니다.</li>
             </ul>
           </article>
@@ -120,10 +120,10 @@
               <h3 data-edit-id="career-051">공통 테스트 모듈로 준비 코드와 실행 기준을 정리했습니다.</h3>
             </header>
             <ul class="bullet-list">
-              <li data-edit-id="career-053"><strong>Fixture 생성과 Mock 초기화, WebMvc·JPA·트랜잭션 설정</strong>을 공통 모듈로 옮겼습니다.</li>
-              <li data-edit-id="career-054"><strong>Base·Mock·WebMvc·JPA로 테스트 진입점을 나눠</strong> 필요한 설정만 사용하게 했습니다.</li>
-              <li data-edit-id="career-055"><strong>느린 동시성 테스트는 별도 옵션으로 실행</strong>하도록 하고, CI에서 실행할 범위를 문서로 정리했습니다.</li>
-              <li data-edit-id="career-070"><strong>CI 테스트가 메모리 부족으로 중단되자</strong> 느린 테스트의 실행 범위와 Spring 컨텍스트의 재사용·초기화 방식을 조정해 자원을 늘리지 않고 문제를 해결했습니다.</li>
+              <li data-edit-id="career-053"><strong>Fixture 생성, Mock 초기화, WebMvc·JPA·트랜잭션 설정</strong>을 공통 모듈로 모아 반복 준비 코드를 줄였습니다.</li>
+              <li data-edit-id="career-054"><strong>Base·Mock·WebMvc·JPA 진입점</strong>으로 나눠 테스트가 필요한 설정만 불러오도록 했습니다.</li>
+              <li data-edit-id="career-055"><strong>느린 동시성 테스트는 별도 옵션으로 분리</strong>하고, CI의 기본·선택 실행 범위를 문서화했습니다.</li>
+              <li data-edit-id="career-070"><strong>CI 테스트가 메모리 부족으로 중단되자</strong> 느린 테스트 범위와 Spring 컨텍스트 재사용·초기화 방식을 조정해 추가 자원 없이 해소했습니다.</li>
             </ul>
           </article>
         </section>
@@ -137,10 +137,10 @@
           </header>
 
           <article class="career-project career-project--featured">
-            <header><h3 data-edit-id="career-059">잘못 저장된 데이터 약 200만 건을 보정했습니다.</h3></header>
+            <header><h3 data-edit-id="career-059">JPA 변경 감지 오류를 실제 영속성 컨텍스트에서 재현하고, 보정으로 저장 데이터의 신뢰를 회복했습니다.</h3></header>
             <ul class="bullet-list">
-              <li data-edit-id="career-069"><strong>실제 영속성 컨텍스트</strong>에서 오류를 재현한 뒤 보정 스크립트를 작성했습니다.</li>
-              <li data-edit-id="career-068"><strong>Drive-Service의 Spring Boot 2.3.8 → 3.3.3 전환 과정에서</strong> 테스트를 0개에서 160개 이상으로 보강했습니다.</li>
+              <li data-edit-id="career-069"><strong>실제 영속성 컨텍스트</strong>에서 JPA 변경 감지 오류를 재현해 원인을 확인하고, 보정 스크립트로 잘못 저장된 데이터를 바로잡았습니다.</li>
+              <li data-edit-id="career-068"><strong>Drive-Service의 Spring Boot 2.3.8 → 3.3.3 전환 과정에서</strong> 테스트 기반을 보강해 전환 후 동작을 검증할 수 있게 했습니다.</li>
             </ul>
           </article>
 

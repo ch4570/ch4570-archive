@@ -137,7 +137,9 @@ test("previous-career cards keep equal columns and print the lead period in orde
     "utf8",
   );
   const previousCareerRules = [
-    ...stylesheet.matchAll(/\.career-previous-grid\s*\{([^}]*)\}/gu),
+    ...stylesheet.matchAll(
+      /^[ \t]*\.career-previous-grid\s*\{(?=[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\))([^}]*)\}/gmu,
+    ),
   ];
 
   assert.equal(previousCareerRules.length, 2, "expected screen and print grid rules");

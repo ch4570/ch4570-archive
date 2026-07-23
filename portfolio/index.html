@@ -33,10 +33,10 @@
         <div class="portfolio-hero-grid">
           <div>
             <p class="eyebrow eyebrow-coral" data-edit-id="portfolio-001">백엔드 엔지니어 포트폴리오</p>
-            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">멈춘 작업을 다시&nbsp;시작하고, 틀어진 데이터를 바로잡았습니다</h1>
+            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">실패를 격리하고, 중단된&nbsp;처리를 이어&nbsp;가며, 틀어진&nbsp;데이터를 바로잡았습니다</h1>
             <p class="hero-copy" data-edit-id="portfolio-003">
-              Java·Kotlin·Spring으로 백엔드를 개발합니다.
-              문제가&nbsp;생긴&nbsp;이유와 해결한 과정을 네 가지 작업으로 정리했습니다.
+              Java·Kotlin·Spring으로 실패 후 다시 시작할 수 있고 데이터 정합성을 지키는 백엔드를 개발합니다.
+              이벤트&nbsp;복구, JPA 데이터 보정, 포인트 배치·동시성, <span lang="en"><span lang="ko">검색·캐시&nbsp;설계</span></span>의 네 가지 사례와 공개한 코드·글·발표를 정리했습니다.
             </p>
           </div>
           <div class="portfolio-profile">
@@ -71,27 +71,27 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">01</span>
             <div>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">이벤트가 어디서 실패했는지 기록하고, 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
+              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">실패 단계를 기록해 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 기능 개발</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka로 처리하는 내부 이벤트 9종 · 처리 상태 6개 · 업무별 복구 방식 8개</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 상태 기록 · JSONB에 payload 저장</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">IN_PROGRESS 상태가 15분을 넘긴 이벤트를 유형별로 묶어 Slack으로 알림</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 경로 설계·개발</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka 이벤트의 발행·처리 상태를 단계별로 구분</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 처리 상태 기록 · JSONB에 복구용 payload 저장</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">정체된 IN_PROGRESS 이벤트를 유형별로 묶어 Slack 알림</dd></div>
           </dl>
 
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-017">실패 상태 하나만으로는 어디서 다시 시작해야 할지 알&nbsp;수&nbsp;없었습니다</h3>
-              <p data-edit-id="portfolio-018">이벤트 발행에 실패한 경우와 발행 후 처리 과정에서 실패한 경우는 확인해야 할 데이터와 복구할 업무가 달랐습니다. 하지만 둘 다 같은 실패 상태로 남았습니다.</p>
+              <h3 data-edit-id="portfolio-017">같은 실패 상태로는 복구 지점을 정할 수&nbsp;없었습니다</h3>
+              <p data-edit-id="portfolio-018">발행 전에 멈췄는지, 발행 후 업무 처리에서 멈췄는지에 따라 확인할 데이터와 재실행 범위가 달랐지만 하나의 실패 상태만 남았습니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-019">실패 상태에 따라 복구할 업무를 나눴습니다</h3>
-              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 구분해 기록했습니다. 저장한 payload로 포인트 차감·회수·만료 알림 중 실패한 업무만 다시 실행하도록 했습니다.</p>
+              <h3 data-edit-id="portfolio-019">실패 단계와 업무를 분리해 복구 범위를 좁혔습니다</h3>
+              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 나눠 기록하고 payload를 보존했습니다. 포인트 차감·회수·만료 알림 가운데 완료되지 않은 업무만 골라 다시 실행했습니다.</p>
             </div>
           </div>
 
@@ -101,28 +101,28 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">02</span>
             <div>
-              <h2 class="case-title" id="jpa-title" data-edit-id="portfolio-079">실제 영속성 컨텍스트에서 JPA 오류를 재현하고 약 200만&nbsp;건을 보정했습니다</h2>
-              <p class="case-lede" data-edit-id="portfolio-080">Mock 테스트에서는 드러나지 않던 변경 감지 오류를 실제 영속성 컨텍스트에서 재현하고, 보정 스크립트로 잘못 저장된 데이터를 바로잡았습니다.</p>
+              <h2 class="case-title" id="jpa-title" data-edit-id="portfolio-079">실제 영속성 컨텍스트에서 JPA 변경 감지 오류를 재현하고 <span lang="en"><span lang="ko">약 200만&nbsp;건</span></span>을 보정했습니다</h2>
+              <p class="case-lede" data-edit-id="portfolio-080">Mock 테스트에서 놓친 저장 오류를 실제 영속성 컨텍스트에서 재현했습니다. 보정 스크립트로 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
             </div>
           </header>
 
           <dl class="fact-grid">
             <div class="fact-cell"><dt data-edit-id="portfolio-081">문제</dt><dd data-edit-id="portfolio-082">JPA 변경 감지 오류</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-083">재현</dt><dd data-edit-id="portfolio-084">실제 영속성 컨텍스트</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-085">보정</dt><dd data-edit-id="portfolio-086">잘못 저장된 데이터 약 200만&nbsp;건</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-087">테스트 기반</dt><dd data-edit-id="portfolio-088">Drive-Service 테스트 0개 → 160개 이상</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-083">재현</dt><dd data-edit-id="portfolio-084">실제 영속성 컨텍스트에서 저장 과정 검증</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-085">보정</dt><dd data-edit-id="portfolio-086">오류 데이터 식별 · 보정 스크립트 적용</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-087">회귀 검증</dt><dd data-edit-id="portfolio-088">실제 저장 동작을 확인하는 테스트 보강</dd></div>
           </dl>
 
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-089">Mock 테스트에서는 오류가 드러나지&nbsp;않았습니다</h3>
-              <p data-edit-id="portfolio-090">기존 Mock 테스트에서는 저장 오류가 재현되지 않아 실제 영속성 컨텍스트에서 저장 과정을 다시 확인해야 했습니다.</p>
+              <h3 data-edit-id="portfolio-089">Mock 테스트만으로는 실제 저장 오류를 찾을 수&nbsp;없었습니다</h3>
+              <p data-edit-id="portfolio-090">기존 테스트는 실제 영속성 컨텍스트의 변경 감지와 저장 시점을 거치지 않아 오류가 드러나지 않았습니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-091">오류를 재현한 뒤 보정&nbsp;스크립트를&nbsp;작성했습니다</h3>
-              <p data-edit-id="portfolio-092">실제 영속성 컨텍스트에서 오류를 재현하고, 보정 스크립트로 잘못 저장된 데이터 약 200만&nbsp;건을 바로잡았습니다.</p>
+              <h3 data-edit-id="portfolio-091">실제 저장 환경에서 재현한 뒤 보정 경로를 만들었습니다</h3>
+              <p data-edit-id="portfolio-092">오류 원인을 재현해 확인하고 보정 스크립트를 작성했습니다. 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
             </div>
           </div>
         </section>
@@ -133,14 +133,14 @@
             <div>
               <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">중단된&nbsp;배치를 이어&nbsp;처리하고 포인트&nbsp;정합성을 검증했습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-030">
-                배치별 재시작 기준을 정하고 요청을 동시에 처리한 뒤 잔액·원장·예산이 맞는지 확인했습니다.
+                배치마다 재시작 기준을 분리하고, 동시 요청이 끝난 뒤 잔액·원장·예산을 함께 대조했습니다.
               </p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-031">담당</dt><dd data-edit-id="portfolio-032">포인트 소멸 배치의 페이지 단위 처리·아카이브 배치 구현·만료 알림 개선</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-033">처리 단위</dt><dd data-edit-id="portfolio-034">소멸 대상을 한꺼번에 읽지 않고 페이지 단위로 반복 처리</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-031">담당</dt><dd data-edit-id="portfolio-032">포인트 소멸·아카이브 배치 구현 · 만료 알림 개선</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-033">처리 단위</dt><dd data-edit-id="portfolio-034">소멸 대상을 페이지 단위로 읽고 반복 처리</dd></div>
             <div class="fact-cell"><dt data-edit-id="portfolio-035">보관 대상</dt><dd data-edit-id="portfolio-036">참조 순서대로 옮긴 아카이브 테이블 10개</dd></div>
             <div class="fact-cell"><dt data-edit-id="portfolio-037">동시성</dt><dd data-edit-id="portfolio-038">9개 API · 13개 시나리오 · 3·5·10개 동시 요청</dd></div>
           </dl>
@@ -148,13 +148,13 @@
           <div class="story-grid">
             <div class="story-block">
               <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-039">세 배치는 중단된 뒤 다시 시작할 기준이 서로&nbsp;달랐습니다</h3>
-              <p data-edit-id="portfolio-040">소멸 배치는 잔액과 원장을 바꾸고, 만료 알림 배치는 발송할 알림을 모았습니다. 아카이브 배치는 참조 순서대로 테이블을 옮겨야 했습니다.</p>
+              <h3 data-edit-id="portfolio-039">배치마다 중단 후 이어갈 지점이 달랐습니다</h3>
+              <p data-edit-id="portfolio-040">소멸 배치는 잔액·원장을 바꾸고 만료 알림 배치는 발송 대상을 모았습니다. 아카이브 배치는 참조 순서를 지켜 테이블을 옮겨야 했습니다.</p>
             </div>
             <div class="story-block">
               <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-041">배치별로 재시작 기준을 정했습니다</h3>
-              <p data-edit-id="portfolio-042">각 배치의 진행 위치를 따로 기록했습니다. 같은 락 키를 쓰거나 같은 예산을 차감하는 동시 요청이 끝난 뒤에는 잔액·원장·이벤트 수를 확인했습니다.</p>
+              <h3 data-edit-id="portfolio-041">진행 위치를 따로 기록하고 결과 정합성을 확인했습니다</h3>
+              <p data-edit-id="portfolio-042">배치별 진행 위치를 분리해 재실행 범위를 제한했습니다. 동시 요청 후에는 잔액·원장·예산·후속 이벤트를 함께 대조했습니다.</p>
             </div>
           </div>
 
@@ -164,16 +164,16 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">04</span>
             <div>
-              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스마다 실패를 처리하고 캐시&nbsp;우회&nbsp;경로를 만들었습니다</h2>
-              <p class="case-lede" data-edit-id="portfolio-050">검색 소스마다 정책과 타임아웃, 실패 처리 방식이 달랐습니다. 후보 조회·랭킹·캐시 저장 단계를 구분하고, 각 단계의 입력과 출력을 정리했습니다.</p>
+              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스의 실패를 격리하고 캐시&nbsp;우회&nbsp;경로를 만들었습니다</h2>
+              <p class="case-lede" data-edit-id="portfolio-050">후보 조회·랭킹·캐시 저장을 분리해 한 소스의 실패가 전체 피드로 번지지 않게 했습니다. 캐시를 쓰지 않고 다시 계산하는 경로도 마련했습니다.</p>
             </div>
           </header>
 
           <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-051">처리 순서</dt><dd data-edit-id="portfolio-052">후보 조회 → 중복 제거 → 점수화 → 재정렬 → 캐시 저장</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-053">구성</dt><dd data-edit-id="portfolio-054">후보 수집 인터페이스 · 역방향 조회 방식 · 캐시 3종</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-055">담당</dt><dd data-edit-id="portfolio-056">9개 검색 소스의 정책·타임아웃·실패 처리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 연동 · Redis 캐시를 우회하는 경로 · 순환 의존 검출</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-051">처리 단계</dt><dd data-edit-id="portfolio-052">후보 조회 → 중복 제거 → 점수화 → 재정렬 → 캐시 저장</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-053">구성</dt><dd data-edit-id="portfolio-054">후보 수집 인터페이스 · 역방향 조회 방식 · 캐시 전략 분리</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-055">실패 격리</dt><dd data-edit-id="portfolio-056">검색 소스별 정책·타임아웃·실패 처리</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 · Redis 캐시 우회 · 순환 의존 검출</dd></div>
           </dl>
 
           <details class="diagram-disclosure archify-disclosure" open>
@@ -198,23 +198,23 @@
           <header class="case-header">
             <span class="case-number" aria-hidden="true">05</span>
             <div>
-              <h2 class="case-title" id="evidence-title" data-edit-id="portfolio-109">공개한 코드와 글</h2>
-              <p class="case-lede" data-edit-id="portfolio-110">기술 글 156편과 YouthCon 발표, Spring 오픈소스에 반영된 개선 3건을 한곳에 모았습니다.</p>
+              <h2 class="case-title" id="evidence-title" data-edit-id="portfolio-109">발표·글·코드로 남긴 공개 기록</h2>
+              <p class="case-lede" data-edit-id="portfolio-110">기술 글 156편과 YouthCon 발표, Spring 오픈소스 개선 제안, 개인 프로젝트를 한곳에 모았습니다.</p>
             </div>
           </header>
 
           <div class="scope-grid">
             <article class="scope-item">
               <h3 data-edit-id="portfolio-111"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 발표</a></h3>
-              <p data-edit-id="portfolio-112">‘우리팀을 위한 Spring Test 만들기’ 발표에서 반복되는 테스트 준비 코드를 줄이고 팀의 테스트 작성 규칙을 정한 과정을 다뤘습니다.</p>
+              <p data-edit-id="portfolio-112">‘우리팀을 위한 Spring Test 만들기’ 발표에서 반복되는 테스트 준비 코드를 공통화하고, 테스트 유형에 맞는 설정과 작성 기준을 정리한 과정을 다뤘습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-113"><a href="https://velog.io/@ch4570/posts">기술 글 156편 · 2026.07 기준</a></h3>
               <p data-edit-id="portfolio-114">Java·JPA·테스트 관련 문제와 SQL 튜닝 경험을 글로 기록했습니다. 글또 10기에서는 준비위원과 연사로 참여했습니다.</p>
             </article>
             <article class="scope-item">
-              <h3 data-edit-id="portfolio-115">Spring 오픈소스 · 개선 제안 3건 반영</h3>
-              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에 불변 컬렉션 처리 개선, 하드코딩 제거, 자원 정리에 관한 제안을 보냈고 세 건 모두 반영됐습니다.</p>
+              <h3 data-edit-id="portfolio-115">Spring 오픈소스 · 반영된 개선 제안</h3>
+              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에 불변 컬렉션 처리, 하드코딩 제거, 자원 정리에 관한 개선을 제안했고 모두 반영됐습니다.</p>
             </article>
             <article class="scope-item">
               <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">Java Cafe 기반 OpenSearch 한글 플러그인</a></h3>
