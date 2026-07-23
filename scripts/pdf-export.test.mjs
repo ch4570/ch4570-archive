@@ -9,6 +9,38 @@ import {
 } from "./prepare-pdf-document.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
+const balancedCareerColumns = "repeat(2, minmax(0, 1fr))";
+
+function findExactRuleDeclarations(stylesheet, selector) {
+  const withoutComments = stylesheet.replace(/\/\*[\s\S]*?\*\//gu, "");
+  const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+  const rulePattern = new RegExp(
+    String.raw`(?:^|\})[ \t\r\n]*${escapedSelector}[ \t\r\n]*\{([^{}]*)\}`,
+    "gu",
+  );
+
+  return [...withoutComments.matchAll(rulePattern)].map(([, ruleBody]) =>
+    ruleBody
+      .split(";")
+      .map((declaration) => declaration.trim())
+      .filter(Boolean)
+      .map((declaration) => {
+        const separator = declaration.indexOf(":");
+        return separator < 0
+          ? { property: declaration, value: "" }
+          : {
+              property: declaration.slice(0, separator).trim(),
+              value: declaration.slice(separator + 1).trim(),
+            };
+      }),
+  );
+}
+
+function effectivePropertyValue(declarations, property) {
+  return declarations
+    .filter((declaration) => declaration.property === property)
+    .at(-1)?.value;
+}
 
 test("PDF preparation embeds the canonical stylesheet and removes runtime-only assets", async () => {
   const [sourceHtml, stylesheet] = await Promise.all([
@@ -136,17 +168,19 @@ test("previous-career cards keep equal columns and print the lead period in orde
     path.join(projectRoot, "assets/design-system.css"),
     "utf8",
   );
-  const previousCareerRules = [
-    ...stylesheet.matchAll(
-      /^[ \t]*\.career-previous-grid\s*\{(?=[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\))([^}]*)\}/gmu,
-    ),
-  ];
+  const previousCareerRules = findExactRuleDeclarations(
+    stylesheet,
+    ".career-previous-grid",
+  ).filter(
+    (declarations) =>
+      effectivePropertyValue(declarations, "grid-template-columns") !== undefined,
+  );
 
   assert.equal(previousCareerRules.length, 2, "expected screen and print grid rules");
-  for (const [, declarations] of previousCareerRules) {
-    assert.match(
-      declarations,
-      /grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/u,
+  for (const declarations of previousCareerRules) {
+    assert.equal(
+      effectivePropertyValue(declarations, "grid-template-columns"),
+      balancedCareerColumns,
       "previous-career cards should use balanced columns",
     );
   }
@@ -161,4 +195,25 @@ test("previous-career cards keep equal columns and print the lead period in orde
     /#worksphere-serving\s+\.career-project:nth-of-type\(2\)\s*\{[^}]*break-before:\s*page[^}]*\}/su,
     "the search project should open the balanced second career page",
   );
+});
+
+test("previous-career grid parsing rejects ineffective two-column declarations", () => {
+  const invalidRules = [
+    "/* grid-template-columns: repeat(2, minmax(0, 1fr)); */ grid-template-columns: 1fr;",
+    "--x: grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-columns: 1fr;",
+    "grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-columns: 1fr;",
+    "grid-template-columns: repeat(2, minmax(0, 1fr)) garbage;",
+  ];
+
+  for (const ruleBody of invalidRules) {
+    const [declarations] = findExactRuleDeclarations(
+      `.career-previous-grid { ${ruleBody} }`,
+      ".career-previous-grid",
+    );
+    assert.notEqual(
+      effectivePropertyValue(declarations, "grid-template-columns"),
+      balancedCareerColumns,
+      ruleBody,
+    );
+  }
 });
