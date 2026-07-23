@@ -15,7 +15,15 @@
       .title { fill: #11150f; font-size: 18px; font-weight: 700; }
       .detail { fill: #4f594d; font-size: 14px; font-weight: 500; }
       .flow { fill: none; stroke: #416f00; stroke-width: 2.5; marker-end: url(#arrow); }
-      .hint { fill: #416f00; font-size: 14px; font-weight: 700; }
+      .hint {
+        fill: #416f00;
+        stroke: #f8faf6;
+        stroke-width: 6px;
+        paint-order: stroke fill;
+        stroke-linejoin: round;
+        font-size: 14px;
+        font-weight: 700;
+      }
     </style>
   </defs>
 
@@ -47,9 +55,9 @@
   <text class="title" x="875" y="82" text-anchor="middle">Feed response</text>
   <text class="detail" x="875" y="108" text-anchor="middle">스냅샷 결과 반환</text>
 
-  <text class="lane" x="36" y="202">Empty일 때 후보 보충</text>
-  <text class="hint" x="398" y="164">Empty</text>
-  <text class="hint" x="677" y="164">새 Snapshot</text>
+  <text class="lane" x="150" y="202">Empty일 때 후보 보충</text>
+  <text class="hint" x="398" y="158">Empty</text>
+  <text class="hint" x="677" y="158">새 Snapshot</text>
 
   <rect class="node" x="32" y="219" width="190" height="100" rx="2"/>
   <text class="title" x="127" y="259" text-anchor="middle">검색 소스 9개</text>

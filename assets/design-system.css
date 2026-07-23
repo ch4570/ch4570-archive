@@ -284,6 +284,18 @@ h4 {
   line-height: 1.75;
 }
 
+.home-hero .hero-copy {
+  line-height: 1.7;
+}
+
+.home-hero .hero-copy > span {
+  display: block;
+}
+
+.home-hero .hero-copy > span + span {
+  margin-top: 8px;
+}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
