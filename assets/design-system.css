@@ -83,6 +83,8 @@
   font-synthesis: none;
 }
 
+
+
 * {
   box-sizing: border-box;
 }
@@ -6041,5 +6043,1955 @@ h4 {
   .portfolio-page .portfolio-profile span,
   .portfolio-page .portfolio-profile a {
     color: var(--ink);
+  }
+}
+
+@media screen {
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) {
+    --sb-primary: #3ecf8e;
+    --sb-primary-deep: #24b47e;
+    --sb-primary-soft: #4ade80;
+    --sb-green-ink: #08734d;
+    --sb-ink: #171717;
+    --sb-ink-secondary: #212121;
+    --sb-muted: #707070;
+    --sb-muted-2: #9a9a9a;
+    --sb-faint: #b2b2b2;
+    --sb-canvas: #ffffff;
+    --sb-canvas-soft: #fafafa;
+    --sb-canvas-night: #1c1c1c;
+    --sb-canvas-night-soft: #242424;
+    --sb-on-dark: #ffffff;
+    --sb-on-dark-muted: #bdbdbd;
+    --sb-hairline: #dfdfdf;
+    --sb-hairline-cool: #ededed;
+    --sb-hairline-strong: #c7c7c7;
+    --sb-selection: rgba(62, 207, 142, 0.32);
+    --sb-focus: #24b47e;
+    --sb-shadow-1: 0 1px 3px rgba(0, 0, 0, 0.06);
+    --sb-shadow-2: 0 8px 24px rgba(0, 0, 0, 0.08);
+    --sb-shadow-3: 0 16px 48px rgba(0, 0, 0, 0.12);
+    --sb-radius-xs: 4px;
+    --sb-radius-sm: 6px;
+    --sb-radius-md: 8px;
+    --sb-radius-lg: 12px;
+    --sb-radius-xl: 16px;
+    --sb-radius-full: 9999px;
+    --sb-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    /* Map the historical public tokens to the new visual contract. */
+    --canvas: var(--sb-canvas);
+    --canvas-overlay: rgba(255, 255, 255, 0.96);
+    --surface: var(--sb-canvas);
+    --surface-strong: var(--sb-canvas);
+    --surface-soft: var(--sb-canvas-soft);
+    --surface-raised: var(--sb-canvas);
+    --surface-document: var(--sb-canvas-soft);
+    --surface-control: var(--sb-canvas-soft);
+    --surface-placeholder: var(--sb-canvas-soft);
+    --pastel-blush: var(--sb-canvas-soft);
+    --pastel-lilac: var(--sb-canvas-soft);
+    --pastel-sage: var(--sb-canvas-soft);
+    --pastel-sky: var(--sb-canvas-soft);
+    --pastel-butter: var(--sb-canvas-soft);
+    --ink: var(--sb-ink);
+    --ink-soft: var(--sb-ink-secondary);
+    --muted: var(--sb-muted);
+    --inverse-ink: var(--sb-ink);
+    --line: var(--sb-hairline);
+    --line-strong: var(--sb-hairline-strong);
+    --selection: var(--sb-selection);
+    --primary: var(--sb-primary);
+    --primary-strong: var(--sb-primary-deep);
+    --link: var(--sb-green-ink);
+    --focus: var(--sb-focus);
+    --lime: var(--sb-primary);
+    --lime-hover: var(--sb-primary-deep);
+    --lime-soft: var(--sb-canvas-soft);
+    --green-ink: var(--sb-green-ink);
+    --teal: var(--sb-green-ink);
+    --teal-soft: var(--sb-canvas-soft);
+    --teal-faint: var(--sb-canvas-soft);
+    --coral: var(--sb-primary);
+    --coral-hover: var(--sb-primary-deep);
+    --coral-soft: var(--sb-canvas-soft);
+    --blue: var(--sb-green-ink);
+    --blue-soft: var(--sb-canvas-soft);
+    --yellow: var(--sb-primary);
+    --yellow-soft: var(--sb-canvas-soft);
+    --header-surface: var(--canvas-overlay);
+    --glass-subtle: var(--sb-canvas);
+    --glass-muted: var(--sb-canvas);
+    --glass-default: var(--sb-canvas);
+    --glass-strong: var(--sb-canvas);
+    --portrait-frame-line: var(--sb-hairline);
+    --line-inverse-soft: rgba(255, 255, 255, 0.14);
+    --line-ink-faint: var(--sb-hairline-cool);
+    --line-ink-soft: var(--sb-hairline);
+    --line-ink-medium: var(--sb-hairline);
+    --line-ink-strong: var(--sb-hairline-strong);
+    --line-ink-accent: var(--sb-hairline-strong);
+    --line-ink-hover: var(--sb-primary-deep);
+    --line-link-soft: var(--sb-hairline);
+    --line-link-medium: var(--sb-hairline-strong);
+    --wash-blush: var(--sb-canvas);
+    --wash-butter: var(--sb-canvas);
+    --wash-sage-soft: var(--sb-canvas);
+    --wash-sage: var(--sb-canvas);
+    --wash-lilac: var(--sb-canvas);
+    --header-line: var(--sb-hairline);
+    --header-muted: var(--sb-muted);
+    --header-control-line: var(--sb-primary);
+    --shadow: var(--sb-shadow-2);
+    --shadow-soft: var(--sb-shadow-2);
+    --shadow-hover: var(--sb-shadow-1);
+    --shadow-header: none;
+    --shadow-control: var(--sb-shadow-1);
+    --shadow-card: none;
+    --shadow-panel: none;
+    --shadow-feature: none;
+    --radius: var(--sb-radius-md);
+    --radius-control: var(--sb-radius-sm);
+    --radius-brand: var(--sb-radius-md);
+    --radius-card: var(--sb-radius-md);
+    --radius-card-lg: var(--sb-radius-lg);
+    --radius-panel: var(--sb-radius-lg);
+    --radius-portrait: var(--sb-radius-lg);
+    --radius-document: var(--sb-radius-xl);
+    --radius-decoration: var(--sb-radius-lg);
+    --radius-pill: var(--sb-radius-full);
+    --header-height: 64px;
+
+    min-width: 0;
+    background: var(--sb-canvas);
+    color: var(--sb-ink-secondary);
+    color-scheme: light;
+    font-family:
+      Pretendard,
+      SUIT,
+      "Apple SD Gothic Neo",
+      "Noto Sans KR",
+      "Helvetica Neue",
+      system-ui,
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) ::selection {
+    background: var(--sb-selection);
+    color: var(--sb-ink);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(a, button, summary):focus-visible {
+    outline: 2px solid var(--sb-focus);
+    outline-offset: 3px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(a, button):active {
+    transform: translateY(1px);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(h1, h2, h3) {
+    color: var(--sb-ink);
+    font-weight: 700;
+    letter-spacing: -0.024em;
+    text-wrap: balance;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(p, li, dd) {
+    text-wrap: pretty;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.container, .site-header-inner),
+  .portfolio-page .portfolio-layout {
+    width: min(var(--content), calc(100% - 96px));
+  }
+
+  /* Shared application chrome */
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-header {
+    height: var(--header-height);
+    border-bottom: 1px solid var(--sb-hairline);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-header-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 24px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-brand {
+    min-height: 44px;
+    gap: 10px;
+    color: var(--sb-ink);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-mark {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border: 1px solid #303030;
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas-night);
+    color: var(--sb-primary);
+    box-shadow: none;
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-mark::after {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 5px;
+    height: 5px;
+    border: 1px solid var(--sb-canvas-night);
+    border-radius: var(--sb-radius-full);
+    background: var(--sb-primary);
+    content: "";
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-name {
+    letter-spacing: -0.01em;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-nav {
+    align-self: stretch;
+    justify-self: center;
+    gap: 2px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-nav a {
+    position: relative;
+    height: 100%;
+    min-height: 44px;
+    padding: 0 14px;
+    border-radius: var(--sb-radius-xs);
+    background: transparent;
+    color: var(--sb-muted);
+    font-size: 13px;
+    font-weight: 700;
+    transition:
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-nav
+    a:hover {
+    background: var(--sb-canvas-soft);
+    color: var(--sb-ink);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-nav
+    a[aria-current="page"] {
+    background: transparent;
+    color: var(--sb-ink);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-nav
+    a[aria-current="page"]::after {
+    position: absolute;
+    right: 12px;
+    bottom: -1px;
+    left: 12px;
+    display: block;
+    height: 2px;
+    border-radius: var(--sb-radius-full) var(--sb-radius-full) 0 0;
+    background: var(--sb-primary);
+    content: "";
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid var(--sb-hairline-strong);
+    border-radius: var(--sb-radius-sm);
+    background: var(--sb-canvas);
+    box-shadow: none;
+    color: var(--sb-ink);
+    font-size: 14px;
+    font-weight: 700;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .button:hover {
+    border-color: var(--sb-primary-deep);
+    background: var(--sb-canvas-soft);
+    box-shadow: none;
+    color: var(--sb-ink);
+    transform: none;
+  }
+
+  .home-page .button-primary,
+  :is(.resume-page, .career-page, .portfolio-page) .site-header .button {
+    border-color: var(--sb-primary);
+    background: var(--sb-primary);
+    color: var(--sb-ink);
+  }
+
+  .home-page .button-primary:hover,
+  :is(.resume-page, .career-page, .portfolio-page)
+    .site-header
+    .button:hover {
+    border-color: var(--sb-primary-deep);
+    background: var(--sb-primary-deep);
+    color: var(--sb-ink);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .scroll-progress {
+    height: 2px;
+    background: var(--sb-primary);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .toast {
+    padding: 12px 18px;
+    border: 1px solid #333333;
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas-night);
+    box-shadow: var(--sb-shadow-3);
+    color: var(--sb-on-dark);
+    backdrop-filter: none;
+  }
+
+  /* Portraits are interface panes, not decorative collages. */
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure)::before,
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure)::after {
+    display: none;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure) {
+    padding: 10px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-lg);
+    background: var(--sb-canvas-soft);
+    box-shadow: var(--sb-shadow-1);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure)
+    img {
+    width: 100%;
+    height: auto;
+    border: 0;
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas);
+    box-shadow: none;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .profile-portrait--document {
+    width: 108px;
+    padding: 6px;
+    border-radius: var(--sb-radius-md);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .profile-portrait--document
+    img {
+    border-radius: var(--sb-radius-sm);
+  }
+
+  /* Home */
+  .home-page .home-hero {
+    padding: 96px 0 88px;
+    border-bottom: 1px solid var(--sb-hairline-cool);
+    background: var(--sb-canvas);
+    overflow: hidden;
+  }
+
+  .home-page .home-hero::before,
+  .home-page .home-hero::after {
+    display: none;
+  }
+
+  .home-page .home-hero-layout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 72px;
+    align-items: center;
+  }
+
+  .home-page .home-name {
+    max-width: 720px;
+    margin-bottom: 18px;
+    font-size: clamp(58px, 5.6vw, 72px);
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .home-page .home-role {
+    display: flex;
+    min-height: 0;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 2px 0 2px 14px;
+    border: 0;
+    border-left: 2px solid var(--sb-primary);
+    border-radius: 0;
+    background: transparent;
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: 0.035em;
+  }
+
+  .home-page .home-hero .hero-copy {
+    max-width: 700px;
+    color: var(--sb-ink-secondary);
+    font-size: 17px;
+    line-height: 1.72;
+  }
+
+  .home-page .home-hero .hero-copy > span + span {
+    margin-top: 7px;
+  }
+
+  .home-page .home-hero .hero-actions {
+    gap: 10px;
+    margin-top: 32px;
+  }
+
+  .home-page .portrait-figure {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .home-page .portrait-figure figcaption {
+    position: relative;
+    z-index: 3;
+    margin: 10px 2px 0;
+    padding: 10px 2px 1px;
+    border-top: 1px solid var(--sb-hairline);
+    border-radius: 0;
+    background: transparent;
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    backdrop-filter: none;
+  }
+
+  .home-page .section-shell {
+    padding: 88px 0;
+    border-top: 0;
+    border-bottom: 1px solid var(--sb-hairline-cool);
+  }
+
+  .home-page .home-hero + .section-shell {
+    background: var(--sb-canvas);
+  }
+
+  .home-page .section-shell + .section-shell {
+    background: var(--sb-canvas-soft);
+  }
+
+  .home-page .section-title {
+    margin-bottom: 32px;
+    font-size: clamp(34px, 3.3vw, 44px);
+    line-height: 1.15;
+  }
+
+  .home-page .document-grid {
+    gap: 20px;
+  }
+
+  .home-page .document-card {
+    min-height: 264px;
+    padding: 30px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-lg);
+    background: var(--sb-canvas);
+    box-shadow: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .home-page .document-card:nth-child(2) {
+    border-color: var(--sb-canvas-night);
+    background: var(--sb-canvas-night);
+  }
+
+  .home-page .document-card:nth-child(3) {
+    background: var(--sb-canvas);
+  }
+
+  .home-page .document-card:hover {
+    border-color: var(--sb-primary-deep);
+    background: var(--sb-canvas-soft);
+    box-shadow: var(--sb-shadow-1);
+    transform: none;
+  }
+
+  .home-page .document-card:nth-child(2):hover {
+    border-color: var(--sb-primary);
+    background: #222222;
+  }
+
+  .home-page .document-card::before {
+    top: 0;
+    right: auto;
+    left: 30px;
+    width: 42px;
+    height: 3px;
+    border-radius: 0 0 var(--sb-radius-xs) var(--sb-radius-xs);
+    background: var(--sb-primary);
+  }
+
+  .home-page .document-card::after {
+    right: 30px;
+    bottom: 26px;
+    color: var(--sb-green-ink);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.035em;
+  }
+
+  .home-page .document-card:nth-child(2)::after,
+  .home-page .document-card:nth-child(2) .document-card-label {
+    color: var(--sb-primary);
+  }
+
+  .home-page .document-card:nth-child(2) :is(h3, p) {
+    color: var(--sb-on-dark);
+  }
+
+  .home-page .document-card-label {
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+  }
+
+  .home-page .document-card h3 {
+    margin: 32px 0 12px;
+    font-size: 26px;
+  }
+
+  .home-page .document-card p {
+    color: var(--sb-muted);
+    font-size: 15px;
+    line-height: 1.68;
+  }
+
+  .home-page .career-list {
+    padding: 0 30px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-lg);
+    background: var(--sb-canvas);
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  .home-page .career-row {
+    position: relative;
+    grid-template-columns: 168px 160px minmax(0, 1fr);
+    gap: 28px;
+    padding: 26px 0;
+    border-color: var(--sb-hairline);
+  }
+
+  .home-page .career-row:first-child::before {
+    position: absolute;
+    top: -1px;
+    bottom: -1px;
+    left: -31px;
+    width: 3px;
+    background: var(--sb-primary);
+    content: "";
+  }
+
+  .home-page .career-row time {
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .home-page .career-company {
+    color: var(--sb-ink);
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .home-page .career-row p {
+    color: var(--sb-ink-secondary);
+    font-size: 14px;
+    line-height: 1.72;
+  }
+
+  /* Resume */
+  .resume-page .resume-canvas {
+    padding: 56px 0 104px;
+    background: var(--sb-canvas-soft);
+  }
+
+  .resume-page .resume-document {
+    width: min(1040px, calc(100% - 96px));
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-xl);
+    background: var(--sb-canvas);
+    box-shadow: var(--sb-shadow-2);
+  }
+
+  .resume-page .resume-hero {
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 48px;
+    padding: 48px;
+    border-bottom: 1px solid var(--sb-hairline);
+    background: var(--sb-canvas);
+    overflow: hidden;
+  }
+
+  .resume-page .resume-hero::after {
+    display: none;
+  }
+
+  .resume-page .resume-hero h1 {
+    margin-bottom: 8px;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .resume-page .eyebrow,
+  .resume-page .resume-hero-role {
+    color: var(--sb-green-ink);
+  }
+
+  .resume-page .eyebrow {
+    margin-bottom: 12px;
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .resume-page .resume-hero-role {
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .resume-page .resume-hero-copy {
+    color: var(--sb-ink-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .resume-page .document-identity-aside {
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .resume-page .resume-contact {
+    color: var(--sb-muted);
+  }
+
+  .resume-page .resume-contact :is(a, span) {
+    min-height: 32px;
+    border-bottom-color: var(--sb-hairline-cool);
+    color: var(--sb-muted);
+    font-size: 12px;
+  }
+
+  .resume-page .resume-contact a:hover {
+    color: var(--sb-green-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .resume-page .resume-ats-body {
+    padding: 40px 48px 48px;
+  }
+
+  .resume-page .resume-section-title {
+    gap: 10px;
+    margin-bottom: 16px;
+    color: var(--sb-ink);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .resume-page .resume-section-title::before {
+    width: 18px;
+    height: 2px;
+    border-radius: 0;
+    background: var(--sb-primary);
+    box-shadow: none;
+  }
+
+  .resume-page .resume-capability-list {
+    padding: 10px 20px;
+    border: 1px solid #2e2e2e;
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas-night);
+  }
+
+  .resume-page .resume-capability-list p {
+    border-color: #343434;
+    color: #e8e8e8;
+  }
+
+  .resume-page .resume-capability-list b {
+    color: var(--sb-primary);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+  }
+
+  .resume-page .resume-role-block {
+    position: relative;
+    border-bottom-color: var(--sb-hairline);
+  }
+
+  .resume-page .resume-role-list .resume-role-block:first-child::before,
+  .resume-page
+    .resume-section:nth-of-type(2)
+    > .resume-role-block:first-of-type::before {
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: -18px;
+    width: 2px;
+    background: var(--sb-primary);
+    content: "";
+  }
+
+  .resume-page .experience-head h3 {
+    color: var(--sb-ink);
+  }
+
+  .resume-page .experience-head p {
+    color: var(--sb-muted);
+  }
+
+  .resume-page .resume-achievement-list strong {
+    color: var(--sb-ink);
+    font-weight: 700;
+  }
+
+  .resume-page .resume-achievement-list li::marker {
+    color: var(--sb-primary-deep);
+  }
+
+  .resume-page :is(.resume-project-list, .resume-meta-lines) {
+    border-top-color: var(--sb-hairline);
+  }
+
+  .resume-page .resume-project-list article,
+  .resume-page .resume-meta-lines p {
+    border-color: var(--sb-hairline);
+  }
+
+  .resume-page .resume-project-list article:nth-child(1) {
+    padding: 16px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas-soft);
+  }
+
+  .resume-page a {
+    color: var(--sb-green-ink);
+    text-underline-offset: 3px;
+  }
+
+  /* Career description */
+  .career-page {
+    --career-primary: var(--sb-primary);
+    --career-primary-hover: var(--sb-primary-deep);
+    --career-primary-active: var(--sb-primary-deep);
+    --career-ink: var(--sb-ink);
+    --career-muted: var(--sb-muted);
+    --career-canvas: var(--sb-canvas);
+    --career-cream: var(--sb-canvas-soft);
+    --career-lavender: var(--sb-canvas-soft);
+    --career-peach: var(--sb-canvas-soft);
+    --career-lavender-mid: var(--sb-canvas-soft);
+    --career-sage: var(--sb-canvas-soft);
+    --career-hairline: var(--sb-hairline);
+    --career-on-primary: var(--sb-ink);
+    --career-on-primary-muted: var(--sb-muted);
+    --career-link: var(--sb-green-ink);
+    --career-hero-gradient: var(--sb-canvas);
+    --career-overview-gradient: var(--sb-canvas-soft);
+    --career-card-radius: var(--sb-radius-md);
+    --career-pill-radius: var(--sb-radius-sm);
+    --career-inset: 48px;
+    --career-card-gap: 16px;
+    --career-card-padding: 26px;
+  }
+
+  .career-page .career-canvas {
+    padding: 56px 0 104px;
+    background: var(--sb-canvas-soft);
+  }
+
+  .career-page .career-document {
+    width: min(1120px, calc(100% - 96px));
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-xl);
+    background: var(--sb-canvas);
+    box-shadow: var(--sb-shadow-2);
+  }
+
+  .career-page .career-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 48px;
+    padding: 52px var(--career-inset);
+    border-bottom: 1px solid var(--sb-hairline);
+    background: var(--sb-canvas);
+    color: var(--sb-ink);
+  }
+
+  .career-page .career-hero::after {
+    display: none;
+  }
+
+  .career-page .career-hero h1 {
+    margin-bottom: 8px;
+    color: var(--sb-ink);
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: -0.04em;
+  }
+
+  .career-page .career-hero .eyebrow {
+    margin-bottom: 12px;
+    color: var(--sb-green-ink);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .career-page .career-hero .resume-hero-role {
+    margin-bottom: 16px;
+    color: var(--sb-green-ink);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .career-page .career-hero .resume-hero-copy {
+    color: var(--sb-ink-secondary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .career-page .career-hero .resume-contact :is(a, span) {
+    min-height: 32px;
+    border-bottom-color: var(--sb-hairline-cool);
+    color: var(--sb-muted);
+    font-size: 12px;
+  }
+
+  .career-page .career-hero .resume-contact a:hover {
+    color: var(--sb-green-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .career-page .career-body {
+    padding: 46px var(--career-inset) 64px;
+  }
+
+  .career-page .career-overview {
+    margin-bottom: 50px;
+    padding: 24px 28px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas-soft);
+  }
+
+  .career-page .career-overview::before {
+    color: var(--sb-green-ink);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    letter-spacing: 0.07em;
+  }
+
+  .career-page .career-history article {
+    border-color: var(--sb-hairline);
+  }
+
+  .career-page .career-history article:first-child {
+    border-left-color: var(--sb-primary);
+  }
+
+  .career-page .career-history article::before {
+    color: var(--sb-primary-deep);
+  }
+
+  .career-page .career-history time,
+  .career-page .career-company-head time {
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .career-page .career-history-line {
+    grid-template-columns: 156px 152px minmax(0, 1fr);
+    gap: 20px;
+    padding: 15px 0;
+  }
+
+  .career-page .career-history strong {
+    color: var(--sb-ink);
+  }
+
+  .career-page .career-company-head,
+  .career-page #worksphere-serving .career-company-head--continuation {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-color: var(--sb-hairline);
+  }
+
+  .career-page .career-company-head h2,
+  .career-page #worksphere-serving .career-company-head--continuation h2 {
+    color: var(--sb-ink);
+    font-size: 28px;
+    letter-spacing: -0.025em;
+  }
+
+  .career-page .career-company-head h2 small,
+  .career-page .career-company-head p {
+    color: var(--sb-muted);
+  }
+
+  .career-page .career-project,
+  .career-page .career-previous-grid--compact .career-project {
+    margin-bottom: var(--career-card-gap);
+    padding: var(--career-card-padding);
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas);
+    box-shadow: none;
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease;
+  }
+
+  .career-page .career-project:nth-of-type(2n):not(.career-project--featured) {
+    background: var(--sb-canvas);
+  }
+
+  .career-page .career-project:not(.career-project--featured):hover {
+    border-color: var(--sb-primary-deep);
+    background: var(--sb-canvas-soft);
+  }
+
+  .career-page .career-project :is(h3, strong),
+  .career-page .career-company-head--nested h3 {
+    color: var(--sb-ink);
+  }
+
+  .career-page .career-project > p:not(.career-note) {
+    color: var(--sb-muted);
+  }
+
+  .career-page .career-project .bullet-list li {
+    color: var(--sb-ink-secondary);
+  }
+
+  .career-page .career-project .bullet-list li::marker {
+    color: var(--sb-primary-deep);
+  }
+
+  .career-page .career-project--featured {
+    border-color: var(--sb-canvas-night);
+    background: var(--sb-canvas-night);
+    box-shadow: none;
+  }
+
+  .career-page .career-project--featured
+    :is(h3, strong, .bullet-list li, .career-note) {
+    color: var(--sb-on-dark);
+  }
+
+  .career-page .career-project--featured > p:not(.career-note) {
+    color: var(--sb-on-dark-muted);
+  }
+
+  .career-page .career-project--featured
+    :is(.project-kicker, .bullet-list li::marker) {
+    color: var(--sb-primary);
+  }
+
+  .career-page .career-inline-title {
+    color: var(--sb-ink);
+    font-size: 24px;
+  }
+
+  .career-page a {
+    color: var(--sb-green-ink);
+    text-underline-offset: 3px;
+  }
+
+  /* Portfolio */
+  .portfolio-page .portfolio-hero {
+    padding: 88px 0 72px;
+    border-bottom: 1px solid var(--sb-hairline-cool);
+    background: var(--sb-canvas);
+    overflow: hidden;
+  }
+
+  .portfolio-page .portfolio-hero::before,
+  .portfolio-page .portfolio-hero::after {
+    display: none;
+  }
+
+  .portfolio-page .portfolio-hero-grid {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .portfolio-page .portfolio-title {
+    max-width: 790px;
+    margin-bottom: 20px;
+    font-size: clamp(48px, 4.7vw, 62px);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+
+  .portfolio-page .portfolio-hero .hero-copy {
+    color: var(--sb-ink-secondary);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .portfolio-page .eyebrow {
+    color: var(--sb-green-ink);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+  }
+
+  .portfolio-page .portfolio-profile {
+    display: block;
+    padding: 22px;
+    border: 1px solid #303030;
+    border-radius: var(--sb-radius-lg);
+    background: var(--sb-canvas-night);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .portfolio-page .portfolio-profile .profile-portrait--portfolio {
+    margin-bottom: 18px;
+    border-color: #393939;
+    background: var(--sb-canvas-night-soft);
+  }
+
+  .portfolio-page .portfolio-profile b {
+    color: var(--sb-on-dark);
+    font-size: 17px;
+  }
+
+  .portfolio-page .portfolio-profile span {
+    margin-bottom: 12px;
+    color: var(--sb-on-dark-muted);
+  }
+
+  .portfolio-page .portfolio-profile a {
+    min-height: 38px;
+    margin-right: 12px;
+    color: var(--sb-primary);
+    text-decoration-color: rgba(62, 207, 142, 0.5);
+    text-underline-offset: 3px;
+  }
+
+  .portfolio-page .portfolio-profile a:hover {
+    color: var(--sb-primary-soft);
+  }
+
+  .portfolio-page .portfolio-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+    gap: 48px;
+    padding: 64px 0 104px;
+  }
+
+  .portfolio-page .case-nav {
+    top: calc(var(--header-height) + 20px);
+    padding: 18px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .portfolio-page .case-nav-title {
+    color: var(--sb-muted);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+  }
+
+  .portfolio-page .case-nav li {
+    border-color: var(--sb-hairline-cool);
+  }
+
+  .portfolio-page .case-nav a {
+    position: relative;
+    min-height: 44px;
+    border-radius: var(--sb-radius-sm);
+    color: var(--sb-muted);
+    font-size: 12px;
+  }
+
+  .portfolio-page .case-nav a:hover {
+    background: var(--sb-canvas-soft);
+    color: var(--sb-ink);
+  }
+
+  .portfolio-page .case-nav a[aria-current="true"] {
+    background: var(--sb-canvas-soft);
+    color: var(--sb-ink);
+    box-shadow: inset 2px 0 0 var(--sb-primary);
+  }
+
+  .portfolio-page .case-nav a[aria-current="true"] span {
+    color: var(--sb-green-ink);
+  }
+
+  .portfolio-page .case-section,
+  .portfolio-page .case-section + .case-section {
+    margin: 0 0 24px;
+    padding: 38px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-lg);
+    background: var(--sb-canvas);
+    scroll-margin-top: calc(var(--header-height) + 24px);
+  }
+
+  .portfolio-page :is(#point, #feed, #evidence) {
+    background: var(--sb-canvas);
+  }
+
+  .portfolio-page #jpa {
+    border-color: var(--sb-canvas-night);
+    background: var(--sb-canvas-night);
+    color: var(--sb-on-dark);
+  }
+
+  .portfolio-page .case-header {
+    gap: 18px;
+    margin-bottom: 26px;
+  }
+
+  .portfolio-page .case-number {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: var(--sb-radius-sm);
+    background: var(--sb-primary);
+    color: var(--sb-ink);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+  }
+
+  .portfolio-page .case-title {
+    font-size: clamp(30px, 3vw, 40px);
+    line-height: 1.22;
+    letter-spacing: -0.03em;
+  }
+
+  .portfolio-page .case-lede {
+    padding: 12px 16px;
+    border-left: 2px solid var(--sb-primary);
+    border-radius: 0 var(--sb-radius-sm) var(--sb-radius-sm) 0;
+    background: var(--sb-canvas-soft);
+    color: var(--sb-ink-secondary);
+  }
+
+  .portfolio-page .fact-grid {
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas);
+  }
+
+  .portfolio-page .fact-cell {
+    border-color: var(--sb-hairline);
+  }
+
+  .portfolio-page :is(.fact-cell dt, .story-label) {
+    color: var(--sb-green-ink);
+    font-family: var(--sb-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+
+  .portfolio-page .fact-cell dd,
+  .portfolio-page .story-block p {
+    color: var(--sb-ink-secondary);
+  }
+
+  .portfolio-page .story-grid,
+  .portfolio-page .story-block + .story-block {
+    border-color: var(--sb-hairline);
+  }
+
+  .portfolio-page .story-block h3 {
+    color: var(--sb-ink);
+  }
+
+  .portfolio-page #jpa :is(.case-title, .story-block h3) {
+    color: var(--sb-on-dark);
+  }
+
+  .portfolio-page #jpa .case-lede,
+  .portfolio-page #jpa .fact-grid {
+    border-color: #383838;
+    background: var(--sb-canvas-night-soft);
+  }
+
+  .portfolio-page #jpa
+    :is(.case-lede, .fact-cell dd, .story-block p) {
+    color: #dddddd;
+  }
+
+  .portfolio-page #jpa
+    :is(.fact-cell, .story-grid, .story-block + .story-block) {
+    border-color: #383838;
+  }
+
+  .portfolio-page #jpa :is(.fact-cell dt, .story-label) {
+    color: var(--sb-primary);
+  }
+
+  .portfolio-page #jpa a {
+    color: var(--sb-primary);
+  }
+
+  .portfolio-page .diagram-disclosure,
+  .portfolio-page .archify-figure {
+    border-color: var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas);
+  }
+
+  .portfolio-page .diagram-disclosure summary {
+    color: var(--sb-ink);
+    font-family: var(--sb-mono);
+    font-size: 12px;
+  }
+
+  .portfolio-page .archify-figure {
+    padding: 18px;
+    box-shadow: none;
+  }
+
+  .portfolio-page .scope-grid {
+    gap: 12px;
+  }
+
+  .portfolio-page .scope-item,
+  .portfolio-page .scope-item:nth-child(2n) {
+    min-height: 154px;
+    border: 1px solid var(--sb-hairline);
+    border-radius: var(--sb-radius-md);
+    background: var(--sb-canvas);
+  }
+
+  .portfolio-page .scope-item:hover {
+    border-color: var(--sb-primary-deep);
+    background: var(--sb-canvas-soft);
+  }
+
+  .portfolio-page a {
+    color: var(--sb-green-ink);
+    text-underline-offset: 3px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.container, .site-header-inner),
+  .portfolio-page .portfolio-layout {
+    width: min(var(--content), calc(100% - 64px));
+  }
+
+  .home-page .home-hero {
+    padding: 72px 0;
+  }
+
+  .home-page .home-hero-layout {
+    grid-template-columns: minmax(0, 1fr) 270px;
+    gap: 48px;
+  }
+
+  .home-page .home-name {
+    font-size: 52px;
+  }
+
+  .home-page .document-card {
+    min-height: 238px;
+    padding: 24px;
+  }
+
+  .home-page .document-card::before {
+    left: 24px;
+  }
+
+  .home-page .document-card::after {
+    right: 24px;
+    bottom: 22px;
+  }
+
+  .home-page .career-row {
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 8px 24px;
+  }
+
+  .home-page .career-row time {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .home-page .career-company {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .home-page .career-row p {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    max-width: 760px;
+  }
+
+  .resume-page .resume-document,
+  .career-page .career-document {
+    width: min(100% - 64px, 1040px);
+  }
+
+  .resume-page .resume-hero,
+  .career-page .career-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    padding: 40px 32px;
+  }
+
+  :is(.resume-page, .career-page) .document-identity-aside {
+    grid-template-columns: 92px minmax(0, 1fr);
+    max-width: 680px;
+  }
+
+  :is(.resume-page, .career-page) .profile-portrait--document {
+    width: 92px;
+  }
+
+  .resume-page .resume-contact,
+  .career-page .career-hero .resume-contact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 18px;
+  }
+
+  .resume-page .resume-ats-body,
+  .career-page .career-body {
+    padding: 36px 32px 44px;
+  }
+
+  .career-page .career-history-line {
+    grid-template-columns: 145px 138px minmax(0, 1fr);
+  }
+
+  .portfolio-page .portfolio-hero {
+    padding: 72px 0;
+  }
+
+  .portfolio-page .portfolio-hero-grid {
+    grid-template-columns: minmax(0, 1fr) 250px;
+    gap: 40px;
+  }
+
+  .portfolio-page .portfolio-title {
+    font-size: 44px;
+  }
+
+  .portfolio-page .portfolio-layout {
+    display: block;
+    padding-top: 0;
+  }
+
+  .portfolio-page .case-nav {
+    top: var(--header-height);
+    z-index: 90;
+    margin: 0 -32px 32px;
+    padding: 0 32px;
+    border: 0;
+    border-bottom: 1px solid var(--sb-hairline);
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.96);
+  }
+
+  .portfolio-page .case-nav a[aria-current="true"] {
+    box-shadow: inset 0 -2px 0 var(--sb-primary);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) {
+    --header-height: 108px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    :is(.container, .site-header-inner),
+  .portfolio-page .portfolio-layout {
+    width: min(var(--content), calc(100% - 40px));
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-header {
+    height: var(--header-height);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-header-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 58px 49px;
+    gap: 0 12px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-brand {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-name {
+    display: inline;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-utilities {
+    display: flex;
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-nav {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    border-top: 1px solid var(--sb-hairline-cool);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) .site-nav a {
+    width: 100%;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 4px;
+    justify-content: center;
+    border-radius: 0;
+    font-size: 13px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-nav
+    a[aria-current="page"]::after {
+    right: 8px;
+    bottom: -1px;
+    left: 8px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-header
+    .button {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .home-page .site-utilities [data-copy-email] {
+    display: inline-flex;
+  }
+
+  .home-page .home-hero {
+    padding: 58px 0 64px;
+  }
+
+  .home-page .home-hero-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
+  }
+
+  .home-page .home-name {
+    font-size: 42px;
+  }
+
+  .home-page .home-role {
+    margin-bottom: 22px;
+    font-size: 11px;
+  }
+
+  .home-page .home-hero .hero-copy {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+
+  .home-page .home-hero .hero-actions {
+    margin-top: 26px;
+  }
+
+  .home-page .home-hero .hero-actions .button {
+    flex: 1 1 calc(50% - 5px);
+    padding-inline: 12px;
+  }
+
+  .home-page .portrait-figure {
+    width: min(270px, 82%);
+    justify-self: end;
+  }
+
+  .home-page .section-shell {
+    padding: 60px 0;
+  }
+
+  .home-page .section-title {
+    margin-bottom: 24px;
+    font-size: 30px;
+  }
+
+  .home-page .document-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-page .document-card {
+    min-height: 208px;
+  }
+
+  .home-page .career-list {
+    padding: 0 20px;
+  }
+
+  .home-page .career-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5px;
+    padding: 22px 0;
+  }
+
+  .home-page .career-row:first-child::before {
+    left: -21px;
+  }
+
+  .home-page .career-row :is(time, .career-company, p) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
+  .resume-page .resume-canvas,
+  .career-page .career-canvas {
+    padding: 20px 0 56px;
+  }
+
+  .resume-page .resume-document,
+  .career-page .career-document {
+    width: calc(100% - 24px);
+    border-radius: var(--sb-radius-lg);
+    box-shadow: none;
+  }
+
+  .resume-page .resume-hero,
+  .career-page .career-hero {
+    gap: 26px;
+    padding: 30px 20px;
+  }
+
+  .resume-page .resume-hero h1,
+  .career-page .career-hero h1 {
+    font-size: 38px;
+  }
+
+  :is(.resume-page, .career-page) .document-identity-aside {
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  :is(.resume-page, .career-page) .profile-portrait--document {
+    width: 78px;
+  }
+
+  .resume-page .resume-contact,
+  .career-page .career-hero .resume-contact {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .resume-page .resume-contact :is(a, span),
+  .career-page .career-hero .resume-contact :is(a, span) {
+    min-height: 44px;
+  }
+
+  .resume-page .resume-ats-body,
+  .career-page .career-body {
+    padding: 28px 20px 38px;
+  }
+
+  .resume-page .resume-role-list .resume-role-block:first-child::before,
+  .resume-page
+    .resume-section:nth-of-type(2)
+    > .resume-role-block:first-of-type::before {
+    left: -12px;
+  }
+
+  .career-page .career-overview {
+    padding: 20px;
+  }
+
+  .career-page .career-history-line {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .career-page .career-project,
+  .career-page .career-previous-grid--compact .career-project {
+    padding: 20px;
+  }
+
+  .career-page .career-project h3,
+  .career-page .career-company-head--nested h3 {
+    font-size: 18px;
+  }
+
+  .portfolio-page .portfolio-hero {
+    padding: 56px 0 60px;
+  }
+
+  .portfolio-page .portfolio-hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+  }
+
+  .portfolio-page .portfolio-title {
+    font-size: 36px;
+  }
+
+  .portfolio-page .portfolio-profile {
+    display: grid;
+    grid-template-columns: 92px repeat(2, minmax(0, 1fr));
+    gap: 0 14px;
+    padding: 18px;
+  }
+
+  .portfolio-page .profile-portrait--portfolio {
+    grid-row: 1 / 6;
+    width: 92px;
+    margin: 0;
+  }
+
+  .portfolio-page .portfolio-profile b,
+  .portfolio-page .portfolio-profile span {
+    grid-column: 2 / -1;
+  }
+
+  .portfolio-page .portfolio-profile a {
+    min-height: 44px;
+    margin: 0;
+  }
+
+  .portfolio-page .case-nav {
+    top: var(--header-height);
+    margin-inline: -20px;
+    padding-inline: 20px;
+  }
+
+  .portfolio-page .case-section,
+  .portfolio-page .case-section + .case-section {
+    margin-bottom: 18px;
+    padding: 24px;
+    border-radius: var(--sb-radius-md);
+  }
+
+  .portfolio-page .case-header {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .portfolio-page .case-number {
+    width: 38px;
+    height: 38px;
+  }
+
+  .portfolio-page .case-title {
+    font-size: 26px;
+  }
+
+  .portfolio-page .story-block,
+  .portfolio-page .story-block + .story-block {
+    padding: 20px 0;
+    border-left: 0;
+  }
+
+  .portfolio-page .story-block + .story-block {
+    border-top: 1px solid var(--sb-hairline);
+  }
+}
+
+@media screen and (max-width: 420px) {
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-header-inner {
+    width: calc(100% - 24px);
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-brand-name {
+    font-size: 13px;
+  }
+
+  :is(.home-page, .resume-page, .career-page, .portfolio-page)
+    .site-header
+    .pdf-download {
+    width: auto;
+    min-height: 44px;
+    padding-inline: 11px;
+    overflow: visible;
+    font-size: 12px;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page)
+    .site-header
+    .pdf-download::after {
+    content: none;
+  }
+
+  .home-page .site-header .site-utilities {
+    display: flex;
+  }
+
+  .home-page .home-name {
+    font-size: 40px;
+  }
+
+  .home-page .home-hero .hero-actions .button {
+    flex-basis: 100%;
+  }
+
+  :is(.resume-page, .career-page) .document-identity-aside {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  :is(.resume-page, .career-page) .profile-portrait--document {
+    width: 72px;
+  }
+
+  .portfolio-page .portfolio-profile {
+    grid-template-columns: 80px minmax(0, 1fr);
+    padding: 14px;
+  }
+
+  .portfolio-page .profile-portrait--portfolio {
+    width: 80px;
+  }
+
+  .portfolio-page .portfolio-profile :is(b, span, a) {
+    grid-column: 2;
+  }
+
+  .portfolio-page .archify-disclosure .archify-figure {
+    padding: 10px;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scrollbar-color: var(--sb-primary-deep) var(--sb-hairline-cool);
+    scrollbar-gutter: stable;
+  }
+
+  .portfolio-page .archify-disclosure .archify-figure::after {
+    position: sticky;
+    left: 0;
+    display: block;
+    width: fit-content;
+    margin-top: 8px;
+    padding: 4px 7px;
+    border-radius: var(--sb-radius-xs);
+    background: var(--sb-canvas-soft);
+    color: var(--sb-muted);
+    content: "좌우로 밀어 전체 흐름 보기 →";
+    font-family: var(--sb-mono);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+  }
+
+  .portfolio-page .archify-disclosure .archify-diagram {
+    width: 720px;
+    max-width: none;
+    height: auto;
+  }
+
+  .portfolio-page .case-section,
+  .portfolio-page .case-section + .case-section {
+    padding: 20px;
+  }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) *,
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) *::before,
+  :is(.home-page, .resume-page, .career-page, .portfolio-page) *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  :is(.resume-page, .career-page, .portfolio-page) {
+    --canvas: #ffffff;
+    --surface: #ffffff;
+    --surface-strong: #ffffff;
+    --surface-soft: #f7f7f7;
+    --surface-raised: #f7f7f7;
+    --surface-document: #ffffff;
+    --surface-control: #f7f7f7;
+    --pastel-blush: #ffffff;
+    --pastel-lilac: #f7f7f7;
+    --pastel-sage: #f7f7f7;
+    --pastel-sky: #f7f7f7;
+    --pastel-butter: #f7f7f7;
+    --ink: #111111;
+    --ink-soft: #222222;
+    --muted: #4d4d4d;
+    --inverse-ink: #111111;
+    --line: #d5d5d5;
+    --line-strong: #bdbdbd;
+    --primary: #16865d;
+    --primary-strong: #126d4c;
+    --lime: #16865d;
+    --lime-hover: #126d4c;
+    --lime-soft: #f7f7f7;
+    --green-ink: #126d4c;
+    --teal: #126d4c;
+    --teal-soft: #f7f7f7;
+    --teal-faint: #f7f7f7;
+    --coral: #16865d;
+    --coral-soft: #ffffff;
+    --blue: #126d4c;
+    --blue-soft: #f7f7f7;
+    --yellow-soft: #f7f7f7;
+    --link: #111111;
+    --focus: #111111;
+    --career-primary: #16865d;
+    --career-primary-hover: #126d4c;
+    --career-primary-active: #126d4c;
+    --career-ink: #111111;
+    --career-muted: #4d4d4d;
+    --career-canvas: #ffffff;
+    --career-cream: #ffffff;
+    --career-lavender: #f7f7f7;
+    --career-peach: #ffffff;
+    --career-lavender-mid: #f7f7f7;
+    --career-sage: #f7f7f7;
+    --career-hairline: #d5d5d5;
+    --career-on-primary: #111111;
+    --career-on-primary-muted: #4d4d4d;
+    --career-link: #111111;
+    --career-print-canvas: #ffffff;
+    --career-print-hero: #f7f7f7;
+    --career-print-alt: #f7f7f7;
+    --career-print-primary: #16865d;
+    --career-print-ink: #111111;
+    --career-print-muted: #4d4d4d;
+    --career-print-hairline: #d5d5d5;
+    background: #ffffff;
+    color: #222222;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure)::before,
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.profile-portrait, .portrait-figure)::after,
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.resume-hero, .career-hero, .portfolio-hero)::before,
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.resume-hero, .career-hero, .portfolio-hero)::after {
+    display: none !important;
+  }
+
+  .resume-page .resume-capability-list,
+  .career-page .career-project--featured,
+  .portfolio-page #jpa,
+  .portfolio-page #jpa :is(.case-lede, .fact-grid) {
+    border-color: #bdbdbd !important;
+    background: #ffffff !important;
+    color: #111111 !important;
+    box-shadow: none !important;
+  }
+
+  .resume-page .resume-capability-list :is(p, b),
+  .career-page .career-project--featured
+    :is(h3, p, li, strong, .career-note, .project-kicker),
+  .portfolio-page #jpa
+    :is(
+      .case-title,
+      .case-lede,
+      .fact-cell dt,
+      .fact-cell dd,
+      .story-label,
+      .story-block h3,
+      .story-block p,
+      a
+    ) {
+    color: #111111 !important;
+  }
+
+  .resume-page .resume-capability-list p,
+  .portfolio-page #jpa
+    :is(.fact-cell, .story-grid, .story-block + .story-block) {
+    border-color: #d5d5d5 !important;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.resume-document, .career-document, .case-section, .portfolio-profile) {
+    box-shadow: none !important;
   }
 }

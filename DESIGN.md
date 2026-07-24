@@ -1,221 +1,288 @@
-# Pastel Ledger Design System
+# Emerald Console Design System
 
-서민재의 홈, 이력서, 경력기술서, 엔지니어링 포트폴리오를 하나의 채용 경험으로 묶는 디자인 계약입니다. 정확한 기술 문서의 밀도는 유지하되, 따뜻한 파스텔 면과 실제 인물 사진을 사용해 “무슨 일을 했는가”와 “누가 했는가”를 동시에 빠르게 이해하게 합니다.
+서민재의 홈, 이력서, 경력기술서, 엔지니어링 포트폴리오를 하나의 정밀한 개발자 문서 경험으로 묶는 디자인 계약입니다. 문서 구조와 문구는 그대로 두고, 흰 캔버스·근흑색 타이포그래피·얇은 hairline·절제된 에메랄드 신호로 화면과 PDF의 시각 언어만 교체합니다.
 
-공개 레퍼런스인 `https://getdesign.md/slack/design-md`에서는 밝은 캔버스, 둥근 표면, 제한된 짙은 강조색, 넉넉한 여백만 원칙으로 차용합니다. Slack 로고, 문구, 자산, 전용 서체, 레이아웃 복제는 사용하지 않습니다.
+## 0. Reference And Immutable Template
 
-## Direction
+### Reference
 
-- 전체 인상은 **warm, precise, human**입니다.
-- 밝은 아이보리 캔버스 위에 블러시, 라일락, 세이지, 스카이, 버터 면을 제한적으로 배치합니다.
-- 파스텔은 정보 그룹을 구분하는 표면입니다. 장식만을 위한 무지개 그라디언트나 반복 카드에는 사용하지 않습니다.
-- 짙은 플럼 잉크를 모든 페이지의 공통 중심색으로 사용합니다.
-- 실제 프로필 사진은 신뢰를 만드는 핵심 자산입니다. 홈에서는 크게, 문서 화면에서는 작은 identity portrait로 사용합니다.
-- 결과 문장은 문제 설명보다 먼저 보이고, 기술명과 수치는 리터럴 텍스트로 남깁니다.
-- 화면과 A4 인쇄는 같은 정보 위계를 사용하되 인쇄에서는 장식과 그림자를 평면화합니다.
+- Primary design reference: `https://getdesign.md/supabase/design-md`
+- Rendered reference: `https://getdesign.md/design-md/supabase/preview`
+- Upstream source: `VoltAgent/awesome-design-md`, `design-md/supabase/DESIGN.md`
+- Extracted revision: `4482a96f9c1f2426ab08c570f86c84ee045534c8` (2026-05-17)
+- Runtime evidence was collected at 1280×900 and 375×812 with real Chrome and `getComputedStyle`.
+- The reference is inspiration, not affiliation. Supabase logos, trademarks, copy, screenshots, and proprietary fonts are not used.
 
-## Tokens
+The current reference is a **white-canvas system**, not the older dark-only interpretation: `#ffffff` canvas, `#171717` ink, `#3ecf8e` primary, `#dfdfdf` hairline, 6px buttons, 12px cards, and a single dark inverted surface.
+
+### Immutable Template
+
+The following HTML files are structural and content baselines. This redesign must not change their bytes, DOM hierarchy, copy, links, image sources, or `data-edit-id` values.
+
+| File | SHA-256 baseline |
+| --- | --- |
+| `index.html` | `6b6a784d54de9f59c8c317d38488422fc4ff622a2f67027453d850df69cddce1` |
+| `resume/index.html` | `a8e8d4c10c8513d2da5c2a84ce10bb01d1a28f4b68a7310935eae6310d4e333b` |
+| `career/index.html` | `2901a8115d1b7ff2a91d38a05604215a1c592798472b19a46031c81162889977` |
+| `portfolio/index.html` | `ed341baa65b4b3d22d3e773c4da20be48baa24331bc410d330d88268d26a85b4` |
+
+## 1. Direction
+
+- Atmosphere: **quietly technical, precise, credible**.
+- Signature material: white interface panes separated by cool-gray 1px hairlines.
+- Color story: near-monochrome canvas with emerald reserved for primary action, current state, small markers, and focus.
+- Signature moment: the strongest evidence surface flips to `canvas-night`; the remaining document stays white.
+- Profile photography remains real and local, presented like a clean product pane rather than a decorative portrait collage.
+- Information hierarchy comes from type size, spacing, borders, and polarity. Color never carries meaning alone.
+- There are no pastel bands, atmospheric gradients, glass cards, glow effects, rotated paper layers, or large decorative circles.
+
+## 2. Tokens
 
 ### Color
 
-| Token | Value | Usage |
+| Token | Value | Role |
 | --- | --- | --- |
-| `--canvas` | `#fbf8f5` | 전체 배경 |
-| `--canvas-overlay` | `rgba(251, 248, 245, 0.92)` | sticky header |
-| `--surface` | `#fffdfb` | 기본 문서·카드 |
-| `--surface-strong` | `#ffffff` | 사진·도식 면 |
-| `--pastel-blush` | `#fbe9e7` | 홈·경력 강조 면 |
-| `--pastel-lilac` | `#eee9f8` | 현재 위치·연표 |
-| `--pastel-sage` | `#e6f0e9` | 운영·안정성 결과 |
-| `--pastel-sky` | `#e6f0f5` | 데이터·구조 표면 |
-| `--pastel-butter` | `#f8efcf` | 수치·주의 환기 |
-| `--ink` | `#2c2230` | 제목·핵심 텍스트 |
-| `--ink-soft` | `#4f4652` | 본문 |
-| `--muted` | `#675c69` | 날짜·보조 문구 |
-| `--inverse-ink` | `#ffffff` | 짙은 면 위 텍스트 |
-| `--line` | `#ded5df` | 기본 hairline |
-| `--line-strong` | `#c3b7c5` | 강조 경계 |
-| `--primary` | `#6e4c71` | CTA·활성 상태 |
-| `--primary-strong` | `#533457` | hover·대표 결과 |
-| `--link` | `#355f6d` | 본문 링크 |
-| `--focus` | `#116b75` | 키보드 포커스 |
-| `--selection` | `#e7dcef` | 텍스트 선택 |
-| `--shadow-soft` | `0 16px 42px rgba(74, 48, 73, 0.09)` | 큰 화면의 부드러운 깊이 |
-| `--shadow-hover` | `0 20px 50px rgba(74, 48, 73, 0.14)` | 상호작용 카드 hover |
+| `--sb-primary` | `#3ecf8e` | primary CTA, current marker |
+| `--sb-primary-deep` | `#24b47e` | pressed and strong hover |
+| `--sb-primary-soft` | `#4ade80` | small diagram/status accent only |
+| `--sb-ink` | `#171717` | primary text |
+| `--sb-ink-secondary` | `#212121` | emphasized body text |
+| `--sb-muted` | `#707070` | supporting copy |
+| `--sb-muted-2` | `#9a9a9a` | tertiary metadata |
+| `--sb-faint` | `#b2b2b2` | disabled or incidental copy |
+| `--sb-canvas` | `#ffffff` | page and document canvas |
+| `--sb-canvas-soft` | `#fafafa` | alternate band and compact panel |
+| `--sb-canvas-night` | `#1c1c1c` | one featured evidence surface |
+| `--sb-canvas-night-soft` | `#202020` | nested dark cells |
+| `--sb-on-dark` | `#ffffff` | text on night surfaces |
+| `--sb-hairline` | `#dfdfdf` | default divider |
+| `--sb-hairline-cool` | `#ededed` | subtle divider |
+| `--sb-hairline-strong` | `#c7c7c7` | emphasized control boundary |
+| `--sb-selection` | `rgba(62, 207, 142, 0.32)` | text selection |
+| `--sb-focus` | `#24b47e` | keyboard focus |
 
-`--muted`는 모든 파스텔 면에서 4.5:1 이상의 대비를 유지합니다. 흰 글자는 `--primary`보다 밝은 면에 사용하지 않습니다.
+Emerald is scarce. A normal viewport should contain one filled emerald control and a small number of rules or dots, not broad green panels.
 
-반투명 면, tinted hairline, 그림자, radius는 컴포넌트 안에서 값을 새로 만들지 않고 아래 semantic family만 사용합니다.
+### Elevation
 
-| Family | Tokens | Usage |
+| Token | Value | Use |
 | --- | --- | --- |
-| Glass | `--glass-subtle`, `--glass-muted`, `--glass-default`, `--glass-strong` | label, callout, button, floating panel |
-| Plum line | `--line-ink-faint`, `--line-ink-soft`, `--line-ink-medium`, `--line-ink-strong`, `--line-ink-accent`, `--line-ink-hover` | divider부터 hover 경계까지 위계 순서 |
-| Teal line | `--line-link-soft`, `--line-link-medium` | capability와 diagram 경계 |
-| Pastel wash | `--wash-blush`, `--wash-butter`, `--wash-sage-soft`, `--wash-sage`, `--wash-lilac` | 큰 사례 면을 위한 제한된 tint |
-| Elevation | `--shadow-header`, `--shadow-control`, `--shadow-card`, `--shadow-panel`, `--shadow-soft`, `--shadow-feature`, `--shadow-hover` | header부터 featured outcome까지 깊이 순서 |
-| Radius | `--radius-control`, `--radius-brand`, `--radius-card`, `--radius-card-lg`, `--radius-panel`, `--radius-portrait`, `--radius-document`, `--radius-decoration`, `--radius-pill` | 12px부터 pill까지 component scale |
+| `--sb-shadow-1` | `0 1px 3px rgba(0, 0, 0, 0.06)` | portrait and compact pane |
+| `--sb-shadow-2` | `0 8px 24px rgba(0, 0, 0, 0.08)` | document shell |
+| `--sb-shadow-3` | `0 16px 48px rgba(0, 0, 0, 0.12)` | toast only |
 
-기존 의미 토큰은 새 공통 토큰에 매핑합니다.
+Default cards are flat. Border contrast is the primary depth system.
 
-| Legacy token | Mapping |
-| --- | --- |
-| `--lime`, `--coral`, `--teal`, `--blue`, `--yellow` | `--primary`, `--primary`, `--link`, `--link`, `--primary` |
-| `--lime-soft`, `--coral-soft` | `--pastel-sage`, `--pastel-blush` |
-| `--teal-soft`, `--teal-faint`, `--blue-soft` | `--pastel-sky` |
-| `--yellow-soft` | `--pastel-butter` |
-| `--green-ink` | `--primary-strong` |
+### Radius
 
-### Type
+| Token | Value | Use |
+| --- | ---: | --- |
+| `--sb-radius-xs` | `4px` | labels and tiny chrome |
+| `--sb-radius-sm` | `6px` | buttons and controls |
+| `--sb-radius-md` | `8px` | compact cards |
+| `--sb-radius-lg` | `12px` | document cards and portrait panes |
+| `--sb-radius-xl` | `16px` | outer document shell |
+| `--sb-radius-full` | `9999px` | status dots and tags only |
 
-- Font stack: `Pretendard`, `SUIT`, `Apple SD Gothic Neo`, `Noto Sans KR`, system sans-serif.
-- Display: 700–800 weight, `-0.035em`, 1.05–1.16 line height.
-- Section heading: 700 weight, `-0.024em`, 1.16–1.28 line height.
-- Body: 400–600 weight, 1.62–1.72 line height.
-- Metadata: 12–14px, 650–700 weight, 1.4 line height.
-- Desktop display / section: 68px / 42px.
-- Tablet display / section: 50px / 34px.
-- Mobile display / section: 38px / 28px.
-- 본문은 화면에서 16px 미만으로 줄이지 않습니다. 조밀한 표와 메타데이터만 12–15px를 허용합니다.
-- 한국어 문장 전체에 `nowrap`을 사용하지 않습니다. 기술명·날짜·짧은 역할 단위만 의미 있는 span으로 보호합니다.
+Buttons and navigation controls are never pill-shaped.
 
-### Geometry And Rhythm
+### Spacing
 
-- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96px.
+- Base unit: 8px.
+- Fine tokens: 2, 4, 8, 12px.
+- Primary scale: 16, 24, 32, 48, 64, 80, 96px.
 - Content width: 1184px.
 - Reading measure: 720px.
-- Screen inset: 20px at 375, 32px at 768, 48px at 1280.
-- Radius: controls 999px, small cards 16px, large surfaces 24px, photos 22px.
-- Touch target: at least 44×44px.
-- Screen section rhythm: 56px mobile, 72px tablet, 96px desktop.
-- 그림자는 큰 identity surface와 hover 가능한 카드에만 사용합니다. 문서 본문을 카드 그림자로 반복 분절하지 않습니다.
+- Inset: 48px desktop, 32px tablet, 20px mobile.
+- Major section rhythm: 96px desktop, 72px tablet, 56–64px mobile.
+- Touch targets: 44px minimum.
 
-## Shared Primitives
+## 3. Typography
+
+No external font or new runtime dependency is added.
+
+- UI/display stack: `Pretendard`, `SUIT`, `Apple SD Gothic Neo`, `Noto Sans KR`, `Helvetica Neue`, system sans-serif.
+- Technical stack: `ui-monospace`, `SFMono-Regular`, `Menlo`, `Monaco`, `Consolas`, monospace.
+- Display: 64px / 700 / 1.10 / `-0.03em`.
+- Section opener: 48px / 700 / 1.12 / `-0.024em`.
+- Card title: 28–32px / 700 / 1.22 / `-0.018em`.
+- Compact heading: 22–24px / 700 / 1.33.
+- Body lead: 18px / 400 / 1.62.
+- Body: 16px / 400 / 1.62.
+- UI control: 14px / 700 / 1.
+- Caption: 13px / 500 / 1.45.
+- Technical label: 12px / 600 / 1.35 / `0.08em`.
+
+The reference uses weight 500 display type. Korean glyph rendering needs slightly stronger weight, so public Hangul headings use 700 without exceeding it. Dense labels, dates, sequence numbers, and English document labels use the technical stack.
+
+Korean clauses must wrap naturally. `nowrap` is reserved for dates, short technology names, and compact role fragments.
+
+## 4. Layout And Depth
+
+- Preserve every current grid, section order, and DOM grouping.
+- Translate current panels into interface panes: white or `canvas-soft`, 1px hairline, 8–16px radius.
+- Use a single dark inverted panel per document at most.
+- Do not tint each sibling card differently.
+- Do not add full-bleed imagery, atmospheric gradients, or decorative background shapes.
+- Photo and diagram frames may receive Level 1 elevation; outer document shells may receive Level 2. Repeated content cards stay flat.
+- Desktop document surfaces remain centered and bounded. Mobile layouts stack without horizontal overflow.
+
+## 5. Shared Primitives And States
 
 ### Site Header
 
-- 모든 공개 페이지에서 `SM / 서민재` 홈 링크, 이력서, 경력기술서, 포트폴리오 순서를 공유합니다.
-- 아이보리 반투명 배경, 1px hairline, 72px 높이입니다.
-- 현재 문서는 라일락 pill과 `aria-current`로 표시합니다.
-- 오른쪽의 이메일 또는 PDF 행동은 짙은 플럼 pill입니다.
-- 700px 이하에서는 텍스트 브랜드를 줄이고, 문서 링크와 PDF 44px 행동은 유지합니다.
+- White 64px desktop header with a cool hairline bottom border.
+- Brand mark is an 8px near-black square with an emerald status edge.
+- Navigation is plain text. Current page uses a 2px emerald bottom rule, not a colored pill.
+- Right utility uses `button-primary-green`.
+- At 700px and below, the unchanged structure becomes two rows: brand/utility first, three document links second.
 
-### Identity Portrait
+States:
 
-- 원본은 `assets/profile.jpg`, 689×886, `alt="서민재 프로필 사진"`입니다.
-- 본문 내 모든 사용은 명시적 `width`와 `height`, `aspect-ratio: 4 / 5`, `object-fit: cover`를 가집니다.
-- 홈은 최대 360px, 문서·포트폴리오 화면은 108–144px입니다.
-- 사진 뒤에는 서로 다른 단색 파스텔 종이 두 장을 겹친 듯한 프레임을 사용합니다. 사진 자체에 필터를 적용하거나 얼굴을 가리는 장식을 올리지 않습니다.
-- 홈 사진은 eager, 아래쪽 또는 중복 사진은 lazy loading을 허용합니다.
-- 이력서 PDF에서는 작은 사진을 유지할 수 있지만, 경력기술서·포트폴리오 PDF에서는 페이지 계약을 위해 숨깁니다.
+- Default: ink text on white.
+- Hover: `canvas-soft` background or ink underline.
+- Current: ink text plus 2px emerald rule.
+- Focus-visible: 2px emerald outline with 3px offset.
 
-### Buttons
+### Button
 
-- Primary: `--primary` 배경, 흰 글자, 48px 높이, pill.
-- Secondary: 반투명 흰 면, `--line-strong` 경계, 48px 높이, pill.
-- hover는 색과 그림자만 바꾸고 레이아웃을 움직이지 않습니다.
-- `:focus-visible`은 3px teal outline과 3px offset입니다.
+- Primary: emerald fill, near-black text, 6px radius, 44–48px height.
+- Secondary: white fill, strong hairline, near-black text, 6px radius.
+- Dark: night fill, white text, 6px radius.
 
-### Pastel Surface
+States:
 
-- `blush`, `lilac`, `sage`, `sky`, `butter` 다섯 변형을 사용합니다.
-- 한 viewport 안에 큰 파스텔 면은 최대 3종입니다.
-- 같은 위계의 카드에 무작위 색을 쓰지 않고, 문서 종류나 정보 역할에 따라 반복합니다.
-- 큰 hero는 하나의 기본 면과 두 개의 단색 pseudo shape로 깊이를 만듭니다. 전체 화면 rainbow gradient는 금지합니다.
+- Hover: border or fill shifts one token; no movement.
+- Pressed: primary uses `primary-deep`; controls use `translateY(1px)` only during press.
+- Focus-visible: 2px emerald outline with 3px offset.
+- Reduced motion: transition removed.
+
+### Interface Portrait
+
+- Real source remains `assets/profile.jpg`, 689×886.
+- The image sits in a white or soft-canvas pane with 1px hairline, 12px outer radius, and 8px image radius.
+- A small emerald status dot or top rule may appear in the pane chrome.
+- No filter, green overlay, rotated sheet, thick white frame, or face-obscuring decoration.
+- Resume print retains a compact portrait. Career and portfolio print hide it to protect page contracts.
 
 ### Document Card
 
-- 16–20px radius, 1px tinted border, 24–32px inset.
-- 제목, 한 줄 설명, 이동 affordance의 세 단계만 유지합니다.
-- 홈의 세 문서는 라일락, 블러시, 스카이 표면으로 고정합니다.
-- hover는 경계·그림자 변화만 사용하고 transform으로 주변 배치를 흔들지 않습니다.
+- White canvas, 1px hairline, 12px radius, 24–32px padding.
+- Label uses the technical type.
+- The career-description card may be the single inverted featured card on the home page.
+- Hover changes hairline to emerald and applies Level 1 elevation.
 
 ### Evidence Row
 
-- 순서: 기간 → 회사/범위 → 역할 → 결과.
-- 데스크톱에서는 열, 모바일에서는 기간과 회사부터 세로로 쌓습니다.
-- 색에만 의존하지 않고 크기·weight·위치로 계층을 구분합니다.
+- Order remains period → company/scope → role/result.
+- Period and sequence use technical type with tabular numerals.
+- Hairlines separate rows.
+- Current employment receives an emerald left or top rule, not a tinted background.
 
 ### Outcome Panel
 
-- 일반 결과는 흰 면과 hairline을 사용합니다.
-- 한 문서에 가장 강한 결과 하나만 `--primary-strong` 면과 흰 글자를 사용할 수 있습니다.
-- 보조 결과는 세이지 또는 라일락 옅은 면과 3px 규칙선으로 표시합니다.
-- 수치와 결과는 제목 또는 첫 문장에 위치합니다.
+- Default: white, hairline, 12px radius.
+- Quiet alternative: `canvas-soft`.
+- Featured: `canvas-night` with white text, nested `canvas-night-soft` cells, and a small emerald marker.
+- Long text never uses emerald as its primary text color.
 
-## Page Contracts
+### Diagram Pane
+
+- White interface pane, 1px hairline, 8–12px radius.
+- Native SVG colors remain intact.
+- Caption uses technical type.
+- At 375px the complex SVG keeps a readable 720px working width inside an explicitly labeled horizontal scroll pane; text and connectors must not overlap.
+
+### Toast
+
+- Night surface, white text, 8px radius, Level 3 elevation.
+- No blur or glass effect.
+
+## 6. Page Application
 
 ### Home
 
-- Hero: copy 1fr + portrait 360px의 비대칭 2열. 모바일에서는 copy → photo 순서입니다.
-- Hero surface는 블러시, 사진 frame은 라일락+버터입니다.
-- 문서 카드 3개는 동일한 크기와 구조, 서로 다른 고정 파스텔 면을 사용합니다.
-- 경력은 카드 묶음이 아니라 한 개의 흰 timeline surface 안에서 hairline으로 나눕니다.
-- 첫 화면에서 이름, 직무, 대표 가치, 사진, 이력서 CTA가 보여야 합니다.
+- Hero remains copy + portrait. It becomes a white canvas with no background decoration.
+- Name is the 64px display anchor; role becomes a compact technical label.
+- Portrait is rendered as an interface pane.
+- The three document cards share one structural style. The career-description card is the one inverted featured card.
+- Career remains one table-like surface with hairline rows and an emerald marker on the current role.
 
 ### Resume
 
-- 화면에서는 큰 흰 문서가 아니라 부드러운 아이보리 캔버스 위 24px 문서 surface로 보입니다.
-- Hero는 이름·요약, 작은 portrait, contact utility를 같은 identity block 안에 배치합니다.
-- 기술은 라일락 요약 panel, 현재 경력은 결과 우선, 이전 경력은 hairline 목록으로 구성합니다.
-- A4는 정확히 1페이지를 유지합니다. portrait는 68×88px 이하로 유지하고 연락처와 같은 상단 행에 둡니다.
+- Outer document is a white 16px shell over `canvas-soft`.
+- Hero becomes a white identity pane separated by a hairline.
+- Skill summary becomes the single night/code-like block on screen.
+- Experience uses hairline sections; current employment gets an emerald rule.
+- Print stays exactly one A4 page and converts the night block back to light.
 
 ### Career Description
 
-- 별도 Slack 전용 색 계약을 폐기하고 공통 Pastel Ledger 토큰만 사용합니다.
-- Hero는 블러시 identity band + 작은 portrait + contact strip입니다.
-- 연표는 라일락 surface, 프로젝트는 흰 outcome panels입니다.
-- 약 200만 건 보정 결과 한 개만 짙은 플럼 featured panel로 허용합니다.
-- 회사와 역할은 `h2(company) + small(role/product)`의 두 단계로 유지합니다.
-- A4는 정확히 2페이지, 페이지 2 시작에 웍스피어 문맥을 유지합니다.
+- Hero and career overview become white/soft interface panes.
+- Company headings retain the existing company → role/product hierarchy.
+- Project cards are white hairline surfaces with no alternating color wash.
+- The JPA correction result remains the single night featured panel.
+- Print stays exactly two A4 pages and keeps Worksphere context at the start of page 2.
 
 ### Portfolio
 
-- Hero는 스카이 identity surface와 작은 portrait/profile panel입니다.
-- sticky case navigation은 흰 면과 라일락 활성 상태를 사용합니다.
-- 각 사례는 번호, 결과 제목, 사실 4개, 상황/변경의 순서입니다.
-- fact cells는 동일한 파스텔을 반복하지 않고 사례 단위로 한 가지 tint만 사용합니다.
-- 다이어그램은 흰 배경과 hairline을 유지하며 텍스트와 선이 겹치지 않아야 합니다.
-- A4는 정확히 3페이지를 유지합니다.
+- Hero becomes white; the unchanged profile aside becomes a night interface pane.
+- Sticky case navigation uses a white hairline rail and an emerald current marker.
+- Case sections use white hairline surfaces. Only the JPA case is visually featured through a night header/panel treatment.
+- Fact tables and story blocks rely on hairlines, not pastel fills.
+- Diagram remains a white pane and fully fits at 375px.
+- Print stays exactly three A4 pages and removes dark fills.
 
-## Responsive
+## 7. Responsive
 
-| Width | Inset | Header | Identity | Cards |
+| Width | Inset | Header | Identity | Content |
 | --- | ---: | --- | --- | --- |
-| 375px | 20px | compact brand, 44px targets | single column | single column |
-| 768px | 32px | full nav | home 2 columns, docs compact portrait | 2 columns where meaningful |
-| 1280px | 48px | full header | 720px copy + 360px portrait | bounded by 1184px |
+| 1280px | 48px | 64px single row | full two-column | bounded by 1184px |
+| 768px | 32px | 64px single row | compact two-column where possible | timeline narrative moves to full row |
+| 375px | 20px | two 44px rows | single column | cards and evidence rows stack |
 
-- 200% 확대에서도 수평 스크롤이 없어야 합니다.
-- portrait와 기술 다이어그램은 컨테이너 폭을 넘지 않습니다.
-- sticky 요소는 콘텐츠를 가리지 않습니다.
-- 375px에서 헤더는 문서 링크를 제거하지 않습니다.
+- All navigation destinations remain visible at 375px.
+- Mobile header labels stay readable; do not shrink below 12px.
+- Portraits stay inside their panes. The mobile diagram may exceed its viewport only inside the bounded, labeled scroll pane.
+- 200% zoom must not introduce horizontal page scrolling.
+- Sticky case navigation must not cover anchors.
 
-## Print
+## 8. Print
 
 - `@page`: A4, 10mm.
-- 배경은 흰색, 본문은 검정/짙은 회색, 파스텔은 5–8% tint로 평면화합니다.
-- sticky header, progress, 버튼, toast, portfolio side navigation은 숨깁니다.
-- 그림자, decorative pseudo shape, 화면 전용 caption을 제거합니다.
-- 텍스트와 링크는 선택 가능해야 하며 PDF 안에 화면 캡처를 넣지 않습니다.
-- Resume 1쪽, Career 2쪽, Portfolio 3쪽 계약은 시각 효과보다 우선합니다.
+- Canvas is white, text is black/near-black, rules are neutral gray.
+- Emerald is limited to thin rules and tiny markers.
+- All night surfaces convert to white or 3–5% gray with dark text.
+- Shadows, sticky elements, buttons, progress, toast, and decorative pseudo-elements are removed.
+- Text and links remain selectable.
+- Exact contracts: Resume 1 page, Career 2 pages, Portfolio 3 pages.
 
-## Accessibility And Performance
+## 9. Accessibility And Performance
 
-- 모든 의미 있는 사진과 도식은 구체적인 alt를 갖습니다.
-- 색 외에 shape, label, weight로 상태를 구분합니다.
-- `prefers-reduced-motion`에서는 scroll behavior와 transition을 제거합니다.
-- 외부 폰트·이미지 요청을 추가하지 않습니다.
-- 프로필 원본은 이미 로컬에 있으며 네트워크 실패와 무관하게 표시되어야 합니다.
-- 이미지에는 크기와 aspect ratio를 선언해 CLS를 방지합니다.
-- 링크와 버튼은 키보드 순서가 DOM 읽기 순서와 같아야 합니다.
-- CJK 고아행, 단독 구분점, 잘린 기술명, 도식의 선·글자 겹침은 배포 차단 결함입니다.
+- Normal body and metadata meet WCAG AA contrast.
+- Focus-visible is not replaced by hover.
+- Current states use rule/weight plus color.
+- Touch targets are at least 44×44px.
+- DOM reading order and keyboard order remain unchanged.
+- `prefers-reduced-motion` removes transitions and smooth scroll.
+- No new external fonts, images, scripts, or dependencies.
+- Local images keep intrinsic dimensions to prevent CLS.
+- CJK orphan lines, clipped glyphs, broken technical names, diagram overlaps, and horizontal overflow block release.
 
-## Explicit Exclusions
+## 10. Personas, Critique, And Accepted Debt
 
-- Slack 로고·마케팅 카피·스크린샷·전용 자산 복제.
-- generic purple-blue full-screen gradient, glassmorphism, glow, 무한 애니메이션.
-- 프로필 사진의 AI 보정·얼굴 변형·stock image 대체.
-- 새 런타임 의존성 또는 외부 웹폰트.
-- 지원되지 않는 성과 수치와 기술 경험의 추가.
-- 문서 전체를 각각 다른 브랜드처럼 보이게 하는 페이지별 독립 테마.
+Primary persona: a technical recruiter scanning for chronology and business impact. Secondary persona: a backend interviewer validating implementation depth and evidence.
+
+The visual system must support:
+
+- a 10-second identity and chronology scan,
+- a 60-second results scan,
+- deep reading of one project without losing company context,
+- keyboard navigation and 200% zoom,
+- standalone PDF review.
+
+Accepted debt:
+
+- Circular is proprietary, so the local Korean system stack substitutes for it.
+- Existing HTML class names may retain old semantic names such as `lavender` or `peach`; CSS maps them to the new neutral system because structure is explicitly immutable.
+- The historical CSS baseline remains below the final public override for compatibility with the admin renderer. The final scoped layer is the source of truth for public pages.
