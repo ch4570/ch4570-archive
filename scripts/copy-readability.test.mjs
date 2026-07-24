@@ -89,6 +89,33 @@ test("public documents keep one heading and valid editable regions", async () =>
   }
 });
 
+test("public documents expose one stable and non-editable profile portrait", async () => {
+  const documents = [
+    "index.html",
+    "resume/index.html",
+    "career/index.html",
+    "portfolio/index.html",
+  ];
+
+  for (const file of documents) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    const portraits = source.match(
+      /<img\b[^>]*\bsrc="(?:\.\/|\.\.\/)assets\/profile\.jpg"[^>]*>/gu,
+    ) ?? [];
+
+    assert.equal(portraits.length, 1, file + " should expose one profile portrait");
+    assert.match(portraits[0], /\balt="서민재 프로필 사진"/u);
+    assert.match(portraits[0], /\bwidth="689"/u);
+    assert.match(portraits[0], /\bheight="886"/u);
+    assert.ok(
+      scanEditableRegions(source).every(
+        (region) => !region.innerHTML.includes("profile.jpg"),
+      ),
+      file + " should keep the portrait outside editable content",
+    );
+  }
+});
+
 test("portfolio story cards stay short and semantic", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(

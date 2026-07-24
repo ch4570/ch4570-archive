@@ -1,371 +1,221 @@
-# Signal Grid Design System
+# Pastel Ledger Design System
 
-서민재의 이력서, 경력기술서, 엔지니어링 포트폴리오를 위한 화면 규칙입니다. `npx getdesign@latest add nvidia`로 받은 프리셋에서 각진 그리드, 선명한 녹색, 얇은 구분선 원칙을 참고했습니다. NVIDIA의 로고, 상표 표현, 전용 서체는 사용하지 않습니다.
+서민재의 홈, 이력서, 경력기술서, 엔지니어링 포트폴리오를 하나의 채용 경험으로 묶는 디자인 계약입니다. 정확한 기술 문서의 밀도는 유지하되, 따뜻한 파스텔 면과 실제 인물 사진을 사용해 “무슨 일을 했는가”와 “누가 했는가”를 동시에 빠르게 이해하게 합니다.
 
-`career/`는 이 문서 아래의 **Career Page — Slack-derived Editorial Contract**를 별도 표면 계약으로 사용합니다. `.career-page` 안에서는 해당 계약의 aubergine, 90px pill, 16px card, pastel hero gradient가 기존 Signal Grid의 라임·2px radius·무그라디언트 규칙보다 우선하며, 이 예외는 이력서와 포트폴리오에 전파하지 않습니다.
+공개 레퍼런스인 `https://getdesign.md/slack/design-md`에서는 밝은 캔버스, 둥근 표면, 제한된 짙은 강조색, 넉넉한 여백만 원칙으로 차용합니다. Slack 로고, 문구, 자산, 전용 서체, 레이아웃 복제는 사용하지 않습니다.
 
-## Design Direction
+## Direction
 
-- 밝은 배경 위에서 긴 기술 문서를 빠르게 훑을 수 있어야 합니다.
-- 큰 검정 면보다 검정 헤더와 규칙선으로 구조를 잡습니다.
-- 라임은 버튼, 현재 위치, 핵심 숫자처럼 시선이 먼저 가야 하는 곳에만 씁니다.
-- 도식의 보조 색은 장식이 아니라 역할을 구분합니다.
-- 카드의 깊이는 둥근 모서리와 큰 그림자보다 선, 면, 간격으로 표현합니다.
+- 전체 인상은 **warm, precise, human**입니다.
+- 밝은 아이보리 캔버스 위에 블러시, 라일락, 세이지, 스카이, 버터 면을 제한적으로 배치합니다.
+- 파스텔은 정보 그룹을 구분하는 표면입니다. 장식만을 위한 무지개 그라디언트나 반복 카드에는 사용하지 않습니다.
+- 짙은 플럼 잉크를 모든 페이지의 공통 중심색으로 사용합니다.
+- 실제 프로필 사진은 신뢰를 만드는 핵심 자산입니다. 홈에서는 크게, 문서 화면에서는 작은 identity portrait로 사용합니다.
+- 결과 문장은 문제 설명보다 먼저 보이고, 기술명과 수치는 리터럴 텍스트로 남깁니다.
+- 화면과 A4 인쇄는 같은 정보 위계를 사용하되 인쇄에서는 장식과 그림자를 평면화합니다.
 
-## Color Tokens
+## Tokens
 
-| Token | Value | Usage |
-| --- | --- | --- |
-| `--canvas` | `#f5f6f3` | 페이지 바탕 |
-| `--canvas-overlay` | `rgba(245, 246, 243, 0.97)` | 고정 내비게이션 아래의 캔버스 면 |
-| `--surface` | `#ffffff` | 문서와 카드 |
-| `--surface-soft` | `#f0f2ef` | 섹션 구분, 사이드바 |
-| `--surface-raised` | `#fafbf9` | 포트폴리오 히어로 면 |
-| `--surface-document` | `#f8f9f7` | 이력서 문서 헤더 면 |
-| `--surface-control` | `#f4f4f4` | 인쇄용 보조 패널과 관리자 컨트롤 면 |
-| `--surface-placeholder` | `#e9edf0` | 이미지 로딩·대체 면 |
-| `--ink` | `#11150f` | 제목, 헤더, 주요 선 |
-| `--ink-soft` | `#30382d` | 본문 |
-| `--muted` | `#667064` | 보조 설명, 날짜 |
-| `--inverse-ink` | `#ffffff` | 검정 면 위의 글자 |
-| `--line` | `#d9dfd5` | 기본 구분선 |
-| `--line-strong` | `#aeb9aa` | 강조 구분선 |
-| `--selection` | `#d7eeae` | 텍스트 선택 배경 |
-| `--lime` | `#76b900` | CTA, 활성 상태, 주요 노드 |
-| `--lime-hover` | `#66a400` | 라임 인터랙션 상태 |
-| `--lime-soft` | `#edf7dc` | 성과와 결과 배경 |
-| `--green-ink` | `#416f00` | 작은 링크와 라임 계열 글자 |
-| `--teal` | `#007b83` | 외부 시스템, 비동기 경로 |
-| `--teal-soft` | `#e4f5f3` | 도식의 비동기 면 |
-| `--teal-faint` | `#f2f9f8` | 이력서 프로젝트 강조 면 |
-| `--coral` | `#b95016` | 장애, 복구 경로 |
-| `--coral-hover` | `#bc4d39` | 장애 버튼 인터랙션 상태 |
-| `--coral-soft` | `#fff0e6` | 장애·복구 보조 면 |
-| `--blue` | `#3c6e9e` | 완료 결과 |
-| `--blue-soft` | `#eaf2f8` | 완료 결과 보조 면 |
-| `--yellow` | `#c89500` | 보조 지표 |
-| `--yellow-soft` | `#fff6d8` | 보조 지표 면 |
-| `--focus` | `#006c78` | 키보드 포커스 링 |
-| `--header-surface` | `rgba(17, 21, 15, 0.97)` | 고정 헤더 면 |
-| `--header-line` | `#2d342a` | 헤더 하단선 |
-| `--header-muted` | `#bdc5ba` | 헤더 비활성 링크 |
-| `--header-control-line` | `#697265` | 헤더 컨트롤 테두리 |
-| `--shadow` | `0 12px 32px rgba(20, 32, 16, 0.07)` | 호버 피드백 |
-
-라임 바탕에는 `--ink`를 사용합니다. 본문 링크나 작은 글자에는 라임 원색 대신 `--green-ink`를 사용합니다.
-
-## Typography
-
-- 기본 서체: `Pretendard`, `Apple SD Gothic Neo`, `Noto Sans KR`, system sans-serif
-- 화면 제목: 700-800 weight, 줄 간격 1.08-1.22
-- 본문: 400-600 weight, 줄 간격 1.6-1.7
-- 영문 레이블: 10-12px, 700 weight, uppercase
-- 자간은 항상 `0`
-- 검색되어야 하는 기술명과 복합 표현은 소스와 PDF에 리터럴 문자열로 남기고, 줄바꿈 제어가 필요하면 의미가 있는 `nowrap` 요소를 사용합니다. 보이지 않는 word joiner 문자는 사용하지 않습니다.
-
-### Screen Typography Tokens
+### Color
 
 | Token | Value | Usage |
 | --- | --- | --- |
-| `--type-micro` | `9px` | 최소 상태 레이블 |
-| `--type-label-xs` | `10px` | 지표·스토리 레이블 |
-| `--type-caption` | `11px` | 캡션과 보조 정보 |
-| `--type-label` | `12px` | 키커와 메타데이터 |
-| `--type-ui` | `13px` | 내비게이션과 컨트롤 |
-| `--type-body-sm` | `14px` | 조밀한 본문 |
-| `--type-body-md` | `15px` | 보조 본문 |
-| `--type-body` | `16px` | 기본 본문 |
-| `--type-body-lg` | `17px` | 강조 본문 |
-| `--type-heading-xs` | `18px` | 작은 제목 |
-| `--type-heading-sm` | `19px` | 카드·스토리 제목 |
-| `--type-heading-md` | `20px` | 중간 제목 |
-| `--type-heading-lg` | `21px` | 경력 프로젝트 제목 |
-| `--type-heading-xl` | `22px` | 문서 소제목 |
-| `--type-title-xs` | `25px` | 반응형 문서 제목 |
-| `--type-title-sm` | `28px` | 모바일 사례 제목 |
-| `--type-title-md` | `30px` | 경력 회사 제목 |
-| `--type-title-lg` | `32px` | 태블릿 섹션 제목 |
-| `--type-display-xs` | `40px` | 사례 제목 |
-| `--type-display-sm` | `42px` | 화면 섹션 제목 |
-| `--type-display-md` | `43px` | 반응형 이력서 이름 |
-| `--type-display-lg` | `50px` | 중간 화면 대표 제목 |
-| `--type-display-xl` | `52px` | 태블릿 홈 이름 |
-| `--type-display-2xl` | `54px` | 이력서 이름 |
-| `--type-display-3xl` | `62px` | 포트폴리오 대표 제목 |
-| `--type-display-4xl` | `64px` | 대표 화면 제목 |
-| `--type-display-5xl` | `82px` | 데스크톱 홈 이름 |
+| `--canvas` | `#fbf8f5` | 전체 배경 |
+| `--canvas-overlay` | `rgba(251, 248, 245, 0.92)` | sticky header |
+| `--surface` | `#fffdfb` | 기본 문서·카드 |
+| `--surface-strong` | `#ffffff` | 사진·도식 면 |
+| `--pastel-blush` | `#fbe9e7` | 홈·경력 강조 면 |
+| `--pastel-lilac` | `#eee9f8` | 현재 위치·연표 |
+| `--pastel-sage` | `#e6f0e9` | 운영·안정성 결과 |
+| `--pastel-sky` | `#e6f0f5` | 데이터·구조 표면 |
+| `--pastel-butter` | `#f8efcf` | 수치·주의 환기 |
+| `--ink` | `#2c2230` | 제목·핵심 텍스트 |
+| `--ink-soft` | `#4f4652` | 본문 |
+| `--muted` | `#675c69` | 날짜·보조 문구 |
+| `--inverse-ink` | `#ffffff` | 짙은 면 위 텍스트 |
+| `--line` | `#ded5df` | 기본 hairline |
+| `--line-strong` | `#c3b7c5` | 강조 경계 |
+| `--primary` | `#6e4c71` | CTA·활성 상태 |
+| `--primary-strong` | `#533457` | hover·대표 결과 |
+| `--link` | `#355f6d` | 본문 링크 |
+| `--focus` | `#116b75` | 키보드 포커스 |
+| `--selection` | `#e7dcef` | 텍스트 선택 |
+| `--shadow-soft` | `0 16px 42px rgba(74, 48, 73, 0.09)` | 큰 화면의 부드러운 깊이 |
+| `--shadow-hover` | `0 20px 50px rgba(74, 48, 73, 0.14)` | 상호작용 카드 hover |
 
-화면의 모든 `font-size` 선언은 이 최상위 `:root` 토큰을 사용합니다. 화면 크기는 기존 렌더링 값을 그대로 보존합니다.
+`--muted`는 모든 파스텔 면에서 4.5:1 이상의 대비를 유지합니다. 흰 글자는 `--primary`보다 밝은 면에 사용하지 않습니다.
 
-### Print Typography Tokens
+반투명 면, tinted hairline, 그림자, radius는 컴포넌트 안에서 값을 새로 만들지 않고 아래 semantic family만 사용합니다.
 
-| Token | Value | Usage |
+| Family | Tokens | Usage |
 | --- | --- | --- |
-| `--print-type-micro` | `7pt` | 인쇄 최소 메타데이터 |
-| `--print-type-fine` | `7.8pt` | 조밀한 인쇄 보조 정보 |
-| `--print-type-label` | `8pt` | 인쇄 레이블 |
-| `--print-type-caption` | `8.4pt` | 작은 캡션 |
-| `--print-type-caption-lg` | `8.5pt` | 큰 캡션과 주석 |
-| `--print-type-body-sm` | `9pt` | 조밀한 인쇄 본문 |
-| `--print-type-body-md` | `9.2pt` | 프로젝트 인쇄 본문 |
-| `--print-type-body` | `9.5pt` | 기본 인쇄 본문 |
-| `--print-type-body-lg` | `10pt` | 강조 인쇄 본문 |
-| `--print-type-heading-xs` | `10.5pt` | 최소 인쇄 제목 |
-| `--print-type-heading-sm` | `11pt` | 작은 인쇄 제목 |
-| `--print-type-heading-md` | `11.5pt` | 중간 인쇄 제목 |
-| `--print-type-heading-lg` | `12pt` | 큰 인쇄 제목 |
-| `--print-type-display-xs` | `18pt` | 인쇄 섹션 제목 |
-| `--print-type-display-sm` | `19pt` | 인쇄 사례 제목 |
-| `--print-type-display-md` | `22pt` | 큰 인쇄 사례 제목 |
-| `--print-type-display-lg` | `27pt` | 경력기술서 대표 제목 |
-| `--print-type-display-xl` | `28pt` | 포트폴리오 대표 제목 |
-| `--print-type-display-2xl` | `31pt` | 이력서 대표 제목 |
+| Glass | `--glass-subtle`, `--glass-muted`, `--glass-default`, `--glass-strong` | label, callout, button, floating panel |
+| Plum line | `--line-ink-faint`, `--line-ink-soft`, `--line-ink-medium`, `--line-ink-strong`, `--line-ink-accent`, `--line-ink-hover` | divider부터 hover 경계까지 위계 순서 |
+| Teal line | `--line-link-soft`, `--line-link-medium` | capability와 diagram 경계 |
+| Pastel wash | `--wash-blush`, `--wash-butter`, `--wash-sage-soft`, `--wash-sage`, `--wash-lilac` | 큰 사례 면을 위한 제한된 tint |
+| Elevation | `--shadow-header`, `--shadow-control`, `--shadow-card`, `--shadow-panel`, `--shadow-soft`, `--shadow-feature`, `--shadow-hover` | header부터 featured outcome까지 깊이 순서 |
+| Radius | `--radius-control`, `--radius-brand`, `--radius-card`, `--radius-card-lg`, `--radius-panel`, `--radius-portrait`, `--radius-document`, `--radius-decoration`, `--radius-pill` | 12px부터 pill까지 component scale |
 
-인쇄의 모든 `font-size` 선언은 `@media print` 안의 `:root` 토큰을 사용합니다. 6.8→7pt, 7.5·7.6→7.8pt, 8.2·8.3→8.4pt, 8.7·8.8→8.5pt, 9.4→9.5pt, 12.2→12pt만 기존 광학적 근사값으로 통합하고 나머지 크기는 보존합니다.
+기존 의미 토큰은 새 공통 토큰에 매핑합니다.
 
-## Shape And Spacing
+| Legacy token | Mapping |
+| --- | --- |
+| `--lime`, `--coral`, `--teal`, `--blue`, `--yellow` | `--primary`, `--primary`, `--link`, `--link`, `--primary` |
+| `--lime-soft`, `--coral-soft` | `--pastel-sage`, `--pastel-blush` |
+| `--teal-soft`, `--teal-faint`, `--blue-soft` | `--pastel-sky` |
+| `--yellow-soft` | `--pastel-butter` |
+| `--green-ink` | `--primary-strong` |
 
-- Radius: `2px`
-- 기본 간격 단위: `4px`
-- 카드 안쪽 여백: 24-32px
-- 화면 섹션 간격: 64-88px
-- 그림자는 호버 피드백에만 작게 사용합니다.
-- 그라디언트와 장식용 광원 효과는 사용하지 않습니다.
+### Type
 
-### Spacing Tokens
+- Font stack: `Pretendard`, `SUIT`, `Apple SD Gothic Neo`, `Noto Sans KR`, system sans-serif.
+- Display: 700–800 weight, `-0.035em`, 1.05–1.16 line height.
+- Section heading: 700 weight, `-0.024em`, 1.16–1.28 line height.
+- Body: 400–600 weight, 1.62–1.72 line height.
+- Metadata: 12–14px, 650–700 weight, 1.4 line height.
+- Desktop display / section: 68px / 42px.
+- Tablet display / section: 50px / 34px.
+- Mobile display / section: 38px / 28px.
+- 본문은 화면에서 16px 미만으로 줄이지 않습니다. 조밀한 표와 메타데이터만 12–15px를 허용합니다.
+- 한국어 문장 전체에 `nowrap`을 사용하지 않습니다. 기술명·날짜·짧은 역할 단위만 의미 있는 span으로 보호합니다.
 
-| Token | Value | Usage |
-| --- | --- | --- |
-| `--space-1` | `4px` | 최소 인라인 간격 |
-| `--space-2` | `8px` | 아이콘·텍스트 간격 |
-| `--space-3` | `12px` | 조밀한 컨트롤 여백 |
-| `--space-4` | `16px` | 지표 셀 기본 여백 |
-| `--space-5` | `20px` | 작은 카드 여백 |
-| `--space-6` | `24px` | 내비게이션·스토리 기본 간격 |
-| `--space-7` | `28px` | 넓은 본문 열 간격 |
-| `--space-8` | `32px` | 문서 내부 구획 |
-| `--space-10` | `40px` | 반응형 구획 |
-| `--space-12` | `48px` | 화면 구간 |
-| `--space-16` | `64px` | 사례 헤더 열과 큰 구간 |
-| `--space-20` | `80px` | 데스크톱 히어로 간격 |
-| `--space-22` | `88px` | 화면 섹션 간격 |
-| `--career-date-rail` | `168px` | 경력기술서의 회사 기간 열. 인쇄에서는 `108px`로 축소 |
+### Geometry And Rhythm
 
-새로 바꾸는 레이아웃 간격은 이 4px 스케일을 사용합니다. 1-3px 규칙선과 기존 레이블의 5px·7px 베이스라인 보정은 광학적 예외로 유지하며 새 컴포넌트에 확장하지 않습니다.
+- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96px.
+- Content width: 1184px.
+- Reading measure: 720px.
+- Screen inset: 20px at 375, 32px at 768, 48px at 1280.
+- Radius: controls 999px, small cards 16px, large surfaces 24px, photos 22px.
+- Touch target: at least 44×44px.
+- Screen section rhythm: 56px mobile, 72px tablet, 96px desktop.
+- 그림자는 큰 identity surface와 hover 가능한 카드에만 사용합니다. 문서 본문을 카드 그림자로 반복 분절하지 않습니다.
 
-## Components
+## Shared Primitives
 
-### Header
+### Site Header
 
-검정 바탕과 라임 브랜드 마크를 씁니다. 브랜드 마크는 홈으로 연결하고, 현재 문서는 라임 하단선으로 표시합니다. 모바일에서도 이력서·경력기술서·포트폴리오 링크를 유지합니다.
+- 모든 공개 페이지에서 `SM / 서민재` 홈 링크, 이력서, 경력기술서, 포트폴리오 순서를 공유합니다.
+- 아이보리 반투명 배경, 1px hairline, 72px 높이입니다.
+- 현재 문서는 라일락 pill과 `aria-current`로 표시합니다.
+- 오른쪽의 이메일 또는 PDF 행동은 짙은 플럼 pill입니다.
+- 700px 이하에서는 텍스트 브랜드를 줄이고, 문서 링크와 PDF 44px 행동은 유지합니다.
 
-### Browser Icon
+### Identity Portrait
 
-브라우저 아이콘은 Ink 바탕과 Lime 정사각형을 겹친 인라인 SVG로 모든 공개 문서와 관리자 화면에서 공유합니다. 별도 네트워크 요청 없이 로드하며 둥근 모서리나 그림자를 추가하지 않습니다.
+- 원본은 `assets/profile.jpg`, 689×886, `alt="서민재 프로필 사진"`입니다.
+- 본문 내 모든 사용은 명시적 `width`와 `height`, `aspect-ratio: 4 / 5`, `object-fit: cover`를 가집니다.
+- 홈은 최대 360px, 문서·포트폴리오 화면은 108–144px입니다.
+- 사진 뒤에는 서로 다른 단색 파스텔 종이 두 장을 겹친 듯한 프레임을 사용합니다. 사진 자체에 필터를 적용하거나 얼굴을 가리는 장식을 올리지 않습니다.
+- 홈 사진은 eager, 아래쪽 또는 중복 사진은 lazy loading을 허용합니다.
+- 이력서 PDF에서는 작은 사진을 유지할 수 있지만, 경력기술서·포트폴리오 PDF에서는 페이지 계약을 위해 숨깁니다.
 
 ### Buttons
 
-주요 버튼은 라임 바탕과 검정 글자, 보조 버튼은 흰 바탕과 진한 테두리를 씁니다. 높이는 최소 40px, radius는 2px입니다.
+- Primary: `--primary` 배경, 흰 글자, 48px 높이, pill.
+- Secondary: 반투명 흰 면, `--line-strong` 경계, 48px 높이, pill.
+- hover는 색과 그림자만 바꾸고 레이아웃을 움직이지 않습니다.
+- `:focus-visible`은 3px teal outline과 3px offset입니다.
 
-### Metrics
+### Pastel Surface
 
-네 개 지표는 흰 면과 검정 hairline으로 묶고 라임 상단선으로만 강조합니다. 홈의 작은 화면에서는 2x2 배열을 유지합니다.
+- `blush`, `lilac`, `sage`, `sky`, `butter` 다섯 변형을 사용합니다.
+- 한 viewport 안에 큰 파스텔 면은 최대 3종입니다.
+- 같은 위계의 카드에 무작위 색을 쓰지 않고, 문서 종류나 정보 역할에 따라 반복합니다.
+- 큰 hero는 하나의 기본 면과 두 개의 단색 pseudo shape로 깊이를 만듭니다. 전체 화면 rainbow gradient는 금지합니다.
 
-### Document Cards
+### Document Card
 
-문서 카드는 1px 테두리와 5px 상단 규칙선을 씁니다. 큰 그림자나 둥근 외곽선 없이 제목과 이동 행동이 한눈에 이어져야 합니다.
+- 16–20px radius, 1px tinted border, 24–32px inset.
+- 제목, 한 줄 설명, 이동 affordance의 세 단계만 유지합니다.
+- 홈의 세 문서는 라일락, 블러시, 스카이 표면으로 고정합니다.
+- hover는 경계·그림자 변화만 사용하고 transform으로 주변 배치를 흔들지 않습니다.
 
-### Case Density
+### Evidence Row
 
-대표 사례는 헤더, 핵심 지표, 도식 한 장을 기본 골격으로 삼습니다. 구현 항목을 나열한 상세 카드와 다른 문서에 이미 있는 과거 경력은 포트폴리오에서 반복하지 않습니다. 같은 결론을 문장·카드·도식으로 중복 설명하지 않습니다.
+- 순서: 기간 → 회사/범위 → 역할 → 결과.
+- 데스크톱에서는 열, 모바일에서는 기간과 회사부터 세로로 쌓습니다.
+- 색에만 의존하지 않고 크기·weight·위치로 계층을 구분합니다.
 
-### Career Timeline
+### Outcome Panel
 
-경력기술서는 최신 경력부터 한 방향으로 읽히는 세로 타임라인을 사용합니다. 상단 요약과 회사별 상세 모두 `기간 → 회사·역할 → 문제와 결과` 순서로 스캔되며, 데스크톱과 인쇄에서는 기간을 왼쪽 날짜 레일에 고정합니다. 같은 회사의 후속 업무는 새 회사 블록처럼 반복하지 않고 하위 구획으로 이어 붙입니다. 모바일에서는 날짜를 회사명 위에 쌓고, 이전 경력도 2열로 압축하지 않습니다.
+- 일반 결과는 흰 면과 hairline을 사용합니다.
+- 한 문서에 가장 강한 결과 하나만 `--primary-strong` 면과 흰 글자를 사용할 수 있습니다.
+- 보조 결과는 세이지 또는 라일락 옅은 면과 3px 규칙선으로 표시합니다.
+- 수치와 결과는 제목 또는 첫 문장에 위치합니다.
 
-### Architecture Diagrams
+## Page Contracts
 
-- 사례마다 도식은 최대 한 장만 둡니다.
-- 주 경로와 책임 경계만 남기고 노드는 8-12개 안으로 제한합니다.
-- 피드 서빙 도식은 Archify `v2.11.0`의 Architecture IR로 관리합니다.
-- 원본 IR은 `design/archify/`, 배포용 light SVG는 `assets/diagrams/`에 둡니다.
-- Archify HTML·스크립트·iframe은 서비스에 싣지 않고 빌드 시 생성한 정적 SVG만 사용합니다.
-- 화면 캡션은 HTML에 두고 SVG에는 구조와 연결선만 남깁니다.
+### Home
 
-## Responsive And Print
+- Hero: copy 1fr + portrait 360px의 비대칭 2열. 모바일에서는 copy → photo 순서입니다.
+- Hero surface는 블러시, 사진 frame은 라일락+버터입니다.
+- 문서 카드 3개는 동일한 크기와 구조, 서로 다른 고정 파스텔 면을 사용합니다.
+- 경력은 카드 묶음이 아니라 한 개의 흰 timeline surface 안에서 hairline으로 나눕니다.
+- 첫 화면에서 이름, 직무, 대표 가치, 사진, 이력서 CTA가 보여야 합니다.
 
-- Desktop: 콘텐츠 최대 폭 1180px
-- Tablet: 900px 이하에서 문서와 도식을 한 열로 전환
-- Mobile: 420px 이하에서도 홈 지표는 2x2, 나머지 긴 지표는 한 열. 폭이 긴 도식은 단일 disclosure로 접고, 열었을 때만 가로로 탐색합니다.
-- Print: A4, 라임 강조와 역할별 옅은 면색을 보존하고 화면용 반응형 규칙과 분리. 로컬 SVG는 PDF HTML에 data URI로 포함해 스타일과 경로가 빠지지 않게 합니다.
+### Resume
 
-## Accessibility
+- 화면에서는 큰 흰 문서가 아니라 부드러운 아이보리 캔버스 위 24px 문서 surface로 보입니다.
+- Hero는 이름·요약, 작은 portrait, contact utility를 같은 identity block 안에 배치합니다.
+- 기술은 라일락 요약 panel, 현재 경력은 결과 우선, 이전 경력은 hairline 목록으로 구성합니다.
+- A4는 정확히 1페이지를 유지합니다. portrait는 68×88px 이하로 유지하고 연락처와 같은 상단 행에 둡니다.
 
-- 모든 인터랙션은 `:focus-visible` 표시를 제공합니다.
-- 색만으로 현재 위치를 알리지 않고 선, 텍스트, 배경을 함께 사용합니다.
-- `prefers-reduced-motion`에서 전환 시간을 제거합니다.
-- 본문과 배경은 WCAG AA 수준의 대비를 유지합니다.
+### Career Description
 
----
+- 별도 Slack 전용 색 계약을 폐기하고 공통 Pastel Ledger 토큰만 사용합니다.
+- Hero는 블러시 identity band + 작은 portrait + contact strip입니다.
+- 연표는 라일락 surface, 프로젝트는 흰 outcome panels입니다.
+- 약 200만 건 보정 결과 한 개만 짙은 플럼 featured panel로 허용합니다.
+- 회사와 역할은 `h2(company) + small(role/product)`의 두 단계로 유지합니다.
+- A4는 정확히 2페이지, 페이지 2 시작에 웍스피어 문맥을 유지합니다.
 
-## Career Page — Slack-derived Editorial Contract
+### Portfolio
 
-### Source And Provenance
+- Hero는 스카이 identity surface와 작은 portrait/profile panel입니다.
+- sticky case navigation은 흰 면과 라일락 활성 상태를 사용합니다.
+- 각 사례는 번호, 결과 제목, 사실 4개, 상황/변경의 순서입니다.
+- fact cells는 동일한 파스텔을 반복하지 않고 사례 단위로 한 가지 tint만 사용합니다.
+- 다이어그램은 흰 배경과 hairline을 유지하며 텍스트와 선이 겹치지 않아야 합니다.
+- A4는 정확히 3페이지를 유지합니다.
 
-- Public source: `https://getdesign.md/slack/design-md`
-- Verification: the public preview was inspected in Google Chrome 150 on 2026-07-24 at CSS widths 375 / 768 / 1280px with device scale factor 1.
-- Runtime truth takes precedence over older read-only notes that rejected aubergine, pill controls, or gradients. The career adaptation uses the measured composition and tokens, not Slack logos, copy, screenshots, assets, or proprietary fonts.
-- Korean typography remains `Pretendard`, `Apple SD Gothic Neo`, `Noto Sans KR`, system sans-serif. The runtime font measurement informs hierarchy only.
+## Responsive
 
-### Career Direction And Information Order
+| Width | Inset | Header | Identity | Cards |
+| --- | ---: | --- | --- | --- |
+| 375px | 20px | compact brand, 44px targets | single column | single column |
+| 768px | 32px | full nav | home 2 columns, docs compact portrait | 2 columns where meaningful |
+| 1280px | 48px | full header | 720px copy + 360px portrait | bounded by 1184px |
 
-The career page is a warm, one-column hiring document: a light navigation row, one pastel identity/evidence band, one compact chronology card, and a sequence of outcome cards. Aubergine is scarce and meaningful: the download action, active navigation, timeline numerals, and one featured outcome surface. The reading order remains identity → evidence summary → reverse chronology → current employer → outcome evidence → prior employers.
+- 200% 확대에서도 수평 스크롤이 없어야 합니다.
+- portrait와 기술 다이어그램은 컨테이너 폭을 넘지 않습니다.
+- sticky 요소는 콘텐츠를 가리지 않습니다.
+- 375px에서 헤더는 문서 링크를 제거하지 않습니다.
 
-The page must let a recruiter identify the candidate, role, approximately three years of experience, employer, dates, and strongest facts within ten seconds. An engineering reviewer must then be able to scan literal technology names and validation scope without decorative content interrupting the document.
+## Print
 
-### Career-only Token Mapping
+- `@page`: A4, 10mm.
+- 배경은 흰색, 본문은 검정/짙은 회색, 파스텔은 5–8% tint로 평면화합니다.
+- sticky header, progress, 버튼, toast, portfolio side navigation은 숨깁니다.
+- 그림자, decorative pseudo shape, 화면 전용 caption을 제거합니다.
+- 텍스트와 링크는 선택 가능해야 하며 PDF 안에 화면 캡처를 넣지 않습니다.
+- Resume 1쪽, Career 2쪽, Portfolio 3쪽 계약은 시각 효과보다 우선합니다.
 
-All new visual declarations are scoped below `.career-page`. Raw career values are declared once as custom properties; career selectors consume those properties or the shared spacing/type scale.
+## Accessibility And Performance
 
-#### Color And Surface Tokens
+- 모든 의미 있는 사진과 도식은 구체적인 alt를 갖습니다.
+- 색 외에 shape, label, weight로 상태를 구분합니다.
+- `prefers-reduced-motion`에서는 scroll behavior와 transition을 제거합니다.
+- 외부 폰트·이미지 요청을 추가하지 않습니다.
+- 프로필 원본은 이미 로컬에 있으며 네트워크 실패와 무관하게 표시되어야 합니다.
+- 이미지에는 크기와 aspect ratio를 선언해 CLS를 방지합니다.
+- 링크와 버튼은 키보드 순서가 DOM 읽기 순서와 같아야 합니다.
+- CJK 고아행, 단독 구분점, 잘린 기술명, 도식의 선·글자 겹침은 배포 차단 결함입니다.
 
-| Token | Value | Career usage |
-| --- | --- | --- |
-| `--career-primary` | `#4a154b` | PDF CTA, sparse accents, single featured outcome |
-| `--career-primary-hover` | `#611f69` | CTA and active-pill hover |
-| `--career-primary-active` | `#481a54` | pressed state |
-| `--career-ink` | `#1d1d1d` | headings and body on light surfaces |
-| `--career-muted` | `#696969` | dates, subtitles, supporting copy |
-| `--career-canvas` | `#ffffff` | document and ordinary outcome cards |
-| `--career-cream` | `#f4ede4` | outer canvas and alternate surface |
-| `--career-lavender` | `#f9f0ff` | active navigation and quiet tint |
-| `--career-peach` | `#fff0e6` | first hero-gradient stop |
-| `--career-lavender-mid` | `#e9d8ff` | fourth hero-gradient stop |
-| `--career-sage` | `#d8e6e0` | final hero-gradient stop |
-| `--career-hairline` | `#e6e6e6` | ordinary cards and dividers |
-| `--career-on-primary` | `#ffffff` | text on aubergine |
-| `--career-on-primary-muted` | `#d9bdde` | supporting copy on aubergine |
-| `--career-link` | `#1264a3` | focus ring and link affordance |
-| `--career-hero-gradient` | `linear-gradient(120deg, #fff0e6 0%, #f4ede4 25%, #f9f0ff 50%, #e9d8ff 75%, #d8e6e0 100%)` | identity/evidence band only |
-| `--career-overview-gradient` | `linear-gradient(135deg, #f4ede4 0%, #f9f0ff 100%)` | chronology summary card |
+## Explicit Exclusions
 
-#### Geometry, Rhythm, And Type Tokens
-
-| Token | Value | Career usage |
-| --- | --- | --- |
-| `--career-content` | `1184px` | centered readable shell at 1280px with 48px insets |
-| `--career-measure` | `720px` | hero and supporting-copy measure |
-| `--career-inset` | `20px` | default/mobile horizontal inset |
-| `--career-shell-inset` | `max(var(--career-inset), calc((100% - var(--career-content)) / 2))` | full-bleed band alignment |
-| `--career-section-space` | `48px` | default/mobile section rhythm |
-| `--career-hero-block` | `48px` | default/mobile hero vertical padding |
-| `--career-hero-title` | `32px` | default/mobile identity title |
-| `--career-section-title` | `28px` | default/mobile section heading |
-| `--career-company-title` | `28px` | employer heading |
-| `--career-project-title` | `19px` | outcome heading |
-| `--career-card-gap` | `16px` | default/mobile card gap |
-| `--career-card-padding` | `24px` | default/mobile outcome-card inset |
-| `--career-contact-gap` | `8px` | contact-cell gap |
-| `--career-action-height` | `48px` | download pill |
-| `--career-touch-min` | `44px` | mobile contact and navigation targets |
-| `--career-action-inline` | `28px` | pill horizontal padding |
-| `--career-card-radius` | `16px` | cards and summary surface |
-| `--career-pill-radius` | `90px` | active navigation and download action |
-| `--career-hairline-width` | `1px` | card/divider rule |
-| `--career-focus-width` | `3px` | keyboard focus outline |
-| `--career-focus-offset` | `3px` | focus separation from the control |
-| `--career-display-leading` | `1.12` | identity and section display type |
-| `--career-heading-leading` | `1.3` | employer/project headings |
-| `--career-body-leading` | `1.6` | Korean body copy |
-| `--career-display-tracking` | `-0.012em` | runtime-equivalent display tracking |
-| `--career-transition` | `180ms ease` | hover/focus/pressed feedback |
-
-At 768px, `--career-inset / --career-hero-block / --career-hero-title` become `32px / 64px / 44px`; section title becomes `36px`, section rhythm `64px`, card gap `24px`, and card padding `32px`. At the desktop ladder used by the 1280px reference, they become `48px / 96px / 64px`; section title becomes `50px`, section rhythm `96px`, card gap `24px`, and card padding remains `32px`.
-
-### Career Primitives
-
-#### Light Career Header
-
-- White, hairline-separated, shadowless sticky header.
-- Navigation stays in DOM order. The current document uses a lavender pill with ink text; non-current links stay plain.
-- The PDF download action is the single filled aubergine control, 48px high with 28px inline padding and 90px radius.
-- Hover uses `--career-primary-hover`, pressed uses `--career-primary-active`, and `:focus-visible` uses a visible `--career-link` outline. Interaction transitions affect only color and transform.
-
-#### Identity And Evidence Band
-
-- One full-width `--career-hero-gradient` surface with no border, radius, or shadow.
-- Content aligns to `--career-shell-inset`; title follows the 32 / 44 / 64px ladder and body measure stays at 720px.
-- Identity, role, and factual evidence remain a single text column.
-- Contact details form a compact utility strip after the evidence: 2 columns at 375px, 3 at 768px, 4 at 1280px. Each mobile link target is at least 44px high.
-- Duplicate resume/portfolio contact links may be hidden below 700px, but DOM order and real link text remain unchanged.
-
-#### Chronology Summary
-
-- Cream-to-lavender 16px card on the white document track.
-- Four rows remain reverse chronological and preserve date → employer → platform/role source order.
-- Decimal-leading-zero row numbers are the sparse aubergine accent; row dividers use the hairline token.
-
-#### Employer Heading
-
-- Employer name is the h2 primary line.
-- A reusable semantic `<small>` subtitle holds separate nowrap spans for role and product/platform. Spans wrap as units so separator glyphs cannot dangle.
-- Dates are separate semantic `<time>` elements and remain visually subordinate.
-- Continuation headings use the same `<small>` primitive for compact outcome labels and always repeat the employer context.
-
-#### Outcome Card
-
-- Ordinary projects: white, 1px hairline, 16px radius, no shadow, 24px mobile padding and 32px from tablet upward.
-- One and only one `.career-project--featured` surface is aubergine with white heading/body and muted-light supporting copy. It must not become a full-bleed dark section.
-- Cream alternate cards are optional and sparse; the chronology card already satisfies the alternate-surface need.
-- Strong text inside bullets uses medium/semi-bold weight so dense Korean copy does not become uniformly dark; factual metrics remain scannable.
-- Cards are real semantic DOM sections, never raster or screenshot substitutes.
-
-### Responsive Contract
-
-| Reference width | Horizontal inset | Hero block padding | Hero title | Section heading | Contact columns | Card gap |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| 375px | 20px | 48px | 32px / 1.12 | 28px / 1.12 | 2 | 16px |
-| 768px | 32px | 64px | 44px / 1.12 | 36px / 1.12 | 3 | 24px |
-| 1280px | 48px | 96px | 64px / 1.12 | 50px / 1.12 | 4 | 24px |
-
-- Career content remains one column at every width. Only compact contact utilities change column count.
-- At 200% zoom the document reflows without horizontal scrolling; no full heading or Korean sentence is forced into nowrap.
-- Semantic subtitle spans may remain unbroken only when each unit comfortably fits the 375px content width.
-
-### A4 Print Adaptation
-
-- Output remains exactly two A4 pages with selectable text and existing page-flow ownership.
-- The screen gradient flattens to a pale cream hero tint; chronology uses a pale lavender tint.
-- All body and heading text prints black or near-black. Aubergine becomes a lighter accent for rules and the featured card is flattened to a pale tint rather than a dark full-bleed surface.
-- Screen header, progress, and download controls remain hidden.
-- Cards have no shadows. Ordinary outcomes flatten to compact hairline-separated rows and may split across a page when needed to preserve the two-page contract; the featured outcome keeps its pale card surface and `break-inside: avoid`. Employer headings and dates remain attached to the following outcome.
-- Page 2 must begin with employer context before the first continuation project. Dates, reverse chronology, literal technical terms, and all `data-edit-id` seams remain unchanged.
-
-Print-only token values:
-
-| Token | Value | Usage |
-| --- | --- | --- |
-| `--career-print-canvas` | `#ffffff` | page background |
-| `--career-print-hero` | `#faf5ef` | flattened hero |
-| `--career-print-alt` | `#f8f3fb` | chronology and featured-card tint |
-| `--career-print-primary` | `#744675` | lighter aubergine accent |
-| `--career-print-ink` | `#000000` | print headings/body |
-| `--career-print-muted` | `#333333` | print supporting text |
-| `--career-print-hairline` | `#d7cbd7` | print dividers |
-
-### Accessibility And COGA
-
-- Keyboard users receive a non-color `:focus-visible` outline on navigation, download, and contact links; pressed and hover states remain distinct.
-- Mobile controls and contact links meet the 44px target minimum; the PDF action stays 48px high.
-- Contrast uses dark ink on white/cream/lavender and white on aubergine. Muted text is not used below readable body sizes on colored surfaces.
-- `prefers-reduced-motion` removes transform feedback and transition duration.
-- Wayfinding does not rely on color alone: current navigation has pill shape plus `aria-current`, employer subtitles create explicit hierarchy, and dates remain semantic `<time>`.
-- COGA: one reading direction, predictable employer → outcome grouping, plain Korean result-led copy, restrained surface variants, and no decorative motion or memory-dependent interaction.
-- CJK line breaking uses natural wrapping with only short semantic subtitle/metric units protected. Invisible joiners remain prohibited.
-
-### Explicit Exclusions And Debt
-
-- Excluded: reference-derived Slack brand copy, logos, proprietary fonts, screenshots, imagery, CTA phrases, marketing examples, footer imitation, and blue decorative accents. A factual mention of Slack as an operational notification tool remains part of the candidate evidence.
-- Excluded: new packages, JavaScript behavior, decorative animation, shadows, glass, dark full-bleed print sections, unsupported metrics, and changes outside `.career-page`.
-- The Signal Grid system remains authoritative for home, resume, portfolio, and admin.
-- Accepted design debt: none. Any horizontal overflow, split Korean compound, third print page, missing page-2 employer context, or accessibility regression blocks delivery rather than entering debt.
+- Slack 로고·마케팅 카피·스크린샷·전용 자산 복제.
+- generic purple-blue full-screen gradient, glassmorphism, glow, 무한 애니메이션.
+- 프로필 사진의 AI 보정·얼굴 변형·stock image 대체.
+- 새 런타임 의존성 또는 외부 웹폰트.
+- 지원되지 않는 성과 수치와 기술 경험의 추가.
+- 문서 전체를 각각 다른 브랜드처럼 보이게 하는 페이지별 독립 테마.

@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#11150f">
+  <meta name="theme-color" content="#fbf8f5">
   <meta name="description" content="서민재 백엔드 엔지니어 이력서. Java·Kotlin·Spring 기반의 이벤트 복구, 포인트 원장·배치, 검색·캐시, JPA 오류 대응 경험을 담았습니다.">
   <title>서민재 · Backend Engineer Resume</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='18' fill='%232c2230'/%3E%3Cpath d='M16%2016h32v32H16z' rx='10' fill='%23fbe9e7'/%3E%3Cpath d='M24%2024h16v16H24z' rx='5' fill='%236e4c71'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/design-system.css">
   <script src="../assets/site.js" defer></script>
 </head>
-<body>
+<body class="resume-page">
   <a class="skip-link" href="#resume-main">이력서 본문으로 건너뛰기</a>
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <header class="site-header screen-only">
     <div class="site-header-inner">
+      <a class="site-brand" href="../" aria-label="서민재 홈">
+        <span class="site-brand-mark" aria-hidden="true">SM</span>
+        <span class="site-brand-name">서민재</span>
+      </a>
       <nav class="site-nav" aria-label="주요 문서">
         <a href="./" aria-current="page">이력서</a>
         <a href="../career/">경력기술서</a>
@@ -39,15 +43,20 @@
             Kafka 이벤트 복구와 중단된&nbsp;배치의&nbsp;재시작을 구현했고, JPA 변경 감지 오류를 실제&nbsp;영속성&nbsp;컨텍스트에서 재현했습니다.
           </p>
         </div>
-        <address class="resume-contact">
-          <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
-          <a href="https://github.com/ch4570">github.com/ch4570</a>
-          <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
-          <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
-          <a href="https://ch4570-archive.vercel.app/career/">경력기술서</a>
-          <a href="https://ch4570-archive.vercel.app/portfolio/">포트폴리오</a>
-          <span>Seoul, Korea</span>
-        </address>
+        <div class="document-identity-aside">
+          <figure class="profile-portrait profile-portrait--document">
+            <img src="../assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async">
+          </figure>
+          <address class="resume-contact">
+            <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
+            <a href="https://github.com/ch4570">github.com/ch4570</a>
+            <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
+            <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
+            <a href="https://ch4570-archive.vercel.app/career/">경력기술서</a>
+            <a href="https://ch4570-archive.vercel.app/portfolio/">포트폴리오</a>
+            <span>Seoul, Korea</span>
+          </address>
+        </div>
       </header>
 
       <div class="resume-ats-body">

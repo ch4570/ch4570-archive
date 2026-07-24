@@ -103,17 +103,29 @@ function expandDetailsElements(sourceHtml) {
   return expandedHtml;
 }
 
-export async function loadSvgAssetReplacements(sourceHtml, sourcePath) {
+const imageMimeTypes = new Map([
+  [".jpeg", "image/jpeg"],
+  [".jpg", "image/jpeg"],
+  [".png", "image/png"],
+  [".svg", "image/svg+xml"],
+  [".webp", "image/webp"],
+]);
+
+export async function loadLocalAssetReplacements(sourceHtml, sourcePath) {
   const replacements = new Map();
   const sourceDirectory = path.dirname(path.resolve(sourcePath));
-  const svgSourcePattern = /\bsrc=(["'])([^"'<>]+\.svg)\1/giu;
+  const imageSourcePattern =
+    /\bsrc=(["'])([^"'<>]+\.(?:jpe?g|png|svg|webp))\1/giu;
 
-  for (const match of sourceHtml.matchAll(svgSourcePattern)) {
+  for (const match of sourceHtml.matchAll(imageSourcePattern)) {
     const source = match[2];
     if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|\/)/iu.test(source)) continue;
 
-    const svg = await readFile(path.resolve(sourceDirectory, source));
-    replacements.set(source, `data:image/svg+xml;base64,${svg.toString("base64")}`);
+    const mimeType = imageMimeTypes.get(path.extname(source).toLowerCase());
+    if (!mimeType) continue;
+
+    const image = await readFile(path.resolve(sourceDirectory, source));
+    replacements.set(source, `data:${mimeType};base64,${image.toString("base64")}`);
   }
 
   return replacements;
@@ -159,7 +171,7 @@ async function main() {
     readFile(sourcePath, "utf8"),
     readFile(stylesheetPath, "utf8"),
   ]);
-  const assetReplacements = await loadSvgAssetReplacements(sourceHtml, sourcePath);
+  const assetReplacements = await loadLocalAssetReplacements(sourceHtml, sourcePath);
   const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, assetReplacements);
 
   await mkdir(path.dirname(targetPath), { recursive: true });

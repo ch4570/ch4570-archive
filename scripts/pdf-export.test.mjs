@@ -5,7 +5,7 @@ import test from "node:test";
 
 import {
   buildPdfDocument,
-  loadSvgAssetReplacements,
+  loadLocalAssetReplacements,
 } from "./prepare-pdf-document.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
@@ -96,18 +96,20 @@ test("PDF preparation expands every printable disclosure without site JavaScript
   );
 });
 
-test("PDF preparation embeds local Archify SVG assets", async () => {
+test("PDF preparation embeds every supported local document image", async () => {
   const sourcePath = path.join(projectRoot, "portfolio/index.html");
   const [sourceHtml, stylesheet] = await Promise.all([
     readFile(sourcePath, "utf8"),
     readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
   ]);
-  const replacements = await loadSvgAssetReplacements(sourceHtml, sourcePath);
+  const replacements = await loadLocalAssetReplacements(sourceHtml, sourcePath);
   const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, replacements);
 
-  assert.equal(replacements.size, 1);
+  assert.equal(replacements.size, 2);
   assert.match(preparedHtml, /src="data:image\/svg\+xml;base64,/);
+  assert.match(preparedHtml, /src="data:image\/jpeg;base64,/);
   assert.doesNotMatch(preparedHtml, /\.\.\/assets\/diagrams\/feed-serving\.svg/);
+  assert.doesNotMatch(preparedHtml, /\.\.\/assets\/profile\.jpg/);
 });
 
 test("PDF preparation handles quoted delimiters and similarly named attributes", () => {

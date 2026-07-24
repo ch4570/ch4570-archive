@@ -3,19 +3,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#11150f">
+  <meta name="theme-color" content="#fbf8f5">
   <meta name="description" content="서민재 백엔드 엔지니어. Java·Kotlin·Spring으로 개발한 이벤트 복구, 포인트 원장·배치, 검색·캐시 사례를 소개합니다.">
   <title>서민재 · Backend Engineer</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' fill='%2311150f'/%3E%3Cpath d='M12%2012h40v40H12z' fill='%2376b900'/%3E%3Cpath d='M22%2022h20v20H22z' fill='%2311150f'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='18' fill='%232c2230'/%3E%3Cpath d='M16%2016h32v32H16z' rx='10' fill='%23fbe9e7'/%3E%3Cpath d='M24%2024h16v16H24z' rx='5' fill='%236e4c71'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./assets/design-system.css">
   <script src="./assets/site.js" defer></script>
 </head>
-<body>
+<body class="home-page">
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <header class="site-header">
     <div class="site-header-inner">
+      <a class="site-brand" href="./" aria-current="page" aria-label="서민재 홈">
+        <span class="site-brand-mark" aria-hidden="true">SM</span>
+        <span class="site-brand-name">서민재</span>
+      </a>
       <nav class="site-nav" aria-label="주요 문서">
         <a href="./resume/">이력서</a>
         <a href="./career/">경력기술서</a>
@@ -48,7 +52,7 @@
           </div>
 
           <figure class="portrait-figure">
-            <img src="./assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886">
+            <img src="./assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async" fetchpriority="high">
             <figcaption>Backend Engineer · Seoul, Korea</figcaption>
           </figure>
         </div>
