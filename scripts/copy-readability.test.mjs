@@ -143,6 +143,43 @@ test("career overview preserves period, employer, and role reading order", async
   }
 });
 
+test("career employer headings separate company from product and role", async () => {
+  const source = await readFile(resolve(repositoryRoot, "career/index.html"), "utf8");
+  const editableById = new Map(
+    scanEditableRegions(source).map((region) => [region.id, region]),
+  );
+  const employerHeadings = [
+    ["career-025", "웍스피어(유)", "JOBKOREA·Albamon"],
+    ["career-065", "토스랩", "JANDI"],
+  ];
+
+  for (const [id, company, product] of employerHeadings) {
+    const heading = editableById.get(id);
+    assert.equal(heading?.tagName, "h2", "expected employer heading " + id);
+
+    const hierarchy = heading.innerHTML.match(
+      /^\s*([^<]+?)\s*<small>([\s\S]+)<\/small>\s*$/u,
+    );
+    assert.ok(hierarchy, id + " should nest product and role in a <small> subtitle");
+    assert.equal(visibleText(hierarchy[1]), company, id + " should expose only the company");
+
+    const subtitle = visibleText(hierarchy[2]);
+    assert.ok(subtitle.includes(product), id + " should keep the product in its subtitle");
+    assert.ok(
+      subtitle.includes("Backend Engineer"),
+      id + " should keep the role in its subtitle",
+    );
+  }
+
+  const continuation = editableById.get("career-042");
+  assert.equal(continuation?.tagName, "h2", "expected continuation heading career-042");
+  assert.match(
+    visibleText(continuation.innerHTML),
+    /^웍스피어\(유\)/u,
+    "career-042 should retain its employer context",
+  );
+});
+
 test("portfolio leads with the JPA correction case before supporting work", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const orderedIds = ["event", "jpa", "point", "feed", "evidence"];

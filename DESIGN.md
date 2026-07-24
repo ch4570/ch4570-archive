@@ -2,6 +2,8 @@
 
 서민재의 이력서, 경력기술서, 엔지니어링 포트폴리오를 위한 화면 규칙입니다. `npx getdesign@latest add nvidia`로 받은 프리셋에서 각진 그리드, 선명한 녹색, 얇은 구분선 원칙을 참고했습니다. NVIDIA의 로고, 상표 표현, 전용 서체는 사용하지 않습니다.
 
+`career/`는 이 문서 아래의 **Career Page — Slack-derived Editorial Contract**를 별도 표면 계약으로 사용합니다. `.career-page` 안에서는 해당 계약의 aubergine, 90px pill, 16px card, pastel hero gradient가 기존 Signal Grid의 라임·2px radius·무그라디언트 규칙보다 우선하며, 이 예외는 이력서와 포트폴리오에 전파하지 않습니다.
+
 ## Design Direction
 
 - 밝은 배경 위에서 긴 기술 문서를 빠르게 훑을 수 있어야 합니다.
@@ -203,3 +205,167 @@
 - 색만으로 현재 위치를 알리지 않고 선, 텍스트, 배경을 함께 사용합니다.
 - `prefers-reduced-motion`에서 전환 시간을 제거합니다.
 - 본문과 배경은 WCAG AA 수준의 대비를 유지합니다.
+
+---
+
+## Career Page — Slack-derived Editorial Contract
+
+### Source And Provenance
+
+- Public source: `https://getdesign.md/slack/design-md`
+- Verification: the public preview was inspected in Google Chrome 150 on 2026-07-24 at CSS widths 375 / 768 / 1280px with device scale factor 1.
+- Runtime truth takes precedence over older read-only notes that rejected aubergine, pill controls, or gradients. The career adaptation uses the measured composition and tokens, not Slack logos, copy, screenshots, assets, or proprietary fonts.
+- Korean typography remains `Pretendard`, `Apple SD Gothic Neo`, `Noto Sans KR`, system sans-serif. The runtime font measurement informs hierarchy only.
+
+### Career Direction And Information Order
+
+The career page is a warm, one-column hiring document: a light navigation row, one pastel identity/evidence band, one compact chronology card, and a sequence of outcome cards. Aubergine is scarce and meaningful: the download action, active navigation, timeline numerals, and one featured outcome surface. The reading order remains identity → evidence summary → reverse chronology → current employer → outcome evidence → prior employers.
+
+The page must let a recruiter identify the candidate, role, approximately three years of experience, employer, dates, and strongest facts within ten seconds. An engineering reviewer must then be able to scan literal technology names and validation scope without decorative content interrupting the document.
+
+### Career-only Token Mapping
+
+All new visual declarations are scoped below `.career-page`. Raw career values are declared once as custom properties; career selectors consume those properties or the shared spacing/type scale.
+
+#### Color And Surface Tokens
+
+| Token | Value | Career usage |
+| --- | --- | --- |
+| `--career-primary` | `#4a154b` | PDF CTA, sparse accents, single featured outcome |
+| `--career-primary-hover` | `#611f69` | CTA and active-pill hover |
+| `--career-primary-active` | `#481a54` | pressed state |
+| `--career-ink` | `#1d1d1d` | headings and body on light surfaces |
+| `--career-muted` | `#696969` | dates, subtitles, supporting copy |
+| `--career-canvas` | `#ffffff` | document and ordinary outcome cards |
+| `--career-cream` | `#f4ede4` | outer canvas and alternate surface |
+| `--career-lavender` | `#f9f0ff` | active navigation and quiet tint |
+| `--career-peach` | `#fff0e6` | first hero-gradient stop |
+| `--career-lavender-mid` | `#e9d8ff` | fourth hero-gradient stop |
+| `--career-sage` | `#d8e6e0` | final hero-gradient stop |
+| `--career-hairline` | `#e6e6e6` | ordinary cards and dividers |
+| `--career-on-primary` | `#ffffff` | text on aubergine |
+| `--career-on-primary-muted` | `#d9bdde` | supporting copy on aubergine |
+| `--career-link` | `#1264a3` | focus ring and link affordance |
+| `--career-hero-gradient` | `linear-gradient(120deg, #fff0e6 0%, #f4ede4 25%, #f9f0ff 50%, #e9d8ff 75%, #d8e6e0 100%)` | identity/evidence band only |
+| `--career-overview-gradient` | `linear-gradient(135deg, #f4ede4 0%, #f9f0ff 100%)` | chronology summary card |
+
+#### Geometry, Rhythm, And Type Tokens
+
+| Token | Value | Career usage |
+| --- | --- | --- |
+| `--career-content` | `1184px` | centered readable shell at 1280px with 48px insets |
+| `--career-measure` | `720px` | hero and supporting-copy measure |
+| `--career-inset` | `20px` | default/mobile horizontal inset |
+| `--career-shell-inset` | `max(var(--career-inset), calc((100% - var(--career-content)) / 2))` | full-bleed band alignment |
+| `--career-section-space` | `48px` | default/mobile section rhythm |
+| `--career-hero-block` | `48px` | default/mobile hero vertical padding |
+| `--career-hero-title` | `32px` | default/mobile identity title |
+| `--career-section-title` | `28px` | default/mobile section heading |
+| `--career-company-title` | `28px` | employer heading |
+| `--career-project-title` | `19px` | outcome heading |
+| `--career-card-gap` | `16px` | default/mobile card gap |
+| `--career-card-padding` | `24px` | default/mobile outcome-card inset |
+| `--career-contact-gap` | `8px` | contact-cell gap |
+| `--career-action-height` | `48px` | download pill |
+| `--career-touch-min` | `44px` | mobile contact and navigation targets |
+| `--career-action-inline` | `28px` | pill horizontal padding |
+| `--career-card-radius` | `16px` | cards and summary surface |
+| `--career-pill-radius` | `90px` | active navigation and download action |
+| `--career-hairline-width` | `1px` | card/divider rule |
+| `--career-focus-width` | `3px` | keyboard focus outline |
+| `--career-focus-offset` | `3px` | focus separation from the control |
+| `--career-display-leading` | `1.12` | identity and section display type |
+| `--career-heading-leading` | `1.3` | employer/project headings |
+| `--career-body-leading` | `1.6` | Korean body copy |
+| `--career-display-tracking` | `-0.012em` | runtime-equivalent display tracking |
+| `--career-transition` | `180ms ease` | hover/focus/pressed feedback |
+
+At 768px, `--career-inset / --career-hero-block / --career-hero-title` become `32px / 64px / 44px`; section title becomes `36px`, section rhythm `64px`, card gap `24px`, and card padding `32px`. At the desktop ladder used by the 1280px reference, they become `48px / 96px / 64px`; section title becomes `50px`, section rhythm `96px`, card gap `24px`, and card padding remains `32px`.
+
+### Career Primitives
+
+#### Light Career Header
+
+- White, hairline-separated, shadowless sticky header.
+- Navigation stays in DOM order. The current document uses a lavender pill with ink text; non-current links stay plain.
+- The PDF download action is the single filled aubergine control, 48px high with 28px inline padding and 90px radius.
+- Hover uses `--career-primary-hover`, pressed uses `--career-primary-active`, and `:focus-visible` uses a visible `--career-link` outline. Interaction transitions affect only color and transform.
+
+#### Identity And Evidence Band
+
+- One full-width `--career-hero-gradient` surface with no border, radius, or shadow.
+- Content aligns to `--career-shell-inset`; title follows the 32 / 44 / 64px ladder and body measure stays at 720px.
+- Identity, role, and factual evidence remain a single text column.
+- Contact details form a compact utility strip after the evidence: 2 columns at 375px, 3 at 768px, 4 at 1280px. Each mobile link target is at least 44px high.
+- Duplicate resume/portfolio contact links may be hidden below 700px, but DOM order and real link text remain unchanged.
+
+#### Chronology Summary
+
+- Cream-to-lavender 16px card on the white document track.
+- Four rows remain reverse chronological and preserve date → employer → platform/role source order.
+- Decimal-leading-zero row numbers are the sparse aubergine accent; row dividers use the hairline token.
+
+#### Employer Heading
+
+- Employer name is the h2 primary line.
+- A reusable semantic `<small>` subtitle holds separate nowrap spans for role and product/platform. Spans wrap as units so separator glyphs cannot dangle.
+- Dates are separate semantic `<time>` elements and remain visually subordinate.
+- Continuation headings use the same `<small>` primitive for compact outcome labels and always repeat the employer context.
+
+#### Outcome Card
+
+- Ordinary projects: white, 1px hairline, 16px radius, no shadow, 24px mobile padding and 32px from tablet upward.
+- One and only one `.career-project--featured` surface is aubergine with white heading/body and muted-light supporting copy. It must not become a full-bleed dark section.
+- Cream alternate cards are optional and sparse; the chronology card already satisfies the alternate-surface need.
+- Strong text inside bullets uses medium/semi-bold weight so dense Korean copy does not become uniformly dark; factual metrics remain scannable.
+- Cards are real semantic DOM sections, never raster or screenshot substitutes.
+
+### Responsive Contract
+
+| Reference width | Horizontal inset | Hero block padding | Hero title | Section heading | Contact columns | Card gap |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 375px | 20px | 48px | 32px / 1.12 | 28px / 1.12 | 2 | 16px |
+| 768px | 32px | 64px | 44px / 1.12 | 36px / 1.12 | 3 | 24px |
+| 1280px | 48px | 96px | 64px / 1.12 | 50px / 1.12 | 4 | 24px |
+
+- Career content remains one column at every width. Only compact contact utilities change column count.
+- At 200% zoom the document reflows without horizontal scrolling; no full heading or Korean sentence is forced into nowrap.
+- Semantic subtitle spans may remain unbroken only when each unit comfortably fits the 375px content width.
+
+### A4 Print Adaptation
+
+- Output remains exactly two A4 pages with selectable text and existing page-flow ownership.
+- The screen gradient flattens to a pale cream hero tint; chronology uses a pale lavender tint.
+- All body and heading text prints black or near-black. Aubergine becomes a lighter accent for rules and the featured card is flattened to a pale tint rather than a dark full-bleed surface.
+- Screen header, progress, and download controls remain hidden.
+- Cards have no shadows. Ordinary outcomes flatten to compact hairline-separated rows and may split across a page when needed to preserve the two-page contract; the featured outcome keeps its pale card surface and `break-inside: avoid`. Employer headings and dates remain attached to the following outcome.
+- Page 2 must begin with employer context before the first continuation project. Dates, reverse chronology, literal technical terms, and all `data-edit-id` seams remain unchanged.
+
+Print-only token values:
+
+| Token | Value | Usage |
+| --- | --- | --- |
+| `--career-print-canvas` | `#ffffff` | page background |
+| `--career-print-hero` | `#faf5ef` | flattened hero |
+| `--career-print-alt` | `#f8f3fb` | chronology and featured-card tint |
+| `--career-print-primary` | `#744675` | lighter aubergine accent |
+| `--career-print-ink` | `#000000` | print headings/body |
+| `--career-print-muted` | `#333333` | print supporting text |
+| `--career-print-hairline` | `#d7cbd7` | print dividers |
+
+### Accessibility And COGA
+
+- Keyboard users receive a non-color `:focus-visible` outline on navigation, download, and contact links; pressed and hover states remain distinct.
+- Mobile controls and contact links meet the 44px target minimum; the PDF action stays 48px high.
+- Contrast uses dark ink on white/cream/lavender and white on aubergine. Muted text is not used below readable body sizes on colored surfaces.
+- `prefers-reduced-motion` removes transform feedback and transition duration.
+- Wayfinding does not rely on color alone: current navigation has pill shape plus `aria-current`, employer subtitles create explicit hierarchy, and dates remain semantic `<time>`.
+- COGA: one reading direction, predictable employer → outcome grouping, plain Korean result-led copy, restrained surface variants, and no decorative motion or memory-dependent interaction.
+- CJK line breaking uses natural wrapping with only short semantic subtitle/metric units protected. Invisible joiners remain prohibited.
+
+### Explicit Exclusions And Debt
+
+- Excluded: reference-derived Slack brand copy, logos, proprietary fonts, screenshots, imagery, CTA phrases, marketing examples, footer imitation, and blue decorative accents. A factual mention of Slack as an operational notification tool remains part of the candidate evidence.
+- Excluded: new packages, JavaScript behavior, decorative animation, shadows, glass, dark full-bleed print sections, unsupported metrics, and changes outside `.career-page`.
+- The Signal Grid system remains authoritative for home, resume, portfolio, and admin.
+- Accepted design debt: none. Any horizontal overflow, split Korean compound, third print page, missing page-2 employer context, or accessibility regression blocks delivery rather than entering debt.
