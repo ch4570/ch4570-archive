@@ -48,6 +48,7 @@
   --space-16: 64px;
   --space-20: 80px;
   --space-22: 88px;
+  --career-date-rail: 168px;
   --type-micro: 9px;
   --type-label-xs: 10px;
   --type-caption: 11px;
@@ -107,6 +108,7 @@ body {
   white-space: nowrap;
 }
 
+.career-hero .resume-hero-copy > span,
 [data-edit-id="career-075"] strong > span {
   white-space: nowrap;
 }
@@ -1108,30 +1110,62 @@ h4 {
 }
 
 .career-overview {
-  padding-bottom: 10px;
+  padding-bottom: var(--space-5);
+}
+
+.career-overview::before {
+  content: "CAREER TIMELINE";
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--green-ink);
+  font-size: var(--type-label-xs);
+  font-weight: 800;
 }
 
 .career-history {
+  counter-reset: career-history;
   border-top: 2px solid var(--ink);
 }
 
 .career-history article {
-  padding: 12px 0;
+  counter-increment: career-history;
+  display: grid;
+  grid-template-columns: var(--space-8) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: center;
   border-bottom: 1px solid var(--line);
+}
+
+.career-history article::before {
+  content: counter(career-history, decimal-leading-zero);
+  color: var(--green-ink);
+  font-size: var(--type-label-xs);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .career-history-line {
   display: grid;
-  grid-template-columns: 155px 150px minmax(0, 1fr);
-  gap: 20px;
+  grid-template-columns:
+    var(--career-date-rail)
+    calc(var(--space-20) + var(--space-16))
+    minmax(0, 1fr);
+  gap: var(--space-5);
   align-items: baseline;
   margin: 0;
+  padding: var(--space-3) 0;
 }
 
-.career-history time,
 .career-history span {
   color: var(--muted);
   font-size: var(--type-label);
+}
+
+.career-history time {
+  color: var(--green-ink);
+  font-size: var(--type-label);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
 }
 
 .career-history strong {
@@ -1149,12 +1183,22 @@ h4 {
 
 .career-company-head {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 28px;
+  grid-template-columns: var(--career-date-rail) minmax(0, 1fr);
+  gap: var(--space-8);
   align-items: start;
   margin-bottom: 18px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--ink);
+}
+
+.career-company-head > div {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.career-company-head > time {
+  grid-column: 1;
+  grid-row: 1;
 }
 
 .career-company-head h2 {
@@ -1179,14 +1223,41 @@ h4 {
 }
 
 .career-company-head time {
-  color: var(--muted);
-  font-size: var(--type-caption);
-  font-weight: 700;
+  padding-top: var(--space-2);
+  color: var(--green-ink);
+  font-size: var(--type-ui);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .career-company-head--continuation {
   margin-bottom: 12px;
+}
+
+.career-company-block > .career-project,
+#previous-experience > .career-inline-title,
+#previous-experience > .career-previous-grid {
+  margin-inline-start: calc(var(--career-date-rail) + var(--space-8));
+}
+
+#worksphere-serving.career-company-block {
+  padding-top: 0;
+  border-top: 0;
+}
+
+#worksphere-serving .career-company-head--continuation {
+  display: block;
+  margin-inline-start: calc(var(--career-date-rail) + var(--space-8));
+  padding-top: var(--space-6);
+}
+
+#worksphere-serving .career-company-head--continuation > div {
+  display: block;
+}
+
+#worksphere-serving .career-company-head--continuation h2 {
+  font-size: var(--type-heading-md);
 }
 
 .career-company-head--nested {
@@ -1305,8 +1376,8 @@ h4 {
 
 .career-previous-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 34px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .career-company-head--nested {
@@ -1314,11 +1385,15 @@ h4 {
 }
 
 .career-previous-grid--compact {
-  gap: 28px;
+  gap: 0;
 }
 
 .career-previous-grid--compact .career-project {
-  padding: 16px 0 0;
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.career-previous-grid--compact .career-project:last-child {
   border-bottom: 0;
 }
 
@@ -1948,11 +2023,34 @@ h4 {
   .career-history-line,
   .career-company-head {
     grid-template-columns: 1fr;
-    gap: 5px;
+    gap: var(--space-2);
   }
 
   .career-history article {
-    padding: 15px 0;
+    grid-template-columns: var(--space-6) minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .career-company-head > time {
+    grid-column: 1;
+    grid-row: 1;
+    padding-top: 0;
+  }
+
+  .career-company-head > div {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .career-company-block > .career-project,
+  #previous-experience > .career-inline-title,
+  #previous-experience > .career-previous-grid,
+  #worksphere-serving .career-company-head--continuation {
+    margin-inline-start: 0;
+  }
+
+  #worksphere-serving .career-company-head--continuation > div {
+    grid-row: 1;
   }
 
   .career-company-block {
@@ -1995,7 +2093,7 @@ h4 {
   }
 
   .career-previous-grid {
-    gap: 16px;
+    gap: 0;
   }
 
   .career-meta-grid,
@@ -2339,6 +2437,7 @@ h4 {
     --muted: #505050;
     --line: #c8c8c8;
     --line-strong: #888888;
+    --career-date-rail: 108px;
     --print-type-micro: 7pt;
     --print-type-fine: 7.8pt;
     --print-type-label: 8pt;
@@ -2657,7 +2756,9 @@ h4 {
   }
 
   .career-history article {
-    padding: 7px 0;
+    grid-template-columns: var(--space-6) minmax(0, 1fr);
+    gap: var(--space-2);
+    padding: 0;
   }
 
   .career-history-line {
@@ -2691,13 +2792,11 @@ h4 {
   }
 
   #worksphere-serving .career-project:nth-of-type(2) {
-    padding: 28px 0 20px;
-    break-before: page;
-    page-break-before: always;
+    padding: var(--space-5) 0;
   }
 
   #worksphere-serving .career-project:nth-of-type(3) {
-    padding: 24px 0;
+    padding: var(--space-6) 0;
   }
 
   #worksphere-serving .career-project:nth-of-type(n + 2) h3,
@@ -2718,34 +2817,34 @@ h4 {
   }
 
   #previous-experience.career-company-block {
-    padding-top: 40px;
+    padding-top: 0;
   }
 
   #previous-experience > .career-company-head {
-    margin-bottom: 16px;
-    padding-bottom: 16px;
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
   }
 
   #previous-experience > .career-project {
-    padding: 24px 0;
+    padding: var(--space-4) 0;
   }
 
   #previous-experience .career-inline-title {
-    margin-top: 28px;
-    padding-top: 20px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-3);
   }
 
   #previous-experience .career-previous-grid {
-    margin-top: 16px;
+    margin-top: var(--space-2);
   }
 
   #previous-experience .career-previous-grid .career-project {
-    padding-top: 20px;
+    padding-top: var(--space-2);
   }
 
   #previous-experience .career-previous-grid .career-company-head {
-    margin-bottom: 16px;
-    padding-bottom: 16px;
+    margin-bottom: var(--space-2);
+    padding-bottom: var(--space-2);
   }
 
   .career-company-block {
@@ -2754,10 +2853,22 @@ h4 {
   }
 
   .career-company-head {
+    grid-template-columns: var(--career-date-rail) minmax(0, 1fr);
+    gap: var(--space-4);
     margin-bottom: 10px;
     padding-bottom: 10px;
     break-after: avoid;
     break-inside: avoid;
+  }
+
+  .career-company-block > .career-project,
+  #previous-experience > .career-inline-title,
+  #previous-experience > .career-previous-grid {
+    margin-inline-start: calc(var(--career-date-rail) + var(--space-4));
+  }
+
+  #worksphere-serving .career-company-head--continuation {
+    margin-inline-start: calc(var(--career-date-rail) + var(--space-4));
   }
 
   .career-company-head h2 {
@@ -2863,18 +2974,18 @@ h4 {
   }
 
   #previous-experience > .career-company-head {
-    grid-template-columns: 1fr;
-    gap: 4px;
+    grid-template-columns: var(--career-date-rail) minmax(0, 1fr);
+    gap: var(--space-4);
   }
 
   .career-previous-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
   .career-previous-grid .career-company-head {
-    grid-template-columns: 1fr;
-    gap: 4px;
+    grid-template-columns: var(--career-date-rail) minmax(0, 1fr);
+    gap: var(--space-4);
   }
 
   .career-previous-grid--compact .career-project {

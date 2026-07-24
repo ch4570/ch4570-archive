@@ -9,7 +9,7 @@ import {
 } from "./prepare-pdf-document.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
-const balancedCareerColumns = "repeat(2, minmax(0, 1fr))";
+const chronologicalCareerColumn = "1fr";
 
 function findExactRuleDeclarations(stylesheet, selector) {
   const withoutComments = stylesheet.replace(/\/\*[\s\S]*?\*\//gu, "");
@@ -163,7 +163,7 @@ test("print styles preserve color and do not inherit screen breakpoints", async 
   assert.match(stylesheet, /print-color-adjust:\s*exact/);
 });
 
-test("previous-career cards keep equal columns and print the lead period in order", async () => {
+test("previous-career entries keep one chronological column and print dates first", async () => {
   const stylesheet = await readFile(
     path.join(projectRoot, "assets/design-system.css"),
     "utf8",
@@ -180,29 +180,34 @@ test("previous-career cards keep equal columns and print the lead period in orde
   for (const declarations of previousCareerRules) {
     assert.equal(
       effectivePropertyValue(declarations, "grid-template-columns"),
-      balancedCareerColumns,
-      "previous-career cards should use balanced columns",
+      chronologicalCareerColumn,
+      "previous-career entries should stay in one chronological column",
     );
   }
 
   assert.match(
     stylesheet,
-    /#previous-experience\s*>\s*\.career-company-head\s*\{[^}]*grid-template-columns:\s*1fr[^}]*\}/su,
-    "the print lead period should stay beside its own role in extracted text",
+    /#previous-experience\s*>\s*\.career-company-head\s*\{[^}]*grid-template-columns:\s*var\(--career-date-rail\)\s+minmax\(0,\s*1fr\)[^}]*\}/su,
+    "the print lead period should stay in the left date rail",
+  );
+  assert.doesNotMatch(
+    stylesheet,
+    /#worksphere-serving\s+\.career-project:nth-of-type\(\d+\)\s*\{[^}]*(?:break-before:\s*page|page-break-before:\s*always)[^}]*\}/su,
+    "Worksphere projects should flow naturally instead of creating a trailing print page",
   );
   assert.match(
     stylesheet,
-    /#worksphere-serving\s+\.career-project:nth-of-type\(2\)\s*\{[^}]*break-before:\s*page[^}]*\}/su,
-    "the search project should open the balanced second career page",
+    /#previous-experience\.career-company-block\s*\{[^}]*padding-top:\s*0[^}]*\}/su,
+    "the previous-company sequence should start without redundant print-only whitespace",
   );
 });
 
-test("previous-career grid parsing rejects ineffective two-column declarations", () => {
+test("previous-career grid parsing rejects ineffective chronological declarations", () => {
   const invalidRules = [
-    "/* grid-template-columns: repeat(2, minmax(0, 1fr)); */ grid-template-columns: 1fr;",
-    "--x: grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-columns: 1fr;",
-    "grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-columns: 1fr;",
-    "grid-template-columns: repeat(2, minmax(0, 1fr)) garbage;",
+    "/* grid-template-columns: 1fr; */ grid-template-columns: repeat(2, minmax(0, 1fr));",
+    "--x: grid-template-columns: 1fr; grid-template-columns: repeat(2, minmax(0, 1fr));",
+    "grid-template-columns: 1fr; grid-template-columns: repeat(2, minmax(0, 1fr));",
+    "grid-template-columns: 1fr garbage;",
   ];
 
   for (const ruleBody of invalidRules) {
@@ -212,7 +217,7 @@ test("previous-career grid parsing rejects ineffective two-column declarations",
     );
     assert.notEqual(
       effectivePropertyValue(declarations, "grid-template-columns"),
-      balancedCareerColumns,
+      chronologicalCareerColumn,
       ruleBody,
     );
   }
