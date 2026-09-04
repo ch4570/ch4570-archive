@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const copies = [
   ["assets/design-system.css", "public/assets/design-system.css"],
+  ["assets/terminal-home.css", "public/assets/terminal-home.css"],
   ["assets/site.js", "public/assets/site.js"],
   ["assets/profile.jpg", "public/assets/profile.jpg"],
   ["assets/diagrams/feed-serving.svg", "public/assets/diagrams/feed-serving.svg"],

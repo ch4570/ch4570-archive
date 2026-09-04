@@ -116,6 +116,25 @@ test("public documents expose one stable and non-editable profile portrait", asy
   }
 });
 
+test("home keeps changing career and public metrics editable", async () => {
+  const source = await readFile(resolve(repositoryRoot, "index.html"), "utf8");
+  const editableById = new Map(
+    scanEditableRegions(source).map((region) => [region.id, region]),
+  );
+
+  for (const id of ["home-016", "home-019", "home-022", "home-025"]) {
+    assert.equal(editableById.get(id)?.tagName, "time", id + " should remain editable");
+  }
+  assert.equal(
+    editableById.get("home-028")?.tagName,
+    "span",
+    "the public-data checked date should remain editable",
+  );
+  for (const id of ["home-029", "home-030", "home-031", "home-032"]) {
+    assert.equal(editableById.get(id)?.tagName, "dd", id + " should remain editable");
+  }
+});
+
 test("portfolio story cards stay short and semantic", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
   const editableById = new Map(

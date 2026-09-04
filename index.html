@@ -3,116 +3,359 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fbf8f5">
-  <meta name="description" content="서민재 백엔드 엔지니어. Java·Kotlin·Spring으로 개발한 이벤트 복구, 포인트 원장·배치, 검색·캐시 사례를 소개합니다.">
-  <title>서민재 · Backend Engineer</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='18' fill='%232c2230'/%3E%3Cpath d='M16%2016h32v32H16z' rx='10' fill='%23fbe9e7'/%3E%3Cpath d='M24%2024h16v16H24z' rx='5' fill='%236e4c71'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#0b0d0c">
+  <meta name="description" content="서민재 백엔드 엔지니어의 통합 커리어 아카이브. 이력서, 경력, 프로젝트, 오픈소스와 기술 활동을 한 화면에서 확인할 수 있습니다.">
+  <title>서민재 · Backend Engineer / Career Archive</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='8' fill='%230b0d0c'/%3E%3Cpath d='M14%2018l12%2014-12%2014' fill='none' stroke='%23caff63' stroke-width='6' stroke-linecap='square'/%3E%3Cpath d='M30%2046h20' stroke='%23f8faf4' stroke-width='6'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./assets/design-system.css">
+  <link rel="stylesheet" href="./assets/terminal-home.css">
   <script src="./assets/site.js" defer></script>
 </head>
-<body class="home-page">
+<body class="home-page terminal-home">
   <a class="skip-link" href="#main">본문으로 건너뛰기</a>
   <div class="scroll-progress" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <div class="site-header-inner">
-      <a class="site-brand" href="./" aria-current="page" aria-label="서민재 홈">
-        <span class="site-brand-mark" aria-hidden="true">SM</span>
-        <span class="site-brand-name">서민재</span>
+  <header class="terminal-header">
+    <div class="terminal-header__inner">
+      <a class="terminal-brand" href="#top" aria-label="서민재 커리어 아카이브 홈">
+        <span class="terminal-brand__prompt" aria-hidden="true">&gt;_</span>
+        <span>rex@backend</span>
+        <span class="terminal-status"><i aria-hidden="true"></i> available</span>
       </a>
-      <nav class="site-nav" aria-label="주요 문서">
-        <a href="./resume/">이력서</a>
-        <a href="./career/">경력기술서</a>
-        <a href="./portfolio/">포트폴리오</a>
+      <nav class="terminal-nav" aria-label="페이지 내 주요 영역">
+        <a href="#impact" data-section-link>impact</a>
+        <a href="#career" data-section-link>career</a>
+        <a href="#work" data-section-link>work</a>
+        <a href="#activity" data-section-link>activity</a>
       </nav>
-      <div class="site-utilities">
-        <button class="button" type="button" data-copy-email>이메일 복사</button>
-      </div>
+      <button class="terminal-contact" type="button" data-copy-email>
+        <span aria-hidden="true">$</span> contact
+      </button>
     </div>
   </header>
 
   <main id="main">
-    <section class="home-hero" aria-labelledby="home-title">
-      <div class="container">
-        <div class="home-hero-layout">
-          <div>
-            <h1 class="home-name" id="home-title" data-edit-id="home-002">서민재</h1>
-            <p class="home-role" data-edit-id="home-003">백엔드 엔지니어 · Java / Kotlin / Spring</p>
-            <p class="hero-copy" data-edit-id="home-004">
-              <span>실패한 단계만 다시 실행할 수 있는 복구 흐름과, 데이터&nbsp;정합성을 검증하는 백엔드를 개발합니다.</span>
-              <span>이벤트 처리 실패는 발행과 처리 단계로 나누고, 저장한&nbsp;payload로 필요한 업무만 복구하도록 구현했습니다.</span>
-              <span>중단된 배치는 진행 위치에서 다시 시작하게 하고, JPA 오류는 실제 영속성 컨텍스트에서 재현해&nbsp;보정했습니다.</span>
-              <span>이벤트·배치·JPA 문제를 원인과 복구 범위로 나눠 운영&nbsp;부담을 낮추고 데이터 신뢰를 지킵니다.</span>
-            </p>
-            <div class="hero-actions">
-              <a class="button button-primary" href="./resume/">이력서 보기 <span aria-hidden="true">→</span></a>
-              <a class="button" href="./career/">경력기술서 보기</a>
-              <a class="button" href="./portfolio/">포트폴리오 보기</a>
-            </div>
+    <section class="terminal-hero" id="top" aria-labelledby="home-title">
+      <div class="terminal-container terminal-hero__grid">
+        <div class="terminal-hero__copy" data-reveal>
+          <p class="command-line"><span>~/career</span> $ whoami</p>
+          <h1 id="home-title">
+            <span data-edit-id="home-002">서민재</span>
+            <small data-edit-id="home-003">Backend Engineer</small>
+          </h1>
+          <p class="terminal-hero__statement" data-edit-id="home-004">
+            복잡한 문제를 <strong>명확하게 정리하고</strong>,<br>
+            끝까지 실행해 <strong>팀의 성과로 연결합니다.</strong>
+          </p>
+          <p class="terminal-hero__description">
+            Java·Kotlin·Spring으로 이벤트 복구, 데이터 정합성, 중단 가능한 배치와 검색 실패 격리를 설계합니다.
+            장애를 숨기기보다 상태와 경계를 코드로 드러내는 백엔드 엔지니어입니다.
+          </p>
+          <div class="terminal-hero__actions">
+            <a class="terminal-button terminal-button--primary" href="#work">
+              <span aria-hidden="true">./</span> 대표 작업 보기
+            </a>
+            <a class="terminal-button" href="./pdf/seo-minjae-resume.pdf" download="서민재_백엔드_이력서.pdf">
+              resume.pdf <span aria-hidden="true">↓</span>
+            </a>
           </div>
+          <ul class="terminal-links" aria-label="외부 프로필">
+            <li><a href="https://github.com/ch4570" target="_blank" rel="noreferrer">GitHub ↗</a></li>
+            <li><a href="https://velog.io/@ch4570/posts" target="_blank" rel="noreferrer">Velog ↗</a></li>
+            <li><a href="https://www.linkedin.com/in/devseorex/" target="_blank" rel="noreferrer">LinkedIn ↗</a></li>
+          </ul>
+        </div>
 
-          <figure class="portrait-figure">
+        <aside class="profile-terminal" aria-label="프로필">
+          <div class="terminal-window__bar">
+            <span class="window-dot" aria-hidden="true"></span>
+            <span>profile.sh</span>
+            <span>UTF-8</span>
+          </div>
+          <figure class="profile-terminal__image">
             <img src="./assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async" fetchpriority="high">
-            <figcaption>Backend Engineer · Seoul, Korea</figcaption>
+            <figcaption><span>STATUS</span> OPEN_TO_DISCUSS</figcaption>
           </figure>
-        </div>
-
+          <dl class="profile-terminal__meta">
+            <div><dt>LOC</dt><dd>Seoul, Korea</dd></div>
+            <div><dt>STACK</dt><dd>Java · Kotlin · Spring</dd></div>
+            <div><dt>FOCUS</dt><dd>Recovery · Consistency</dd></div>
+          </dl>
+        </aside>
+      </div>
+      <div class="terminal-container terminal-log" aria-label="현재 상태">
+        <span>[OK] profile loaded</span>
+        <span>[OK] public evidence linked</span>
+        <span>[NOW] Worxphere · JOBKOREA / Albamon</span>
       </div>
     </section>
 
-    <section class="section-shell" aria-labelledby="documents-title">
-      <div class="container">
-        <h2 class="section-title" id="documents-title" data-edit-id="home-006">문서</h2>
+    <section class="impact-section" id="impact" aria-labelledby="impact-title">
+      <div class="terminal-container">
+        <header class="section-command" data-reveal>
+          <p><span>01</span> $ cat impact.log</p>
+          <h2 id="impact-title">결과부터 확인하세요.</h2>
+          <span class="section-command__aside">verified outcomes / production &amp; public records</span>
+        </header>
 
-        <div class="document-grid">
-          <a class="document-card" href="./resume/">
-            <span class="document-card-label">Resume</span>
-            <h3 data-edit-id="home-007">이력서</h3>
-            <p data-edit-id="home-008">경력과 기술을 한 장에 정리했습니다.</p>
+        <div class="impact-grid">
+          <article class="impact-card impact-card--hero impact-card--linked" data-reveal>
+            <span class="impact-card__label">DATA_CORRECTION</span>
+            <strong>약 200만<small>건</small></strong>
+            <p>실제 영속성 컨텍스트에서 JPA 변경 감지 오류를 재현하고 잘못 저장된 데이터를 보정했습니다.</p>
+            <a href="#case-jpa">case.read() →</a>
+          </article>
+          <article class="impact-card" data-reveal>
+            <span class="impact-card__label">REGRESSION_TEST</span>
+            <strong>0 <i>→</i> 160<small>+</small></strong>
+            <p>Spring Boot 2.3.8 → 3.3.3 전환 과정의 회귀 검증 기반을 만들었습니다.</p>
+          </article>
+          <article class="impact-card" data-reveal>
+            <span class="impact-card__label">EVENT_RECOVERY</span>
+            <strong>9 <i>/</i> 6 <i>/</i> 8</strong>
+            <p>이벤트 9종 · 상태 6개 · 업무별 복구 경로 8개로 실패 범위를 좁혔습니다.</p>
+          </article>
+          <article class="impact-card impact-card--linked" data-reveal>
+            <span class="impact-card__label">KNOWLEDGE_SHARED</span>
+            <strong>156<small>편</small></strong>
+            <p>Java·JPA·테스트·SQL 튜닝 경험을 기술 글로 공개했습니다.</p>
+            <a href="https://velog.io/@ch4570/posts" target="_blank" rel="noreferrer">posts.list() ↗</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="career-console" id="career" aria-labelledby="career-title">
+      <div class="terminal-container">
+        <header class="section-command" data-reveal>
+          <p><span>02</span> $ git log --career --reverse</p>
+          <h2 id="career-title" data-edit-id="home-014">경력 타임라인</h2>
+          <span class="section-command__aside">2022.11 — present · Backend Engineer</span>
+        </header>
+
+        <div class="career-terminal" data-reveal>
+          <div class="terminal-window__bar">
+            <span class="window-dot" aria-hidden="true"></span>
+            <span>career.log</span>
+            <span>4 records</span>
+          </div>
+          <ol class="career-timeline">
+            <li class="career-entry career-entry--current">
+              <div class="career-entry__period"><time datetime="2025-06" data-edit-id="home-016">2025.06 — NOW</time><span>HEAD</span></div>
+              <div class="career-entry__body">
+                <div class="career-entry__head">
+                  <h3 data-edit-id="home-017">웍스피어(유)</h3>
+                  <p>JOBKOREA · Albamon Platform</p>
+                </div>
+                <p data-edit-id="home-018">Kafka 이벤트 실패를 상태와 복구 경로로 분리하고, 포인트 원장·배치 정합성과 개인화 피드의 검색·캐시 우회 흐름을 개발하고 있습니다.</p>
+                <ul class="signal-list">
+                  <li>Kafka 9종 / 상태 6개 / 복구 8경로</li>
+                  <li>아카이브 10테이블</li>
+                  <li>동시성 9 API / 13 시나리오</li>
+                  <li>검색 소스 9개</li>
+                </ul>
+              </div>
+            </li>
+            <li class="career-entry">
+              <div class="career-entry__period"><time datetime="2024-06" data-edit-id="home-019">2024.06 — 2025.04</time><span>v3.3.3</span></div>
+              <div class="career-entry__body">
+                <div class="career-entry__head"><h3 data-edit-id="home-020">토스랩</h3><p>JANDI</p></div>
+                <p data-edit-id="home-021">JPA 변경 감지 결함을 실제 저장 환경에서 재현해 약 200만 건을 보정하고, Spring Boot 3 전환을 테스트 160개 이상으로 검증했습니다.</p>
+              </div>
+            </li>
+            <li class="career-entry">
+              <div class="career-entry__period"><time datetime="2023-09" data-edit-id="home-022">2023.09 — 2024.05</time><span>gateway</span></div>
+              <div class="career-entry__body">
+                <div class="career-entry__head"><h3 data-edit-id="home-023">오케스트로</h3><p>IDP · Vista</p></div>
+                <p data-edit-id="home-024">Spring Cloud Gateway에 Security·JWT 인증/인가를 적용하고 VM 메트릭과 OpenSearch 동적 조회 API를 개발했습니다.</p>
+              </div>
+            </li>
+            <li class="career-entry">
+              <div class="career-entry__period"><time datetime="2022-11" data-edit-id="home-025">2022.11 — 2023.02</time><span>init</span></div>
+              <div class="career-entry__body">
+                <div class="career-entry__head"><h3 data-edit-id="home-026">즐거운</h3><p>In-house Service</p></div>
+                <p data-edit-id="home-027">자사 서비스의 백엔드 기능을 개발하고 운영했습니다.</p>
+              </div>
+            </li>
+          </ol>
+          <div class="career-terminal__footer">
+            <span>4 companies</span>
+            <a href="./career/">전체 경력기술서 보기 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="work-section" id="work" aria-labelledby="work-title">
+      <div class="terminal-container">
+        <header class="section-command section-command--light" data-reveal>
+          <p><span>03</span> $ ls ./selected-work</p>
+          <h2 id="work-title">운영 문제를 해결한 방식</h2>
+          <span class="section-command__aside">problem → decision → verifiable result</span>
+        </header>
+
+        <div class="case-grid">
+          <article class="case-card case-card--featured" id="case-jpa" data-reveal>
+            <header>
+              <span>CASE_01 / DATA INTEGRITY</span>
+              <strong>약 2,000,000 rows corrected</strong>
+            </header>
+            <div>
+              <h3>Mock 밖의 저장 동작을<br>직접 재현했습니다.</h3>
+              <p>Mock 테스트에서 드러나지 않던 JPA 변경 감지 오류를 실제 영속성 컨텍스트에서 재현했습니다. 오류 데이터를 식별하는 보정 스크립트를 만들고 회귀 테스트로 저장 동작을 검증했습니다.</p>
+              <dl class="case-steps">
+                <div><dt>01 / reproduce</dt><dd>실제 Persistence Context에서 저장 시점 확인</dd></div>
+                <div><dt>02 / recover</dt><dd>잘못 저장된 값 식별·보정</dd></div>
+                <div><dt>03 / prevent</dt><dd>0 → 160+ 테스트로 마이그레이션 회귀 검증</dd></div>
+              </dl>
+            </div>
+          </article>
+
+          <article class="case-card" data-reveal>
+            <header><span>CASE_02 / EVENT RECOVERY</span><strong>9 events · 6 states · 8 paths</strong></header>
+            <div>
+              <h3>실패한 업무만 골라<br>다시 실행했습니다.</h3>
+              <p>발행 실패와 처리 실패를 나누고 PostgreSQL JSONB에 복구용 payload를 보존했습니다. 15분 넘게 멈춘 이벤트는 유형별 Slack 알림으로 감지합니다.</p>
+              <div class="case-tags"><span>Kafka</span><span>PostgreSQL</span><span>JSONB</span><span>Slack</span></div>
+            </div>
+          </article>
+
+          <article class="case-card" data-reveal>
+            <header><span>CASE_03 / BATCH &amp; CONCURRENCY</span><strong>10 tables · 13 scenarios</strong></header>
+            <div>
+              <h3>중단 지점에서 이어가고<br>끝에서 정합성을 맞췄습니다.</h3>
+              <p>아카이브 테이블 10개를 참조 순서대로 옮기며 진행 위치를 기록했습니다. 9개 API의 동시 요청 후 잔액·원장·예산·후속 이벤트를 함께 대조했습니다.</p>
+              <div class="case-tags"><span>Spring Batch</span><span>Ledger</span><span>Lock</span><span>Restart</span></div>
+            </div>
+          </article>
+
+          <article class="case-card" data-reveal>
+            <header><span>CASE_04 / SEARCH SERVING</span><strong>9 search sources</strong></header>
+            <div>
+              <h3>검색 실패를 격리하고<br>캐시 우회로를 열었습니다.</h3>
+              <p>후보 조회 → 중복 제거 → 점수화 → 재정렬 → 저장을 분리했습니다. 소스별 타임아웃과 실패 정책, Redis 없이 다시 계산하는 경로를 구현했습니다.</p>
+              <div class="case-tags"><span>OpenSearch</span><span>Redis</span><span>Ranking</span><span>ArchUnit</span></div>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-cta" data-reveal>
+          <p><span>Need the full context?</span> 설계 배경, 판단, 검증 방법까지 상세 문서에서 확인할 수 있습니다.</p>
+          <a class="terminal-button terminal-button--dark" href="./portfolio/">포트폴리오 전체 보기 →</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="activity-section" id="activity" aria-labelledby="activity-title">
+      <div class="terminal-container">
+        <header class="section-command" data-reveal>
+          <p><span>04</span> $ fetch --public-activity</p>
+          <h2 id="activity-title">코드 밖에도 남긴 기록</h2>
+          <span class="section-command__aside" data-edit-id="home-028">GitHub public data · checked 2026.09.04</span>
+        </header>
+
+        <div class="github-panel" data-reveal>
+          <div class="github-panel__intro">
+            <p class="command-line"><span>github.com</span> /ch4570</p>
+            <h3>DevSeoRex</h3>
+            <p>학습을 저장소로, 문제 해결을 글과 오픈소스 제안으로 남깁니다.</p>
+            <a href="https://github.com/ch4570" target="_blank" rel="noreferrer">GitHub profile ↗</a>
+          </div>
+          <dl class="github-stats">
+            <div><dt>public_repos</dt><dd data-edit-id="home-029">62</dd></div>
+            <div><dt>original_repos</dt><dd data-edit-id="home-030">45</dd></div>
+            <div><dt>followers</dt><dd data-edit-id="home-031">68</dd></div>
+            <div><dt>last_year_contributions</dt><dd data-edit-id="home-032">31<small> public</small></dd></div>
+          </dl>
+          <p class="github-panel__note">GitHub 공개 프로필/API 기준. 비공개 조직 활동은 포함하지 않습니다.</p>
+        </div>
+
+        <div class="evidence-grid">
+          <article class="evidence-card" data-reveal>
+            <span class="evidence-card__index">01</span>
+            <p class="evidence-card__type">OPEN_SOURCE</p>
+            <strong>3<small> accepted proposals</small></strong>
+            <h3>Spring 생태계에 보낸 개선 제안 3건 반영</h3>
+            <p>불변 컬렉션 처리, 하드코딩 제거, 자원 정리 개선을 제안했습니다.</p>
+            <ul>
+              <li><a href="https://github.com/spring-projects/spring-kafka/pull/2875" target="_blank" rel="noreferrer">spring-kafka #2875 ↗</a></li>
+              <li><a href="https://github.com/spring-projects/spring-boot/pull/38029" target="_blank" rel="noreferrer">spring-boot #38029 ↗</a></li>
+              <li><a href="https://github.com/spring-projects/spring-data-jpa/pull/3408" target="_blank" rel="noreferrer">spring-data-jpa #3408 ↗</a></li>
+            </ul>
+          </article>
+          <article class="evidence-card" data-reveal>
+            <span class="evidence-card__index">02</span>
+            <p class="evidence-card__type">WRITING</p>
+            <strong>156<small> technical posts · 2026.07</small></strong>
+            <h3>Java·JPA·테스트·SQL 튜닝 기록</h3>
+            <p>해결 결과만이 아니라 재현 과정과 판단 근거를 다시 사용할 수 있는 글로 남겼습니다.</p>
+            <a href="https://velog.io/@ch4570/posts" target="_blank" rel="noreferrer">velog.posts() ↗</a>
+          </article>
+          <article class="evidence-card" data-reveal>
+            <span class="evidence-card__index">03</span>
+            <p class="evidence-card__type">TALK</p>
+            <strong>1<small> public talk</small></strong>
+            <h3>YouthCon 2025 · 우리팀을 위한 Spring Test 만들기</h3>
+            <p>반복되는 테스트 준비 코드를 공통화하고 테스트 유형별 설정 기준을 만든 과정을 공유했습니다.</p>
+            <a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9" target="_blank" rel="noreferrer">talk.view() ↗</a>
+          </article>
+          <article class="evidence-card" data-reveal>
+            <span class="evidence-card__index">04</span>
+            <p class="evidence-card__type">PROJECT</p>
+            <strong>16<small> assertions</small></strong>
+            <h3>OpenSearch 2.19 한글 검색 플러그인</h3>
+            <p>Java Cafe Elasticsearch 플러그인을 Kotlin으로 이식하고 한·영 자판, 초성·자모 검색 예시를 검증했습니다.</p>
+            <a href="https://github.com/ch4570/open-search-custom-plugin" target="_blank" rel="noreferrer">repository.open() ↗</a>
+          </article>
+        </div>
+
+        <div class="qualification-row" data-reveal>
+          <div><span>EDUCATION</span><strong>한국방송통신대학교</strong><p>컴퓨터과학과 졸업 · 2023.03 — 2025.03</p></div>
+          <div><span>CERTIFICATION</span><strong>CKA</strong><p>Certified Kubernetes Administrator · 2024.09</p></div>
+          <div><span>CERTIFICATION</span><strong>SQLD</strong><p>SQL Developer · 2022.06</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="document-section" id="documents" aria-labelledby="documents-title">
+      <div class="terminal-container">
+        <header class="section-command section-command--light" data-reveal>
+          <p><span>05</span> $ ls ./documents</p>
+          <h2 id="documents-title" data-edit-id="home-006">제출용 문서</h2>
+          <span class="section-command__aside">HTML for reading · PDF for submission</span>
+        </header>
+        <div class="document-terminal-grid">
+          <a href="./resume/" data-reveal>
+            <span>01</span><p>resume.html</p><strong data-edit-id="home-007">이력서</strong><small>A4 · 1 page</small><i aria-hidden="true">→</i>
           </a>
-          <a class="document-card" href="./career/">
-            <span class="document-card-label">Career Description</span>
-            <h3 data-edit-id="home-009">경력기술서</h3>
-            <p data-edit-id="home-010">회사별로 맡은 일과 결과를 정리했습니다.</p>
+          <a href="./career/" data-reveal>
+            <span>02</span><p>career.md</p><strong data-edit-id="home-009">경력기술서</strong><small>A4 · 2 pages</small><i aria-hidden="true">→</i>
           </a>
-          <a class="document-card" href="./portfolio/">
-            <span class="document-card-label">Portfolio</span>
-            <h3 data-edit-id="home-011">엔지니어링 포트폴리오</h3>
-            <p data-edit-id="home-012">대표 작업 네 가지에서 마주한 문제와 해결 과정을 설명합니다.</p>
+          <a href="./portfolio/" data-reveal>
+            <span>03</span><p>portfolio.run</p><strong data-edit-id="home-011">엔지니어링 포트폴리오</strong><small>A4 · 3 pages</small><i aria-hidden="true">→</i>
           </a>
         </div>
       </div>
     </section>
 
-    <section class="section-shell" aria-labelledby="career-title">
-      <div class="container">
-        <h2 class="section-title" id="career-title" data-edit-id="home-014">경력</h2>
-
-        <div class="career-list">
-          <div class="career-row">
-            <time datetime="2025-06" data-edit-id="home-016">2025.06 — 현재</time>
-            <div class="career-company" data-edit-id="home-017">웍스피어(유)</div>
-            <p data-edit-id="home-018">JOBKOREA·Albamon 플랫폼에서 Kafka 이벤트 실패를 상태와 복구 경로로 나누고, 포인트 원장·배치의 정합성과 검색·캐시&nbsp;우회 흐름을 다루고 있습니다.</p>
-          </div>
-          <div class="career-row">
-            <time datetime="2024-06" data-edit-id="home-019">2024.06 — 2025.04</time>
-            <div class="career-company" data-edit-id="home-020">토스랩</div>
-            <p data-edit-id="home-021">JPA 변경 감지 오류를 실제 영속성 컨텍스트에서 재현해 보정&nbsp;스크립트로 잘못 저장된 데이터를 바로잡고, Spring&nbsp;Boot&nbsp;3 전환 과정에 회귀 테스트 기반을 마련했습니다.</p>
-          </div>
-          <div class="career-row">
-            <time datetime="2023-09" data-edit-id="home-022">2023.09 — 2024.05</time>
-            <div class="career-company" data-edit-id="home-023">오케스트로</div>
-            <p data-edit-id="home-024">API Gateway의 요청 경계에 인증·인가를 적용하고, VM 메트릭 조회 조건을 OpenSearch 동적 쿼리로 구성했습니다.</p>
-          </div>
-          <div class="career-row">
-            <time datetime="2022-11" data-edit-id="home-025">2022.11 — 2023.02</time>
-            <div class="career-company" data-edit-id="home-026">즐거운</div>
-            <p data-edit-id="home-027">자사 서비스의 백엔드 기능을 개발했습니다.</p>
-          </div>
+    <section class="contact-section" aria-labelledby="contact-title">
+      <div class="terminal-container contact-terminal" data-reveal>
+        <p class="command-line"><span>~/contact</span> $ send-message</p>
+        <h2 id="contact-title">좋은 시스템과 팀에 대해<br>이야기 나누고 싶습니다.</h2>
+        <div>
+          <a class="terminal-button terminal-button--primary" href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
+          <button class="terminal-button" type="button" data-copy-email>이메일 복사</button>
         </div>
       </div>
     </section>
   </main>
+
+  <footer class="terminal-footer">
+    <div class="terminal-container">
+      <p>© <span data-current-year>2026</span> Rex Seo. Built as a career archive.</p>
+      <a href="#top">return to top ↑</a>
+    </div>
+  </footer>
 
   <div class="toast" role="status" aria-live="polite"></div>
 </body>
