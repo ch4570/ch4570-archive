@@ -207,6 +207,7 @@ States:
 - Evidence order is impact metrics → career timeline → selected work → public activity → submission documents → contact.
 - Production and public metrics must include their unit or scope. GitHub values include a checked date and exclude private activity explicitly.
 - Light paper sections separate case studies and documents from the dark console without changing the terminal geometry.
+- The hero carries two low-contrast terminal-log sheets that stream real development commands and runtime states using transform-only motion.
 - Scroll reveals use opacity and transform only, preserve content without JavaScript, and disappear entirely under `prefers-reduced-motion`.
 
 ### Resume

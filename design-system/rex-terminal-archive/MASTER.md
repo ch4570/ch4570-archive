@@ -71,8 +71,9 @@ Normal text/background pairs meet WCAG AA. Color never carries state alone: labe
 ## Motion
 
 - Reveal uses opacity and `translateY(18px)` only, 420ms.
+- The hero may run one ambient terminal-log effect built from two transform-only sheets; it stays decorative, low-contrast, and behind all readable content.
 - Content is visible without JavaScript.
-- `prefers-reduced-motion` removes reveal transitions, cursor blinking, and smooth scrolling.
+- `prefers-reduced-motion` removes the ambient log stream, reveal transitions, cursor blinking, and smooth scrolling.
 - Interaction never depends on animation completion.
 
 ## Accessibility and performance
