@@ -25,17 +25,17 @@ Every main section is directly linkable with an anchor. The sticky desktop navig
 
 | Token | Value | Use |
 | --- | --- | --- |
-| `--term-bg` | `#080b09` | main dark canvas |
-| `--term-panel` | `#0e1310` | terminal panels |
-| `--term-line` | `#293229` | passive separators |
-| `--term-line-strong` | `#5e6c5b` | control and panel boundaries |
-| `--term-ink` | `#f3f7ef` | primary dark-mode text |
-| `--term-muted` | `#98a394` | secondary dark-mode text |
-| `--term-dim` | `#7f8a7c` | tertiary dark-mode metadata |
-| `--term-green` | `#b6f542` | primary action and system signal |
-| `--term-green-ink` | `#4a6800` | green text on paper |
-| `--term-paper` | `#f1f0e8` | case-study and document surface |
-| `--term-paper-ink` | `#10130f` | text and borders on paper |
+| `--term-bg` | `#0b0d0c` | main dark canvas |
+| `--term-panel` | `#121512` | terminal panels |
+| `--term-line` | `#2c322b` | passive separators |
+| `--term-line-strong` | `#465044` | control and panel boundaries |
+| `--term-ink` | `#f8faf4` | primary dark-mode text |
+| `--term-muted` | `#aeb8a9` | secondary dark-mode text |
+| `--term-dim` | `#879184` | tertiary dark-mode metadata |
+| `--term-green` | `#caff63` | primary action and system signal |
+| `--term-green-ink` | `#3d5f00` | green text on paper |
+| `--term-paper` | `#f5f4ed` | case-study and document surface |
+| `--term-paper-ink` | `#151814` | text and borders on paper |
 
 Normal text/background pairs meet WCAG AA. Color never carries state alone: labels, borders, and position reinforce green signals.
 
@@ -51,22 +51,23 @@ Normal text/background pairs meet WCAG AA. Color never carries state alone: labe
 
 ## Geometry and layout
 
-- Maximum content width: 1240px.
-- Desktop gutter: 32px per side; mobile gutter: 14–18px per side.
-- Primary section spacing: 112px desktop, 76px mobile.
-- Corners remain square. Depth comes from borders, polarity, and sparse hard shadows.
-- Dark grid uses a 40px rhythm. Component spacing follows 4/8px increments.
+- Maximum content width: 1200px.
+- Desktop gutter: 40px per side; mobile gutter: 14–20px per side.
+- Primary section spacing: 92–132px desktop, 82px mobile.
+- Main panels use a restrained 14–20px radius. Depth comes from borders, polarity, and two sparse shadow levels.
+- Dark grid uses a 64px rhythm. Component spacing follows 4/8px increments.
 - Breakpoints: 420, 760, and 1080px; verified viewports: 375, 768, 1024, 1440px.
 
 ## Components
 
-- Header: 64px desktop / 58px mobile, sticky, 44px minimum targets.
+- Header: 76px desktop / 68px mobile, sticky, with an inset 56px navigation surface and 44px minimum targets.
 - Terminal window: title bar, status square, border, content; no ornamental fake controls.
 - Primary button: lime fill with dark text; only one visually dominant action per section.
 - Metric card: large number, machine-readable label, plain-language evidence sentence.
 - Career row: period first, then company/product and result; current role gets a text badge plus green treatment.
 - Case card: problem-led headline, evidence paragraph, technology or process metadata.
 - Public-data panel: source scope and checked date are always visible.
+- Mobile profile: compact two-column portrait/meta pane; decorative status logs are hidden to prioritize the first evidence section.
 
 ## Motion
 
@@ -85,6 +86,7 @@ Normal text/background pairs meet WCAG AA. Color never carries state alone: labe
 - No horizontal page overflow from 375px upward.
 - No external imagery, font, animation, or chart dependency.
 - Static GitHub metrics avoid runtime API latency and layout shift; refresh the checked date when values change.
+- Scroll-progress writes are batched through `requestAnimationFrame` to avoid repeated layout work during scrolling.
 
 ## Relationship to submission documents
 

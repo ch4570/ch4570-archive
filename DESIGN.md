@@ -33,7 +33,7 @@ The following submission-document HTML files are structural and content baseline
 - Signature moment: the strongest evidence surface flips to `canvas-night`; the remaining document stays white.
 - Profile photography remains real and local, presented like a clean product pane rather than a decorative portrait collage.
 - Information hierarchy comes from type size, spacing, borders, and polarity. Color never carries meaning alone.
-- There are no pastel bands, atmospheric gradients, glass cards, glow effects, rotated paper layers, or large decorative circles.
+- Submission documents avoid pastel bands, atmospheric gradients, glass cards, glow effects, rotated paper layers, and decorative circles. The dark home may use one restrained ambient field and soft terminal-panel depth without competing with evidence.
 
 ## 2. Tokens
 
@@ -202,12 +202,13 @@ States:
 ### Home
 
 - Home is the unified career archive and uses the dedicated `assets/terminal-home.css` layer.
-- Dark near-black canvas, phosphor-lime signal color, visible grid, square borders, and system monospace metadata create the terminal mood.
+- Dark near-black canvas, phosphor-lime signal color, a low-contrast grid, restrained 14–20px panel radii, and system monospace metadata create a modern terminal-editorial mood.
 - The first viewport leads with identity, operating principle, profile, and one primary action. It must expose the next content cue without hiding it.
 - Evidence order is impact metrics → career timeline → selected work → public activity → submission documents → contact.
 - Production and public metrics must include their unit or scope. GitHub values include a checked date and exclude private activity explicitly.
 - Light paper sections separate case studies and documents from the dark console without changing the terminal geometry.
 - The hero carries two low-contrast terminal-log sheets that stream real development commands and runtime states using transform-only motion.
+- On narrow screens the portrait collapses into a compact horizontal profile pane and the decorative status log is removed so evidence starts sooner.
 - Scroll reveals use opacity and transform only, preserve content without JavaScript, and disappear entirely under `prefers-reduced-motion`.
 
 ### Resume

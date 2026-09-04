@@ -244,14 +244,21 @@
     linkedSections.forEach((section) => sectionObserver.observe(section));
   }
 
+  let progressFrame = 0;
   const updateProgress = () => {
+    progressFrame = 0;
     if (!progress) return;
     const max = document.documentElement.scrollHeight - window.innerHeight;
     const value = max > 0 ? Math.min(1, window.scrollY / max) : 0;
     progress.style.width = `${value * 100}%`;
   };
 
+  const requestProgressUpdate = () => {
+    if (progressFrame) return;
+    progressFrame = window.requestAnimationFrame(updateProgress);
+  };
+
   updateProgress();
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  window.addEventListener("resize", updateProgress);
+  window.addEventListener("scroll", requestProgressUpdate, { passive: true });
+  window.addEventListener("resize", requestProgressUpdate);
 })();
