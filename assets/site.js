@@ -1,4 +1,6 @@
 (() => {
+  document.body.classList.add("has-reveal");
+
   const progress = document.querySelector(".scroll-progress");
   const toast = document.querySelector(".toast");
 
@@ -108,6 +110,51 @@
       { rootMargin: "-18% 0px -66%", threshold: [0, 0.15, 0.4] },
     );
     sections.forEach((section) => observer.observe(section));
+  }
+
+  document.querySelectorAll("[data-current-year]").forEach((item) => {
+    item.textContent = String(new Date().getFullYear());
+  });
+
+  const revealItems = [...document.querySelectorAll("[data-reveal]")];
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8%", threshold: 0.08 },
+    );
+    revealItems.forEach((item) => revealObserver.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add("is-revealed"));
+  }
+
+  const sectionLinks = [...document.querySelectorAll("[data-section-link]")];
+  const linkedSections = sectionLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && linkedSections.length) {
+    const sectionObserver = new IntersectionObserver(
+      (entries) => {
+        const activeEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+        if (!activeEntry) return;
+        sectionLinks.forEach((link) => {
+          const active = link.getAttribute("href") === `#${activeEntry.target.id}`;
+          if (active) link.setAttribute("aria-current", "true");
+          else link.removeAttribute("aria-current");
+        });
+      },
+      { rootMargin: "-25% 0px -60%", threshold: [0, 0.12, 0.35] },
+    );
+    linkedSections.forEach((section) => sectionObserver.observe(section));
   }
 
   const updateProgress = () => {

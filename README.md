@@ -1,14 +1,14 @@
 # ch4570-archive
 
-[이력서](https://ch4570-archive.vercel.app/resume/) · [경력기술서](https://ch4570-archive.vercel.app/career/) · [포트폴리오](https://ch4570-archive.vercel.app/portfolio/) · [기술 블로그](https://velog.io/@ch4570/posts)
+[통합 커리어 아카이브](https://ch4570-archive.vercel.app/) · [이력서](https://ch4570-archive.vercel.app/resume/) · [경력기술서](https://ch4570-archive.vercel.app/career/) · [포트폴리오](https://ch4570-archive.vercel.app/portfolio/) · [기술 블로그](https://velog.io/@ch4570/posts)
 
 ## 이 저장소
 
-이력서, 경력기술서, 포트폴리오를 한 저장소에서 관리하는 Next.js 애플리케이션입니다. 공개 문서는 정적 HTML과 제출용 PDF로 제공하고, 문구 수정은 비밀번호로 보호된 `/admin/`에서 처리합니다.
+이력서, 경력기술서, 포트폴리오와 공개 활동 지표를 하나의 커리어 아카이브로 관리하는 Next.js 애플리케이션입니다. 홈은 경력·대표 작업·GitHub·글·발표를 한 흐름으로 보여 주고, 상세 문서는 정적 HTML과 제출용 PDF로 제공합니다. 문구 수정은 비밀번호로 보호된 `/admin/`에서 처리합니다.
 
 ## 공개 문서
 
-- `/` - 전체 소개와 문서 이동
+- `/` - 이력서·경력·포트폴리오·공개 활동을 합친 터미널 스타일 커리어 아카이브
 - `/resume/` - 이력서
 - `/career/` - 경력기술서
 - `/portfolio/` - 포트폴리오

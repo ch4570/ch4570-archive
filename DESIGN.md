@@ -1,6 +1,6 @@
-# Emerald Console Design System
+# Rex Terminal Archive + Emerald Documents
 
-서민재의 홈, 이력서, 경력기술서, 엔지니어링 포트폴리오를 하나의 정밀한 개발자 문서 경험으로 묶는 디자인 계약입니다. 문서 구조와 문구는 그대로 두고, 흰 캔버스·근흑색 타이포그래피·얇은 hairline·절제된 에메랄드 신호로 화면과 PDF의 시각 언어만 교체합니다.
+홈은 이력서·경력기술서·포트폴리오·공개 활동을 하나로 합친 다크 터미널형 커리어 아카이브입니다. 제출용 이력서, 경력기술서, 포트폴리오는 기존 Emerald Console의 흰 캔버스와 A4 출력 계약을 유지합니다. 두 레이어는 에메랄드 신호색, 모노스페이스 메타데이터, 얇은 시스템 경계선이라는 공통 언어로 연결됩니다.
 
 ## 0. Reference And Immutable Template
 
@@ -17,11 +17,10 @@ The current reference is a **white-canvas system**, not the older dark-only inte
 
 ### Immutable Template
 
-The following HTML files are structural and content baselines. This redesign must not change their bytes, DOM hierarchy, copy, links, image sources, or `data-edit-id` values.
+The following submission-document HTML files are structural and content baselines. The unified home (`index.html`) is intentionally excluded because it is the evolving public archive surface.
 
 | File | SHA-256 baseline |
 | --- | --- |
-| `index.html` | `6b6a784d54de9f59c8c317d38488422fc4ff622a2f67027453d850df69cddce1` |
 | `resume/index.html` | `a8e8d4c10c8513d2da5c2a84ce10bb01d1a28f4b68a7310935eae6310d4e333b` |
 | `career/index.html` | `2901a8115d1b7ff2a91d38a05604215a1c592798472b19a46031c81162889977` |
 | `portfolio/index.html` | `ed341baa65b4b3d22d3e773c4da20be48baa24331bc410d330d88268d26a85b4` |
@@ -202,11 +201,13 @@ States:
 
 ### Home
 
-- Hero remains copy + portrait. It becomes a white canvas with no background decoration.
-- Name is the 64px display anchor; role becomes a compact technical label.
-- Portrait is rendered as an interface pane.
-- The three document cards share one structural style. The career-description card is the one inverted featured card.
-- Career remains one table-like surface with hairline rows and an emerald marker on the current role.
+- Home is the unified career archive and uses the dedicated `assets/terminal-home.css` layer.
+- Dark near-black canvas, phosphor-lime signal color, visible grid, square borders, and system monospace metadata create the terminal mood.
+- The first viewport leads with identity, operating principle, profile, and one primary action. It must expose the next content cue without hiding it.
+- Evidence order is impact metrics → career timeline → selected work → public activity → submission documents → contact.
+- Production and public metrics must include their unit or scope. GitHub values include a checked date and exclude private activity explicitly.
+- Light paper sections separate case studies and documents from the dark console without changing the terminal geometry.
+- Scroll reveals use opacity and transform only, preserve content without JavaScript, and disappear entirely under `prefers-reduced-motion`.
 
 ### Resume
 
