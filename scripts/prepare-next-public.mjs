@@ -11,6 +11,7 @@ const copies = [
   ["assets/site.js", "public/assets/site.js"],
   ["assets/system-scene.js", "public/assets/system-scene.js"],
   ["assets/profile.jpg", "public/assets/profile.jpg"],
+  ["assets/social-card.png", "public/assets/social-card.png"],
   [
     "assets/diagrams/feed-serving.svg",
     "public/assets/diagrams/feed-serving.svg",
