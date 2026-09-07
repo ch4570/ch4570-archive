@@ -1378,6 +1378,9 @@ a {
     border-top: 1px solid var(--term-line);
     padding-top: 15px;
   }
+  .fallback-stack {
+    transform: scale(0.76) rotateX(57deg) rotateZ(-35deg);
+  }
   .scene-heading {
     font-size: 9px;
   }
@@ -1790,6 +1793,9 @@ a {
   }
   .hero-person > a {
     display: none;
+  }
+  .fallback-stack {
+    transform: scale(0.66) rotateX(57deg) rotateZ(-35deg);
   }
   .system-scene {
     height: 300px;
