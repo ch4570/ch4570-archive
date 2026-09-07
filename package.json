@@ -10,7 +10,7 @@
     "dev": "node scripts/prepare-next-public.mjs && next dev",
     "build": "node scripts/prepare-next-public.mjs && next build",
     "start": "next start",
-    "lint": "eslint app lib tests next.config.ts",
+    "lint": "eslint app lib tests next.config.ts assets/site.js assets/system-scene.js scripts/check-home-browser.mjs scripts/check-documents-browser.mjs scripts/system-scene.test.mjs",
     "typecheck": "tsc --noEmit",
     "test": "node --test scripts/editor-core.test.mjs scripts/copy-readability.test.mjs scripts/pdf-export.test.mjs scripts/system-scene.test.mjs && tsx --test tests/*.test.ts",
     "validate:content": "node scripts/validate-editables.mjs",

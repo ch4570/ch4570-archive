@@ -7995,3 +7995,231 @@ h4 {
     box-shadow: none !important;
   }
 }
+/* Archive document screens. The submission print rules above stay independent. */
+@media screen {
+  :is(.resume-page, .career-page, .portfolio-page) {
+    --sb-primary: #d4ef9b;
+    --sb-primary-deep: #bdd779;
+    --sb-primary-soft: #e2f5bb;
+    --sb-green-ink: #496521;
+    --sb-ink: #20251b;
+    --sb-ink-secondary: #20251b;
+    --sb-muted: #5c6554;
+    --sb-canvas: #f0f0e6;
+    --sb-canvas-soft: #e9ebe0;
+    --sb-canvas-night: #141612;
+    --sb-canvas-night-soft: #1b1e18;
+    --sb-on-dark: #f1f2e9;
+    --sb-on-dark-muted: #b2b8a9;
+    --sb-hairline: #cdd2c2;
+    --sb-hairline-cool: #dce0d3;
+    --sb-hairline-strong: #a8b29a;
+    --sb-focus: #496521;
+    --header-height: 84px;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-header {
+    background: #141612;
+    border-bottom-color: #34392f;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-brand {
+    color: #f1f2e9;
+    font-size: 22px;
+    letter-spacing: -0.04em;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-brand-mark {
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: #d4ef9b;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-brand-mark::after {
+    content: none;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-nav a {
+    color: #b2b8a9;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-nav a:is(:hover, [aria-current="page"]) {
+    background: transparent;
+    color: #f1f2e9;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-header :is(a, button):focus-visible {
+    outline-color: #d4ef9b;
+    outline-offset: 4px;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-header .button {
+    border-radius: 4px;
+    color: #20251b;
+  }
+
+  :is(.resume-page, .career-page) :is(.resume-document, .career-document) {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  :is(.resume-page, .career-page) :is(.resume-hero-copy, .resume-achievement-list li, .resume-capability-list p, .resume-project-list p, .resume-meta-lines p),
+  .career-page .career-hero .resume-hero-copy,
+  .career-page .career-project :is(p, li),
+  .portfolio-page :is(.story-block p, .fact-cell dd, .scope-item p) {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .resume-page .resume-section-title {
+    font-size: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  :is(.resume-page, .career-page) .resume-contact :is(a, span) {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page)
+    :is(.resume-contact, .portfolio-profile) a[href^="https://ch4570-archive.vercel.app/"] {
+    display: none;
+  }
+
+  .career-page .career-project:not(.career-project--featured) {
+    border: 0;
+    border-top: 1px solid var(--sb-hairline);
+    border-radius: 0;
+    padding-inline: 0;
+  }
+
+  .career-page .career-project:not(.career-project--featured):hover {
+    background: var(--sb-canvas);
+    border-color: var(--sb-hairline);
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) a.skip-link {
+    background: #141612;
+    color: #f1f2e9;
+    border: 1px solid #d4ef9b;
+  }
+
+  .portfolio-page .case-nav {
+    background: var(--sb-canvas);
+  }
+
+  .portfolio-page .case-nav a span {
+    color: inherit;
+  }
+
+  .career-page .career-history article::before {
+    color: var(--sb-green-ink);
+  }
+
+  .portfolio-page .case-section,
+  .portfolio-page .case-section + .case-section {
+    border-radius: 0;
+  }
+
+  .portfolio-page .portfolio-profile {
+    border-radius: 4px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  :is(.resume-page, .career-page, .portfolio-page) {
+    --header-height: 108px;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-brand-name {
+    font-size: 20px;
+  }
+
+  :is(.resume-page, .career-page, .portfolio-page) .site-nav {
+    border-top-color: #34392f;
+  }
+
+  :is(.resume-page, .career-page) :is(.resume-canvas, .career-canvas) {
+    padding-top: 0;
+  }
+
+  :is(.resume-page, .career-page) :is(.resume-document, .career-document) {
+    width: 100%;
+  }
+
+  :is(.resume-page, .career-page) .document-identity-aside {
+    grid-template-columns: 64px minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+
+  :is(.resume-page, .career-page) .profile-portrait--document {
+    width: 64px;
+    padding: 0;
+    border-radius: 4px;
+  }
+
+  :is(.resume-page, .career-page) .resume-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 12px;
+  }
+
+  :is(.resume-page, .career-page) .resume-contact :is(a, span) {
+    flex-basis: 100%;
+    min-height: 36px;
+    line-height: 1.5;
+  }
+
+  :is(.resume-page, .career-page) .resume-contact span {
+    min-height: 28px;
+  }
+
+  .portfolio-page .portfolio-profile {
+    grid-template-columns: 72px repeat(3, minmax(0, 1fr));
+    gap: 0 12px;
+    padding: 16px;
+  }
+
+  .portfolio-page .profile-portrait--portfolio {
+    grid-column: 1;
+    grid-row: 1 / 5;
+    width: 72px;
+    padding: 0;
+  }
+
+  .portfolio-page .portfolio-profile :is(b, span),
+  .portfolio-page .portfolio-profile a[href^="mailto:"] {
+    grid-column: 2 / -1;
+  }
+
+  .portfolio-page .portfolio-profile a {
+    grid-column: auto;
+    min-height: 40px;
+    margin: 0;
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .portfolio-page .portfolio-profile {
+    grid-template-columns: 64px repeat(3, minmax(0, 1fr));
+    gap: 0 8px;
+    padding: 12px;
+  }
+
+  .portfolio-page .profile-portrait--portfolio {
+    width: 64px;
+  }
+
+  .portfolio-page .portfolio-profile a:not([href^="mailto:"]) {
+    white-space: nowrap;
+  }
+}

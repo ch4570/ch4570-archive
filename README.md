@@ -77,6 +77,7 @@ sh scripts/export-pdfs.sh
 npm run start -- --port 3000
 # 다른 터미널에서 실행
 node scripts/check-home-browser.mjs http://127.0.0.1:3000 output/screenshots/home --full-page
+node scripts/check-documents-browser.mjs http://127.0.0.1:3000 output/screenshots/documents
 ```
 
 브라우저 결과 JSON은 자동 검사 결과와 시각 검수를 구분합니다. 캡처 이미지를 직접 열어 확인해야 시각 검증이 완료됩니다. `validate:content`는 편집 전용 검사이므로 의도적인 레이아웃 변경을 리뷰·커밋한 뒤 새 HEAD 기준으로 실행합니다.
