@@ -684,22 +684,54 @@ try {
         controls,
         "terminal-desktop",
       );
+      await terminal.page("Page.bringToFront");
+      const wheelPoint = await terminal.evaluate(`(() => {
+        window.__archiveWheelEvents=[];
+        window.addEventListener('wheel',event=>window.__archiveWheelEvents.push({deltaY:event.deltaY,trusted:event.isTrusted,target:event.target.tagName}),{capture:true,passive:true});
+        const x=24,y=Math.min(500,Math.floor(innerHeight/2)),hit=document.elementFromPoint(x,y);
+        return {x,y,target:hit?.tagName,visible:document.visibilityState==='visible',focused:document.hasFocus(),scrollable:document.documentElement.scrollHeight>innerHeight};
+      })()`);
+      await terminal.page("Input.dispatchMouseEvent", {
+        type: "mouseMoved",
+        x: wheelPoint.x,
+        y: wheelPoint.y,
+      });
+      const wheelState = () =>
+        terminal.evaluate(
+          "({y:window.scrollY,receipts:window.__archiveWheelEvents.length,lastEvent:window.__archiveWheelEvents.at(-1)})",
+        );
       const wheel = () =>
         terminal.page("Input.dispatchMouseEvent", {
           type: "mouseWheel",
-          x: 16,
-          y: 500,
+          x: wheelPoint.x,
+          y: wheelPoint.y,
           deltaX: 0,
           deltaY: 460,
         });
       const initialScroll = await terminal.evaluate("window.scrollY");
       await wheel();
-      await pause(250);
-      const unlockedScroll = await terminal.evaluate("window.scrollY");
+      const unlocked = await observeUntil(
+        wheelState,
+        (state) => state.y > initialScroll && state.receipts > 0,
+      );
+      const unlockedPassed =
+        wheelPoint.visible &&
+        wheelPoint.focused &&
+        wheelPoint.scrollable &&
+        unlocked.state.y > initialScroll &&
+        unlocked.state.receipts > 0;
       record(
         "background wheel scroll works before opening terminal",
-        unlockedScroll > initialScroll,
-        { before: initialScroll, after: unlockedScroll },
+        unlockedPassed,
+        {
+          before: initialScroll,
+          after: unlocked.state.y,
+          elapsedMs: unlocked.elapsedMs,
+          samples: unlocked.samples,
+          receipts: unlocked.state.receipts,
+          lastEvent: unlocked.state.lastEvent,
+          pointer: wheelPoint,
+        },
         "terminal-desktop",
       );
       await terminal.evaluate("window.scrollTo({top:0,behavior:'instant'})");
@@ -713,13 +745,31 @@ try {
         "terminal-desktop",
       );
       const lockedScroll = await terminal.evaluate("window.scrollY");
+      const lockedReceipts = (await wheelState()).receipts;
+      const lockSampleMs = Math.max(750, unlocked.elapsedMs + 500);
       await wheel();
-      await pause(250);
-      const modalScroll = await terminal.evaluate("window.scrollY");
+      // Observe the whole window, failing immediately if background movement occurs.
+      const locked = await observeUntil(
+        wheelState,
+        (state) => Math.abs(state.y - lockedScroll) >= 1,
+        lockSampleMs,
+      );
       record(
         "open terminal prevents background wheel scrolling",
-        Math.abs(modalScroll - lockedScroll) < 1,
-        { before: lockedScroll, after: modalScroll, wheelDelta: 460 },
+        unlockedPassed &&
+          locked.state.receipts > lockedReceipts &&
+          Math.abs(locked.state.y - lockedScroll) < 1,
+        {
+          before: lockedScroll,
+          after: locked.state.y,
+          wheelDelta: 460,
+          positiveControlPassed: unlockedPassed,
+          plannedSampleMs: lockSampleMs,
+          elapsedMs: locked.elapsedMs,
+          samples: locked.samples,
+          receipts: locked.state.receipts,
+          lastEvent: locked.state.lastEvent,
+        },
         "terminal-desktop",
       );
       await screenshot(terminal, "terminal-desktop-open.png");
