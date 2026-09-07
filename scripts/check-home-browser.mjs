@@ -349,6 +349,20 @@ try {
     const dialog=document.querySelector('dialog[data-terminal-dialog]'),input=document.querySelector('[data-terminal-input]'),output=document.querySelector('[data-terminal-output]');
     return {present:!!dialog,open:!!dialog?.open,modal:!!dialog?.matches(':modal'),inputFocused:document.activeElement===input,value:input?.value,output:output?.textContent.trim()||'',polite:!!output?.closest('[aria-live="polite"]')||['status','log'].includes(output?.getAttribute('role'))};
   })()`);
+  const observeUntil = async (read, matches, timeoutMs = 4000) => {
+    const startedAt = Date.now();
+    let state;
+    let samples = 0;
+    do {
+      state = await read();
+      samples++;
+      if (matches(state))
+        return { state, elapsedMs: Date.now() - startedAt, samples };
+      if (Date.now() - startedAt >= timeoutMs) break;
+      await pause(50);
+    } while (true);
+    return { state, elapsedMs: Date.now() - startedAt, samples };
+  };
   const enterTerminalText = async (context, value) => {
     await context.evaluate(
       "document.querySelector('[data-terminal-input]').focus();document.querySelector('[data-terminal-input]').select()",
@@ -366,18 +380,31 @@ try {
   const openTerminal = async (context, index) => {
     if (!(await terminalState(context)).open)
       await click(context, "[data-terminal-open]", index);
-    await pause(120);
+    await observeUntil(
+      () => terminalState(context),
+      (state) => state.open && state.modal && state.inputFocused,
+    );
   };
   const terminalNavigation = async (context, command, target) => {
     await terminalCommand(context, command);
-    const state = await context.evaluate(`(() => {
+    const matches = (state) =>
+      state.hash === target && !state.dialogOpen && state.headingFocused;
+    const observation = await observeUntil(
+      () =>
+        context.evaluate(`(() => {
       const section=document.querySelector(${JSON.stringify(target)}),heading=section?.querySelector('h1,h2,h3');
       return {hash:location.hash,dialogOpen:document.querySelector('[data-terminal-dialog]').open,headingFocused:document.activeElement===heading,headingText:heading?.textContent.trim()};
-    })()`);
+    })()`),
+      matches,
+    );
     record(
       `terminal ${command} navigates and focuses section heading`,
-      state.hash === target && !state.dialogOpen && state.headingFocused,
-      state,
+      matches(observation.state),
+      {
+        ...observation.state,
+        elapsedMs: observation.elapsedMs,
+        samples: observation.samples,
+      },
       "terminal-desktop",
     );
   };
@@ -697,9 +724,14 @@ try {
       );
       await screenshot(terminal, "terminal-desktop-open.png");
       await key(terminal, "Escape");
-      const escaped = await terminal.evaluate(
-        `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${openerIndex}]})`,
+      const escapeObservation = await observeUntil(
+        () =>
+          terminal.evaluate(
+            `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${openerIndex}]})`,
+          ),
+        (state) => !state.open && state.openerFocused,
       );
+      const escaped = escapeObservation.state;
       record(
         "terminal Escape restores opener focus",
         !escaped.open && escaped.openerFocused,
@@ -712,7 +744,10 @@ try {
       ]) {
         await terminal.page("Page.bringToFront");
         await key(terminal, "k", modifiers);
-        const state = await terminalState(terminal);
+        const { state } = await observeUntil(
+          () => terminalState(terminal),
+          (state) => state.open && state.modal && state.inputFocused,
+        );
         record(
           `terminal ${shortcut} opens and focuses input`,
           state.open && state.modal && state.inputFocused,
@@ -791,8 +826,12 @@ try {
       for (const view of ["data", "recovery"]) {
         await openTerminal(terminal, openerIndex);
         await terminalCommand(terminal, `view ${view}`);
-        const state = await terminal.evaluate(
-          `({pressed:document.querySelector('[data-scene-view="${view}"]').getAttribute('aria-pressed'),view:document.querySelector('[data-scene]')?.dataset.sceneState})`,
+        const { state } = await observeUntil(
+          () =>
+            terminal.evaluate(
+              `({pressed:document.querySelector('[data-scene-view="${view}"]').getAttribute('aria-pressed'),view:document.querySelector('[data-scene]')?.dataset.sceneState})`,
+            ),
+          (state) => state.pressed === "true" && state.view === view,
         );
         record(
           `terminal view ${view} updates the actual scene`,
@@ -812,17 +851,28 @@ try {
       if (quickIndex >= 0) {
         await openTerminal(terminal, openerIndex);
         await click(terminal, "[data-terminal-command]", quickIndex);
-        await pause(120);
         const command = controls.quick[quickIndex].command;
-        const state = await terminalState(terminal);
-        const hash = await terminal.evaluate("location.hash");
-        record(
-          "terminal quick command executes its advertised action",
+        const matches = (state) =>
           command === "help"
             ? state.open && /help|work|docs/.test(state.output)
             : !state.open &&
-                hash === (command === "work" ? "#work" : "#documents"),
-          { command, hash, ...state },
+              state.hash === (command === "work" ? "#work" : "#documents");
+        const observation = await observeUntil(
+          async () => ({
+            ...(await terminalState(terminal)),
+            hash: await terminal.evaluate("location.hash"),
+          }),
+          matches,
+        );
+        record(
+          "terminal quick command executes its advertised action",
+          matches(observation.state),
+          {
+            command,
+            ...observation.state,
+            elapsedMs: observation.elapsedMs,
+            samples: observation.samples,
+          },
           "terminal-desktop",
         );
       } else
@@ -870,9 +920,12 @@ try {
         );
         await screenshot(context, `terminal-mobile-${width}.png`);
         await click(context, "[data-terminal-close]");
-        await pause(120);
-        const closed = await context.evaluate(
-          `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${index}]})`,
+        const { state: closed } = await observeUntil(
+          () =>
+            context.evaluate(
+              `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${index}]})`,
+            ),
+          (state) => !state.open && state.openerFocused,
         );
         record(
           "mobile terminal close restores opener focus",

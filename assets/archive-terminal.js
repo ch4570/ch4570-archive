@@ -33,7 +33,6 @@
   let draft = "";
   let composing = false;
   let opener = null;
-  let afterClose = null;
 
   const sceneHost = () => document.querySelector("[data-scene]");
   const sceneAvailable = () => sceneHost()?.dataset.renderer === "webgl";
@@ -98,15 +97,16 @@
 
   const fail = (command, message) => append(command, message, [], "error");
 
-  function close(next = null) {
-    afterClose = next;
-    if (dialog.open) dialog.close();
+  function close({ restoreFocus = true } = {}) {
+    if (!dialog.open) return;
+    dialog.close();
+    if (restoreFocus && opener?.isConnected)
+      opener.focus({ preventScroll: true });
   }
 
   function open(source = document.activeElement) {
     if (dialog.open) return;
     opener = source;
-    afterClose = null;
     try {
       dialog.showModal();
       input.focus({ preventScroll: true });
@@ -128,20 +128,19 @@
       );
       return;
     }
-    close(() => {
-      const heading = section.querySelector("h1, h2, h3") || section;
-      if (!heading.hasAttribute("tabindex"))
-        heading.setAttribute("tabindex", "-1");
-      const hash = `#${destination.id}`;
-      if (window.location.hash !== hash)
-        window.history.pushState(null, "", hash);
-      heading.focus({ preventScroll: true });
-      section.scrollIntoView({
-        behavior: motion.matches ? "instant" : "smooth",
-        block: "start",
-      });
-      append(command, message);
+    // close() restores native focus synchronously; its later close event is only a notification.
+    close({ restoreFocus: false });
+    const heading = section.querySelector("h1, h2, h3") || section;
+    if (!heading.hasAttribute("tabindex"))
+      heading.setAttribute("tabindex", "-1");
+    const hash = `#${destination.id}`;
+    if (window.location.hash !== hash) window.history.pushState(null, "", hash);
+    heading.focus({ preventScroll: true });
+    section.scrollIntoView({
+      behavior: motion.matches ? "instant" : "smooth",
+      block: "start",
     });
+    append(command, message);
   }
 
   function remember(value) {
@@ -268,12 +267,10 @@
     );
   }
 
-  dialog.addEventListener("close", () => {
-    if (dialog.open) return;
-    const next = afterClose;
-    afterClose = null;
-    if (next) next();
-    else if (opener?.isConnected) opener.focus({ preventScroll: true });
+  dialog.addEventListener("cancel", (event) => {
+    if (event.defaultPrevented) return;
+    event.preventDefault();
+    close();
   });
   closeButton.addEventListener("click", () => close());
   dialog.addEventListener("click", (event) => {

@@ -14,8 +14,10 @@ function setup({
   missing = [],
   inertScene = false,
   supported = true,
+  deferClose = false,
 } = {}) {
   let document;
+  const closeEvents = [];
   const dataKey = (name) =>
     name.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
   class Element {
@@ -152,11 +154,15 @@ function setup({
       if (!this.disabled) this.emit("click", { clientX: 200, clientY: 200 });
     }
     showModal() {
+      this.previousFocus = document.activeElement;
       this.open = true;
     }
     close() {
+      if (!this.open) return;
       this.open = false;
-      this.emit("close");
+      this.previousFocus?.focus({ preventScroll: true });
+      if (deferClose) closeEvents.push(() => this.emit("close"));
+      else this.emit("close");
     }
   }
   document = new Element("document");
@@ -249,6 +255,12 @@ function setup({
     location,
     get toggleClicks() {
       return toggleClicks;
+    },
+    get pendingCloseEvents() {
+      return closeEvents.length;
+    },
+    flushCloseEvents() {
+      while (closeEvents.length) closeEvents.shift()();
     },
     open() {
       opener.click();
@@ -433,4 +445,60 @@ test("only clicks outside the dialog bounds dismiss its backdrop", () => {
   app.dialog.emit("click", { clientX: 20, clientY: 20 });
   assert.equal(app.dialog.open, false);
   assert.equal(app.document.activeElement, app.opener);
+});
+
+test("navigation completes before a queued native close event and retains heading focus after it", () => {
+  for (const [command, section] of [
+    ["work", "work"],
+    ["docs", "documents"],
+  ]) {
+    const app = setup({ deferClose: true });
+    app.open();
+    app.run(command);
+    assert.equal(app.dialog.open, false);
+    assert.equal(app.pendingCloseEvents, 1);
+    assert.equal(app.location.hash, `#${section}`);
+    assert.equal(app.document.activeElement, app.sections[section].children[0]);
+    app.flushCloseEvents();
+    assert.equal(app.location.hash, `#${section}`);
+    assert.equal(app.document.activeElement, app.sections[section].children[0]);
+  }
+});
+
+test("reopening before close notifications cannot drop earlier navigation or steal the new input focus", () => {
+  const app = setup({ deferClose: true });
+  app.open();
+  app.run("work");
+  app.open();
+  app.type("keep this draft");
+  app.flushCloseEvents();
+  assert.equal(app.location.hash, "#work");
+  assert.equal(app.dialog.open, true);
+  assert.equal(app.document.activeElement, app.input);
+  assert.equal(app.input.value, "keep this draft");
+  app.run("docs");
+  app.open();
+  app.run("contact");
+  assert.equal(app.pendingCloseEvents, 2);
+  app.flushCloseEvents();
+  assert.equal(app.location.hash, "#contact");
+  assert.equal(app.document.activeElement, app.sections.contact.children[0]);
+});
+
+test("Escape and button close restore the opener immediately without affecting a subsequent dialog session", () => {
+  const app = setup({ deferClose: true });
+  for (const dismiss of [() => app.cancel(), () => app.closeButton.click()]) {
+    app.open();
+    app.type("draft survives");
+    dismiss();
+    assert.equal(app.dialog.open, false);
+    assert.equal(app.document.activeElement, app.opener);
+    app.open();
+    app.flushCloseEvents();
+    assert.equal(app.dialog.open, true);
+    assert.equal(app.document.activeElement, app.input);
+    assert.equal(app.input.value, "draft survives");
+    app.closeButton.click();
+    app.flushCloseEvents();
+  }
 });
