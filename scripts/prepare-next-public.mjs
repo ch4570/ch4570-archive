@@ -9,8 +9,12 @@ const copies = [
   ["assets/design-system.css", "public/assets/design-system.css"],
   ["assets/terminal-home.css", "public/assets/terminal-home.css"],
   ["assets/site.js", "public/assets/site.js"],
+  ["assets/system-scene.js", "public/assets/system-scene.js"],
   ["assets/profile.jpg", "public/assets/profile.jpg"],
-  ["assets/diagrams/feed-serving.svg", "public/assets/diagrams/feed-serving.svg"],
+  [
+    "assets/diagrams/feed-serving.svg",
+    "public/assets/diagrams/feed-serving.svg",
+  ],
   ["output/pdf/seo-minjae-resume.pdf", "public/pdf/seo-minjae-resume.pdf"],
   [
     "output/pdf/seo-minjae-career-description.pdf",

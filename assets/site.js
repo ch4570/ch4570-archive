@@ -3,94 +3,9 @@
 
   const progress = document.querySelector(".scroll-progress");
   const toast = document.querySelector(".toast");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  const terminalHero = document.querySelector(".terminal-home .terminal-hero");
-  if (terminalHero && !reduceMotion) {
-    const terminalColumns = [
-      [
-        "$ ./gradlew test --parallel",
-        "> Task :compileKotlin UP-TO-DATE",
-        "> Task :integrationTest PASSED",
-        "BUILD SUCCESSFUL in 4.2s",
-        "42 actionable tasks: 18 executed",
-      ],
-      [
-        "[INFO] consumer=feed-recovery partition=03",
-        "[TRACE] offset=814230 lag=0",
-        "[OK] payload archived status=RETRYABLE",
-        "[RUN] replay --scope=failed-only",
-        "[DONE] downstream=3 latency=42ms",
-      ],
-      [
-        "$ psql archive --command status.sql",
-        "SELECT id, status FROM event_archive;",
-        "UPDATE 128",
-        "COMMIT",
-        "consistency_check: matched=13/13",
-      ],
-      [
-        "$ docker compose up -d",
-        "kafka-1      healthy",
-        "postgres-1   healthy",
-        "redis-1      healthy",
-        "opensearch-1 healthy",
-      ],
-      [
-        "$ git switch feature/recovery-path",
-        "Switched to a new branch",
-        "$ git diff --stat",
-        "recovery.kt  +84 -12",
-        "$ git commit -m 'isolate failed work'",
-      ],
-      [
-        "[CACHE] key=feed:user:4570 miss",
-        "[SEARCH] sources=9 timeout=120ms",
-        "[RANK] candidates=320 deduped=187",
-        "[FALLBACK] redis=unavailable recompute=true",
-        "[OK] response status=200",
-      ],
-      [
-        "$ kubectl get pods -n production",
-        "api-7d9f6c5b6d-k4m2p   1/1 Running",
-        "worker-56f87c4ff8-r9x1q 1/1 Running",
-        "batch-28914320-xc7vt    0/1 Completed",
-        "rollout status: successfully rolled out",
-      ],
-      [
-        "[BATCH] job=archive-transfer restart=true",
-        "[READ] cursor=tenant:82:page:14",
-        "[WRITE] tables=10 chunk=500",
-        "[CHECK] ledger balance=consistent",
-        "[DONE] exit_code=COMPLETED",
-      ],
-    ];
-
-    const stream = document.createElement("div");
-    stream.className = "terminal-rain";
-    stream.setAttribute("aria-hidden", "true");
-
-    for (let sheetIndex = 0; sheetIndex < 2; sheetIndex += 1) {
-      const sheet = document.createElement("div");
-      sheet.className = `terminal-rain__sheet terminal-rain__sheet--${sheetIndex + 1}`;
-
-      for (let columnIndex = 0; columnIndex < 4; columnIndex += 1) {
-        const column = document.createElement("div");
-        column.className = "terminal-rain__column";
-        const lines = terminalColumns[sheetIndex * 4 + columnIndex];
-
-        lines.forEach((line) => {
-          const item = document.createElement("span");
-          item.className = "terminal-rain__line";
-          item.textContent = line;
-          column.appendChild(item);
-        });
-        sheet.appendChild(column);
-      }
-      stream.appendChild(sheet);
-    }
-    terminalHero.prepend(stream);
-  }
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
   const showToast = (message) => {
     if (!toast) return;
@@ -116,7 +31,10 @@
           await Promise.race([
             navigator.clipboard.writeText(email),
             new Promise((_, reject) => {
-              window.setTimeout(() => reject(new Error("clipboard timeout")), 600);
+              window.setTimeout(
+                () => reject(new Error("clipboard timeout")),
+                600,
+              );
             }),
           ]);
           copied = true;
@@ -132,9 +50,15 @@
         input.style.position = "fixed";
         input.style.opacity = "0";
         document.body.appendChild(input);
-        input.select();
-        copied = document.execCommand("copy");
-        input.remove();
+        try {
+          input.select();
+          copied = document.execCommand("copy");
+        } catch {
+          copied = false;
+        } finally {
+          input.remove();
+          button.focus({ preventScroll: true });
+        }
       }
 
       showToast(copied ? "이메일 주소를 복사했습니다." : `이메일: ${email}`);
@@ -231,10 +155,13 @@
       (entries) => {
         const activeEntry = entries
           .filter((entry) => entry.isIntersecting)
-          .sort((left, right) => right.intersectionRatio - left.intersectionRatio)[0];
+          .sort(
+            (left, right) => right.intersectionRatio - left.intersectionRatio,
+          )[0];
         if (!activeEntry) return;
         sectionLinks.forEach((link) => {
-          const active = link.getAttribute("href") === `#${activeEntry.target.id}`;
+          const active =
+            link.getAttribute("href") === `#${activeEntry.target.id}`;
           if (active) link.setAttribute("aria-current", "true");
           else link.removeAttribute("aria-current");
         });

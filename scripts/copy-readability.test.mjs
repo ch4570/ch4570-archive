@@ -57,7 +57,7 @@ test("browser documents declare an inline favicon", async () => {
   for (const [file, source] of documents) {
     assert.match(
       source,
-      /<link rel="icon" href="data:image\/svg\+xml,[^"]+">/u,
+      /<link\s+rel="icon"\s+href="data:image\/svg\+xml,[^"]+"\s*\/?>/u,
       file + " should not trigger a fallback /favicon.ico request",
     );
   }
