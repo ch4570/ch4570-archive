@@ -4,7 +4,7 @@ import { dirname, resolve } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { scanEditableRegions } from "../admin/editor-core.js";
+import { assertEditableOnlyChanges, scanEditableRegions } from "../admin/editor-core.js";
 
 const repositoryRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -75,6 +75,10 @@ test("public documents keep one heading and valid editable regions", async () =>
     const source = await readFile(resolve(repositoryRoot, file), "utf8");
     assert.equal(source.match(/<h1\b/gu)?.length, 1, file + " should have one h1");
 
+    assert.doesNotThrow(
+      () => assertEditableOnlyChanges(source, source),
+      file + " should keep editable values safe for the admin",
+    );
     const regions = scanEditableRegions(source);
     assert.ok(regions.length > 0, file + " should expose editable content");
     assert.equal(

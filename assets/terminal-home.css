@@ -107,7 +107,8 @@ a {
   letter-spacing: 0.09em;
   line-height: 1.5;
 }
-.lime {
+.lime,
+.hero h1 > span {
   color: var(--term-green);
 }
 .skip-link {
