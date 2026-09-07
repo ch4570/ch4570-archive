@@ -21,6 +21,11 @@ if (!originArg || !outputArg || typeof WebSocket === "undefined") {
 const origin = new URL(originArg).origin,
   output = path.resolve(outputArg),
   baselineOnly = args.includes("--baseline-only");
+const softwareWebGL = process.env.ARCHIVE_SOFTWARE_WEBGL === "1";
+const rendererMode = softwareWebGL ? "software-swiftshader" : "browser-default";
+const rendererFlags = softwareWebGL
+  ? ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
+  : [];
 const baselineIndex = args.indexOf("--print-baseline"),
   baselinePath = baselineIndex < 0 ? null : args[baselineIndex + 1];
 if (baselineIndex >= 0 && !baselinePath)
@@ -101,6 +106,7 @@ try {
       "--no-first-run",
       "--no-default-browser-check",
       "--disable-background-networking",
+      ...rendererFlags,
       "about:blank",
     ],
     { stdio: "ignore" },
@@ -241,7 +247,13 @@ try {
   await writeFile(
     path.join(output, "print.json"),
     JSON.stringify(
-      { origin, browser, capturedAt: new Date().toISOString(), snapshots },
+      {
+        origin,
+        browser,
+        rendererMode,
+        capturedAt: new Date().toISOString(),
+        snapshots,
+      },
       null,
       2,
     ) + "\n",
@@ -454,6 +466,7 @@ try {
       {
         origin,
         browser,
+        rendererMode,
         baselineOnly,
         printBaseline: baselinePath,
         checks,
@@ -462,6 +475,7 @@ try {
           "Screenshots need separate visual inspection.",
           "Print media emulation compares CSS layout and typography; it does not verify generated PDF pagination. Existing PDF files are only fetched.",
           "Viewport emulation does not prove physical-device behavior or complete accessibility conformance.",
+          "Opt-in SwiftShader rendering verifies browser behavior on the CPU, not physical GPU performance.",
         ],
       },
       null,

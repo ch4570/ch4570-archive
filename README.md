@@ -93,3 +93,9 @@ ARCHIFY_CLI=/tmp/archify-v2.11.0/archify/bin/archify.mjs node scripts/export-arc
 ```
 
 라이선스 고지는 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)에 있습니다.
+
+## 공유 이미지와 브라우저 CI
+
+공유 이미지는 `design/social-card.html`의 편집 가능한 원본과 실제 WebGL 장면에서 만듭니다. `node scripts/render-social-card.mjs`로 `assets/social-card.png`를 재생성하고 이미지를 직접 확인합니다. 홈과 세 문서는 같은 이미지와 각자의 canonical URL을 사용합니다.
+
+PR 검증에서는 설치된 Chrome과 SwiftShader로 홈·문서 탐색을 검사합니다. 실패해도 스크린샷·JSON·서버 로그를 Actions artifact로 남깁니다. CI의 기능 검사와 스크린샷 생성은 수동 시각 검수를 대체하지 않습니다.

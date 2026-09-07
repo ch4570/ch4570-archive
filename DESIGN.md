@@ -65,3 +65,9 @@
 - `npm run lint`, `npm run typecheck`, `npm run build`.
 - `node scripts/check-home-browser.mjs <origin> output/screenshots/<run> --full-page`: 실제 Chrome의 1440·1280·390·320px, 확대에 해당하는 좁은 레이아웃, 링크·복사·모션·대체 화면 확인.
 - 브라우저 실행 증거와 이미지의 사람/에이전트 시각 검수를 별도로 기록한다. 실제 모바일 GPU의 배터리·장시간 성능은 측정하지 않았다.
+
+## 공유와 지속 검증
+
+`design/social-card.html`은 1200×630 공유 이미지 원본이다. `scripts/render-social-card.mjs`가 설치된 Chrome에서 실제 WebGL 장면을 모션 감소 상태로 렌더링해 `assets/social-card.png`를 만든다. 네 공개 문서가 이 이미지와 각자의 canonical URL을 사용한다.
+
+PR CI는 Ubuntu 24.04에 설치된 Chrome에서 홈·문서를 검사한다. GPU가 없는 러너에서는 `ARCHIVE_SOFTWARE_WEBGL=1`로 SwiftShader를 명시하고 WebGL 초기화 성공을 필수로 확인한다. 제품의 렌더러는 이 설정을 사용하지 않는다. 검사 후 스크린샷·JSON·서버 로그를 보관하며, 업로드 성공을 시각 검수 완료로 간주하지 않는다. 서로 다른 OS의 글꼴 차이 때문에 로컬 인쇄 레이아웃 스냅샷은 Linux CI의 픽셀 기준으로 사용하지 않는다.

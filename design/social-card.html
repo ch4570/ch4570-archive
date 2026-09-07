@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1200, initial-scale=1" />
+    <title>서민재 · Engineering Archive — social preview artboard</title>
+    <!-- Editable 1200 × 630 source. Render with: node scripts/render-social-card.mjs -->
+    <style>
+      :root {
+        color-scheme: dark;
+        --paper: #f1f2e9;
+        --ink: #141612;
+        --accent: #d4ef9b;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      body {
+        background: var(--ink);
+        color: var(--paper);
+        font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      }
+      .artboard {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+      }
+      .identity {
+        position: absolute;
+        top: 64px;
+        left: 64px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .identity::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .identity .divider {
+        color: #79806d;
+        font-weight: 400;
+      }
+      .identity .role {
+        font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+        font-size: 15px;
+        letter-spacing: 1.6px;
+        color: #c7cbbd;
+      }
+      h1 {
+        position: absolute;
+        top: 178px;
+        left: 60px;
+        z-index: 1;
+        margin: 0;
+        font-size: 80px;
+        line-height: 1.16;
+        font-weight: 700;
+        letter-spacing: -5.2px;
+        word-break: keep-all;
+      }
+      h1 span {
+        color: var(--accent);
+      }
+      .stack {
+        position: absolute;
+        top: 413px;
+        left: 65px;
+        margin: 0;
+        color: #b4baa8;
+        font-size: 21px;
+        letter-spacing: -0.25px;
+      }
+      .scene {
+        position: absolute;
+        top: 78px;
+        right: 2px;
+        width: 610px;
+        height: 470px;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      .rule {
+        position: absolute;
+        bottom: 74px;
+        left: 64px;
+        right: 64px;
+        height: 1px;
+        background: #343a2c;
+      }
+      .signature,
+      .domain {
+        position: absolute;
+        bottom: 33px;
+        margin: 0;
+        font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+        font-size: 12px;
+        line-height: 1;
+        letter-spacing: 1.2px;
+      }
+      .signature {
+        left: 65px;
+        color: #a7b098;
+      }
+      .domain {
+        right: 65px;
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <main
+      class="artboard"
+      aria-label="서민재 백엔드 엔지니어 포트폴리오 공유 이미지"
+    >
+      <p class="identity">
+        서민재 <span class="divider">/</span>
+        <span class="role">BACKEND ENGINEER</span>
+      </p>
+      <h1>실패 이후까지<br />설계합니다<span>.</span></h1>
+      <p class="stack">Java · Kotlin · Spring</p>
+      <div class="scene" data-scene>
+        <canvas id="system-scene" aria-hidden="true"></canvas>
+      </div>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="signature">REX SEO · ENGINEERING ARCHIVE</p>
+      <p class="domain">CH4570</p>
+    </main>
+    <script src="../assets/system-scene.js"></script>
+  </body>
+</html>
