@@ -29,6 +29,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prepare Korean screenshot fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          fc-match ":lang=ko"
+
       - name: Verify application
         run: |
           npm run lint
@@ -41,6 +47,7 @@ jobs:
         env:
           ARCHIVE_CHROME: /usr/bin/google-chrome
           ARCHIVE_SOFTWARE_WEBGL: "1"
+          ARCHIVE_REQUIRE_KOREAN_FONT: "1"
         run: |
           set -euo pipefail
           mkdir -p output/browser-ci

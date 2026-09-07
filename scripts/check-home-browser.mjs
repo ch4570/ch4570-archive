@@ -31,6 +31,8 @@ const origin = requested.origin;
 const output = path.resolve(outputArg);
 const baseline = flags.includes("--baseline");
 const softwareWebGL = process.env.ARCHIVE_SOFTWARE_WEBGL === "1";
+const requireKoreanFont = process.env.ARCHIVE_REQUIRE_KOREAN_FONT === "1";
+let renderedHeadingFonts = [];
 const rendererMode = softwareWebGL ? "software-swiftshader" : "browser-default";
 const rendererFlags = softwareWebGL
   ? ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"]
@@ -380,6 +382,26 @@ try {
     );
     await screenshot(context, `${viewport.name}.png`);
     if (viewport.name === "desktop") {
+      await context.page("DOM.enable");
+      await context.page("CSS.enable");
+      const { root } = await context.page("DOM.getDocument");
+      const { nodeId } = await context.page("DOM.querySelector", {
+        nodeId: root.nodeId,
+        selector: "h1",
+      });
+      const { fonts } = await context.page("CSS.getPlatformFontsForNode", {
+        nodeId,
+      });
+      renderedHeadingFonts = fonts;
+      if (requireKoreanFont) {
+        record(
+          "Korean heading is rendered with the installed CJK font",
+          fonts.some(
+            (font) => /Noto.*CJK/i.test(font.familyName) && font.glyphCount > 0,
+          ),
+          fonts,
+        );
+      }
       if (flags.includes("--full-page"))
         await screenshot(context, "desktop-full.png", true);
       const resources = await context.evaluate(`(async () => {
@@ -701,6 +723,7 @@ try {
     origin,
     baseline,
     rendererMode,
+    renderedHeadingFonts,
     capturedAt: new Date().toISOString(),
     browser: browser?.product,
     viewportEmulation: true,
