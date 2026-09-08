@@ -346,8 +346,8 @@ try {
   };
   const terminalState = (context) =>
     context.evaluate(`(() => {
-    const dialog=document.querySelector('dialog[data-terminal-dialog]'),input=document.querySelector('[data-terminal-input]'),output=document.querySelector('[data-terminal-output]');
-    return {present:!!dialog,open:!!dialog?.open,modal:!!dialog?.matches(':modal'),inputFocused:document.activeElement===input,value:input?.value,output:output?.textContent.trim()||'',polite:!!output?.closest('[aria-live="polite"]')||['status','log'].includes(output?.getAttribute('role'))};
+    const session=document.querySelector('main [data-terminal-session]'),input=document.querySelector('[data-terminal-input]'),output=document.querySelector('[data-terminal-output]'),form=document.querySelector('[data-terminal-form]'),inputRect=input?.getBoundingClientRect();
+    return {inputVisible:!!inputRect&&inputRect.top>=0&&inputRect.bottom<=innerHeight,inputTop:inputRect?.top,inputBottom:inputRect?.bottom,viewportHeight:innerHeight,present:!!session,inMain:!!session?.closest('main'),dialogCount:document.querySelectorAll('dialog[data-terminal-dialog]').length,inputFocused:document.activeElement===input,value:input?.value,output:output?.textContent.trim()||'',entries:output?.children.length||0,polite:!!output?.closest('[aria-live="polite"]')||['status','log'].includes(output?.getAttribute('role')),formCount:document.querySelectorAll('[data-terminal-form]').length,formAfterOutput:!!output&&!!form&&!!(output.compareDocumentPosition(form)&Node.DOCUMENT_POSITION_FOLLOWING),hash:location.hash};
   })()`);
   const observeUntil = async (read, matches, timeoutMs = 4000) => {
     const startedAt = Date.now();
@@ -375,36 +375,34 @@ try {
   };
   const visibleTerminalOpener = (context) =>
     context.evaluate(
-      `([...document.querySelectorAll('[data-terminal-open]')].findIndex(button=>{const rect=button.getBoundingClientRect();return !button.hidden&&!button.disabled&&rect.width>0&&rect.height>0;}))`,
+      `([...document.querySelectorAll('[data-terminal-focus]')].findIndex(button=>{const rect=button.getBoundingClientRect();return !button.hidden&&!button.disabled&&rect.width>0&&rect.height>0;}))`,
     );
-  const openTerminal = async (context, index) => {
-    if (!(await terminalState(context)).open)
-      await click(context, "[data-terminal-open]", index);
+  const focusTerminal = async (context, index) => {
+    await click(context, "[data-terminal-focus]", index);
     await observeUntil(
       () => terminalState(context),
-      (state) => state.open && state.modal && state.inputFocused,
+      (state) => state.present && state.inputFocused && state.inputVisible,
     );
   };
-  const terminalNavigation = async (context, command, target) => {
+  const terminalResult = async (context, command, expectedHref) => {
+    const before = await terminalState(context);
     await terminalCommand(context, command);
-    const matches = (state) =>
-      state.hash === target && !state.dialogOpen && state.headingFocused;
-    const observation = await observeUntil(
-      () =>
-        context.evaluate(`(() => {
-      const section=document.querySelector(${JSON.stringify(target)}),heading=section?.querySelector('h1,h2,h3');
-      return {hash:location.hash,dialogOpen:document.querySelector('[data-terminal-dialog]').open,headingFocused:document.activeElement===heading,headingText:heading?.textContent.trim()};
-    })()`),
-      matches,
+    const state = await terminalState(context);
+    const links = await context.evaluate(
+      `[...document.querySelector('[data-terminal-output]').lastElementChild.querySelectorAll('a[href]')].map(link=>({href:link.getAttribute('href'),label:link.textContent.trim()}))`,
     );
     record(
-      `terminal ${command} navigates and focuses section heading`,
-      matches(observation.state),
-      {
-        ...observation.state,
-        elapsedMs: observation.elapsedMs,
-        samples: observation.samples,
-      },
+      `terminal ${command} appends usable results and retains input focus`,
+      state.inputFocused && state.value === "" && state.hash === before.hash &&
+        state.entries === before.entries + 1 &&
+        state.output.startsWith(before.output) &&
+        links.some(link => {
+          const url = new URL(link.href, origin);
+          return link.label.length > 0 && (expectedHref.startsWith("#")
+            ? url.hash === expectedHref
+            : url.origin === origin && url.pathname.replace(/\/$/, "") === expectedHref);
+        }),
+      { beforeEntries: before.entries, ...state, links },
       "terminal-desktop",
     );
   };
@@ -453,7 +451,7 @@ try {
     context.evaluate(`(() => {
     const visible = element => { if (!element) return false; const rect = element.getBoundingClientRect(); let current = element; while(current) { const style = getComputedStyle(current); if(style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) return false; current = current.parentElement; } return rect.width > 0 && rect.height > 0; };
     return { h1Count: document.querySelectorAll('h1').length, h1Text: document.querySelector('h1')?.textContent.trim(), h1Visible: visible(document.querySelector('h1')), mainCharacters: document.querySelector('main')?.innerText.trim().length || 0,
-      sectionHeadings: [...document.querySelectorAll('main h2')].map(element => ({text: element.textContent.trim(), visible: visible(element)})) };
+      sectionHeadings: [...document.querySelectorAll('main h2')].filter(element=>!element.closest('[data-terminal-session]')).map(element => ({text: element.textContent.trim(), visible: visible(element)})) };
   })()`);
   const viewports = [
     { name: "desktop", width: 1440, height: 1000 },
@@ -657,281 +655,183 @@ try {
   const openerIndex = await visibleTerminalOpener(terminal);
   const initialTerminal = await terminalState(terminal);
   if (baseline && !initialTerminal.present)
-    skip(
-      "terminal command interface",
-      "Baseline predates the terminal interface.",
-    );
+    skip("inline terminal command interface", "Baseline predates the inline terminal interface.");
   else {
     record(
-      "terminal controls initialize with JavaScript",
-      initialTerminal.present && openerIndex >= 0 && !initialTerminal.open,
+      "terminal is one inline session with output followed by a single prompt",
+      initialTerminal.present && initialTerminal.inMain &&
+        initialTerminal.dialogCount === 0 && initialTerminal.formCount === 1 &&
+        initialTerminal.formAfterOutput && openerIndex >= 0,
       { ...initialTerminal, openerIndex },
       "terminal-desktop",
     );
     if (initialTerminal.present && openerIndex >= 0) {
       const controls = await terminal.evaluate(
-        `({form:document.querySelector('[data-terminal-form]')?.tagName,input:document.querySelector('[data-terminal-input]')?.tagName,close:document.querySelector('[data-terminal-close]')?.tagName,quick:[...document.querySelectorAll('[data-terminal-command]')].map(button=>({command:button.dataset.terminalCommand,tag:button.tagName,name:button.textContent.trim()}))})`,
+        `({form:document.querySelector('[data-terminal-form]')?.tagName,input:document.querySelector('[data-terminal-input]')?.tagName,inputName:document.querySelector('[data-terminal-input]')?.labels?.[0]?.textContent.trim()||document.querySelector('[data-terminal-input]')?.getAttribute('aria-label'),quick:[...document.querySelectorAll('[data-terminal-command]')].map(button=>({command:button.dataset.terminalCommand,tag:button.tagName,name:button.textContent.trim()}))})`,
       );
       record(
-        "terminal uses a form and named command buttons",
-        controls.form === "FORM" &&
-          controls.input === "INPUT" &&
-          controls.close === "BUTTON" &&
-          controls.quick.length > 0 &&
-          controls.quick.every(
-            (button) => button.tag === "BUTTON" && button.name.length > 0,
-          ),
+        "terminal uses a labelled input and form",
+        controls.form === "FORM" && controls.input === "INPUT" &&
+          !!controls.inputName &&
+          controls.quick.every(button => button.tag === "BUTTON" && button.name.length > 0),
         controls,
         "terminal-desktop",
       );
       await terminal.page("Page.bringToFront");
-      const wheelPoint = await terminal.evaluate(`(() => {
-        window.__archiveWheelEvents=[];
-        window.addEventListener('wheel',event=>window.__archiveWheelEvents.push({deltaY:event.deltaY,trusted:event.isTrusted,target:event.target.tagName}),{capture:true,passive:true});
-        const x=24,y=Math.min(500,Math.floor(innerHeight/2)),hit=document.elementFromPoint(x,y);
-        return {x,y,target:hit?.tagName,visible:document.visibilityState==='visible',focused:document.hasFocus(),scrollable:document.documentElement.scrollHeight>innerHeight};
-      })()`);
-      await terminal.page("Input.dispatchMouseEvent", {
-        type: "mouseMoved",
-        x: wheelPoint.x,
-        y: wheelPoint.y,
-      });
-      const wheelState = () =>
-        terminal.evaluate(
-          "({y:window.scrollY,receipts:window.__archiveWheelEvents.length,lastEvent:window.__archiveWheelEvents.at(-1)})",
-        );
-      const wheel = () =>
-        terminal.page("Input.dispatchMouseEvent", {
-          type: "mouseWheel",
-          x: wheelPoint.x,
-          y: wheelPoint.y,
-          deltaX: 0,
-          deltaY: 460,
-        });
-      const initialScroll = await terminal.evaluate("window.scrollY");
-      await wheel();
-      const unlocked = await observeUntil(
-        wheelState,
-        (state) => state.y > initialScroll && state.receipts > 0,
-      );
-      const unlockedPassed =
-        wheelPoint.visible &&
-        wheelPoint.focused &&
-        wheelPoint.scrollable &&
-        unlocked.state.y > initialScroll &&
-        unlocked.state.receipts > 0;
-      record(
-        "background wheel scroll works before opening terminal",
-        unlockedPassed,
-        {
-          before: initialScroll,
-          after: unlocked.state.y,
-          elapsedMs: unlocked.elapsedMs,
-          samples: unlocked.samples,
-          receipts: unlocked.state.receipts,
-          lastEvent: unlocked.state.lastEvent,
-          pointer: wheelPoint,
-        },
-        "terminal-desktop",
-      );
+      await focusTerminal(terminal, openerIndex);
+      const focused = await terminalState(terminal);
+      record("terminal focus action brings the focused inline prompt into view", focused.inputFocused && focused.inputVisible, focused, "terminal-desktop");
+      await screenshot(terminal, "terminal-desktop-prompt.png");
       await terminal.evaluate("window.scrollTo({top:0,behavior:'instant'})");
       await pause(150);
-      await openTerminal(terminal, openerIndex);
-      const opened = await terminalState(terminal);
-      record(
-        "terminal opener opens a modal dialog and focuses input",
-        opened.open && opened.modal && opened.inputFocused,
-        opened,
-        "terminal-desktop",
-      );
-      const lockedScroll = await terminal.evaluate("window.scrollY");
-      const lockedReceipts = (await wheelState()).receipts;
-      const lockSampleMs = Math.max(750, unlocked.elapsedMs + 500);
-      await wheel();
-      // Observe the whole window, failing immediately if background movement occurs.
-      const locked = await observeUntil(
-        wheelState,
-        (state) => Math.abs(state.y - lockedScroll) >= 1,
-        lockSampleMs,
+      const initialScroll = await terminal.evaluate("window.scrollY");
+      await terminal.page("Input.dispatchMouseEvent", {
+        type: "mouseWheel", x: 24, y: 400, deltaX: 0, deltaY: 460,
+      });
+      const wheelObservation = await observeUntil(
+        () => terminal.evaluate("({y:scrollY,overflow:getComputedStyle(document.documentElement).overflowY,bodyOverflow:getComputedStyle(document.body).overflowY})"),
+        state => state.y > initialScroll,
       );
       record(
-        "open terminal prevents background wheel scrolling",
-        unlockedPassed &&
-          locked.state.receipts > lockedReceipts &&
-          Math.abs(locked.state.y - lockedScroll) < 1,
-        {
-          before: lockedScroll,
-          after: locked.state.y,
-          wheelDelta: 460,
-          positiveControlPassed: unlockedPassed,
-          plannedSampleMs: lockSampleMs,
-          elapsedMs: locked.elapsedMs,
-          samples: locked.samples,
-          receipts: locked.state.receipts,
-          lastEvent: locked.state.lastEvent,
-        },
+        "focused inline terminal leaves normal page wheel scrolling available",
+        wheelObservation.state.y > initialScroll,
+        { before: initialScroll, ...wheelObservation.state },
         "terminal-desktop",
       );
-      await screenshot(terminal, "terminal-desktop-open.png");
-      await key(terminal, "Escape");
-      const escapeObservation = await observeUntil(
-        () =>
-          terminal.evaluate(
-            `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${openerIndex}]})`,
-          ),
-        (state) => !state.open && state.openerFocused,
-      );
-      const escaped = escapeObservation.state;
-      record(
-        "terminal Escape restores opener focus",
-        !escaped.open && escaped.openerFocused,
-        escaped,
-        "terminal-desktop",
-      );
-      for (const [shortcut, modifiers] of [
-        ["Cmd+K", 4],
-        ["Ctrl+K", 2],
-      ]) {
-        await terminal.page("Page.bringToFront");
+      for (const [shortcut, modifiers] of [["Cmd+K", 4], ["Ctrl+K", 2]]) {
+        await terminal.evaluate("document.activeElement.blur()");
         await key(terminal, "k", modifiers);
-        const { state } = await observeUntil(
-          () => terminalState(terminal),
-          (state) => state.open && state.modal && state.inputFocused,
-        );
-        record(
-          `terminal ${shortcut} opens and focuses input`,
-          state.open && state.modal && state.inputFocused,
-          state,
-          "terminal-desktop",
-        );
-        await key(terminal, "Escape");
+        const { state } = await observeUntil(() => terminalState(terminal), state => state.inputFocused);
+        record(`terminal ${shortcut} focuses input`, state.inputFocused, state, "terminal-desktop");
       }
-      await openTerminal(terminal, openerIndex);
       const initialOutput = (await terminalState(terminal)).output;
       await terminalCommand(terminal, "there-is-no-such-action");
       const unknown = await terminalState(terminal);
       record(
-        "terminal unknown command provides polite help and stays open",
-        unknown.open &&
-          unknown.polite &&
-          unknown.output !== initialOutput &&
+        "terminal unknown command appends polite recovery and retains input focus",
+        unknown.inputFocused && unknown.polite && unknown.output !== initialOutput &&
           unknown.output.includes("there-is-no-such-action") &&
-          /help|도움|명령/i.test(unknown.output),
+          unknown.value === "there-is-no-such-action" && /help|도움|명령/i.test(unknown.output),
         unknown,
         "terminal-desktop",
       );
       const hostile = '<img src=x onerror="window.__terminalInjection=true">';
       await terminalCommand(terminal, hostile);
       const injection = await terminal.evaluate(
-        `({open:document.querySelector('[data-terminal-dialog]').open,text:document.querySelector('[data-terminal-output]').textContent,executed:!!window.__terminalInjection,unexpectedElements:document.querySelector('[data-terminal-output]').querySelectorAll('img,script,iframe,svg,object').length})`,
+        `({text:document.querySelector('[data-terminal-output]').textContent,executed:!!window.__terminalInjection,unexpectedElements:document.querySelector('[data-terminal-output]').querySelectorAll('img,script,iframe,svg,object').length})`,
       );
       record(
         "terminal treats HTML input as text",
-        injection.open &&
-          injection.text.includes(hostile) &&
-          !injection.executed &&
-          injection.unexpectedElements === 0,
+        injection.text.includes(hostile) && !injection.executed && injection.unexpectedElements === 0,
         injection,
         "terminal-desktop",
       );
       await terminalCommand(terminal, "help");
       await terminalCommand(terminal, "view data");
-      await openTerminal(terminal, openerIndex);
-      await enterTerminalText(terminal, "");
+      await enterTerminalText(terminal, "draft-in-progress");
       const history = [];
-      for (const direction of [
-        "ArrowUp",
-        "ArrowUp",
-        "ArrowDown",
-        "ArrowDown",
-      ]) {
+      for (const direction of ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"]) {
         await key(terminal, direction);
         history.push((await terminalState(terminal)).value);
       }
       record(
-        "terminal history moves backward and forward",
-        JSON.stringify(history) ===
-          JSON.stringify(["view data", "help", "view data", ""]),
+        "terminal history restores the draft after browsing commands",
+        JSON.stringify(history) === JSON.stringify(["view data", "help", "view data", "draft-in-progress"]),
         history,
         "terminal-desktop",
       );
       await enterTerminalText(terminal, "doc");
       await key(terminal, "Tab");
       const completion = await terminalState(terminal);
+      record("terminal Tab completes a unique command", completion.value?.trim() === "docs" && completion.inputFocused, completion, "terminal-desktop");
+      await enterTerminalText(terminal, "아직 입력 중");
+      const beforeComposition = await terminalState(terminal);
+      await terminal.evaluate(`(() => {
+        const input=document.querySelector('[data-terminal-input]');
+        input.dispatchEvent(new CompositionEvent('compositionstart',{bubbles:true,data:'중'}));
+        input.dispatchEvent(new KeyboardEvent('keydown',{key:'Enter',isComposing:true,bubbles:true,cancelable:true}));
+        document.querySelector('[data-terminal-form]').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      })()`);
+      const composing = await terminalState(terminal);
       record(
-        "terminal Tab completes a unique command",
-        completion.value?.trim() === "docs" && completion.inputFocused,
-        completion,
+        "terminal composition events preserve Korean input without executing a command",
+        composing.value === "아직 입력 중" && composing.entries === beforeComposition.entries && composing.inputFocused,
+        { beforeEntries: beforeComposition.entries, ...composing, fixture: "Synthetic composition and submit events; physical IME not exercised." },
         "terminal-desktop",
       );
+      await terminal.evaluate("document.querySelector('[data-terminal-input]').dispatchEvent(new CompositionEvent('compositionend',{bubbles:true,data:'중'}))");
+      const staticBeforeClear = await terminal.evaluate(`['top','work','career','activity','documents','contact'].map(id=>({id,text:document.getElementById(id)?.textContent}))`);
       await terminalCommand(terminal, "clear");
       const cleared = await terminalState(terminal);
+      const staticAfterClear = await terminal.evaluate(`['top','work','career','activity','documents','contact'].map(id=>({id,text:document.getElementById(id)?.textContent}))`);
       record(
-        "terminal clear resets output",
-        cleared.open &&
-          (cleared.output === "" || cleared.output === initialOutput),
-        cleared,
+        "terminal clear removes runtime output and retains static transcript",
+        cleared.entries === 0 && cleared.output === "" && cleared.inputFocused &&
+          JSON.stringify(staticBeforeClear) === JSON.stringify(staticAfterClear),
+        { ...cleared, staticTranscriptUnchanged: JSON.stringify(staticBeforeClear) === JSON.stringify(staticAfterClear) },
         "terminal-desktop",
       );
+      await terminalResult(terminal, "work", "#work");
+      await terminalResult(terminal, "docs", "/resume");
       for (const view of ["data", "recovery"]) {
-        await openTerminal(terminal, openerIndex);
-        await terminalCommand(terminal, `view ${view}`);
+        await terminalResult(terminal, `view ${view}`, "#system-sketch");
         const { state } = await observeUntil(
-          () =>
-            terminal.evaluate(
-              `({pressed:document.querySelector('[data-scene-view="${view}"]').getAttribute('aria-pressed'),view:document.querySelector('[data-scene]')?.dataset.sceneState})`,
-            ),
-          (state) => state.pressed === "true" && state.view === view,
+          () => terminal.evaluate(`({pressed:document.querySelector('[data-scene-view="${view}"]').getAttribute('aria-pressed'),view:document.querySelector('[data-scene]')?.dataset.sceneState})`),
+          state => state.pressed === "true" && state.view === view,
         );
-        record(
-          `terminal view ${view} updates the actual scene`,
-          state.pressed === "true" && state.view === view,
-          state,
-          "terminal-desktop",
-        );
+        record(`terminal view ${view} updates the actual scene`, state.pressed === "true" && state.view === view, state, "terminal-desktop");
       }
-      await openTerminal(terminal, openerIndex);
-      await screenshot(terminal, "terminal-desktop-commands.png");
-      await terminalNavigation(terminal, "work", "#work");
-      await openTerminal(terminal, openerIndex);
-      await terminalNavigation(terminal, "docs", "#documents");
-      const quickIndex = controls.quick.findIndex((button) =>
-        ["help", "work", "docs"].includes(button.command),
-      );
+      await terminalCommand(terminal, "help");
+      const quickIndex = await terminal.evaluate(`([...document.querySelectorAll('[data-terminal-command]')].findIndex(button=>button.dataset.terminalCommand==='help'))`);
       if (quickIndex >= 0) {
-        await openTerminal(terminal, openerIndex);
+        await enterTerminalText(terminal, "career");
+        const beforeQuick = await terminalState(terminal);
         await click(terminal, "[data-terminal-command]", quickIndex);
-        const command = controls.quick[quickIndex].command;
-        const matches = (state) =>
-          command === "help"
-            ? state.open && /help|work|docs/.test(state.output)
-            : !state.open &&
-              state.hash === (command === "work" ? "#work" : "#documents");
-        const observation = await observeUntil(
-          async () => ({
-            ...(await terminalState(terminal)),
-            hash: await terminal.evaluate("location.hash"),
-          }),
-          matches,
-        );
+        const afterQuick = await terminalState(terminal);
         record(
-          "terminal quick command executes its advertised action",
-          matches(observation.state),
-          {
-            command,
-            ...observation.state,
-            elapsedMs: observation.elapsedMs,
-            samples: observation.samples,
-          },
+          "terminal quick help appends commands and preserves the input draft",
+          afterQuick.entries === beforeQuick.entries + 1 && afterQuick.inputFocused &&
+            afterQuick.value === beforeQuick.value && /help|work|docs/.test(afterQuick.output),
+          afterQuick,
           "terminal-desktop",
         );
-      } else
-        record(
-          "terminal quick command executes its advertised action",
-          false,
-          { reason: "No internal help/work/docs quick command is available" },
-          "terminal-desktop",
+      } else record("terminal quick help executes its advertised action", false, { reason: "No help quick command is available" }, "terminal-desktop");
+      const beforeGrowth = await terminal.evaluate("({height:document.documentElement.scrollHeight,outputHeight:document.querySelector('[data-terminal-output]').getBoundingClientRect().height})");
+      for (let index = 0; index < 5; index++) await terminalCommand(terminal, "docs");
+      await observeUntil(() => terminalState(terminal), state => state.inputVisible);
+      const growth = await terminal.evaluate(`(() => {
+        const output=document.querySelector('[data-terminal-output]'),form=document.querySelector('[data-terminal-form]'),outputRect=output.getBoundingClientRect(),formRect=form.getBoundingClientRect(),style=getComputedStyle(output);
+        return {height:document.documentElement.scrollHeight,outputHeight:outputRect.height,scrollHeight:output.scrollHeight,clientHeight:output.clientHeight,overflow:style.overflowY,formTop:formRect.top,formBottom:formRect.bottom,viewportHeight:innerHeight,outputBottom:outputRect.bottom,inputFocused:document.activeElement===document.querySelector('[data-terminal-input]'),promptVisible:formRect.top>=-1&&formRect.bottom<=innerHeight+1,formCount:document.querySelectorAll('[data-terminal-form]').length};
+      })()`);
+      record(
+        "terminal results extend page height downward before the single live prompt",
+        growth.height > beforeGrowth.height && growth.outputHeight > beforeGrowth.outputHeight &&
+          growth.scrollHeight <= growth.clientHeight + 1 && !['auto','scroll'].includes(growth.overflow) &&
+          growth.formTop >= growth.outputBottom - 1 && growth.inputFocused && growth.promptVisible && growth.formCount === 1,
+        { before: beforeGrowth, after: growth },
+        "terminal-desktop",
+      );
+      await pause(400);
+      await screenshot(terminal, "terminal-desktop-commands.png");
+      await layout(terminal, "terminal-desktop-results");
+      await enterTerminalText(terminal, "");
+      await key(terminal, "Tab");
+      const tabExit = await terminalState(terminal);
+      record("terminal empty-input Tab allows keyboard navigation onward", !tabExit.inputFocused, tabExit, "terminal-desktop");
+      // Follow a generated in-page result link, then return using the explicit focus control.
+      const beforeResultLink = await terminalState(terminal);
+      const resultLinkIndex = await terminal.evaluate(`([...document.querySelectorAll('[data-terminal-output] a[href]')].findIndex(link=>link.hash==='#work'))`);
+      if (resultLinkIndex >= 0) {
+        await click(terminal, "[data-terminal-output] a[href]", resultLinkIndex);
+        const { state } = await observeUntil(
+          () => terminal.evaluate("({hash:location.hash,workTop:document.getElementById('work').getBoundingClientRect().top,viewportHeight:innerHeight})"),
+          state => state.hash === "#work" && state.workTop >= -1 && state.workTop < state.viewportHeight / 2,
         );
+        record("terminal result link navigates to the requested section", state.hash === "#work" && state.workTop >= -1 && state.workTop < state.viewportHeight / 2, state, "terminal-desktop");
+        await focusTerminal(terminal, openerIndex);
+        const returned = await terminalState(terminal);
+        record("terminal focus action returns to the existing transcript", returned.inputFocused && returned.entries === beforeResultLink.entries, returned, "terminal-desktop");
+      } else record("terminal result link navigates to work", false, { reason: "No generated work result link" }, "terminal-desktop");
     }
   }
   await terminal.close();
@@ -939,51 +839,25 @@ try {
     for (const width of [390, 320]) {
       const context = await openPage({ width, height: 844, mobile: true });
       const index = await visibleTerminalOpener(context);
-      if (index < 0)
-        record(
-          "mobile terminal opener is available",
-          false,
-          { openerIndex: index },
-          `terminal-${width}`,
-        );
+      if (index < 0) record("mobile terminal focus action is available", false, { openerIndex: index }, `terminal-${width}`);
       else {
-        await openTerminal(context, index);
-        const state = await terminalState(context);
+        await focusTerminal(context, index);
+        await terminalCommand(context, "docs");
+        const { state } = await observeUntil(() => terminalState(context), state => state.inputVisible);
+        record("mobile terminal appends results and keeps the focused prompt in view", state.present && state.inputFocused && state.inputVisible && state.entries === 1 && state.formAfterOutput, state, `terminal-${width}`);
+        const bounds = await context.evaluate(`(() => {
+          const input=document.querySelector('[data-terminal-input]'),form=document.querySelector('[data-terminal-form]'),rect=form.getBoundingClientRect(),inputRect=input.getBoundingClientRect();
+          return{left:rect.left,right:rect.right,width:innerWidth,scrollWidth:form.scrollWidth,clientWidth:form.clientWidth,inputLeft:inputRect.left,inputRight:inputRect.right,inputHeight:inputRect.height};
+        })()`);
         record(
-          "mobile terminal opens and focuses input",
-          state.open && state.modal && state.inputFocused,
-          state,
-          `terminal-${width}`,
-        );
-        const bounds = await context.evaluate(
-          `(() => {const dialog=document.querySelector('[data-terminal-dialog]'),rect=dialog.getBoundingClientRect();return{left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom,width:innerWidth,height:innerHeight,scrollWidth:dialog.scrollWidth,clientWidth:dialog.clientWidth};})()`,
-        );
-        record(
-          "mobile terminal fits the viewport",
-          bounds.left >= -1 &&
-            bounds.right <= bounds.width + 1 &&
-            bounds.top >= -1 &&
-            bounds.bottom <= bounds.height + 1 &&
-            bounds.scrollWidth <= bounds.clientWidth + 1,
+          "mobile terminal prompt remains usable without horizontal clipping",
+          bounds.left >= -1 && bounds.right <= bounds.width + 1 && bounds.scrollWidth <= bounds.clientWidth + 1 && bounds.inputLeft >= -1 && bounds.inputRight <= bounds.width + 1 && bounds.inputHeight >= 24,
           bounds,
           `terminal-${width}`,
         );
+        await pause(400);
         await screenshot(context, `terminal-mobile-${width}.png`);
-        await click(context, "[data-terminal-close]");
-        const { state: closed } = await observeUntil(
-          () =>
-            context.evaluate(
-              `({open:document.querySelector('[data-terminal-dialog]').open,openerFocused:document.activeElement===document.querySelectorAll('[data-terminal-open]')[${index}]})`,
-            ),
-          (state) => !state.open && state.openerFocused,
-        );
-        record(
-          "mobile terminal close restores opener focus",
-          !closed.open && closed.openerFocused,
-          closed,
-          `terminal-${width}`,
-        );
-        await layout(context, `terminal-closed-${width}`);
+        await layout(context, `terminal-results-${width}`);
       }
       await context.close();
     }
@@ -1116,7 +990,7 @@ try {
   await layout(noScript, "javascript-disabled-mobile");
   const noScriptTerminal = await noScript.evaluate(`(async () => {
     const original=new DOMParser().parseFromString(await (await fetch(location.href,{cache:'no-store'})).text(),'text/html');
-    return {initialOpeners:[...original.querySelectorAll('[data-terminal-open]')].map(button=>({hidden:button.hasAttribute('hidden')})),openers:[...document.querySelectorAll('[data-terminal-open]')].map(button=>{const rect=button.getBoundingClientRect();return{hidden:button.hidden,display:getComputedStyle(button).display,visible:rect.width>0&&rect.height>0};})};
+    return {initialSessionHidden:original.querySelector('[data-terminal-session]')?.hidden,sessionHidden:document.querySelector('[data-terminal-session]')?.hidden,initialOpeners:[...original.querySelectorAll('[data-terminal-focus]')].map(button=>({hidden:button.hasAttribute('hidden')})),openers:[...document.querySelectorAll('[data-terminal-focus]')].map(button=>{const rect=button.getBoundingClientRect();return{hidden:button.hidden,display:getComputedStyle(button).display,visible:rect.width>0&&rect.height>0};})};
   })()`);
   if (baseline && noScriptTerminal.openers.length === 0)
     skip(
@@ -1125,8 +999,9 @@ try {
     );
   else
     record(
-      "terminal opener remains hidden until JavaScript initializes",
-      noScriptTerminal.initialOpeners.length > 0 &&
+      "terminal focus actions remain hidden until JavaScript initializes",
+      noScriptTerminal.initialSessionHidden && noScriptTerminal.sessionHidden &&
+        noScriptTerminal.initialOpeners.length > 0 &&
         noScriptTerminal.initialOpeners.every((button) => button.hidden) &&
         noScriptTerminal.openers.length > 0 &&
         noScriptTerminal.openers.every(
@@ -1155,11 +1030,16 @@ try {
         fallbackState.fallbacks.some((item) => item.visible),
       fallbackState,
     );
+  if (fallbackState.present) {
+    await fallback.evaluate("document.getElementById('system-sketch').scrollIntoView({block:'start',behavior:'instant'})");
+    await pause(100);
+  }
   await screenshot(fallback, "webgl-fallback.png");
   await fallback.close();
   const printContext = await openPage({ reduced: true });
   const printOpener = await visibleTerminalOpener(printContext);
-  if (printOpener >= 0) await openTerminal(printContext, printOpener);
+  if (printOpener >= 0) await focusTerminal(printContext, printOpener);
+  if (printOpener >= 0) await terminalCommand(printContext, "docs");
   await printContext.page("Emulation.setEmulatedMedia", {
     media: "print",
     features: [{ name: "prefers-reduced-motion", value: "reduce" }],
@@ -1171,14 +1051,14 @@ try {
     const over=(foreground,background)=>foreground.slice(0,3).map((channel,index)=>channel*foreground[3]+background[index]*(1-foreground[3]));
     const luminance=rgb=>rgb.map(channel=>{const value=channel/255;return value<=0.04045?value/12.92:((value+0.055)/1.055)**2.4;}).reduce((sum,value,index)=>sum+value*[0.2126,0.7152,0.0722][index],0);
     const visible=element=>{const rect=element.getBoundingClientRect();for(let current=element;current;current=current.parentElement){const style=getComputedStyle(current);if(style.display==='none'||style.visibility==='hidden'||Number(style.opacity)===0)return false;}return rect.width>0&&rect.height>0;};
-    const groups=['.case-story > p','.work-row > div > p:not(.case-meta)','.documents h3','.diagram-node strong'];
+    const groups=['.case-panel > [data-terminal-summary]','.case-panel .case-after','.documents h3','.career-company h3'];
     const samples=groups.map(selector=>({selector,elements:[...document.querySelectorAll(selector)].map(element=>{
       const layers=[];for(let current=element;current;current=current.parentElement)layers.unshift(rgba(getComputedStyle(current).backgroundColor));
       const background=layers.reduce((color,layer)=>over(layer,color),[255,255,255]),style=getComputedStyle(element),foreground=over(rgba(style.color),background),a=luminance(foreground),b=luminance(background);
       return{text:element.textContent.trim().slice(0,130),visible:visible(element),foreground:style.color,background,fontSize:style.fontSize,ratio:(Math.max(a,b)+0.05)/(Math.min(a,b)+0.05)};
     })}));
-    const chrome=[...document.querySelectorAll('[data-terminal-open],[data-terminal-dialog],[data-terminal-form],[data-terminal-output],[data-terminal-close],[data-terminal-command],.workspace-bar')].map(element=>({tag:element.tagName,name:element.getAttribute('aria-label')||element.className,visible:visible(element)}));
-    return {media:matchMedia('print').matches,samples,chrome,dialogOpen:!!document.querySelector('[data-terminal-dialog]')?.open};
+    const chrome=[...document.querySelectorAll('[data-terminal-focus],[data-terminal-form],[data-terminal-output],[data-terminal-command],.workspace-bar')].map(element=>({tag:element.tagName,name:element.getAttribute('aria-label')||element.className,visible:visible(element)}));
+    return {media:matchMedia('print').matches,samples,chrome};
   })()`);
   record(
     "print reading text remains visible with contrast at least 4.5:1",
@@ -1200,11 +1080,11 @@ try {
     );
   else
     record(
-      "terminal controls are hidden while printing an open dialog",
+      "terminal controls and runtime results are hidden while printing",
       printState.media &&
         printState.chrome.length > 0 &&
         printState.chrome.every((element) => !element.visible),
-      { dialogOpen: printState.dialogOpen, chrome: printState.chrome },
+      { chrome: printState.chrome },
       "home-print",
     );
   await printContext.evaluate(

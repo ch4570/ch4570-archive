@@ -8,7 +8,7 @@
 
 ## 공개 문서
 
-- `/` - 이력서·경력·포트폴리오·공개 작업과 실제 WebGL 3D를 담은 개발자 포트폴리오
+- `/` - 프로젝트 행성·처리 흐름도·경력·공개 작업을 연결한 개발자 포트폴리오
 - `/resume/` - 이력서
 - `/career/` - 경력기술서
 - `/portfolio/` - 포트폴리오
@@ -20,7 +20,7 @@ Vercel이 운영 서비스입니다. 제출 전 원본 HTML·PDF와 Vercel 배�
 
 - 원본 HTML 네 파일이 공개 문서의 기준입니다.
 - 홈의 디자인 계약은 `DESIGN.md`, 경력·커밋 근거는 `design/public-evidence.md`에 있습니다.
-- 3D는 `assets/system-scene.js`의 WebGL로 렌더링합니다. 외부 패키지·모델·텍스처 없이 동작하며 모션 감소와 CSS 대체 화면을 제공합니다.
+- 홈의 우주 배경과 행성은 `assets/universe.css`와 로컬 이미지로 구성하고, 프로젝트 처리 흐름은 접근 가능한 SVG와 텍스트로 제공합니다.
 - Archify 원본 IR은 `design/archify/`, 배포용 정적 SVG는 `assets/diagrams/`에서 관리합니다.
 - Next.js Route Handler가 원본 바이트를 그대로 응답합니다.
 - 관리자는 `data-edit-id`가 지정된 문구만 수정할 수 있습니다. 레이아웃, 스타일, 도식 마크업은 서버 검증에서 잠깁니다.
@@ -76,9 +76,11 @@ sh scripts/export-pdfs.sh
 ```bash
 npm run start -- --port 3000
 # 다른 터미널에서 실행
-node scripts/check-home-browser.mjs http://127.0.0.1:3000 output/screenshots/home --full-page
+node scripts/check-universe-browser.mjs http://127.0.0.1:3000 output/screenshots/home
 node scripts/check-documents-browser.mjs http://127.0.0.1:3000 output/screenshots/documents
 ```
+
+현재 행성 연결형 이력서 홈은 `assets/universe.css`와 `assets/cosmic-cinema.webp`를 사용합니다. 홈 전용 검증은 `npm run check:universe -- http://localhost:3100 output/universe-qa-v3`로 실행합니다. 기존 `check-home-browser.mjs`는 이전 터미널·3D 시안용 검사입니다.
 
 브라우저 결과 JSON은 자동 검사 결과와 시각 검수를 구분합니다. 캡처 이미지를 직접 열어 확인해야 시각 검증이 완료됩니다. `validate:content`는 편집 전용 검사이므로 의도적인 레이아웃 변경을 리뷰·커밋한 뒤 새 HEAD 기준으로 실행합니다.
 

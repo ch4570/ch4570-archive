@@ -124,7 +124,7 @@ test('pause stops the loop and resume schedules a single new frame', () => {
   app.toggle.emit('click');
   app.step();
   assert.equal(app.toggle.attributes['aria-pressed'], 'true');
-  assert.match(app.toggle.attributes['aria-label'], /재생/);
+  assert.equal(app.toggle.attributes['aria-label'], '움직임 켜기');
   assert.equal(app.pendingFrames, 0);
   const pausedDraws = app.draws;
   app.step();
@@ -186,7 +186,7 @@ test('reduced motion renders static states while the latest repeated view choice
   app.views[2].emit('click');
   app.step();
   assert.equal(app.host.dataset.sceneState, 'recovery');
-  assert.equal(app.description.textContent, '실패한 단계의 상태를 남겨, 필요한 업무부터 다시 실행합니다.');
+  assert.equal(app.description.textContent, '층 사이를 좁히고 반대쪽에서 구조를 봅니다.');
   assert.deepEqual(app.views.map((button) => button.attributes['aria-pressed']), ['false', 'false', 'true']);
   assert.notDeepEqual(app.modelMatrices[nextFrameStart], initialModel);
   assert.equal(app.pendingFrames, 0);

@@ -90,7 +90,7 @@ jobs:
           fi
 
           browser_status=0
-          node scripts/check-home-browser.mjs \
+          node scripts/check-universe-browser.mjs \
             http://127.0.0.1:4173 output/browser-ci/home \
             || browser_status=1
           node scripts/check-documents-browser.mjs \

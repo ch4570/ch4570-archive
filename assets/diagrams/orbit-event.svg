@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" width="1000" height="420" role="img" aria-labelledby="title desc">
+<title id="title">이벤트 실패 지점을 분리하고 필요한 업무만 복구하는 흐름</title>
+<desc id="desc">이벤트 발행 전 중단과 발행 후 업무 처리 실패를 별도로 기록합니다. PostgreSQL의 처리 상태와 JSONB의 payload를 바탕으로 완료하지 못한 업무만 골라 다시 실행하며, 완료한 업무는 반복 실행 대상에서 제외합니다. 이벤트는 9종, 상태는 6개, 복구 경로는 8개입니다.</desc>
+<defs>
+  <radialGradient id="space"><stop stop-color="#162d3c" stop-opacity=".62"/><stop offset="1" stop-color="#03080e" stop-opacity=".3"/></radialGradient>
+  <radialGradient id="cyan" cx="27%" cy="22%" r="79%"><stop stop-color="#f5f5dd"/><stop offset=".12" stop-color="#9be1de"/><stop offset=".43" stop-color="#287582"/><stop offset=".72" stop-color="#102b3c"/><stop offset="1" stop-color="#020810"/></radialGradient>
+  <radialGradient id="gold" cx="24%" cy="18%" r="83%"><stop stop-color="#fff4cc"/><stop offset=".13" stop-color="#dcb66f"/><stop offset=".43" stop-color="#93612c"/><stop offset=".72" stop-color="#38251b"/><stop offset="1" stop-color="#090b11"/></radialGradient>
+  <radialGradient id="ember" cx="26%" cy="19%" r="81%"><stop stop-color="#ffe5b6"/><stop offset=".14" stop-color="#e39968"/><stop offset=".43" stop-color="#984930"/><stop offset=".75" stop-color="#391c1e"/><stop offset="1" stop-color="#080910"/></radialGradient>
+  <radialGradient id="silver" cx="25%" cy="18%" r="82%"><stop stop-color="#f7f9e9"/><stop offset=".2" stop-color="#a7b7bb"/><stop offset=".49" stop-color="#536672"/><stop offset=".8" stop-color="#1a2938"/><stop offset="1" stop-color="#050b13"/></radialGradient>
+  <radialGradient id="night" cx="24%" cy="22%" r="80%"><stop offset=".38" stop-color="#000" stop-opacity="0"/><stop offset=".82" stop-color="#01040b" stop-opacity=".12"/><stop offset="1" stop-color="#01040b" stop-opacity=".77"/></radialGradient>
+  <radialGradient id="halo"><stop offset=".64" stop-color="#6cafbc" stop-opacity="0"/><stop offset=".78" stop-color="#94d2d6" stop-opacity=".18"/><stop offset="1" stop-color="#759caa" stop-opacity="0"/></radialGradient>
+  <clipPath id="globe"><circle r="1"/></clipPath>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="m0 0 8 4.5L0 9" fill="none" stroke="#e6c58d" stroke-width="1.8" stroke-linejoin="round"/></marker>
+  <marker id="arrow-cyan" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="m0 0 8 4.5L0 9" fill="none" stroke="#9dd8de" stroke-width="1.8" stroke-linejoin="round"/></marker>
+  <style>
+    text { font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; }
+    .label { fill: #f6f0e4; font-size: 22px; font-weight: 700; letter-spacing: -.025em; }
+    .detail { fill: #b9cad2; font-size: 16px; }
+    .caption { fill: #e6c58d; font-size: 15px; font-weight: 600; }
+    .flow { fill: none; stroke: #e6c58d; stroke-width: 1.9; marker-end: url(#arrow); }
+    .flow-cyan { fill: none; stroke: #9dd8de; stroke-width: 1.7; marker-end: url(#arrow-cyan); }
+    .branch-label { fill: #e6c58d; stroke: #080f19; stroke-width: 7px; paint-order: stroke; stroke-linejoin: round; font-size: 15px; font-weight: 600; }
+  </style>
+</defs>
+<rect width="1000" height="420" fill="#050b13" fill-opacity=".82"/>
+<ellipse cx="475" cy="220" rx="525" ry="255" fill="url(#space)"/>
+<g aria-hidden="true"><circle cx="39" cy="49" r="1" fill="#c9e0e5" opacity="0.5"/><circle cx="230" cy="44" r="0.8" fill="#c9e0e5" opacity="0.6"/><circle cx="286" cy="300" r="0.8" fill="#c9e0e5" opacity="0.4"/><circle cx="952" cy="45" r="1.2" fill="#c9e0e5" opacity="0.6"/><circle cx="755" cy="359" r="0.9" fill="#c9e0e5" opacity="0.5"/><circle cx="490" cy="364" r="1" fill="#c9e0e5" opacity="0.35"/><circle cx="564" cy="40" r="0.8" fill="#c9e0e5" opacity="0.45"/><circle cx="831" cy="61" r="0.7" fill="#c9e0e5" opacity="0.55"/><circle cx="934" cy="373" r="1" fill="#c9e0e5" opacity="0.55"/><circle cx="48" cy="386" r="0.8" fill="#c9e0e5" opacity="0.6"/><circle cx="51" cy="206" r="0.7" fill="#c9e0e5" opacity="0.4"/><circle cx="732" cy="47" r="1.1" fill="#c9e0e5" opacity="0.6"/><circle cx="465" cy="75" r="0.8" fill="#c9e0e5" opacity="0.3"/><circle cx="194" cy="388" r="1.1" fill="#c9e0e5" opacity="0.3"/></g>
+<path class="flow" d="M149 96C230 81 274 128 330 166"/><path class="flow" d="M150 268C224 286 280 239 331 214"/><path class="flow" d="M458 178C509 139 525 135 569 144"/><path class="flow" d="M701 153C746 151 771 167 789 188"/><g transform="translate(110 101) scale(36)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#ember)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(110 269) scale(36)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#silver)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(396 193) scale(60)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#cyan)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(635 151) scale(60)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#gold)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(870 210) scale(70)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><ellipse rx="1.48" ry=".34" transform="rotate(-21)" fill="none" stroke="#c99e67" stroke-width=".105" opacity=".43"/><ellipse rx="1.63" ry=".37" transform="rotate(-21)" fill="none" stroke="#edce92" stroke-width=".018" opacity=".65"/><circle r="1" fill="url(#cyan)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/><path d="M-1.48 0A1.48.34 0 0 0 1.48 0" transform="rotate(-21)" fill="none" stroke="#ddbb81" stroke-width=".065" opacity=".58"/></g><text x="110" y="165" class="label" text-anchor="middle" >발행 실패</text><text x="110" y="190" class="detail" text-anchor="middle" >발행 전 중단</text><text x="110" y="333" class="label" text-anchor="middle" >처리 실패</text><text x="110" y="358" class="detail" text-anchor="middle" >발행 후 업무 중단</text><text x="396" y="288" class="label" text-anchor="middle" >상태·payload 저장</text><text x="396" y="315" class="detail" text-anchor="middle" >PostgreSQL · JSONB</text><text x="635" y="248" class="label" text-anchor="middle" >선택 복구</text><text x="635" y="275" class="detail" text-anchor="middle" >실패한 업무만 재실행</text><text x="870" y="323" class="label" text-anchor="middle" >업무 완료</text><text x="870" y="350" class="detail" text-anchor="middle" >완료한 업무는 제외</text><text x="38" y="37" class="caption" text-anchor="start" >이벤트 9종  ·  상태 6개  ·  복구 경로 8개</text>
+</svg>

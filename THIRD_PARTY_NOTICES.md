@@ -26,3 +26,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+## Barlow Condensed
+
+`assets/fonts/BarlowCondensed-BlackItalic.ttf` is distributed unmodified from
+[Google Fonts](https://github.com/google/fonts/tree/main/ofl/barlowcondensed).
+Copyright 2017 The Barlow Project Authors (https://github.com/jpt/barlow).
+Licensed under the SIL Open Font License 1.1; full text in
+`assets/fonts/OFL-BarlowCondensed.txt`. Used for the home poster name title.

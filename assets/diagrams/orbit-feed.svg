@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" width="1000" height="420" role="img" aria-labelledby="title desc">
+<title id="title">스냅샷 분기에 따른 개인화 피드 처리 흐름</title>
+<desc id="desc">Feed API 요청을 Orchestrator가 받아 Snapshot을 조회합니다. Hit이면 저장된 결과를 반환합니다. Empty이면 검색 소스 9개의 후보를 모아 FPR에서 중복과 노출 이력을 제거하고, SPR에서 점수화하고, Re-Rank에서 최종 순서를 정해 새 Snapshot을 저장합니다. Orchestrator에는 캐시를 우회해 다시 계산하는 경로도 있습니다. 검색 소스별 타임아웃과 실패 처리를 분리했습니다. 화살표는 데이터 처리 순서를 나타냅니다.</desc>
+<defs>
+  <radialGradient id="space"><stop stop-color="#162d3c" stop-opacity=".62"/><stop offset="1" stop-color="#03080e" stop-opacity=".3"/></radialGradient>
+  <radialGradient id="cyan" cx="27%" cy="22%" r="79%"><stop stop-color="#f5f5dd"/><stop offset=".12" stop-color="#9be1de"/><stop offset=".43" stop-color="#287582"/><stop offset=".72" stop-color="#102b3c"/><stop offset="1" stop-color="#020810"/></radialGradient>
+  <radialGradient id="gold" cx="24%" cy="18%" r="83%"><stop stop-color="#fff4cc"/><stop offset=".13" stop-color="#dcb66f"/><stop offset=".43" stop-color="#93612c"/><stop offset=".72" stop-color="#38251b"/><stop offset="1" stop-color="#090b11"/></radialGradient>
+  <radialGradient id="ember" cx="26%" cy="19%" r="81%"><stop stop-color="#ffe5b6"/><stop offset=".14" stop-color="#e39968"/><stop offset=".43" stop-color="#984930"/><stop offset=".75" stop-color="#391c1e"/><stop offset="1" stop-color="#080910"/></radialGradient>
+  <radialGradient id="silver" cx="25%" cy="18%" r="82%"><stop stop-color="#f7f9e9"/><stop offset=".2" stop-color="#a7b7bb"/><stop offset=".49" stop-color="#536672"/><stop offset=".8" stop-color="#1a2938"/><stop offset="1" stop-color="#050b13"/></radialGradient>
+  <radialGradient id="night" cx="24%" cy="22%" r="80%"><stop offset=".38" stop-color="#000" stop-opacity="0"/><stop offset=".82" stop-color="#01040b" stop-opacity=".12"/><stop offset="1" stop-color="#01040b" stop-opacity=".77"/></radialGradient>
+  <radialGradient id="halo"><stop offset=".64" stop-color="#6cafbc" stop-opacity="0"/><stop offset=".78" stop-color="#94d2d6" stop-opacity=".18"/><stop offset="1" stop-color="#759caa" stop-opacity="0"/></radialGradient>
+  <clipPath id="globe"><circle r="1"/></clipPath>
+  <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="m0 0 8 4.5L0 9" fill="none" stroke="#e6c58d" stroke-width="1.8" stroke-linejoin="round"/></marker>
+  <marker id="arrow-cyan" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="m0 0 8 4.5L0 9" fill="none" stroke="#9dd8de" stroke-width="1.8" stroke-linejoin="round"/></marker>
+  <style>
+    text { font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", sans-serif; }
+    .label { fill: #f6f0e4; font-size: 22px; font-weight: 700; letter-spacing: -.025em; }
+    .detail { fill: #b9cad2; font-size: 16px; }
+    .caption { fill: #e6c58d; font-size: 15px; font-weight: 600; }
+    .flow { fill: none; stroke: #e6c58d; stroke-width: 1.9; marker-end: url(#arrow); }
+    .flow-cyan { fill: none; stroke: #9dd8de; stroke-width: 1.7; marker-end: url(#arrow-cyan); }
+    .branch-label { fill: #e6c58d; stroke: #080f19; stroke-width: 7px; paint-order: stroke; stroke-linejoin: round; font-size: 15px; font-weight: 600; }
+  </style>
+</defs>
+<rect width="1000" height="420" fill="#050b13" fill-opacity=".82"/>
+<ellipse cx="475" cy="220" rx="525" ry="255" fill="url(#space)"/>
+<g aria-hidden="true"><circle cx="39" cy="49" r="1" fill="#c9e0e5" opacity="0.5"/><circle cx="230" cy="44" r="0.8" fill="#c9e0e5" opacity="0.6"/><circle cx="286" cy="300" r="0.8" fill="#c9e0e5" opacity="0.4"/><circle cx="952" cy="45" r="1.2" fill="#c9e0e5" opacity="0.6"/><circle cx="755" cy="359" r="0.9" fill="#c9e0e5" opacity="0.5"/><circle cx="490" cy="364" r="1" fill="#c9e0e5" opacity="0.35"/><circle cx="564" cy="40" r="0.8" fill="#c9e0e5" opacity="0.45"/><circle cx="831" cy="61" r="0.7" fill="#c9e0e5" opacity="0.55"/><circle cx="934" cy="373" r="1" fill="#c9e0e5" opacity="0.55"/><circle cx="48" cy="386" r="0.8" fill="#c9e0e5" opacity="0.6"/><circle cx="51" cy="206" r="0.7" fill="#c9e0e5" opacity="0.4"/><circle cx="732" cy="47" r="1.1" fill="#c9e0e5" opacity="0.6"/><circle cx="465" cy="75" r="0.8" fill="#c9e0e5" opacity="0.3"/><circle cx="194" cy="388" r="1.1" fill="#c9e0e5" opacity="0.3"/></g>
+<path class="flow" d="M145 96C207 71 251 71 302 95"/><path class="flow" d="M400 96C466 71 525 71 584 94"/><path class="flow" d="M678 95C741 71 780 71 837 95"/><path class="flow" d="M598 132C554 233 170 204 112 264"/><path class="flow-cyan" d="M348 142C319 217 175 195 99 264"/><path class="flow" d="M145 308C211 277 251 277 304 306"/><path class="flow" d="M400 306C467 277 522 277 582 306"/><path class="flow" d="M677 306C740 277 781 277 839 306"/><path class="flow" d="M885 263C885 206 739 214 671 128"/><text x="761" y="66" class="branch-label" text-anchor="middle" >Hit</text><text x="468" y="226" class="branch-label" text-anchor="middle" >Empty → 후보 보충</text><text x="158" y="222" class="branch-label" text-anchor="middle" >캐시 우회</text><text x="825" y="215" class="branch-label" text-anchor="middle" >새 Snapshot 저장</text><g transform="translate(100 101) scale(39)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#silver)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(351 101) scale(39)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#gold)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(629 101) scale(39)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#cyan)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(885 101) scale(39)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#gold)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(100 308) scale(38)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#ember)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(351 308) scale(38)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#silver)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(629 308) scale(38)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#cyan)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><g transform="translate(885 308) scale(38)" aria-hidden="true"><circle r="1.34" fill="url(#halo)"/><circle r="1" fill="url(#gold)"/><g clip-path="url(#globe)" fill="none">
+      <path d="M-1.1-.5C-.4-.84-.46-.23.03-.48S.7-.48 1-.22M-1.1-.12C-.63-.55-.28.16.15-.12S.68.12 1.15.03M-1 .32C-.5-.03-.26.66.18.39S.67.3 1.08.58" stroke="#ecd6a8" stroke-width=".08" opacity=".10"/>
+      <path d="M-.91-.6-.62-.46-.56-.17-.22-.08-.14.1-.35.28-.25.53-.05.76-.2.9M.18-.87.42-.59.37-.37.62-.19.52.16.8.43.86.69" stroke="#061219" stroke-width=".075" opacity=".075"/>
+      <path d="M-.84-.38Q-.56-.72-.16-.63M-.7.24Q-.38.03-.11.17M.21-.4Q.43-.31.52-.06" stroke="#fff6cf" stroke-width=".025" opacity=".17"/>
+      <circle cx="-.44" cy="-.35" r=".115" stroke="#10212b" stroke-width=".025" opacity=".085"/>
+      <circle cx=".28" cy=".28" r=".085" stroke="#ead6b3" stroke-width=".018" opacity=".06"/>
+      <circle cx="-.17" cy=".6" r=".06" stroke="#f1deb6" stroke-width=".025" opacity=".12"/>
+    </g><circle r="1" fill="url(#night)"/><path d="M-.97.17A1 1 0 0 1 .17-.98" fill="none" stroke="#fcf1d0" stroke-width=".022" opacity=".7"/><circle r="1.02" fill="none" stroke="#b1d5d7" stroke-width=".012" opacity=".21"/></g><text x="100" y="32" class="label" text-anchor="middle" style="font-size:20px">Feed API</text><text x="351" y="32" class="label" text-anchor="middle" style="font-size:20px">Orchestrator</text><text x="629" y="32" class="label" text-anchor="middle" style="font-size:20px">Snapshot</text><text x="885" y="32" class="label" text-anchor="middle" style="font-size:20px">Feed 응답</text><text x="100" y="55" class="detail" text-anchor="middle" >요청 문맥</text><text x="351" y="55" class="detail" text-anchor="middle" >조회·보충·우회 결정</text><text x="629" y="55" class="detail" text-anchor="middle" >Hit · Empty · Unavailable</text><text x="885" y="55" class="detail" text-anchor="middle" >저장된 결과 반환</text><text x="100" y="373" class="label" text-anchor="middle" style="font-size:20px">검색 소스 9개</text><text x="100" y="398" class="detail" text-anchor="middle" >타임아웃·실패 격리</text><text x="351" y="373" class="label" text-anchor="middle" style="font-size:20px">FPR</text><text x="351" y="398" class="detail" text-anchor="middle" >중복·노출 이력 제거</text><text x="629" y="373" class="label" text-anchor="middle" style="font-size:20px">SPR</text><text x="629" y="398" class="detail" text-anchor="middle" >후보 점수화</text><text x="885" y="373" class="label" text-anchor="middle" style="font-size:20px">Re-Rank</text><text x="885" y="398" class="detail" text-anchor="middle" >최종 순서 재정렬</text>
+</svg>

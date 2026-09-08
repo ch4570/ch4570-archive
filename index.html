@@ -3,21 +3,21 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#141612" />
+    <meta name="theme-color" content="#090c10" />
     <meta
       name="description"
-      content="서민재 백엔드 엔지니어. 데이터 정합성, 이벤트 복구, 검색과 테스트. 운영에서 해결한 문제와 공개 코드에 남긴 판단을 정리했습니다."
+      content="백엔드 엔지니어 서민재의 이력서와 작업 기록. Java·Kotlin·Spring으로 개발하며, 이벤트 복구와 데이터 보정, 배치·검색을 다뤘습니다."
     />
     <meta
       property="og:title"
-      content="서민재 — 실패 이후까지 설계하는 백엔드 엔지니어"
+      content="서민재 — 백엔드 엔지니어 이력서"
     />
     <meta
       property="og:description"
-      content="운영에서 해결한 문제, 코드에 남긴 판단. Java · Kotlin · Spring 백엔드 엔지니어 서민재의 작업 기록."
+      content="Java·Kotlin·Spring 백엔드 엔지니어. 회사에서 맡은 일과 문제를 해결한 과정, 공개한 코드와 글을 정리했습니다."
     />
     <meta property="og:type" content="website" />
-    <title>서민재 — Backend Engineer</title>
+    <title>서민재 — 백엔드 엔지니어</title>
     <link rel="canonical" href="https://ch4570-archive.vercel.app/" />
     <meta property="og:url" content="https://ch4570-archive.vercel.app/" />
     <meta property="og:locale" content="ko_KR" />
@@ -29,374 +29,186 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="서민재 백엔드 엔지니어 — 실패 이후까지 설계합니다. 세 층으로 분리된 금속 시스템 구조."
+      content="서민재 백엔드 엔지니어 소개. 백엔드 개발 경력과 프로젝트를 소개하는 이미지."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="서민재 — Backend Engineer" />
+    <meta name="twitter:title" content="서민재 — 백엔드 엔지니어" />
     <meta
       name="twitter:image"
       content="https://ch4570-archive.vercel.app/assets/social-card.png"
     />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='12' fill='%23141612'/%3E%3Cpath d='M16%2048V16h17q16%200%2016%2013%200%2010-13%2013l15%206H36L25%2038v10z' fill='%23d4ef9b'/%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='12' fill='%23090c10'/%3E%3Cpath d='M16%2048V16h17q16%200%2016%2013%200%2010-13%2013l15%206H36L25%2038v10z' fill='%23e4bf7d'/%3E%3C/svg%3E"
     />
-    <link rel="stylesheet" href="./assets/terminal-home.css" />
     <script src="./assets/site.js" defer></script>
-    <script src="./assets/system-scene.js" defer></script>
-    <script src="./assets/archive-terminal.js" defer></script>
+    <link rel="preload" href="./assets/fonts/BarlowCondensed-BlackItalic.ttf" as="font" type="font/ttf" crossorigin />
+    <link rel="stylesheet" href="./assets/universe.css" />
+
+
+    <script src="./assets/resume-explorer.js" defer></script>
   </head>
   <body class="home-page archive-home">
     <a class="skip-link" href="#main">본문으로 건너뛰기</a>
     <div class="scroll-progress" aria-hidden="true"></div>
+    <div class="terminal-shell universe-shell">
     <header class="site-header">
-      <div class="wrap header-inner">
-        <a class="brand" href="#top" aria-label="서민재 홈"
-          ><svg aria-hidden="true" viewBox="0 0 28 28" width="28" height="28">
-            <path
-              d="m14 2 11 6v12l-11 6-11-6V8zM3 8l11 6 11-6M14 14v12"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-            /></svg
-          >Rex Seo<span class="brand-dot">.</span></a
-        >
-        <nav aria-label="주요 영역">
-          <a href="#work" data-section-link>작업</a
-          ><a href="#career" data-section-link>경력</a
-          ><a href="#activity" data-section-link>기록</a
-          ><a href="#documents" data-section-link>문서</a>
-        </nav>
-        <div class="header-actions">
-          <button
-            class="terminal-trigger"
-            type="button"
-            data-terminal-open
-            hidden
-            aria-haspopup="dialog"
-            aria-label="탐색 터미널 열기"
-          >
-            <span class="prompt-icon" aria-hidden="true">&gt;_</span
-            ><span>터미널</span><kbd aria-hidden="true">⌘ K</kbd>
-          </button>
-          <a class="header-contact" href="mailto:ckdekrn88@gmail.com"
-            >연락하기 <span aria-hidden="true">↗</span></a
-          >
-        </div>
+      <a class="brand" href="#top" aria-label="서민재 홈"><span class="brand-name">REX</span><span class="brand-role">SEO<br />ENGINEER</span></a>
+      <nav aria-label="주요 영역">
+        <a href="#top" data-section-link>소개</a>
+        <a href="#work" data-section-link>작업</a>
+        <a href="#career" data-section-link>경력</a>
+        <a href="#activity" data-section-link>기록</a>
+      </nav>
+      <div class="header-actions">
+        <a href="./pdf/seo-minjae-resume.pdf" download="서민재_백엔드_이력서.pdf">이력서 PDF ↓</a>
       </div>
     </header>
     <main id="main" tabindex="-1">
-      <section class="hero wrap" id="top" aria-labelledby="home-title">
-        <div class="hero-copy">
-          <p class="eyebrow">
-            <span class="signal" aria-hidden="true"></span
-            ><span data-edit-id="home-002">서민재</span
-            ><span class="eyebrow-divider">/</span
-            ><span data-edit-id="home-003">BACKEND ENGINEER</span>
-          </p>
-          <h1 id="home-title" data-edit-id="home-004">
-            실패 이후까지<br />설계합니다<span>.</span>
-          </h1>
-          <p class="hero-description">
-            틀어진 데이터를 바로잡고, 멈춘 이벤트를 다시 처리합니다.<br
-              class="desktop-break"
-            />
-            Java·Kotlin·Spring으로 운영에서 마주한 문제를 해결해 왔습니다.
-          </p>
+      <div class="stellar-backdrop" aria-hidden="true"><span class="distant-planet distant-planet--one"></span><span class="distant-planet distant-planet--two"></span><span class="distant-planet distant-planet--three"></span><span class="galactic-thread"></span></div>
+      <section class="cosmic-hero" id="top" aria-labelledby="home-title">
+        <div class="hero-art" aria-hidden="true">
+          <img src="./assets/cosmic-cinema.webp" alt="" width="1672" height="941" fetchpriority="high" decoding="async" />
+        </div>
+        <div class="hero-content">
+          <p class="hero-kicker"><span>BACKEND</span> ENGINEER</p>
+          <div class="cosmic-title">
+            <h1 id="home-title" aria-label="서민재 · Rex Seo"><span>REX</span><span>SEO</span></h1>
+            <p class="hero-identity"><strong data-edit-id="home-004">서민재</strong><span>Java · Kotlin · Spring</span></p>
+          </div>
+          <p class="hero-description">실패한 이벤트를 복구하고,<br />복잡한 데이터 흐름을 연결합니다.</p>
           <div class="hero-actions">
-            <a class="button button-primary" href="#work"
-              >문제 해결 사례 보기 <span aria-hidden="true">↘</span></a
-            ><a
-              class="text-link"
-              href="./pdf/seo-minjae-resume.pdf"
-              download="서민재_백엔드_이력서.pdf"
-              >이력서 PDF <span aria-hidden="true">↓</span></a
-            >
-          </div>
-          <div class="hero-person">
-            <img
-              src="./assets/profile.jpg"
-              alt="서민재 프로필 사진"
-              width="689"
-              height="886"
-              decoding="async"
-            />
-            <div>
-              <strong>서민재 <span>Rex Seo</span></strong>
-              <p>웍스피어 · JOBKOREA / Albamon</p>
-            </div>
-            <a
-              href="https://github.com/ch4570"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="서민재 GitHub 새 탭에서 보기"
-              >GitHub ↗</a
-            >
+            <a class="hero-primary" href="#work">주요 프로젝트 보기 <span aria-hidden="true">↗</span></a>
+            <a class="hero-secondary" href="./pdf/seo-minjae-resume.pdf" download="서민재_백엔드_이력서.pdf">이력서 PDF <span aria-hidden="true">↓</span></a>
           </div>
         </div>
-        <div class="hero-visual">
-          <div class="scene-heading">
-            <span class="mono"
-              ><span class="prompt-icon" aria-hidden="true">&gt;_</span> system
-              / architecture</span
-            ><span class="scene-index">3D EXPLORER</span>
-          </div>
-          <div class="system-scene" data-scene>
-            <div class="scene-fallback" aria-hidden="true">
-              <div class="fallback-stack">
-                <div class="fallback-layer"><i></i></div>
-                <div class="fallback-layer"><i></i></div>
-                <div class="fallback-layer"><i></i></div>
-              </div>
-            </div>
-            <canvas id="system-scene" aria-hidden="true"></canvas>
-            <span
-              class="scene-coordinate scene-coordinate--top"
-              aria-hidden="true"
-              >01 / APPLICATION</span
-            ><span
-              class="scene-coordinate scene-coordinate--bottom"
-              aria-hidden="true"
-              >03 / PERSISTENCE</span
-            >
-          </div>
-          <div class="scene-toolbar">
-            <div class="scene-views" role="group" aria-label="3D 구조 보기">
-              <button
-                type="button"
-                data-scene-view="system"
-                aria-pressed="true"
-              >
-                구조</button
-              ><button
-                type="button"
-                data-scene-view="data"
-                aria-pressed="false"
-              >
-                데이터</button
-              ><button
-                type="button"
-                data-scene-view="recovery"
-                aria-pressed="false"
-              >
-                복구
-              </button>
-            </div>
-            <button
-              class="motion-toggle"
-              type="button"
-              data-scene-toggle
-              aria-pressed="false"
-            >
-              <span data-scene-toggle-label>회전 멈추기</span
-              ><span aria-hidden="true">Ⅱ</span>
-            </button>
-          </div>
-          <p class="scene-caption" data-scene-description aria-live="polite">
-            각자의 책임은 분리하고, 다시 이어질 경로는 남깁니다.
-          </p>
-        </div>
+        <div class="hero-caption"><p>THE ENGINEERING UNIVERSE</p><a href="#career">경력 살펴보기 <span aria-hidden="true">↓</span></a></div>
       </section>
-      <div class="workspace-bar wrap" aria-label="페이지 탐색">
-        <span class="workspace-location"
-          ><span class="prompt-icon" aria-hidden="true">~/</span>archive<span
-            class="workspace-branch"
-            >ch4570</span
-          ></span
-        >
-        <button
-          class="workspace-command"
-          type="button"
-          data-terminal-open
-          hidden
-          aria-haspopup="dialog"
-        >
-          <span class="prompt-icon" aria-hidden="true">$</span
-          ><span>명령어로 둘러보기</span><kbd aria-hidden="true">⌘ K</kbd>
-        </button>
-        <a class="workspace-browse" href="#work"
-          >작업 살펴보기 <span aria-hidden="true">↓</span></a
-        >
-      </div>
-      <section
-        class="impact-strip wrap"
-        id="impact"
-        aria-label="주요 경력 성과"
-      >
-        <div>
-          <strong>약 200만<span>건</span></strong>
-          <p>JPA 결함 데이터 보정</p>
-          <a href="./portfolio/#jpa">재현과 보정 과정 ↗</a>
-        </div>
-        <div>
-          <strong>160<span>+</span></strong>
-          <p>Spring Boot 전환 회귀 테스트</p>
-          <a href="./career/">검증 범위 보기 ↗</a>
-        </div>
-        <div>
-          <strong>3<span>건</span></strong>
-          <p>Spring 생태계 개선 제안 반영</p>
-          <a href="#open-source">공개 기여 확인 ↘</a>
-        </div>
-        <p class="impact-note">
-          문제와 해결 과정은<br />아래 사례에서<br />확인하실 수 있습니다.
-        </p>
+      <section class="identity-band" aria-label="현재 하는 일">
+        <div class="identity-person"><img src="./assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" /><div><p data-edit-id="home-003">백엔드 엔지니어</p><strong>서민재 <span>Rex Seo</span></strong></div></div>
+        <p>현재 <strong>웍스피어 · JOBKOREA / Albamon</strong><span>이벤트 복구와 개인화 피드를 개발하고 있습니다.</span></p>
+        <a href="mailto:ckdekrn88@gmail.com">메일 보내기 <span aria-hidden="true">↗</span></a>
       </section>
-      <section class="work-section" id="work" aria-labelledby="work-title">
+      <div class="universe-strip" aria-label="주요 기술"><p>TECH STACK</p><ul><li>Java</li><li>Kotlin</li><li>Spring Boot</li><li>Kafka</li><li>Redis</li><li>OpenSearch</li></ul></div>
+      <section class="command-block work-section" id="work" aria-labelledby="work-title">
+        <p class="chapter-label">01 / PROJECT UNIVERSE</p>
+        <div class="command-output">
         <div class="wrap">
           <header class="section-heading">
             <div>
-              <p class="eyebrow">
-                <span class="section-index">01</span> ~/work
-              </p>
-              <h2 id="work-title">
-                운영에서 만난 문제를<br />코드로 해결했습니다.
+              <span class="section-index" aria-hidden="true">02</span><h2 id="work-title">
+                운영에서 해결한 문제
               </h2>
             </div>
-            <p>
-              문제를 재현하고 복구 경로를 만든 뒤,<br />결과가 맞는지
-              확인했습니다.
-            </p>
+
           </header>
-          <article class="featured-case" id="case-jpa">
-            <div class="case-story">
-              <div class="case-meta">
-                <span>DATA INTEGRITY</span><span>토스랩 · JANDI</span>
+          <div class="case-explorer" data-explorer data-explorer-default="jpa" data-explorer-history>
+            <div class="planet-navigator">
+              <div class="orbit-map-heading"><span>PROJECT ORBITS</span><p>네 가지 독립 프로젝트 · 행성을 선택해 성과와 흐름을 살펴보세요.</p></div>
+              <svg class="orbit-routes" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="route-light"><stop stop-color="#dfa759"/><stop offset=".5" stop-color="#83cddc"/><stop offset="1" stop-color="#d38b65"/></linearGradient></defs><ellipse cx="600" cy="180" rx="525" ry="150"/><path class="orbit-spine" d="M155 205 C250 205 260 95 445 95 S645 235 750 235 S925 105 1035 105"/><path class="orbit-drop" d="M155 205 Q170 345 600 395" data-route="jpa"/><path class="orbit-drop" d="M445 95 Q455 280 600 395" data-route="event"/><path class="orbit-drop" d="M750 235 Q730 340 600 395" data-route="batch"/><path class="orbit-drop" d="M1035 105 Q1045 340 600 395" data-route="search"/></svg>
+              <div class="case-tabs" data-explorer-tabs hidden aria-label="프로젝트 행성 선택" aria-orientation="horizontal">
+                <button type="button" id="case-tab-jpa" data-explorer-tab="jpa" aria-controls="case-jpa"><span class="world-sphere world-sphere--gold" aria-hidden="true"></span><span class="world-caption"><span class="world-index">01 / DATA</span><strong>JPA 데이터 보정</strong><small>약 <b>200만</b> 건 보정</small></span></button>
+                <button type="button" id="case-tab-event" data-explorer-tab="event" aria-controls="case-event"><span class="world-sphere world-sphere--blue" aria-hidden="true"></span><span class="world-caption"><span class="world-index">02 / RECOVERY</span><strong>이벤트 복구</strong><small><b>9종</b> 이벤트 · <b>8개</b> 복구 경로</small></span></button>
+                <button type="button" id="case-tab-batch" data-explorer-tab="batch" aria-controls="case-batch"><span class="world-sphere world-sphere--red" aria-hidden="true"></span><span class="world-caption"><span class="world-index">03 / CONSISTENCY</span><strong>배치·동시성</strong><small><b>13개</b> 동시성 시나리오</small></span></button>
+                <button type="button" id="case-tab-search" data-explorer-tab="search" aria-controls="case-search"><span class="world-sphere world-sphere--ice" aria-hidden="true"></span><span class="world-caption"><span class="world-index">04 / SEARCH</span><strong>검색·캐시</strong><small><b>9개</b> 검색 소스 실패 격리</small></span></button>
               </div>
-              <h3>테스트는 통과했는데,<br />데이터는 달랐습니다.</h3>
-              <p>
-                Mock 테스트로는 보이지 않던 JPA 변경 감지 결함이 있었습니다.
-                실제 영속성 컨텍스트에서 저장 동작을 재현하고, 잘못 저장된 값을
-                찾는 보정 스크립트를 작성했습니다.
+            </div>
+            <div class="case-panels">
+<article class="case-panel" id="case-jpa" data-reading-surface data-explorer-panel="jpa">
+<div class="case-meta">
+                <span>데이터 정합성</span><span>토스랩 · JANDI</span>
+              </div>
+              <h3><a href="./portfolio/#jpa">JPA 저장 오류를 재현해 약 200만 건 보정</a></h3>
+              <p data-terminal-summary>
+                Mock 테스트에서 놓친 JPA 변경 감지 오류를 실제 영속성
+                컨텍스트에서 재현했습니다. 잘못 저장된 데이터를 찾아 보정하는
+                스크립트를 작성했습니다.
               </p>
-              <div class="case-result">
-                <strong>약 200만 건</strong><span>오류 데이터 보정</span>
+              <div class="case-result" id="impact">
+                <span class="output-key">결과</span><strong>약 200만 건 보정</strong>
               </div>
               <p class="case-after">
-                Spring Boot 2.3.8 → 3.3.3 전환에서는 테스트를 0개에서 160개
-                이상으로 늘려 기존 동작을 검증할 기반을 만들었습니다.
+                Spring Boot 2.3.8 → 3.3.3 전환은 별도 작업으로 진행했습니다.
+                테스트를 0개에서 160개 이상으로 늘려 기존 동작을 검증했습니다.
               </p>
+              <figure class="achievement-chart" aria-labelledby="test-chart-caption" data-reading-surface><figcaption id="test-chart-caption"><span>별도 작업 / Spring Boot 전환</span><strong>회귀 테스트 보강</strong></figcaption><div class="test-bar-row"><span>전환 전</span><div class="test-bar-track"><i class="test-bar-zero"></i></div><strong>0개</strong></div><div class="test-bar-row"><span>전환 후</span><div class="test-bar-track"><i class="test-bar-full"></i></div><strong>160개 이상</strong></div><p>Spring Boot 2.3.8 → 3.3.3 · 기존 동작을 검증하기 위한 테스트 수</p></figure>
+<figure class="planet-flow" aria-labelledby="flow-jpa-caption"><figcaption id="flow-jpa-caption"><span>PROCESS / JPA 오류 대응</span><strong>행성 사이로 이어지는 처리 흐름</strong></figcaption><div class="flow-viewport" tabindex="0" role="region" aria-label="JPA 오류 대응 흐름도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/orbit-jpa.svg" alt="JPA 오류를 재현하고 영향 데이터를 찾아 약 200만 건을 보정한 흐름" width="1000" height="420" loading="lazy" /></div><p class="flow-summary">오류 재현 → 영향 데이터 확인 → 보정 스크립트 → 약 200만 건 보정</p></figure>
+<dl class="case-flow" aria-label="작업 과정"><div><dt>원인</dt><dd>변경 감지 누락</dd></div><div><dt>재현</dt><dd>영속성 컨텍스트</dd></div><div><dt>조치</dt><dd>잘못된 데이터 보정</dd></div></dl>
               <div class="case-source-links">
                 <a class="text-link dark-link" href="./portfolio/#jpa"
-                  >설계 상세 보기 ↗</a
+                  >재현·보정 과정 보기 ↗</a
                 ><a
                   class="text-link dark-link"
                   href="https://velog.io/@ch4570/여러분이-열심히-짠-테스트는-안녕하십니까"
                   target="_blank"
                   rel="noreferrer"
-                  >직접 쓴 재현·보정 기록 ↗</a
+                  >관련 글 읽기 ↗</a
                 >
               </div>
-            </div>
-            <figure class="persistence-diagram">
-              <div class="diagram-top">
-                <span class="mono">PERSISTENCE CONTEXT</span
-                ><span class="diagram-dot" aria-hidden="true"></span>
-              </div>
-              <div class="diagram-flow">
-                <div class="diagram-node">
-                  <span>01</span><strong>실제 저장 동작 재현</strong
-                  ><small>Entity → Dirty checking</small>
-                </div>
-                <div class="diagram-connector" aria-hidden="true"></div>
-                <div class="diagram-node diagram-node--focus">
-                  <span>02</span><strong>오류 데이터 식별·보정</strong
-                  ><small>Identify → Correct</small>
-                </div>
-                <div class="diagram-connector" aria-hidden="true"></div>
-                <div class="diagram-node">
-                  <span>03</span><strong>회귀 테스트로 재발 확인</strong
-                  ><small>Persist → Flush → Verify</small>
-                </div>
-              </div>
-              <figcaption>
-                실제 저장 환경에서 확인하고, 보정하고, 다시 검증했습니다.
-              </figcaption>
-            </figure>
-          </article>
-          <div class="work-list">
-            <article class="work-row">
-              <span class="work-number">02</span>
-              <div>
-                <p class="case-meta">EVENT RECOVERY <span>웍스피어</span></p>
-                <h3>실패한 업무만 다시 실행하도록 만들었습니다.</h3>
-                <p>
-                  발행 실패와 처리 실패를 분리하고 PostgreSQL JSONB에 복구용
-                  payload를 남겼습니다. 이벤트 9종을 상태 6개와 업무별 복구 경로
-                  8개로 나눴습니다.
+</article>
+<article class="case-panel" id="case-event" data-reading-surface data-explorer-panel="event">
+<p class="case-meta">이벤트 복구 <span>웍스피어</span></p>
+                <h3><a href="./portfolio/#event">실패한 이벤트를 업무별로 다시 실행</a></h3>
+                <p data-terminal-summary>
+                  발행 실패와 처리 실패를 따로 기록하고, 복구에 필요한 데이터를
+                  PostgreSQL JSONB에 보관했습니다. 이벤트 9종에 대해 상태 6개와
+                  업무별 복구 경로 8개를 구성했습니다.
                 </p>
-              </div>
-              <a
-                href="./portfolio/#event"
-                aria-label="이벤트 복구 설계 상세 보기"
-                >↗</a
-              >
-            </article>
-            <article class="work-row">
-              <span class="work-number">03</span>
-              <div>
-                <p class="case-meta">
-                  BATCH &amp; CONCURRENCY <span>웍스피어</span>
+<dl class="achievement-counts" aria-label="이벤트 복구 구현 범위"><div><dt>이벤트 유형</dt><dd>9<span>종</span></dd></div><div><dt>추적 상태</dt><dd>6<span>개</span></dd></div><div><dt>업무별 복구 경로</dt><dd>8<span>개</span></dd></div></dl><figure class="planet-flow" aria-labelledby="flow-event-caption"><figcaption id="flow-event-caption"><span>PROCESS / 이벤트 복구</span><strong>행성 사이로 이어지는 처리 흐름</strong></figcaption><div class="flow-viewport" tabindex="0" role="region" aria-label="이벤트 복구 흐름도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/orbit-event.svg" alt="발행 실패와 처리 실패를 구분해 복구 문맥을 기록하고 필요한 업무를 재실행하는 흐름" width="1000" height="420" loading="lazy" /></div><p class="flow-summary">발행·처리 실패 구분 → JSONB 문맥 보관 → 업무별 재실행 → 처리 상태 확인</p></figure>
+<dl class="case-flow" aria-label="작업 과정"><div><dt>실패 구분</dt><dd>발행 · 처리</dd></div><div><dt>복구 데이터</dt><dd>JSONB 기록</dd></div><div><dt>다시 실행</dt><dd>업무별 복구</dd></div></dl>
+<div class="case-source-links"><a class="text-link" href="./portfolio/#event">구현 과정 읽기 ↗</a></div>
+</article>
+<article class="case-panel" id="case-batch" data-reading-surface data-explorer-panel="batch">
+<p class="case-meta">
+                  배치 · 동시성 <span>웍스피어</span>
                 </p>
-                <h3>중단된 배치를 재개하고 원장 정합성을 검증했습니다.</h3>
-                <p>
-                  아카이브 테이블 10개를 참조 순서대로 옮기며 진행 위치를
-                  기록했습니다. 9개 API를 대상으로 13개 동시성 시나리오를
-                  구성하고, 요청이 끝난 뒤 잔액·원장·예산·후속 이벤트를
+                <h3><a href="./portfolio/#point">배치 재시작과 포인트 정합성 검증</a></h3>
+                <p data-terminal-summary>
+                  아카이브 테이블 10개를 참조 순서에 맞춰 옮기고, 중단 지점부터
+                  재개하도록 진행 위치를 기록했습니다. 9개 API를 13개 동시성
+                  시나리오로 검증하며 잔액·원장·예산·후속 이벤트를 함께
                   대조했습니다.
                 </p>
-              </div>
-              <a
-                href="./portfolio/#point"
-                aria-label="포인트 배치와 동시성 검증 상세 보기"
-                >↗</a
-              >
-            </article>
-            <article class="work-row">
-              <span class="work-number">04</span>
-              <div>
-                <p class="case-meta">
-                  SEARCH &amp; FALLBACK <span>웍스피어</span>
+<dl class="achievement-counts" aria-label="배치와 동시성 검증 범위"><div><dt>아카이브 테이블</dt><dd>10<span>개</span></dd></div><div><dt>검증 API</dt><dd>9<span>개</span></dd></div><div><dt>동시성 시나리오</dt><dd>13<span>개</span></dd></div></dl><figure class="planet-flow" aria-labelledby="flow-batch-caption"><figcaption id="flow-batch-caption"><span>PROCESS / 배치 재시작과 검증</span><strong>행성 사이로 이어지는 처리 흐름</strong></figcaption><div class="flow-viewport" tabindex="0" role="region" aria-label="배치 재시작과 검증 흐름도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/orbit-batch.svg" alt="배치 진행 위치를 기록하고 중단 지점부터 재개하는 흐름과 별도 동시성 검증" width="1000" height="420" loading="lazy" /></div><p class="flow-summary">테이블별 진행 위치 기록 → 중단 → 기록한 지점부터 재개. 별도로 9개 API를 13개 동시성 시나리오로 검증.</p></figure>
+<dl class="case-flow" aria-label="작업 과정"><div><dt>진행 위치</dt><dd>테이블별 기록</dd></div><div><dt>작업 재개</dt><dd>중단 지점부터</dd></div><div><dt>정합성 검증</dt><dd>잔액 · 원장 대조</dd></div></dl>
+<div class="case-source-links"><a class="text-link" href="./portfolio/#point">구현 과정 읽기 ↗</a></div>
+</article>
+<article class="case-panel" id="case-search" data-reading-surface data-explorer-panel="search">
+<p class="case-meta">
+                  검색 <span>웍스피어</span>
                 </p>
-                <h3>검색 소스별로 실패 처리 경로를 분리했습니다.</h3>
-                <p>
-                  9개 검색 소스의 타임아웃과 실패 정책을 분리했습니다. 후보
-                  조회·중복 제거·점수화·재정렬을 나누고, Redis 없이도 다시
-                  계산하는 경로를 구현했습니다.
+                <h3><a href="./portfolio/#feed">검색 소스별 실패 격리와 캐시 우회</a></h3>
+                <p data-terminal-summary>
+                  9개 검색 소스에 각각 타임아웃과 실패 처리 방식을 적용했습니다.
+                  후보 조회부터 중복 제거·점수화·재정렬까지 단계를 나누고,
+                  Redis 캐시를 거치지 않고 다시 계산하는 경로도 만들었습니다.
                 </p>
-              </div>
-              <a
-                href="./portfolio/#feed"
-                aria-label="검색 실패 격리와 캐시 우회 상세 보기"
-                >↗</a
-              >
-            </article>
+<figure class="planet-flow" aria-labelledby="flow-search-caption"><figcaption id="flow-search-caption"><span>PROCESS / 피드 서빙</span><strong>행성 사이로 이어지는 처리 흐름</strong></figcaption><div class="flow-viewport" tabindex="0" role="region" aria-label="피드 서빙 흐름도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/orbit-feed.svg" alt="스냅샷 조회와 검색 후보 보충을 분리하고 FPR, SPR, Re-Rank를 거쳐 응답하는 피드 흐름" width="1000" height="420" loading="lazy" /></div><p class="flow-summary">요청 → 스냅샷 조회 → Hit이면 응답. Empty이면 검색 소스 → FPR 중복 제거 → SPR 점수화 → Re-Rank 재정렬 → 새 스냅샷 → 응답.</p></figure>
+<dl class="case-flow" aria-label="작업 과정"><div><dt>실패 범위</dt><dd>검색 소스별 분리</dd></div><div><dt>처리 단계</dt><dd>후보 조회 → 재정렬</dd></div><div><dt>캐시 우회</dt><dd>다시 계산</dd></div></dl>
+<div class="case-source-links"><a class="text-link" href="./portfolio/#feed">구현 과정 읽기 ↗</a></div>
+<details class="original-flow"><summary>기존 피드 서빙 구조도 함께 보기 <span aria-hidden="true">＋</span></summary><figure><div class="original-flow-viewport" tabindex="0" role="region" aria-label="원본 피드 서빙 구조도. 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/feed-serving.svg" alt="원본 피드 서빙 구조도: API, Orchestrator, Snapshot, 검색 소스와 FPR·SPR·Re-Rank 책임 경계" width="1000" height="360" loading="lazy" /></div><figcaption>스냅샷 조회와 후보 보충 경로를 나눈 기존 구조도입니다.</figcaption></figure></details>
+</article>
+            </div>
           </div>
-          <div class="section-end">
-            <span>문제, 선택한 방법, 검증 범위를 함께 기록했습니다.</span
-            ><a class="text-link dark-link" href="./portfolio/"
-              >포트폴리오 전체 보기 ↗</a
-            >
-          </div>
+        </div>
         </div>
       </section>
       <section
-        class="career-section wrap"
+        class="command-block career-section wrap"
         id="career"
         aria-labelledby="career-title"
       >
+        <p class="chapter-label">02 / CAREER ORBIT</p>
+        <div class="command-output">
         <header class="section-heading">
           <div>
-            <p class="eyebrow">
-              <span class="section-index">02</span> ~/career
-            </p>
-            <h2 id="career-title" data-edit-id="home-014">
-              맡은 역할과<br />해결한 문제를 소개합니다.
+            <span class="section-index" aria-hidden="true">01</span><h2 id="career-title" data-edit-id="home-014">
+              경력
             </h2>
           </div>
           <a class="text-link" href="./career/">경력기술서 ↗</a>
         </header>
-        <ol class="career-list">
+        <ol class="career-list" data-reading-surface>
           <li>
             <div class="career-date">
               <time datetime="2025-06" data-edit-id="home-016"
@@ -407,10 +219,9 @@
               <h3 data-edit-id="home-017">웍스피어(유)</h3>
               <p>JOBKOREA · Albamon</p>
             </div>
-            <p data-edit-id="home-018">
-              이벤트 복구와 개인화 피드를 개발하고, 포인트 원장과 배치의
-              정합성을 검증합니다. 실패 범위를 좁히고 업무별로 다시 실행할 수
-              있는 경로를 만듭니다.
+            <p data-edit-id="home-018" data-terminal-summary>
+              이벤트 복구와 개인화 피드를 개발합니다. 중단된 배치를 다시
+              실행하고, 동시 요청 후 포인트 잔액과 원장이 맞는지 검증합니다.
             </p>
           </li>
           <li>
@@ -423,10 +234,10 @@
               <h3 data-edit-id="home-020">토스랩</h3>
               <p>JANDI</p>
             </div>
-            <p data-edit-id="home-021">
-              JPA 변경 감지 결함을 재현해 약 200만 건을 보정했습니다. Spring
-              Boot 3 전환과 함께 테스트 160개 이상으로 회귀 검증 기반을
-              만들었습니다.
+            <p data-edit-id="home-021" data-terminal-summary>
+              JPA 변경 감지 오류를 재현하고 잘못 저장된 데이터 약 200만 건을
+              보정했습니다. 별도로 Spring Boot 3 전환을 진행하며 테스트를
+              160개 이상으로 늘렸습니다.
             </p>
           </li>
           <li>
@@ -439,9 +250,10 @@
               <h3 data-edit-id="home-023">오케스트로</h3>
               <p>IDP · Vista</p>
             </div>
-            <p data-edit-id="home-024">
-              Spring Cloud Gateway에 Security·JWT 인증과 인가를 적용했습니다. VM
-              메트릭과 OpenSearch 동적 조회 API를 개발했습니다.
+            <p data-edit-id="home-024" data-terminal-summary>
+              Spring Cloud Gateway에 Spring Security·JWT 기반 인증·인가를
+              적용했습니다. VM 메트릭 조회와 OpenSearch 동적 검색 API도
+              개발했습니다.
             </p>
           </li>
           <li>
@@ -452,37 +264,38 @@
             </div>
             <div class="career-company">
               <h3 data-edit-id="home-026">즐거운</h3>
-              <p>In-house Service</p>
+              <p>자사 서비스</p>
             </div>
-            <p data-edit-id="home-027">
+            <p data-edit-id="home-027" data-terminal-summary>
               자사 서비스의 백엔드 기능을 개발하고 운영했습니다.
             </p>
           </li>
         </ol>
-        <div class="qualifications">
+        <div class="qualifications" data-reading-surface>
           <p>
-            <span>EDUCATION</span>한국방송통신대학교 컴퓨터과학과
+            <span>학력</span>한국방송통신대학교 컴퓨터과학과
             <small>2025.03 졸업</small>
           </p>
           <p>
-            <span>CERTIFICATION</span>CKA <small>2024.09</small><i>·</i> SQLD
+            <span>자격</span>CKA <small>2024.09</small><i>·</i> SQLD
             <small>2022.06</small>
           </p>
         </div>
+
+        </div>
       </section>
       <section
-        class="activity-section"
+        class="command-block activity-section"
         id="activity"
         aria-labelledby="activity-title"
       >
+        <p class="chapter-label">03 / OPEN SOURCE & WRITING</p>
+        <div class="command-output">
         <div class="wrap">
           <header class="section-heading">
             <div>
-              <p class="eyebrow">
-                <span class="section-index">03</span> ~/activity
-              </p>
-              <h2 id="activity-title">
-                직접 구현하며 배우고,<br />그 과정을 기록합니다.
+              <span class="section-index" aria-hidden="true">03</span><h2 id="activity-title">
+                공개 코드와 기록
               </h2>
             </div>
             <a
@@ -493,115 +306,14 @@
               >GitHub에서 코드 보기 ↗</a
             >
           </header>
-          <div class="repository-list" id="public-projects">
-            <article class="repository-row">
-              <span class="repo-mark" aria-hidden="true">01</span>
-              <div>
-                <p class="mono">2025.02 — 03 / KOTLIN · OPENSEARCH</p>
-                <h3>
-                  <a
-                    href="https://github.com/ch4570/open-search-custom-plugin"
-                    target="_blank"
-                    rel="noreferrer"
-                    >자판을 잘못 눌러도 검색하도록 만들었습니다. ↗</a
-                  >
-                </h3>
-                <p>
-                  Java Cafe의 Elasticsearch 플러그인을 OpenSearch 2.19에서
-                  동작하도록 이식하고 Kotlin으로 전환했습니다. 한·영 자판 변환,
-                  초성·자모 검색의 실제 분석 결과를 확인하는 16개 검증 예시를
-                  남겼습니다.
-                </p>
-                <div class="repo-links">
-                  <a
-                    href="https://github.com/ch4570/open-search-custom-plugin/commit/beb06b19f818"
-                    target="_blank"
-                    rel="noreferrer"
-                    ><span>beb06b1</span> Kotlin 전환 ↗</a
-                  ><a
-                    href="https://github.com/ch4570/open-search-custom-plugin/commit/b8ec3245b312"
-                    target="_blank"
-                    rel="noreferrer"
-                    ><span>b8ec324</span> OpenSearch 2.19 이식 ↗</a
-                  >
-                </div>
-              </div>
-              <span class="repo-kind">PLUGIN</span>
-            </article>
-            <article class="repository-row">
-              <span class="repo-mark" aria-hidden="true">02</span>
-              <div>
-                <p class="mono">2025.07 — 08 / KOTLIN · REDIS · 학습과 재현</p>
-                <h3>
-                  <a
-                    href="https://github.com/ch4570/redis-distributed-lock"
-                    target="_blank"
-                    rel="noreferrer"
-                    >락과 트랜잭션의 실행 순서를 비교했습니다. ↗</a
-                  >
-                </h3>
-                <p>
-                  재고를 줄이는 예제로 락이 없는 경우, DB 비관적 락, Redis 락과
-                  트랜잭션의 순서를 비교했습니다. 100개 동시 요청 후 마지막
-                  재고를 확인하는 네 가지 시나리오를 작성했습니다.
-                </p>
-                <div class="repo-links">
-                  <a
-                    href="https://github.com/ch4570/redis-distributed-lock/blob/main/src/test/kotlin/com/redis/example/service/ProductServiceTest.kt"
-                    target="_blank"
-                    rel="noreferrer"
-                    >동시성 시나리오 읽기 ↗</a
-                  ><a
-                    href="https://github.com/ch4570/redis-distributed-lock/blob/main/src/main/kotlin/com/redis/example/service/ProductService.kt"
-                    target="_blank"
-                    rel="noreferrer"
-                    >락·트랜잭션 경계 비교 ↗</a
-                  >
-                </div>
-              </div>
-              <span class="repo-kind">EXPERIMENT</span>
-            </article>
-            <article class="repository-row">
-              <span class="repo-mark" aria-hidden="true">03</span>
-              <div>
-                <p class="mono">2024.06 — 07 / SPRING · KAFKA · 학습과 재현</p>
-                <h3>
-                  <a
-                    href="https://github.com/ch4570/transactional-outbox"
-                    target="_blank"
-                    rel="noreferrer"
-                    >데이터 저장과 이벤트 발행의 경계를 비교했습니다. ↗</a
-                  >
-                </h3>
-                <p>
-                  이벤트 직접 발행, Outbox 폴링, Debezium 연동을 버전별로
-                  구현했습니다. 데이터 저장과 이벤트 발행 사이의 경계를 코드로
-                  비교했습니다.
-                </p>
-                <div class="repo-links">
-                  <a
-                    href="https://github.com/ch4570/transactional-outbox/commit/fcef16ba2393"
-                    target="_blank"
-                    rel="noreferrer"
-                    ><span>fcef16b</span> Polling Publisher 구현 ↗</a
-                  ><a
-                    href="https://github.com/ch4570/transactional-outbox"
-                    target="_blank"
-                    rel="noreferrer"
-                    >버전별 구현 보기 ↗</a
-                  >
-                </div>
-              </div>
-              <span class="repo-kind">EXPERIMENT</span>
-            </article>
-          </div>
-          <div class="public-notes" id="open-source">
+          <div class="public-notes" id="open-source" data-reading-surface>
             <article>
-              <p class="eyebrow">CONTRIBUTING</p>
-              <h3>사용하던 Spring에<br />개선 사항을 제안했습니다.</h3>
+              <p class="eyebrow">오픈소스 기여</p>
+              <h3>Spring에 보낸 개선 제안</h3>
               <p>
-                Spring 생태계에 보낸 개선 제안 3건이 반영됐습니다. PR의 병합
-                여부와 유지관리자의 반영 설명을 각각 확인할 수 있습니다.
+                Spring Kafka PR은 병합됐고, Spring Boot·Spring Data JPA에는
+                제안한 개선이 반영됐습니다. 각 PR에서 반영 내용과 유지관리자의
+                설명을 확인할 수 있습니다.
               </p>
               <ul class="contribution-links">
                 <li>
@@ -633,12 +345,12 @@
               </ul>
             </article>
             <article>
-              <p class="eyebrow">WRITING &amp; SPEAKING</p>
-              <h3>문제를 해결한 과정을<br />글과 발표로 나눕니다.</h3>
+              <p class="eyebrow">글과 발표</p>
+              <h3>개발하면서 배운 것들</h3>
               <p>
-                Java·JPA·테스트·SQL 튜닝 경험을 글로 남깁니다. YouthCon
-                2025에서는 팀의 반복되는 테스트 준비를 공통화한 과정을
-                발표했습니다.
+                개발하면서 부딪힌 Java·JPA·테스트·SQL 튜닝 문제를 글로 남깁니다.
+                YouthCon 2025에서는 팀이 반복하던 테스트 준비 코드를 공통
+                모듈로 옮긴 경험을 발표했습니다.
               </p>
               <a
                 class="writing-link"
@@ -661,9 +373,109 @@
               >
             </article>
           </div>
+          <div class="repository-list" id="public-projects" data-reading-surface>
+            <article class="repository-row">
+              <div>
+                <p class="mono">2025.02 — 03 / KOTLIN · OPENSEARCH</p>
+                <h3>
+                  <a
+                    href="https://github.com/ch4570/open-search-custom-plugin"
+                    target="_blank"
+                    rel="noreferrer"
+                    >OpenSearch 한글 검색 플러그인 ↗</a
+                  >
+                </h3>
+                <p data-terminal-summary>
+                  Java Cafe의 Elasticsearch 플러그인을 Kotlin으로 옮겨
+                  OpenSearch 2.19에서 실행되도록 했습니다. 한·영 자판 변환과
+                  초성·자모 검색 결과를 확인할 수 있는 검증 예시 16개를
+                  남겼습니다.
+                </p>
+                <div class="repo-links">
+                  <a
+                    href="https://github.com/ch4570/open-search-custom-plugin/commit/beb06b19f818"
+                    target="_blank"
+                    rel="noreferrer"
+                    ><span>beb06b1</span> Kotlin 전환 ↗</a
+                  ><a
+                    href="https://github.com/ch4570/open-search-custom-plugin/commit/b8ec3245b312"
+                    target="_blank"
+                    rel="noreferrer"
+                    ><span>b8ec324</span> OpenSearch 2.19 이식 ↗</a
+                  >
+                </div>
+              </div>
+              <span class="repo-kind">플러그인 이식</span>
+            </article>
+            <article class="repository-row">
+              <div>
+                <p class="mono">2025.07 — 08 / KOTLIN · REDIS · 학습 · 재현</p>
+                <h3>
+                  <a
+                    href="https://github.com/ch4570/redis-distributed-lock"
+                    target="_blank"
+                    rel="noreferrer"
+                    >분산 락과 트랜잭션의 실행 순서 ↗</a
+                  >
+                </h3>
+                <p data-terminal-summary>
+                  재고 차감 예제로 락이 없을 때와 DB 비관적 락을 쓸 때를
+                  비교했습니다. Redis 락과 트랜잭션의 실행 순서까지 네 가지
+                  시나리오로 나눠, 동시 요청 100개를 처리한 뒤 남은 재고를
+                  확인했습니다.
+                </p>
+                <div class="repo-links">
+                  <a
+                    href="https://github.com/ch4570/redis-distributed-lock/blob/main/src/test/kotlin/com/redis/example/service/ProductServiceTest.kt"
+                    target="_blank"
+                    rel="noreferrer"
+                    >동시성 시나리오 읽기 ↗</a
+                  ><a
+                    href="https://github.com/ch4570/redis-distributed-lock/blob/main/src/main/kotlin/com/redis/example/service/ProductService.kt"
+                    target="_blank"
+                    rel="noreferrer"
+                    >락·트랜잭션 경계 비교 ↗</a
+                  >
+                </div>
+              </div>
+              <span class="repo-kind">학습 · 재현</span>
+            </article>
+            <article class="repository-row">
+              <div>
+                <p class="mono">2024.06 — 07 / SPRING · KAFKA · 학습 · 재현</p>
+                <h3>
+                  <a
+                    href="https://github.com/ch4570/transactional-outbox"
+                    target="_blank"
+                    rel="noreferrer"
+                    >Transactional Outbox 구현 비교 ↗</a
+                  >
+                </h3>
+                <p data-terminal-summary>
+                  이벤트 직접 발행, Outbox 폴링, Debezium 연동을 버전별로
+                  구현했습니다. 데이터 저장과 이벤트 발행을 어떻게 연결하는지
+                  코드로 비교했습니다.
+                </p>
+                <div class="repo-links">
+                  <a
+                    href="https://github.com/ch4570/transactional-outbox/commit/fcef16ba2393"
+                    target="_blank"
+                    rel="noreferrer"
+                    ><span>fcef16b</span> Polling Publisher 구현 ↗</a
+                  ><a
+                    href="https://github.com/ch4570/transactional-outbox"
+                    target="_blank"
+                    rel="noreferrer"
+                    >버전별 구현 보기 ↗</a
+                  >
+                </div>
+              </div>
+              <span class="repo-kind">학습 · 재현</span>
+            </article>
+          </div>
           <details class="public-snapshot">
             <summary>
-              공개 활동 집계 <span data-edit-id="home-028">2026.09.07 확인</span
+              GitHub 활동 집계 <span data-edit-id="home-028">2026.09.07 확인</span
               ><span aria-hidden="true">+</span>
             </summary>
             <dl>
@@ -685,32 +497,33 @@
               </div>
             </dl>
             <p>
-              인증 없이 조회한 GitHub 공개 API 기준입니다. 공개 저장소는 원본과
-              포크를 포함하며, 기여 그래프의 비공개 활동은 집계하지 않았습니다.
+              확인한 날짜의 GitHub 공개 정보입니다. 저장소 수에는 포크가
+              포함되며, 비공개 기여는 집계하지 않았습니다.
             </p>
           </details>
         </div>
+
+        </div>
       </section>
       <section
-        class="document-section"
+        class="command-block document-section"
         id="documents"
         aria-labelledby="documents-title"
       >
+        <p class="chapter-label">04 / DOCUMENTS</p>
+        <div class="command-output">
         <div class="wrap">
           <header class="section-heading">
             <div>
-              <p class="eyebrow">
-                <span class="section-index">04</span> ~/documents
-              </p>
               <h2 id="documents-title" data-edit-id="home-006">
-                경력과 작업 내용을<br />문서로 정리했습니다.
+                문서
               </h2>
             </div>
-            <p>화면에서 읽거나,<br />제출용 PDF로 보관할 수 있습니다.</p>
+
           </header>
-          <div class="documents">
+          <div class="documents" data-reading-surface>
             <article>
-              <span class="document-no">01 <span>resume/</span></span>
+              <span class="document-no">resume/</span>
               <h3 data-edit-id="home-007">이력서</h3>
               <p>경력과 주요 성과를 요약했습니다.</p>
               <div>
@@ -719,9 +532,9 @@
               </div>
             </article>
             <article>
-              <span class="document-no">02 <span>career/</span></span>
+              <span class="document-no">career/</span>
               <h3 data-edit-id="home-009">경력기술서</h3>
-              <p>회사별 역할과 문제 해결 과정을 정리했습니다.</p>
+              <p>회사별로 맡은 일과 해결 과정을 정리했습니다.</p>
               <div>
                 <a href="./career/">웹에서 읽기 ↗</a
                 ><a href="./pdf/seo-minjae-career-description.pdf" download
@@ -730,9 +543,9 @@
               </div>
             </article>
             <article>
-              <span class="document-no">03 <span>portfolio/</span></span>
+              <span class="document-no">portfolio/</span>
               <h3 data-edit-id="home-011">포트폴리오</h3>
-              <p>설계 배경과 판단, 검증 근거를 담았습니다.</p>
+              <p>문제의 원인부터 구현·검증 과정까지 담았습니다.</p>
               <div>
                 <a href="./portfolio/">웹에서 읽기 ↗</a
                 ><a href="./pdf/seo-minjae-backend-portfolio.pdf" download
@@ -742,22 +555,24 @@
             </article>
           </div>
         </div>
+
+        </div>
       </section>
       <section
-        class="contact-section wrap"
+        class="command-block contact-section wrap"
         id="contact"
         aria-labelledby="contact-title"
       >
+        <p class="chapter-label">05 / CONTACT</p>
+        <div class="command-output">
         <div>
-          <p class="eyebrow"><span class="section-index">05</span> ~/contact</p>
           <h2 id="contact-title">
-            함께 풀어볼<br />문제가 있나요<span class="lime">?</span>
+            다음 이야기를 함께.
           </h2>
         </div>
-        <div class="contact-details">
-          <p>
-            좋은 시스템과 팀을 만드는 이야기를 좋아합니다.<br />편하게 연락
-            주세요.
+        <div class="contact-details" data-reading-surface>
+          <p data-terminal-summary>
+            채용 제안이나 함께 나누고 싶은 개발 이야기가 있다면 메일로 연락해 주세요.
           </p>
           <a class="contact-email" href="mailto:ckdekrn88@gmail.com"
             >ckdekrn88@gmail.com <span aria-hidden="true">↗</span></a
@@ -780,90 +595,18 @@
             >
           </div>
         </div>
+
+        </div>
       </section>
     </main>
     <footer class="site-footer wrap">
-      <a class="footer-wordmark" href="#top" aria-label="맨 위로"
-        >Rex Seo<span>.</span></a
-      >
       <div>
         <p>© <span data-current-year>2026</span> 서민재</p>
-        <span>생각하고, 만들고, 고쳐 나갑니다.</span
+        <span>서민재의 백엔드 작업 기록</span
         ><a href="#top">맨 위로 ↑</a>
       </div>
     </footer>
-    <dialog
-      class="archive-terminal"
-      data-terminal-dialog
-      aria-labelledby="terminal-title"
-      aria-describedby="terminal-description"
-    >
-      <header class="terminal-titlebar">
-        <h2 id="terminal-title">
-          <span class="prompt-icon" aria-hidden="true">&gt;_</span> archive /
-          탐색 터미널
-        </h2>
-        <button type="button" data-terminal-close aria-label="터미널 닫기">
-          <span aria-hidden="true">Esc ×</span>
-        </button>
-      </header>
-      <div class="terminal-body">
-        <p id="terminal-description">
-          명령어로 작업 기록을 찾고, 3D 구조를 살펴보세요.
-        </p>
-        <div class="terminal-shortcuts" aria-label="명령어 바로 실행">
-          <button type="button" data-terminal-command="work">
-            <span>work</span> 작업
-          </button>
-          <button type="button" data-terminal-command="career">
-            <span>career</span> 경력
-          </button>
-          <button type="button" data-terminal-command="docs">
-            <span>docs</span> 문서
-          </button>
-          <button type="button" data-terminal-command="view recovery">
-            <span>view recovery</span> 3D 복구 구조
-          </button>
-          <button type="button" data-terminal-command="help">
-            <span>help</span> 전체 명령어
-          </button>
-        </div>
-        <div
-          class="terminal-output"
-          data-terminal-output
-          role="log"
-          aria-live="polite"
-          aria-label="명령 실행 결과"
-          aria-relevant="additions"
-        ></div>
-        <form class="terminal-form" data-terminal-form>
-          <label for="terminal-input"
-            ><span>rex@archive</span><span aria-hidden="true"> ~ $</span
-            ><span class="sr-only"> 탐색 명령어</span></label
-          >
-          <div class="terminal-input-row">
-            <input
-              id="terminal-input"
-              data-terminal-input
-              type="text"
-              placeholder="help"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              maxlength="200"
-              enterkeyhint="go"
-            />
-            <button type="submit" aria-label="명령어 실행">
-              실행 <span aria-hidden="true">↵</span>
-            </button>
-          </div>
-        </form>
-      </div>
-      <footer class="terminal-footer">
-        <span><kbd>↑</kbd><kbd>↓</kbd> 이전 명령어</span
-        ><span><kbd>Tab</kbd> 자동 완성</span><span><kbd>Esc</kbd> 닫기</span>
-      </footer>
-    </dialog>
+    </div>
     <div class="toast" role="status" aria-live="polite"></div>
   </body>
 </html>

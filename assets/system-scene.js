@@ -13,9 +13,9 @@
   const label = toggle?.querySelector('[data-scene-toggle-label]');
   const description = document.querySelector('[data-scene-description]');
   const states = {
-    system: { turn: 0, separation: 0.63, tilt: 0, description: '각자의 책임은 분리하고, 다시 이어질 경로는 남깁니다.' },
-    data: { turn: 0.52, separation: 0.84, tilt: -0.04, description: '저장과 처리의 경계를 나누고, 데이터가 흐르는 순서를 살핍니다.' },
-    recovery: { turn: -0.48, separation: 0.45, tilt: 0.045, description: '실패한 단계의 상태를 남겨, 필요한 업무부터 다시 실행합니다.' },
+    system: { turn: 0, separation: 0.63, tilt: 0, description: '세 층으로 나눈 시스템 구성을 살펴봅니다.' },
+    data: { turn: 0.52, separation: 0.84, tilt: -0.04, description: '층 사이를 넓혀 안쪽 구조를 살펴봅니다.' },
+    recovery: { turn: -0.48, separation: 0.45, tilt: 0.045, description: '층 사이를 좁히고 반대쪽에서 구조를 봅니다.' },
   };
 
   let gl;
@@ -327,7 +327,7 @@
     const isPaused = paused || motion.matches;
     if (toggle) {
       toggle.setAttribute('aria-pressed', String(isPaused));
-      const text = motion.matches ? '정지 화면 · 모션 줄이기 설정' : paused ? '3D 움직임 재생' : '3D 움직임 일시정지';
+      const text = motion.matches ? '동작 줄이기 켜짐' : paused ? '움직임 켜기' : '움직임 멈추기';
       toggle.setAttribute('aria-label', text);
       if (label) label.textContent = text;
       else toggle.textContent = text;
