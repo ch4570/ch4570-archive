@@ -2,7 +2,35 @@
 
 서민재의 공개 개발자 이력서와 포트폴리오다. 채용 담당자는 소개·기술·경력·성과를 차례로 읽고, 엔지니어는 각 사례의 근거를 공개 글·코드·커밋에서 확인한다. 홈은 화면에서 읽는 이력서이며, 제출 문서는 읽기와 A4 출력을 위한 별도 형식을 유지한다.
 
-## 2026-09-07 — Connected project universe (current home)
+## 2026-11-20 — Colorful terminal session résumé (current home)
+
+오너는 "더 다채롭게, 백엔드 개발자다운 쉘 느낌"을 요청했다. 기준은 "잘 꾸민 터미널 세션을 열어 둔 것 같은 이력서"다. 프롬프트, 명령, 출력, 상태값이라는 실제 쉘 문법으로 정보를 구조화하고, ANSI 컬러를 넉넉히 쓴다. 콘텐츠는 바꾸지 않고 표현만 바꾼다.
+
+**고정 제약**
+
+- 첫 화면(1440×900)에 이름, 현재 회사, 이메일, 주요 성과 3개 이상, 이력서 PDF가 보인다. 탭이나 클릭 뒤에 숨긴 경력·프로젝트 내용은 없다.
+- 섹션 제목 위에는 powerline 프롬프트(`user@host` 초록 ▸ 경로 파랑 ▸ `⎇ main` 마젠타)와 내용에 맞는 명령을 둔다. 섹션 끝에는 `[ OK ] … exit 0`을 둔다. 프롬프트와 상태 줄은 `aria-hidden`이고 인쇄에서 빠진다.
+- 색은 ANSI 6색과 밝은 변형을 토큰으로 쓰고, 섹션마다 `.tone-*`로 강조색을 달리한다. 상태는 색과 함께 기호·글자(`● Running`, `✓ Completed`, `⊙ 병합`)로 표시한다.
+- 키-값은 구문 강조로 표시한다: 키 시안, 문자열 초록, 숫자 노랑, 주석 회색.
+- 명령·프롬프트·키·숫자·해시는 JetBrains Mono로, 한국어 문장·라벨·링크는 Pretendard로 쓴다. 한국어를 모노 글꼴로 렌더링하지 않는다.
+- 모션은 히어로의 `whoami` 타이핑(0.5초), 출력 등장, 깜박이는 커서 1개뿐이다. `prefers-reduced-motion`이면 모두 끈다. 스캔라인, 글리치, CRT, 과한 글로우는 쓰지 않는다.
+- 320px까지 가로 넘침이 없다. `kubectl` 표는 900px 이하에서 라벨이 붙은 카드로 접힌다. 화면의 모든 텍스트는 WCAG AA를 만족한다.
+- 수치·기술은 경력기술서·포트폴리오 원문에 있는 것만 쓴다. `git log`의 해시 자리는 지어낸 해시 대신 입사 연월(YYYYMM)을 쓰고, 각주로 밝힌다.
+
+| 역할 | 토큰 | 값 |
+| --- | --- | --- |
+| 바탕 / 패널 / 패널-2 | `--bg`, `--panel`, `--panel-2` | `#0d1117` / `#161b22` / `#1f2630` |
+| 본문 / 보조 / 흐림 | `--fg`, `--fg-2`, `--dim` | `#e6edf3` / `#c9d1d9` / `#9aa5b1` |
+| ANSI | `--red` `--green` `--yellow` `--blue` `--magenta` `--cyan` | `#ff7b72` `#7ee787` `#e3b341` `#79c0ff` `#d2a8ff` `#76e3ea` |
+| ANSI bright | `--*-b` | `#ffa198` `#aff5b4` `#f2cc60` `#a5d6ff` `#e2c5ff` `#b3f0ff` |
+| 구문 | `--syn-key/str/num/comment` | 시안 / 초록 / 노랑 / `--dim` |
+| 섹션 강조 | `.tone-*` | 소개 초록, 핵심 역량 마젠타, 프로젝트 시안, 경력 노랑, 공개 기록 파랑, 학력 마젠타, 문서 시안, 연락처 빨강 |
+
+**섹션별 명령:** `whoami`, `cat highlights.log`, `kubectl get skills`, `cat profile.yaml` / `cat about.md` / `kubectl get projects -A -o wide` / `git log --graph --oneline career` / `gh repo list ch4570 --source` / `cat education.txt` / `ls -la docs/` / `cat contact.env`.
+
+홈 스타일은 `assets/home.css` 한 장이고, 동작은 공용 `assets/site.js`만 쓴다. 타이핑 연출은 CSS만으로 구현해 JavaScript가 없어도 내용이 모두 보인다. 브라우저 검증은 `scripts/check-home-browser.mjs`가 맡는다. 이 스크립트는 유한 애니메이션이 끝난 뒤 대비를 잰다. 아래는 이전 디자인의 기록이다.
+
+## 2026-09-07 — Connected project universe (replaced)
 
 사용자는 우주 분위기가 배너에서 끝나지 않고 하단 전체로 이어져야 하며, 업적 그래프와 기존 흐름도를 행성 간 연결로 표현해 달라고 요청했다. 제공한 어벤져스 포스터의 깊이·명암·서로 겹치는 구성에서 출발하되, 실제 경력과 구현 흐름을 시각화한다.
 
