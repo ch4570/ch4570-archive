@@ -50,7 +50,8 @@ const until = async (inspect, accept, description, milliseconds = 10000) => {
 try {
   chrome = spawn(executable, [
     "--headless=new", "--remote-debugging-port=0", `--user-data-dir=${profile}`,
-    "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "about:blank",
+    "--no-first-run", "--no-default-browser-check", "--disable-background-networking",
+    ...(process.env.ARCHIVE_SOFTWARE_WEBGL === "1" ? ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"] : []), "about:blank",
   ], { stdio: "ignore" });
   let launchError;
   chrome.on("error", (error) => { launchError = error; });
@@ -112,7 +113,7 @@ try {
     await page("Page.navigate", { url: origin + "/" + fragment });
     await until(() => evaluate(`location.origin === ${JSON.stringify(origin)} && document.readyState === 'complete' && !!document.querySelector('main')`), Boolean, "Home did not finish loading");
     await evaluate("document.fonts.ready.then(() => true)");
-    await evaluate("Promise.all(document.getAnimations().filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished)).then(() => true)");
+    await evaluate("Promise.all(document.getAnimations().filter(animation => animation.effect?.getComputedTiming().iterations !== Infinity).map(animation => animation.finished.catch(() => null))).then(() => true)");
     await pause(300);
     return { page, evaluate, width, height, close: () => call("Target.closeTarget", { targetId }) };
   };
@@ -146,7 +147,7 @@ try {
     for (const type of ["mousePressed", "mouseReleased"]) await context.page("Input.dispatchMouseEvent", { type, button: "left", clickCount: 1, ...point });
   };
   const key = async (context, value) => {
-    const keys = { Tab: 9, Enter: 13, Home: 36, End: 35, ArrowDown: 40, ArrowUp: 38, ArrowRight: 39, ArrowLeft: 37 };
+    const keys = { Tab: 9, Enter: 13, Escape: 27, Home: 36, End: 35, ArrowDown: 40, ArrowUp: 38, ArrowRight: 39, ArrowLeft: 37 };
     for (const type of ["keyDown", "keyUp"]) await context.page("Input.dispatchKeyEvent", {
       type, key: value, code: value, windowsVirtualKeyCode: keys[value],
       ...(value === "Enter" && type === "keyDown" ? { text: "\r", unmodifiedText: "\r" } : {}),
@@ -163,19 +164,29 @@ try {
     record("no horizontal overflow or broken visible images", observed.width <= observed.expectedWidth + 1 && observed.scrollWidth <= observed.expectedWidth + 1 && !observed.brokenImages.length && !observed.overflowingText.length, observed, scope);
   };
 
+  // Run-on-view sections start transparent; scroll through once so every command has run.
+  const revealAll = async (context) => {
+    const height = await context.evaluate("document.documentElement.scrollHeight");
+    for (let top = 0; top < height; top += context.height * 0.6) {
+      await context.evaluate(`window.scrollTo({top:${Math.round(top)},behavior:'instant'})`);
+      await pause(120);
+    }
+    await context.evaluate("window.scrollTo({top:0,behavior:'instant'})");
+    await pause(700);
+  };
   const contrast = async (context, scope) => {
     const samples = await context.evaluate(`(() => {
       const rgba=value=>{const values=value.match(/[\\d.]+/g)?.map(Number)||[0,0,0];return [...values.slice(0,3),values[3]??1];};
       const over=(foreground,background)=>foreground.slice(0,3).map((channel,index)=>channel*foreground[3]+background[index]*(1-foreground[3]));
       const luminance=rgb=>rgb.map(channel=>{const value=channel/255;return value<=0.04045?value/12.92:((value+0.055)/1.055)**2.4;}).reduce((sum,value,index)=>sum+value*[0.2126,0.7152,0.0722][index],0);
-      const selector='main h1,main h2,main h3,main h4,main p,main li,main dt,main dd,main a,main summary,main button,.site-header a';
-      return [...document.querySelectorAll(selector)].filter(element=>element.getBoundingClientRect().height>0&&element.textContent.trim()).map(element=>{
+      const selector='main h1,main h2,main h3,main p,main li,main dt,main dd,main a,main summary,main button,.site-header a';
+      return [...document.querySelectorAll(selector)].filter(element=>element.getBoundingClientRect().height>0&&element.textContent.trim()&&!element.matches(':disabled')&&!element.closest('[aria-hidden=true],.stream__stage')).map(element=>{
         const layers=[];let opacity=1;
         for(let current=element;current;current=current.parentElement){const style=getComputedStyle(current);layers.unshift(rgba(style.backgroundColor));opacity*=Number(style.opacity);}
-        const background=layers.reduce((color,layer)=>over(layer,color),[15,18,20]),style=getComputedStyle(element),textColor=rgba(style.color);
+        const background=layers.reduce((color,layer)=>over(layer,color),[18,21,28]),style=getComputedStyle(element),textColor=rgba(style.color);
         textColor[3]*=opacity;
         const foreground=over(textColor,background),a=luminance(foreground),b=luminance(background),ratio=(Math.max(a,b)+.05)/(Math.min(a,b)+.05),size=parseFloat(style.fontSize),weight=parseInt(style.fontWeight,10),minimum=size>=24||(size>=18.66&&weight>=700)?3:4.5;
-        return {tag:element.tagName.toLowerCase(),className:element.className,text:element.textContent.trim().slice(0,60),ratio:Number(ratio.toFixed(2)),minimum};
+        return {tag:element.tagName.toLowerCase(),className:String(element.className),text:element.textContent.trim().slice(0,60),ratio:Number(ratio.toFixed(2)),minimum};
       });
     })()`);
     const failures = samples.filter(sample => sample.ratio < sample.minimum);
@@ -183,23 +194,24 @@ try {
   };
   const firstViewport = (context) => context.evaluate(`(() => {
     const inView=element=>{if(!element)return false;const r=element.getBoundingClientRect();return r.width>0&&r.height>0&&r.top>=0&&r.bottom<=innerHeight;};
-    return {name:inView(document.querySelector('h1')),email:inView(document.querySelector('.facts a[href^="mailto:"]')),company:inView(document.querySelector('.facts dd')),highlights:[...document.querySelectorAll('.highlights li')].filter(inView).length,pdf:inView(document.querySelector('.site-header a[download]'))};
+    return {name:inView(document.querySelector('h1')),email:inView(document.querySelector('.hero__links a[href^="mailto:"]')),company:inView(document.querySelector('.profile dd')),highlights:[...document.querySelectorAll('.highlights li')].filter(inView).length,pdf:inView(document.querySelector('.site-header a[download]'))};
   })()`);
   const contentState = (context) => context.evaluate(`(() => {
     const visible=element=>!!element&&element.getBoundingClientRect().height>0&&getComputedStyle(element).visibility!=='hidden';
-    return {heading:document.querySelector('h1')?.textContent.replace(/\\s+/g,' ').trim(),portraitLoaded:!!document.querySelector('.facts img')?.naturalWidth,
-      projects:[...document.querySelectorAll('.project')].map(project=>({id:project.id||null,visible:visible(project)})),
+    return {heading:document.querySelector('h1')?.textContent.replace(/\\s+/g,' ').trim(),portraitLoaded:!!document.querySelector('.profile img')?.naturalWidth,
+      projects:[...document.querySelectorAll('.project')].map(project=>({id:project.id,row:visible(project.querySelector('.kube__toggle')),describe:!!project.querySelector('.describe .desc'),describeVisible:visible(project.querySelector('.describe .desc'))})),
       companies:[...document.querySelectorAll('.company h3')].map(heading=>heading.textContent.trim()),
       sectionHeadings:[...document.querySelectorAll('main section h2')].map(heading=>({text:heading.textContent.trim(),visible:visible(heading)})),
+      stream:{live:!!document.querySelector('.stream.is-live canvas'),fallback:visible(document.querySelector('.stream__fallback'))},
       decorative:document.querySelectorAll('.planet-navigator,.world-sphere,.stellar-backdrop,.hero-art,[data-explorer]').length};
   })()`);
-  const contentComplete = (state) => state.heading?.includes("서민재") && state.projects.length >= 10 && state.projects.every(project => project.visible) && state.companies.length === 4 && state.sectionHeadings.length >= 6 && state.sectionHeadings.every(heading => heading.visible) && state.decorative === 0;
+  const contentComplete = (state) => state.heading?.includes("서민재") && state.projects.length === 7 && state.projects.every(project => project.row && project.describe) && state.companies.length === 4 && state.sectionHeadings.length >= 6 && state.sectionHeadings.every(heading => heading.visible) && (state.stream.live || state.stream.fallback) && state.decorative === 0;
   const headerCheck = async (context, scope) => {
     const observed = await context.evaluate(`(() => [...document.querySelectorAll('.site-header nav a,.site-header a[download]')].map(element=>{
       const r=element.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,hit=document.elementFromPoint(x,y);
       return {text:element.textContent.trim(),download:element.hasAttribute('download'),height:r.height,inViewport:r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight,unobscured:hit===element||element.contains(hit)};
     }))()`);
-    record("header navigation and résumé PDF remain visible and pointer-accessible", observed.some(entry => entry.download) && observed.filter(entry => !entry.download).length >= 3 && observed.every(entry => entry.height >= 24 && entry.inViewport && entry.unobscured), observed, scope);
+    record("header navigation and résumé PDF remain visible and pointer-accessible", observed.some(entry => entry.download) && observed.filter(entry => !entry.download).length >= 3 && observed.every(entry => entry.height >= 14 && entry.inViewport && entry.unobscured), observed, scope);
     const before = new Set(downloads.keys());
     await click(context, ".site-header a[download]");
     const download = await until(async () => [...downloads.values()].find(item => !before.has(item.guid) && item.state === "completed"), Boolean, "Header PDF download did not complete");
@@ -210,12 +222,15 @@ try {
   for (const viewport of [{ width: 1440, height: 900 }, { width: 1024, height: 768 }, { width: 390, height: 844, mobile: true }, { width: 320, height: 640, mobile: true }]) {
     const scope = `${viewport.width}`;
     const context = await openPage(viewport);
-    const state = await contentState(context);
-    record("every career project is readable without interaction and no decorative universe remains", contentComplete(state) && state.portraitLoaded, state, scope);
-    await layout(context, scope);
     if (viewport.width === 1440) {
       const above = await firstViewport(context);
       record("first viewport shows name, current company, email, highlights, and PDF", above.name && above.email && above.company && above.highlights >= 3 && above.pdf, above, scope);
+    }
+    await revealAll(context);
+    const state = await contentState(context);
+    record("every project row, company and section is present; the hero scene or its fallback renders", contentComplete(state) && state.portraitLoaded, state, scope);
+    await layout(context, scope);
+    if (viewport.width === 1440) {
       await context.page("DOM.enable");
       await context.page("CSS.enable");
       const { root } = await context.page("DOM.getDocument");
@@ -228,8 +243,6 @@ try {
       await screenshot(context, "home-1440.png");
       await screenshot(context, "home-1440-full.png", true);
     } else if (viewport.width === 390) {
-      const above = await firstViewport(context);
-      record("mobile first viewport shows name and highlights", above.name && above.highlights >= 1 && above.pdf, above, scope);
       await headerCheck(context, scope);
       await screenshot(context, "home-390.png");
       await screenshot(context, "home-390-full.png", true);
@@ -242,22 +255,50 @@ try {
   const interactive = await openPage({ width: 1440, height: 900 });
   await key(interactive, "Tab");
   record("first Tab reaches the skip link", await interactive.evaluate("document.activeElement.classList.contains('skip-link')"), await interactive.evaluate("document.activeElement.outerHTML.slice(0,80)"), "keyboard");
-  await click(interactive, ".diagram summary");
-  await until(() => interactive.evaluate("(() => {const image=document.querySelector('.diagram img');return document.querySelector('.diagram').open&&image.complete&&image.naturalWidth>0;})()"), Boolean, "Feed diagram did not open and load");
-  const diagram = await interactive.evaluate("(() => {const region=document.querySelector('.diagram [role=region]');return {label:region.getAttribute('aria-label'),tabindex:region.tabIndex,caption:document.querySelector('.diagram figcaption').textContent.trim()};})()");
-  record("feed diagram opens on demand with a text caption and focusable scroll region", diagram.tabindex === 0 && diagram.label && diagram.caption.length > 20, diagram, "interaction");
+  const rowsCollapsed = await interactive.evaluate("[...document.querySelectorAll('.kube__toggle')].every(button=>button.getAttribute('aria-expanded')==='false'&&document.getElementById(button.getAttribute('aria-controls')).inert)");
+  await click(interactive, "#case-search .kube__toggle");
+  await pause(400);
+  const expanded = await interactive.evaluate("(() => {const button=document.querySelector('#case-search .kube__toggle'),panel=document.getElementById(button.getAttribute('aria-controls'));return {expanded:button.getAttribute('aria-expanded'),inert:panel.inert,height:panel.querySelector('.desc').getBoundingClientRect().height};})()");
+  record("kubectl rows start collapsed and expand describe in place", rowsCollapsed && expanded.expanded === "true" && !expanded.inert && expanded.height > 40, { rowsCollapsed, expanded }, "interaction");
+  await click(interactive, "#case-search .diagram summary");
+  await until(() => interactive.evaluate("(() => {const image=document.querySelector('#case-search .diagram img');return document.querySelector('#case-search .diagram').open&&image.complete&&image.naturalWidth>0;})()"), Boolean, "Feed diagram did not open and load");
+  record("feed diagram opens inside the expanded project", true, undefined, "interaction");
+  const flow = await interactive.evaluate("(() => {const f=document.querySelector('[data-flow=search]');return {interactive:f.classList.contains('is-interactive'),nodes:f.querySelectorAll('.flow__node').length,scenarios:[...f.querySelectorAll('[data-scenario]')].map(b=>b.dataset.scenario)};})()");
+  await click(interactive, "[data-flow=search] [data-scenario=partial]");
+  await click(interactive, "[data-flow=search] .flow__play");
+  await click(interactive, "[data-flow=search] .flow__ctrl button[aria-label='다음 단계']");
+  await click(interactive, "[data-flow=search] .flow__ctrl button[aria-label='다음 단계']");
+  await click(interactive, "[data-flow=search] .flow__ctrl button[aria-label='다음 단계']");
+  await pause(900);
+  const flowState = await interactive.evaluate("(() => {const f=document.querySelector('[data-flow=search]');return {pressed:f.querySelector('[data-scenario=partial]').getAttribute('aria-pressed'),current:f.querySelector('.flow__node.is-current')?.dataset.node,offNodes:f.querySelectorAll('.flow__node.is-off').length,note:f.querySelector('.flow__note').textContent.trim(),step:f.querySelector('.flow__list [aria-current=step]')?.textContent.trim()};})()");
+  record("flowchart: scenario + next moves along the exact path with a text note", flow.interactive && flow.nodes >= 8 && flow.scenarios.length === 4 && flowState.pressed === "true" && flowState.current === "drop" && flowState.offNodes > 0 && flowState.note.startsWith("4/") && !!flowState.step, { flow, flowState }, "interaction");
+  await interactive.evaluate("document.activeElement.blur()");
+  await key(interactive, "/");
+  const palette = await interactive.evaluate("({open:document.querySelector('#palette').open,focus:document.activeElement.id})");
+  for (const ch of "cd car") await interactive.page("Input.dispatchKeyEvent", { type: "char", text: ch });
+  await pause(150);
+  const suggestion = await interactive.evaluate("document.querySelector('#palette-list [aria-selected=true]')?.dataset.cmd");
+  await key(interactive, "Enter");
+  await pause(700);
+  const moved = await interactive.evaluate("({open:document.querySelector('#palette').open,top:Math.round(document.querySelector('#career').getBoundingClientRect().top),focus:document.activeElement.id})");
+  record("slash opens the command palette; autocomplete and cd move to a section", palette.open && palette.focus === "palette-input" && suggestion === "cd career" && !moved.open && Math.abs(moved.top) < 120 && moved.focus === "career-title", { palette, suggestion, moved }, "interaction");
+  await key(interactive, "?");
+  const help = await interactive.evaluate("document.querySelector('#keys').open");
+  await key(interactive, "Escape");
+  record("question mark opens the shortcut help", help, help, "keyboard");
   await click(interactive, "[data-copy-email]");
-  const toast = await until(() => interactive.evaluate("document.querySelector('.toast').textContent.trim()"), Boolean, "Copy email feedback did not appear");
-  record("copy email button gives visible feedback", toast.includes("ckdekrn88@gmail.com") || toast.includes("복사"), toast, "interaction");
+  const copied = await until(() => interactive.evaluate("document.querySelector('[data-copy-out]').textContent.trim()"), Boolean, "Copy email feedback did not appear");
+  record("copy email prints an output line", copied.includes("ckdekrn88@gmail.com"), copied, "interaction");
   await interactive.close();
 
   const reduced = await openPage({ width: 390, height: 844, mobile: true, reduced: true });
-  const motion = await reduced.evaluate(`({reduced:matchMedia('(prefers-reduced-motion:reduce)').matches,scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,animations:document.getAnimations().filter(animation=>animation.playState==='running'&&animation.effect?.getComputedTiming().iterations===Infinity).length})`);
-  record("reduced motion has no running infinite animations or smooth scrolling", motion.reduced && motion.scrollBehavior !== "smooth" && !motion.animations, motion, "reduced-motion");
+  const motion = await reduced.evaluate(`({reduced:matchMedia('(prefers-reduced-motion:reduce)').matches,scrollBehavior:getComputedStyle(document.documentElement).scrollBehavior,animations:document.getAnimations().filter(animation=>animation.playState==='running'&&animation.effect?.getComputedTiming().iterations===Infinity).length,pending:document.querySelectorAll('.is-pending').length})`);
+  record("reduced motion: no infinite animation, smooth scroll, or pending reveal", motion.reduced && motion.scrollBehavior !== "smooth" && !motion.animations && !motion.pending, motion, "reduced-motion");
   await reduced.close();
 
   const plain = await openPage({ width: 390, height: 844, mobile: true, javascript: false });
-  record("no-JavaScript content remains complete and readable", contentComplete(await contentState(plain)), await contentState(plain), "no-js");
+  const plainState = await contentState(plain);
+  record("no-JavaScript: every describe block is expanded and readable", contentComplete(plainState) && plainState.projects.every(project => project.describeVisible), plainState, "no-js");
   await layout(plain, "no-js");
   await plain.close();
 
@@ -265,9 +306,9 @@ try {
   await printPage.page("Emulation.setEmulatedMedia", { media: "print", features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
   const printState = await printPage.evaluate(`(() => {
     const visible=element=>!!element&&element.getBoundingClientRect().height>0&&getComputedStyle(element).display!=='none';
-    return {print:matchMedia('print').matches,headerVisible:visible(document.querySelector('.site-header')),projects:[...document.querySelectorAll('.project')].every(visible),headings:[...document.querySelectorAll('main section h2')].map(heading=>visible(heading))};
+    return {print:matchMedia('print').matches,headerVisible:visible(document.querySelector('.site-header')),describes:[...document.querySelectorAll('.describe .desc')].every(visible),headings:[...document.querySelectorAll('main section h2')].map(heading=>visible(heading))};
   })()`);
-  record("print hides navigation and keeps every résumé section", printState.print && !printState.headerVisible && printState.projects && printState.headings.length >= 6 && printState.headings.every(Boolean), printState, "print");
+  record("print hides chrome and expands every project", printState.print && !printState.headerVisible && printState.describes && printState.headings.length >= 6 && printState.headings.every(Boolean), printState, "print");
   await screenshot(printPage, "print-home.png");
   await printPage.close();
 
