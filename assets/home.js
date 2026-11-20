@@ -76,6 +76,17 @@ const setRow = (button, open, animate = true) => {
     { duration: Math.min(420, 220 + Math.abs(to - from) * 0.12), easing: "cubic-bezier(.2,.8,.2,1)" },
   );
 };
+// Collapsed rows show the project's own result line, copied from its describe block (no new text).
+toggles.forEach((button) => {
+  const result = [...$$("dt", document.getElementById(button.getAttribute("aria-controls")))].find((dt) => dt.textContent.trim() === "결과");
+  const name = $(".kube__name", button);
+  if (result?.nextElementSibling && name && !$(".kube__sum", name)) {
+    const line = document.createElement("span");
+    line.className = "kube__sum";
+    line.textContent = result.nextElementSibling.textContent.trim();
+    name.append(line);
+  }
+});
 toggles.forEach((button) => {
   setRow(button, false, false);
   button.addEventListener("click", () => setRow(button, button.getAttribute("aria-expanded") !== "true"));
@@ -293,16 +304,26 @@ import("./flow.js").then(({ mountFlows }) => mountFlows()).catch(() => { /* stat
 
 /* ---------- three.js hero (progressive) ---------- */
 const stream = $("[data-stream]");
-if (stream) {
-  import("./event-stream.js")
-    .then(({ mountEventStream }) => mountEventStream(stream))
-    .then((live) => {
-      if (!live) return;
-      $(".stream__fallback", stream)?.setAttribute("hidden", "");
-      const inject = $("[data-inject]", stream);
-      if (inject && !reduce) inject.hidden = false;
-      const pause = $("[data-pause]", stream);
-      if (pause && !reduce) pause.hidden = false;
-    })
-    .catch(() => { /* static SVG stays */ });
+const saveData = navigator.connection?.saveData === true;
+const loadStream = () => import("./event-stream.js")
+  .then(({ mountEventStream }) => mountEventStream(stream))
+  .then((live) => {
+    if (!live) return;
+    $(".stream__fallback", stream)?.setAttribute("hidden", "");
+    const inject = $("[data-inject]", stream);
+    if (inject && !reduce) inject.hidden = false;
+    const pause = $("[data-pause]", stream);
+    if (pause && !reduce) pause.hidden = false;
+  })
+  .catch(() => { /* static SVG stays */ });
+// three.js (≈270 KB gzip) is fetched only when the scene is near the viewport, and not under Data Saver.
+if (stream && !saveData) {
+  if ("IntersectionObserver" in window) {
+    const watcher = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) return;
+      watcher.disconnect();
+      loadStream();
+    }, { rootMargin: "300px 0px" });
+    watcher.observe(stream);
+  } else loadStream();
 }

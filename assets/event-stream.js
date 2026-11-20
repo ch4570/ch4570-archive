@@ -1,9 +1,9 @@
 // Hero scene: an illustrative event pipeline (producer → topic partitions → consumer).
 // Failed events detour through a recovery node and are re-processed, mirroring the
 // "re-run only the failed work" story. It is a concept animation, not live data.
-// three.js is loaded from a pinned CDN build; any failure leaves the static SVG in place.
+// three.js is loaded from a pinned CDN build (SRI is declared by the import map in index.html); any failure leaves the static SVG in place.
 
-const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
+const THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js";
 
 const COLORS = {
   idle: 0x5ccfe6, // cyan: in flight
