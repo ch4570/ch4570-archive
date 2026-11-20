@@ -258,7 +258,7 @@ function build(figure, def) {
     b.lines.forEach((line, i) => { const s = el("tspan", { x: 0, dy: i ? 17 : 0 }, t); s.textContent = line; });
     nodes.set(id, g);
   });
-  const token = el("circle", { r: 6, class: "flow__token", cx: boxes.values().next().value.x, cy: boxes.values().next().value.y }, svg);
+  const token = el("circle", { r: 6, class: "flow__token", cx: 0, cy: 0 }, svg);
 
   // controls
   const bar = html("div", { class: "flow__bar" });
@@ -331,10 +331,24 @@ function build(figure, def) {
       stage.scrollTo({ left: (box.x / vw) * svg.clientWidth - stage.clientWidth / 2, behavior: reduce ? "auto" : "smooth" });
     }
   };
+  const restAt = (b) => ({ x: b.x - b.w / 2 + 3, y: b.y - b.h / 2 + 1 });
   const placeToken = (id) => {
-    const b = boxes.get(id);
-    token.setAttribute("cx", b.x);
-    token.setAttribute("cy", b.y);
+    cancelAnimationFrame(anim);
+    const p = restAt(boxes.get(id));
+    token.setAttribute("cx", p.x);
+    token.setAttribute("cy", p.y);
+  };
+  const settleToken = (id) => {
+    const p = restAt(boxes.get(id));
+    if (reduce) { placeToken(id); return; }
+    const x0 = Number(token.getAttribute("cx")), y0 = Number(token.getAttribute("cy")), start = performance.now();
+    const step = (now) => {
+      const t = Math.min(1, (now - start) / 160);
+      token.setAttribute("cx", x0 + (p.x - x0) * t);
+      token.setAttribute("cy", y0 + (p.y - y0) * t);
+      if (t < 1) anim = requestAnimationFrame(step);
+    };
+    anim = requestAnimationFrame(step);
   };
   const travel = (from, to, done) => {
     cancelAnimationFrame(anim);
@@ -349,7 +363,7 @@ function build(figure, def) {
       token.setAttribute("cx", p.x);
       token.setAttribute("cy", p.y);
       if (t < 1) anim = requestAnimationFrame(step);
-      else { placeToken(to); done?.(); }
+      else { settleToken(to); done?.(); }
     };
     anim = requestAnimationFrame(step);
   };
@@ -364,6 +378,7 @@ function build(figure, def) {
   };
   const stop = () => {
     playing = false;
+    note.setAttribute("aria-live", "polite"); // user-driven steps are announced once
     clearTimeout(timer);
     play.textContent = index === scenario.path.length - 1 ? "↺ 다시" : "▶ 재생";
     play.setAttribute("aria-pressed", "false");
@@ -377,6 +392,7 @@ function build(figure, def) {
   const start = () => {
     if (index >= scenario.path.length - 1) { index = 0; placeToken(scenario.path[0]); paintState(); }
     playing = true;
+    note.setAttribute("aria-live", "off"); // autoplay must not narrate every step
     play.textContent = "❚❚ 멈춤";
     play.setAttribute("aria-pressed", "true");
     timer = setTimeout(tick, 500);
