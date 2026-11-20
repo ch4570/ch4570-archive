@@ -34,8 +34,9 @@ addEventListener("scroll", () => {
   prog.style.transform = `scaleX(${Math.min(1, scrollY / (h.scrollHeight - innerHeight || 1))})`;
 }, { passive: true });
 
-/* ---------- 분야 필터 (프로젝트 카드와 공개 기록 줄이 data-axes를 나눠 쓴다) ---------- */
+/* ---------- 분야 필터 (프로젝트 카드의 data-axes로 거른다) ---------- */
 const chips = $$(".chip"), items = $$(".grid [data-axes]"), fstat = $(".fstat");
+const grid = $(".grid"), railCounter = $(".rail-count");
 function applyFilter(axis, push = true) {
   chips.forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.axis === axis)));
   let n = 0;
@@ -46,6 +47,8 @@ function applyFilter(axis, push = true) {
   });
   const label = chips.find((c) => c.dataset.axis === axis)?.firstChild.textContent.trim();
   if (fstat) fstat.textContent = axis === "all" ? `전체 ${n}개` : `${label} 관련 ${n}개`;
+  grid?.scrollTo({ left: 0 });
+  railCount();
   if (push) {
     const u = new URL(location);
     if (axis === "all") u.searchParams.delete("axis"); else u.searchParams.set("axis", axis);
@@ -58,16 +61,15 @@ const startAxis = new URL(location).searchParams.get("axis");
 applyFilter(chips.some((c) => c.dataset.axis === startAxis) ? startAxis : "all", false);
 
 /* ---------- 좁은 화면 가로 레일 ---------- */
-const grid = $(".grid"), railCounter = $(".rail-count");
 function railCount() {
   if (!railCounter || getComputedStyle(railCounter).display === "none") return;
   const cards = $$(".card:not([hidden])", grid);
+  if (cards.length < 2) { railCounter.textContent = ""; return; }
   const w = (cards[0]?.offsetWidth || 0) + 18 || 1;
   railCounter.textContent = `${Math.min(cards.length, Math.round(grid.scrollLeft / w) + 1)} / ${cards.length} · 옆으로 밀어서 보기`;
 }
 grid?.addEventListener("scroll", railCount, { passive: true });
 addEventListener("resize", railCount);
-chips.forEach((c) => c.addEventListener("click", () => { grid.scrollTo({ left: 0 }); railCount(); }));
 railCount();
 
 /* ---------- 프로젝트 상세 창 (카드 안 .detail을 복제하고, 흐름도는 flow.js가 그 안에 그린다) ---------- */
@@ -102,7 +104,7 @@ $$(".card__t, [data-open-case]").forEach((b) => b.addEventListener("click", (e) 
 dlg?.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
 $(".case__x")?.addEventListener("click", () => dlg.close());
 dlg?.addEventListener("close", () => {
-  opener?.focus?.();
+  (opener && opener !== document.body ? opener : $("#pt"))?.focus?.();
   const u = new URL(location);
   u.hash = "projects";
   history.replaceState(null, "", u);
@@ -129,7 +131,7 @@ const root = $("[data-hero]");
 const map = $("[data-map]", root);
 const KW = Object.fromEntries(KEYWORDS.map((k) => {
   const card = CARDS.find((c) => c.id === k.card);
-  return [k.id, { axis: k.axis, cs: k.card, cmd: k.shell.cmd, out: k.shell.out, title: card.title, w: k.word }];
+  return [k.id, { flow: Boolean(card.detail.flow), axis: k.axis, cs: k.card, cmd: k.shell.cmd, out: k.shell.out, title: card.title, w: k.word }];
 }));
 const AX2KW = Object.fromEntries(Object.entries(KW).map(([k, v]) => [v.axis, k]));
 const ORDER = $$(".node", map).map((n) => n.dataset.kw);
@@ -273,13 +275,14 @@ function placeMM(k) {
 
 /* 상태줄과 화면 읽기 도구용 한 문장 */
 const sbv = $("[data-sbv]"), sbw = $("[data-sbw]"), srmsg = $("[data-srmsg]");
-let srT = 0;
+let srT = 0, booted = false;
 function paintSb() {
   const on = $(".chip[aria-pressed=true]");
   const f = on ? on.dataset.axis : "all", n = $$(".card:not([hidden])").length;
   const field = f === "all" ? "분야 전체" : `분야 ${on.firstChild.textContent.trim()} ${n}개`;
   sbv.textContent = cur ? `키워드 ${KW[cur].w} · ${field}` : "";
   clearTimeout(srT);
+  if (!booted) return; // 처음 그릴 때는 낭독하지 않는다
   srT = setTimeout(() => { if (cur) srmsg.textContent = `${KW[cur].w} 선택. ${field}`; }, 500);
 }
 if (fstat) new MutationObserver(paintSb).observe(fstat, { childList: true, characterData: true, subtree: true });
@@ -297,6 +300,7 @@ function select(k, apply, instant) {
   $("[data-strip-k]", map).textContent = d.w;
   $("[data-strip-t]", map).textContent = d.title;
   openBtn.dataset.openCase = d.cs;
+  openBtn.textContent = d.flow ? "처리 순서 보기 →" : "상세 보기 →";
   moreLink.dataset.goAxis = d.axis;
   $$(".card[data-kw]").forEach((c) => c.classList.toggle("is-kw", c.dataset.kw === k));
   mmBtns.forEach((b) => {
@@ -328,7 +332,7 @@ nodes.forEach((n) => {
     e.preventDefault();
     const nk = ORDER[(ORDER.indexOf(k) + f + ORDER.length) % ORDER.length];
     $(`.node[data-kw=${nk}] .node__a`, map).focus();
-    select(nk, true);
+    select(nk, false); // 방향키는 h/l처럼 미리 보기만 한다. 거르는 것은 Enter·클릭이다
   });
 });
 mmBtns.forEach((b) => b.addEventListener("click", () => select(b.dataset.kw, true)));
@@ -404,4 +408,5 @@ document.addEventListener("keydown", (e) => {
 
 /* ---------- 시작: 주소의 분야나 기본 키워드로 지도를 맞춘다 ---------- */
 select(AX2KW[new URL(location).searchParams.get("axis")] || "record", false, true);
+booted = true;
 document.fonts?.ready.then(() => { measure(); cur0 = null; runToken(cur, false); });
