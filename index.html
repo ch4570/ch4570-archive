@@ -42,7 +42,7 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='14' fill='%231a1f29'/%3E%3Cpath d='M18 22l12 10-12 10' fill='none' stroke='%23ffcc66' stroke-width='6' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M34 44h12' stroke='%235ccfe6' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
     />
     <script>document.documentElement.classList.add("js");</script>
-    <script type="importmap">{"integrity":{"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js":"sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28"}}</script>
+    <script type="importmap">{"integrity":{"./assets/vendor/three.module.min.js":"sha384-IDC7sAMAIMB/TZ6dgKKPPAKZ2bXXXP8+FBMBC8cU319eBhKITx+PaalhfDkDNH28"}}</script>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="stylesheet" media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" integrity="sha384-GIdEBaqGN9mNkDkMkzMHW8EKUqtpPIe/sLj1X7DIrnc9uPtLROJgmuDlh+3rBw0j" crossorigin="anonymous" />
     <link rel="stylesheet" media="print" onload="this.media='all'" href="https://cdn.jsdelivr.net/npm/@fontsource/martian-mono@5.1.1/400.css" integrity="sha384-3lxAj7nEFT+/ITE5Uy2ikCCBIQ9DFKy9lW3ivfYRe6KHk6ABsLAHnvG0CeOYRDZL" crossorigin="anonymous" />
@@ -94,10 +94,11 @@
 
           <figure class="stream" data-stream aria-labelledby="stream-caption" aria-describedby="stream-desc">
             <div class="stream__stage" data-stage>
-              <svg class="stream__fallback" viewBox="0 0 640 300" aria-hidden="true">
+              <svg class="stream__fallback" viewBox="0 0 640 316" aria-hidden="true">
                 <g fill="none" stroke="#3a4352" stroke-width="2"><path d="M110 90H390M110 150H390M110 210H390"/></g>
                 <g fill="#2a3140" stroke="#6b7686"><rect x="40" y="60" width="50" height="180" rx="4"/><rect x="420" y="60" width="50" height="180" rx="4"/><rect x="540" y="100" width="56" height="100" rx="28"/><circle cx="330" cy="272" r="20" fill="none" stroke-width="5"/></g>
                 <path d="M445 240C440 262 380 272 352 272M308 272C280 272 260 240 300 214" fill="none" stroke="#ffcc66" stroke-dasharray="6 5" stroke-width="2"/>
+                <g fill="#9aa3ad" font-family="Martian Mono, ui-monospace, monospace" font-size="13" text-anchor="middle"><text x="65" y="46">producer</text><text x="250" y="56">topic · 3 partitions</text><text x="445" y="46">consumer</text><text x="568" y="90">store</text><text x="330" y="312">recovery → retry</text></g>
                 <g fill="#5ccfe6"><rect x="150" y="84" width="12" height="12"/><rect x="260" y="144" width="12" height="12"/><rect x="200" y="204" width="12" height="12"/></g>
                 <g fill="#bae67e"><rect x="500" y="84" width="12" height="12"/></g><rect x="324" y="266" width="12" height="12" fill="#f28779"/>
               </svg>
@@ -147,6 +148,32 @@
             <h2 id="projects-title" tabindex="-1">프로젝트</h2>
             <p class="lede">행을 누르면 <code>describe</code> 결과(문제, 한 일, 결과)가 펼쳐집니다.</p>
             <div class="kube" role="list">
+              <article class="project" role="listitem" id="case-jpa">
+                <h3 class="kube__row"><button type="button" class="kube__toggle" aria-expanded="true" aria-controls="d-jpa"><span class="kube__name">JPA 변경 감지 오류 재현과 데이터 보정</span><span class="kube__ns">토스랩</span><span class="st st--done">Completed</span><span class="kube__age">2024.06–2025.04</span></button></h3>
+                <div class="describe" id="d-jpa"><div class="describe__in">
+                  <dl class="desc">
+                    <dt>문제</dt><dd>Mock 테스트에서는 드러나지 않던 JPA 변경 감지 오류로 데이터가 잘못 저장되고 있었습니다.</dd>
+                    <dt>한 일</dt><dd><ul><li>실제 영속성 컨텍스트에서 오류를 재현해 원인을 확인했습니다.</li><li>영향받은 데이터를 찾아 보정 스크립트로 바로잡았습니다.</li></ul></dd>
+                    <dt>결과</dt><dd>약 200만 건 보정</dd>
+                    <dt>기술</dt><dd>JPA</dd>
+                  </dl>
+                  <figure class="flow" data-flow="jpa" aria-labelledby="flow-jpa-title">
+                    <figcaption id="flow-jpa-title" class="flow__title">처리 흐름 <span class="dim">· 시나리오를 고르거나 단계를 눌러 보세요</span></figcaption>
+                    <ol class="flow__steps"><li>Mock 테스트는 통과했지만 데이터가 잘못 저장되고 있었습니다.</li><li>실제 영속성 컨텍스트로 재현해 변경 감지 누락을 원인으로 확인했습니다.</li><li>영향받은 데이터를 찾아 보정 스크립트로 약 200만 건을 바로잡았습니다.</li></ol>
+                  </figure>
+                  <p class="desc__links"><a class="lnk" href="./portfolio/#jpa">재현·보정 과정 보기</a><a class="lnk" href="https://velog.io/@ch4570/여러분이-열심히-짠-테스트는-안녕하십니까" target="_blank" rel="noreferrer">관련 글 읽기</a></p>
+                </div></div>
+              </article>
+              <article class="project" role="listitem" id="case-boot">
+                <h3 class="kube__row"><button type="button" class="kube__toggle" aria-expanded="true" aria-controls="d-boot"><span class="kube__name">Drive-Service Spring Boot 3 전환</span><span class="kube__ns">토스랩</span><span class="st st--done">Completed</span><span class="kube__age">2024.06–2025.04</span></button></h3>
+                <div class="describe" id="d-boot"><div class="describe__in">
+                  <dl class="desc">
+                    <dt>한 일</dt><dd><ul><li>Spring Boot 2.3.8 → 3.3.3 전환 전에 기존 동작을 검증할 회귀 테스트부터 보강했습니다.</li></ul></dd>
+                    <dt>결과</dt><dd>테스트 0개 → 160개 이상</dd>
+                    <dt>기술</dt><dd>Spring Boot 2.3.8 → 3.3.3</dd>
+                  </dl>
+                </div></div>
+              </article>
               <article class="project" role="listitem" id="case-event">
                 <h3 class="kube__row"><button type="button" class="kube__toggle" aria-expanded="true" aria-controls="d-event"><span class="kube__name">Kafka 이벤트 실패 복구</span><span class="kube__ns">웍스피어</span><span class="st st--run">Running</span><span class="kube__age">2025.06–</span></button></h3>
                 <div class="describe" id="d-event"><div class="describe__in">
@@ -209,32 +236,6 @@
                   <dl class="desc">
                     <dt>한 일</dt><dd><ul><li>Fixture 생성, Mock 초기화, WebMvc·JPA·트랜잭션 설정을 공통 모듈로 모아 반복 준비 코드를 줄였습니다.</li><li>Base·Mock·WebMvc·JPA 진입점으로 나눠 테스트가 필요한 설정만 불러오도록 했습니다.</li><li>느린 테스트 범위와 Spring 컨텍스트 재사용 방식을 조정해, 추가 자원 없이 CI 메모리 부족을 해소했습니다.</li></ul></dd>
                     <dt>초점</dt><dd>테스트 표준화 · CI 안정화</dd>
-                  </dl>
-                </div></div>
-              </article>
-              <article class="project" role="listitem" id="case-jpa">
-                <h3 class="kube__row"><button type="button" class="kube__toggle" aria-expanded="true" aria-controls="d-jpa"><span class="kube__name">JPA 변경 감지 오류 재현과 데이터 보정</span><span class="kube__ns">토스랩</span><span class="st st--done">Completed</span><span class="kube__age">2024.06–2025.04</span></button></h3>
-                <div class="describe" id="d-jpa"><div class="describe__in">
-                  <dl class="desc">
-                    <dt>문제</dt><dd>Mock 테스트에서는 드러나지 않던 JPA 변경 감지 오류로 데이터가 잘못 저장되고 있었습니다.</dd>
-                    <dt>한 일</dt><dd><ul><li>실제 영속성 컨텍스트에서 오류를 재현해 원인을 확인했습니다.</li><li>영향받은 데이터를 찾아 보정 스크립트로 바로잡았습니다.</li></ul></dd>
-                    <dt>결과</dt><dd>약 200만 건 보정</dd>
-                    <dt>기술</dt><dd>JPA</dd>
-                  </dl>
-                  <figure class="flow" data-flow="jpa" aria-labelledby="flow-jpa-title">
-                    <figcaption id="flow-jpa-title" class="flow__title">처리 흐름 <span class="dim">· 시나리오를 고르거나 단계를 눌러 보세요</span></figcaption>
-                    <ol class="flow__steps"><li>Mock 테스트는 통과했지만 데이터가 잘못 저장되고 있었습니다.</li><li>실제 영속성 컨텍스트로 재현해 변경 감지 누락을 원인으로 확인했습니다.</li><li>영향받은 데이터를 찾아 보정 스크립트로 약 200만 건을 바로잡았습니다.</li></ol>
-                  </figure>
-                  <p class="desc__links"><a class="lnk" href="./portfolio/#jpa">재현·보정 과정 보기</a><a class="lnk" href="https://velog.io/@ch4570/여러분이-열심히-짠-테스트는-안녕하십니까" target="_blank" rel="noreferrer">관련 글 읽기</a></p>
-                </div></div>
-              </article>
-              <article class="project" role="listitem" id="case-boot">
-                <h3 class="kube__row"><button type="button" class="kube__toggle" aria-expanded="true" aria-controls="d-boot"><span class="kube__name">Drive-Service Spring Boot 3 전환</span><span class="kube__ns">토스랩</span><span class="st st--done">Completed</span><span class="kube__age">2024.06–2025.04</span></button></h3>
-                <div class="describe" id="d-boot"><div class="describe__in">
-                  <dl class="desc">
-                    <dt>한 일</dt><dd><ul><li>Spring Boot 2.3.8 → 3.3.3 전환 전에 기존 동작을 검증할 회귀 테스트부터 보강했습니다.</li></ul></dd>
-                    <dt>결과</dt><dd>테스트 0개 → 160개 이상</dd>
-                    <dt>기술</dt><dd>Spring Boot 2.3.8 → 3.3.3</dd>
                   </dl>
                 </div></div>
               </article>

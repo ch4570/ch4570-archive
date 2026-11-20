@@ -232,7 +232,7 @@ test("career employer headings separate company from product and role", async ()
 
 test("portfolio leads with the JPA correction case before supporting work", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const orderedIds = ["event", "jpa", "point", "feed", "evidence"];
+  const orderedIds = ["jpa", "event", "point", "feed", "evidence"];
   const positions = orderedIds.map((id) => source.indexOf('id="' + id + '"'));
 
   assert.ok(positions.every((position) => position >= 0), "expected every portfolio case");

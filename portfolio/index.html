@@ -77,8 +77,8 @@
       <nav class="case-nav" aria-label="포트폴리오 목차">
         <p class="case-nav-title">작업</p>
         <ol>
-          <li><a href="#event" aria-current="true"><span>01</span>이벤트 복구</a></li>
-          <li><a href="#jpa"><span>02</span>JPA 데이터 보정</a></li>
+          <li><a href="#jpa" aria-current="true"><span>01</span>JPA 데이터 보정</a></li>
+          <li><a href="#event"><span>02</span>이벤트 복구</a></li>
           <li><a href="#point"><span>03</span>배치·동시성</a></li>
           <li><a href="#feed"><span>04</span>검색·캐시</a></li>
           <li><a href="#evidence"><span>05</span>공개 기록</a></li>
@@ -86,39 +86,9 @@
       </nav>
 
       <article class="portfolio-content">
-        <section class="case-section" id="event" aria-labelledby="event-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">01</span>
-            <div>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">실패 단계를 기록해 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
-            </div>
-          </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 경로 설계·개발</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka 이벤트의 발행·처리 상태를 단계별로 구분</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 처리 상태 기록 · JSONB에 복구용 payload 저장</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">정체된 IN_PROGRESS 이벤트를 유형별로 묶어 Slack 알림</dd></div>
-          </dl>
-
-          <div class="story-grid">
-            <div class="story-block">
-              <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-017">같은 실패 상태로는 복구 지점을 정할 수&nbsp;없었습니다</h3>
-              <p data-edit-id="portfolio-018">발행 전에 멈췄는지, 발행 후 업무 처리에서 멈췄는지에 따라 확인할 데이터와 재실행 범위가 달랐지만 하나의 실패 상태만 남았습니다.</p>
-            </div>
-            <div class="story-block">
-              <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-019">실패 단계와 업무를 분리해 복구 범위를 좁혔습니다</h3>
-              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 나눠 기록하고 payload를 보존했습니다. 포인트 차감·회수·만료 알림 가운데 완료되지 않은 업무만 골라 다시 실행했습니다.</p>
-            </div>
-          </div>
-
-        </section>
-
         <section class="case-section" id="jpa" aria-labelledby="jpa-title">
           <header class="case-header">
-            <span class="case-number" aria-hidden="true">02</span>
+            <span class="case-number" aria-hidden="true">01</span>
             <div>
               <h2 class="case-title" id="jpa-title" data-edit-id="portfolio-079">실제 영속성 컨텍스트에서 JPA 변경 감지 오류를 재현하고 <span lang="en"><span lang="ko">약 200만&nbsp;건</span></span>을 보정했습니다</h2>
               <p class="case-lede" data-edit-id="portfolio-080">Mock 테스트에서 놓친 저장 오류를 실제 영속성 컨텍스트에서 재현했습니다. 보정 스크립트로 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
@@ -144,6 +114,36 @@
               <p data-edit-id="portfolio-092">오류 원인을 재현해 확인하고 보정 스크립트를 작성했습니다. 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
             </div>
           </div>
+        </section>
+
+        <section class="case-section" id="event" aria-labelledby="event-title">
+          <header class="case-header">
+            <span class="case-number" aria-hidden="true">02</span>
+            <div>
+              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">실패 단계를 기록해 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
+            </div>
+          </header>
+
+          <dl class="fact-grid">
+            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 경로 설계·개발</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka 이벤트의 발행·처리 상태를 단계별로 구분</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 처리 상태 기록 · JSONB에 복구용 payload 저장</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">정체된 IN_PROGRESS 이벤트를 유형별로 묶어 Slack 알림</dd></div>
+          </dl>
+
+          <div class="story-grid">
+            <div class="story-block">
+              <span class="story-label">상황</span>
+              <h3 data-edit-id="portfolio-017">같은 실패 상태로는 복구 지점을 정할 수&nbsp;없었습니다</h3>
+              <p data-edit-id="portfolio-018">발행 전에 멈췄는지, 발행 후 업무 처리에서 멈췄는지에 따라 확인할 데이터와 재실행 범위가 달랐지만 하나의 실패 상태만 남았습니다.</p>
+            </div>
+            <div class="story-block">
+              <span class="story-label">바꾼 점</span>
+              <h3 data-edit-id="portfolio-019">실패 단계와 업무를 분리해 복구 범위를 좁혔습니다</h3>
+              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 나눠 기록하고 payload를 보존했습니다. 포인트 차감·회수·만료 알림 가운데 완료되지 않은 업무만 골라 다시 실행했습니다.</p>
+            </div>
+          </div>
+
         </section>
 
         <section class="case-section" id="point" aria-labelledby="point-title">
