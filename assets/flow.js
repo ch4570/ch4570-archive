@@ -130,7 +130,7 @@ export const FLOWS = {
   },
   jpa: {
     nodes: {
-      mock: { x: 70, y: 80, label: "Mock 테스트는 통과" },
+      mock: { x: 84, y: 80, label: "Mock 테스트는 통과" },
       bad: { x: 220, y: 80, label: "데이터가\n잘못 저장됨", kind: "fail" },
       repro: { x: 380, y: 80, label: "실제 영속성\n컨텍스트로 재현" },
       cause: { x: 540, y: 80, label: "원인 확인:\n변경 감지 누락", kind: "gate" },

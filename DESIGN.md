@@ -12,7 +12,7 @@
 - 강조색은 각각 뜻이 하나다. 앰버는 프롬프트와 핵심 수치, 시안은 진행 중과 포커스, 그린은 완료, 코랄은 실패를 뜻한다. 본문, 배지, 메타는 중립색을 쓴다.
 - powerline 프롬프트는 히어로에만 둔다. 이후 섹션은 `❯ 명령` 한 줄만 쓴다. 이 줄은 `aria-hidden`이고 상호작용하지 않는다. `[ OK ] exit 0`은 페이지 끝에 한 번만 둔다.
 - 글꼴은 쉘 요소에 Martian Mono, 한국어에 Pretendard를 쓴다. 모노 스택에 Pretendard를 넣어 한글이 고정폭 대체 글꼴로 렌더링되지 않게 한다.
-- 히어로 장면은 "이벤트 복구 개념도"다. producer, topic 파티션 3개, consumer, store로 흐르고, 실패하면 recovery를 거쳐 재처리된다. 시뮬레이션이라고 명시하고 숫자 카운터는 두지 않는다. 장애 주입, 일시정지, 호버 라벨을 둔다. 화면 밖이거나 탭이 숨겨지면 멈춘다. 모션 감소 설정에서는 정지 프레임을 보여 준다. WebGL이나 CDN을 쓸 수 없으면 정적 SVG를 보여 준다. three.js는 jsDelivr에서 `three@0.170.0/build/three.module.min.js`를 동적으로 import하고, npm 의존성은 추가하지 않는다. 무결성은 `index.html`의 import map `integrity`(SHA-384)로 선언한다(미지원 브라우저는 검증 없이 동작). 장면이 뷰포트 300px 안에 들어올 때만 불러오고, 데이터 절약 모드에서는 정적 SVG에 머문다. 폰트 CSS 3개도 SRI를 두고 `media="print"` → `onload` 전환으로 렌더를 막지 않는다.
+- 히어로 장면은 "이벤트 복구 개념도"다. producer, topic 파티션 3개, consumer, store로 흐르고, 실패하면 recovery를 거쳐 재처리된다. 시뮬레이션이라고 명시하고 숫자 카운터는 두지 않는다. 장애 주입, 일시정지, 호버 라벨을 둔다. 화면 밖이거나 탭이 숨겨지면 멈춘다. 모션 감소 설정에서는 정지 프레임을 보여 준다. WebGL이나 CDN을 쓸 수 없으면 정적 SVG를 보여 준다. three.js r170은 `assets/vendor/three.module.min.js`로 저장소에 복사해 동적 import한다(npm 의존성 불추가). CDN 의존과 import map SRI를 지원하지 않는 브라우저의 무검증 로드 위험을 없애려는 결정이며, 무결성은 `index.html`의 import map `integrity`(SHA-384)로도 선언하고 MIT 고지는 `THIRD_PARTY_NOTICES.md`에 둔다. 장면이 뷰포트 300px 안에 들어올 때만 불러오고, 데이터 절약 모드에서는 정적 SVG에 머문다. 폰트 CSS 3개는 CDN에 남기되 SRI를 두고 `media="print"` → `onload` 전환으로 렌더를 막지 않는다.
 - 인터랙션은 사용자 행동에 반응하는 것만 둔다.
   - 섹션 명령은 화면에 처음 들어올 때 한 번만 타이핑된다.
   - 프로젝트 행(h3 > button, `aria-expanded`/`aria-controls`, 닫히면 `inert`)을 누르면 describe가 펼쳐진다.

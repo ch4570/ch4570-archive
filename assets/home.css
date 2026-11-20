@@ -60,7 +60,8 @@ h1:focus-visible, h2:focus-visible { outline: 2px solid var(--cyan); }
 .bar__k:hover { background: var(--fg); color: var(--ink); }
 .bar__pdf { color: var(--fg-2); text-decoration: none; white-space: nowrap; }
 .bar__pdf:hover { background: var(--fg); color: var(--ink); }
-.progress { white-space: pre; color: var(--dim); }
+.progress { display: none; white-space: pre; color: var(--dim); }
+.js .progress { display: inline; }
 .progress.is-zero { visibility: hidden; }
 .progress__track { color: var(--green); }
 
