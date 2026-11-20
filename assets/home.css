@@ -116,7 +116,7 @@ h2{font-size:clamp(28px,3.6vw,40px);line-height:1.25;letter-spacing:-.02em;font-
 .chip[aria-pressed=true] small{color:#4a5260}
 .fstat{margin-top:10px;font:500 12px var(--mono);color:var(--dim);min-height:1.5em}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(36px,4vw,52px) clamp(24px,3vw,40px);margin-top:36px}
-.card{position:relative;display:flex;flex-direction:column;gap:16px}
+.card{min-width:0;position:relative;display:flex;flex-direction:column;gap:16px}
 .card[hidden],[data-axes][hidden]{display:none}
 .card__fig{background:var(--win);border-radius:12px;padding:18px 14px 12px;transition:background .25s}
 .card:hover .card__fig,.card:focus-within .card__fig{background:#1e2430}
@@ -142,7 +142,7 @@ h2{font-size:clamp(28px,3.6vw,40px);line-height:1.25;letter-spacing:-.02em;font-
   .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media(max-width:640px){
-  .grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:minmax(0,1fr)}
 }
 .js .detail{display:none}
 .js-only{display:none}
@@ -657,3 +657,5 @@ html{scroll-padding-bottom:56px}
 .snap p{margin-top:8px}
 .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:760px){.facts{grid-template-columns:1fr}}
+/* 문서 줄의 '웹'·'PDF' 링크도 조작 영역이 24px 이상이어야 한다 */
+.docs .links .lnk{display:inline-flex;align-items:center;justify-content:center;min-width:32px;min-height:32px;padding:0 4px}
