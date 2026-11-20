@@ -3041,7 +3041,7 @@ h4 {
     padding: 12px 0 18px;
   }
 
-  #jpa.case-section,
+  #event.case-section,
   #feed.case-section {
     break-before: page;
     page-break-before: always;
