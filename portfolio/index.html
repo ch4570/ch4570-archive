@@ -172,8 +172,8 @@
             </div>
             <div class="story-block">
               <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-041">진행 위치를 따로 기록하고 결과 정합성을 확인했습니다</h3>
-              <p data-edit-id="portfolio-042">배치별 진행 위치를 분리해 재실행 범위를 제한했습니다. 동시 요청 후에는 잔액·원장·예산·후속 이벤트를 함께 대조했습니다.</p>
+              <h3 data-edit-id="portfolio-041">커서와 시작 ID로 재실행 범위를 정하고 결과 정합성을 확인했습니다</h3>
+              <p data-edit-id="portfolio-042">소멸 배치는 커서로 한 구간씩 읽고, 아카이브 배치는 시작 ID를 지정해 남은 범위부터 다시 실행하게 했습니다. 동시 요청 후에는 잔액·원장·예산·후속 이벤트를 함께 대조했습니다.</p>
             </div>
           </div>
 
@@ -192,7 +192,7 @@
             <div class="fact-cell"><dt data-edit-id="portfolio-051">처리 단계</dt><dd data-edit-id="portfolio-052">후보 조회 → 중복 제거 → 점수화 → 재정렬 → 캐시 저장</dd></div>
             <div class="fact-cell"><dt data-edit-id="portfolio-053">구성</dt><dd data-edit-id="portfolio-054">후보 수집 인터페이스 · 역방향 조회 방식 · 캐시 전략 분리</dd></div>
             <div class="fact-cell"><dt data-edit-id="portfolio-055">실패 격리</dt><dd data-edit-id="portfolio-056">검색 소스별 정책·타임아웃·실패 처리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 · Redis 캐시 우회 · 순환 의존 검출</dd></div>
+            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 · Redis 캐시 우회 · ArchUnit 모듈 의존 검증</dd></div>
           </dl>
 
           <details class="diagram-disclosure archify-disclosure" open>

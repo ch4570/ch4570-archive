@@ -52,7 +52,7 @@
           <p class="resume-hero-role" data-edit-id="career-003">Backend Engineer · Java / Kotlin / Spring</p>
           <p class="resume-hero-copy" data-edit-id="career-004">
             Java·Kotlin·Spring으로 약 3년간 백엔드를 개발했습니다.
-            실패한 업무만 골라 재실행하고 배치는 멈춘 지점부터 재개했으며, <span>실제 영속성 컨텍스트</span>에서 JPA 변경 감지 결함을 재현해 잘못 저장된 데이터 약&nbsp;200만&nbsp;건을 바로잡았습니다.
+            실패한 업무만 골라 재실행하고 배치는 남은 범위부터 다시 실행할 수 있게 했으며, <span>실제 영속성 컨텍스트</span>에서 JPA 변경 감지 결함을 재현해 잘못 저장된 데이터 약&nbsp;200만&nbsp;건을 바로잡았습니다.
           </p>
         </div>
         <div class="document-identity-aside">
@@ -86,7 +86,7 @@
           <header class="career-company-head">
             <div>
               <h2 id="worksphere-title" data-edit-id="career-025">웍스피어(유) <small><span>Backend Engineer</span> <span>JOBKOREA·Albamon Platform</span></small></h2>
-              <p data-edit-id="career-026">JOBKOREA·Albamon 플랫폼에서 실패한 업무만 골라 재실행하고 중단된 배치를 중단 지점부터 재개했습니다. 검색 소스별 실패 처리·캐시 우회 경로를 분리하고, 동시 요청 뒤 잔액·원장·후속 이벤트의 정합성을 검증했습니다.</p>
+              <p data-edit-id="career-026">JOBKOREA·Albamon 플랫폼에서 실패한 업무만 골라 재실행하고 중단된 배치를 남은 범위부터 다시 실행할 수 있게 했습니다. 검색 소스별 실패 처리·캐시 우회 경로를 분리하고, 동시 요청 뒤 잔액·원장·후속 이벤트의 정합성을 검증했습니다.</p>
             </div>
             <time datetime="2025-06" data-edit-id="career-027">2025.06 — 현재</time>
           </header>
@@ -114,11 +114,11 @@
 
           <article class="career-project">
             <header>
-              <h3 data-edit-id="career-036">배치를 중단 지점부터 재개하고, 동시&nbsp;요청 이후의 잔액·원장 정합성을 검증했습니다.</h3>
+              <h3 data-edit-id="career-036">배치를 남은 범위부터 다시 실행하게 하고, 동시&nbsp;요청 이후의 잔액·원장 정합성을 검증했습니다.</h3>
             </header>
             <ul class="bullet-list">
               <li data-edit-id="career-038"><strong>포인트 소멸 대상</strong>을 한 번에 읽지 않고 페이지 단위로 처리했습니다.</li>
-              <li data-edit-id="career-039"><strong>아카이브 테이블 10개를</strong> 참조 순서대로 옮기고, 중단 지점부터 재개하도록 했습니다.</li>
+              <li data-edit-id="career-039"><strong>아카이브 테이블 10개를</strong> 청크마다 정해진 순서로 옮기고, 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행하도록 했습니다.</li>
               <li data-edit-id="career-040"><strong>9개 API를 대상으로 13개 동시성 시나리오를 구성</strong>해 같은 락 키나 예산을 공유하는 요청을 동시에 실행했습니다. 완료 후 잔액·원장·후속 이벤트의 정합성을 검증했습니다.</li>
             </ul>
           </article>
@@ -130,9 +130,9 @@
             </header>
             <p data-edit-id="career-045">개인화 피드에서 검색 소스별 정책과 실패 처리를 맡고, OpenSearch 후보 조회부터 캐시 저장까지 처리 단계를 구분했습니다.</p>
             <ul class="bullet-list">
-              <li data-edit-id="career-046"><strong>9개 검색 소스</strong>에 필터·정렬·벡터 규칙과 소스별 타임아웃·실패 경로를 적용했습니다.</li>
+              <li data-edit-id="career-046"><strong>8개 검색 소스</strong>에 필터·정렬·벡터 규칙과 소스별 타임아웃·실패 경로를 적용했습니다.</li>
               <li data-edit-id="career-047"><strong>후보 필터링·점수화·재정렬·캐시 저장</strong>의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li>
-              <li data-edit-id="career-048"><strong>OpenSearch 조회 기능을 별도 모듈로 분리</strong>하고, ArchUnit 테스트로 순환 의존을 검출했습니다.</li>
+              <li data-edit-id="career-048"><strong>OpenSearch 조회 기능을 별도 모듈로 분리</strong>하고, 모듈 의존 규칙을 ArchUnit 테스트로 검증했습니다.</li>
             </ul>
           </article>
 
