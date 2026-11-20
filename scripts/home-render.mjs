@@ -88,7 +88,7 @@ export function cardHtml(card) {
   return `<article class="card"${attrs}>
   <div><figure class="card__fig">${miniSvg(card)}<span class="go js-only" aria-hidden="true">자세히 ↗</span></figure></div>
   <div>
-    <h3><button type="button" class="card__t" aria-haspopup="dialog">${esc(card.title)}<span class="sr-only"> — 상세 내용과 처리 순서 열기</span></button></h3>
+    <h3><button type="button" class="card__t" aria-haspopup="dialog">${esc(card.title)}<span class="sr-only"> — ${card.detail.flow ? "상세 내용과 처리 순서 열기" : "상세 내용 열기"}</span></button></h3>
     <p class="card__m">${kw}<span>${esc(card.org)}</span><span>${esc(card.period)}</span><span class="st st--${card.status}">${STATUS_LABEL[card.status]}</span></p>
     <p class="card__res">${card.result}</p>${tech}
   </div>

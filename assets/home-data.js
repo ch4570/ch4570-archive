@@ -33,7 +33,7 @@ export const KEYWORDS = [
     shell: { cmd: "cat event.flow", out: "이벤트 9종 · 상태 6개 · 복구 경로 8개" },
     strip: [
       step("이벤트 저장", "CREATED", { mo: true }), step("Kafka", "발행"), step("수신", "IN_PROGRESS", { mo: true }),
-      step("성공하면 COMPLETED", "예외면 FAILED", { cls: "k-done" }),
+      step("성공하면 COMPLETED", "예외는 재시도 대상 FAILED", { cls: "k-done" }),
     ],
   },
   {
@@ -111,7 +111,7 @@ const MINIS = {
     ],
   },
   event: {
-    title: "이벤트를 CREATED로 저장하고 Kafka로 발행. 수신하면 IN_PROGRESS, 업무를 실행해 COMPLETED. 발행 실패는 SEND_FAILED, 처리 실패는 FAILED로 따로 기록하고, 복구 워커가 그 업무만 다시 실행.",
+    title: "이벤트를 CREATED로 저장하고 Kafka로 발행. 수신하면 IN_PROGRESS, 업무를 실행해 COMPLETED. 발행 실패는 SEND_FAILED로 분류하고, 예외는 재시도 대상 FAILED로 기록하고, 복구 워커가 그 업무만 다시 실행.",
     h: 192,
     nodes: {
       save: nd(0, 8, "이벤트 저장|CREATED"), pub: nd(1, 8, "Kafka|발행", "gate"), rx: nd(2, 8, "수신|IN_PROGRESS", "gate"),
