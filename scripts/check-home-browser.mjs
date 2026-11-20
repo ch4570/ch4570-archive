@@ -164,7 +164,10 @@ try {
       return rect.width>0 && rect.height>0 && (hit===element || element.contains(hit)) ? {x,y} : null;
     })()`);
     if (!point) throw new Error(`Control is not touch-accessible: ${selector}`);
-    await context.page("Input.synthesizeTapGesture", { ...point, duration: 50, tapCount: 1, gestureSourceType: "touch" });
+    // synthesizeTapGesture는 Linux Chrome(CI)에서 클릭을 만들지 못하는 일이 있어, 실제 터치 입력과 같은 touchStart/touchEnd를 직접 보낸다
+    await context.page("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: point.x, y: point.y, id: 1 }] });
+    await pause(60);
+    await context.page("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
     await pause(250);
   };
   const press = async (context, value, code) => {
@@ -333,6 +336,7 @@ try {
   const flowState = await interactive.evaluate("(() => {const f=document.querySelector('dialog.case [data-flow=search]');return {pressed:f.querySelector('[data-scenario=partial]').getAttribute('aria-pressed'),current:f.querySelector('.flow__node.is-current')?.dataset.node,note:f.querySelector('.flow__note').textContent.trim(),step:f.querySelector('.flow__list [aria-current=step]')?.textContent.trim()};})()");
   record("card opens the detail dialog; the flowchart moves along the exact path with a text note", dialogState.title === "개인화 피드 검색 소스 실패 격리" && dialogState.nodes >= 8 && dialogState.scenarios.length === 4 && dialogState.focus.includes("case__x") && dialogState.hash === "#case-search" && flowState.pressed === "true" && flowState.current === "drop" && flowState.note.startsWith("4/") && !!flowState.step, { dialogState, flowState }, "interaction");
   await key(interactive, "Escape");
+  await until(() => interactive.evaluate("!document.querySelector('dialog.case').open && location.hash === '#projects'"), Boolean, "Dialog close handling did not finish", 4000).catch(() => null);
   const closed = await interactive.evaluate("({open:document.querySelector('dialog.case').open,focus:document.activeElement.className,hash:location.hash})");
   record("Escape closes the dialog and returns focus to the card", !closed.open && closed.focus.includes("card__t") && closed.hash === "#projects", closed, "keyboard");
   await click(interactive, "[data-copy]");
@@ -374,9 +378,11 @@ try {
 
   // 입력 칸 보호: 입력 칸에서는 한 글자 키가 글자로만 들어간다
   await keys.evaluate("(() => { window.scrollTo({top:0,behavior:'instant'}); const i=document.createElement('input'); i.id='probe'; i.style.cssText='position:fixed;left:8px;top:80px;z-index:99'; document.body.append(i); i.focus(); return true; })()");
+  await pause(600); // 앞선 부드러운 스크롤이 끝나기를 기다린 뒤 기준을 잡는다
+  const scrollBefore = await keys.evaluate("Math.round(scrollY)");
   for (const ch of "j1?hl62") await press(keys, ch, /\d/.test(ch) ? `Digit${ch}` : undefined);
   const probe = await keys.evaluate("({value:document.querySelector('#probe').value,scroll:Math.round(scrollY),help:document.querySelector('[data-help]').hidden})");
-  record("typing in an input field is never hijacked by shortcuts", probe.value === "j1?hl62" && probe.scroll === 0 && probe.help, probe, "keyboard");
+  record("typing in an input field is never hijacked by shortcuts", probe.value === "j1?hl62" && probe.scroll === scrollBefore && probe.help, probe, "keyboard");
   await keys.evaluate("document.querySelector('#probe').remove()");
 
   // 끄기 스위치: 끄면 한 글자 키가 모두 멈추고, 새로고침해도 유지된다

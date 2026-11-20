@@ -143,7 +143,9 @@ const mm = $(".mm"), mmBtns = $$(".mm__b"), mmTok = $(".mm__tok");
 const cmdEl = $("[data-cmd]", root), outEl = $("[data-out]", root);
 const openBtn = $(".open[data-open-case]", root), moreLink = $("[data-more]", root);
 let cur = null, cur0 = null, tapped = null, tapT = 0, typeTimer = null, cycTimer = null;
-const isTouch = (e) => e.pointerType === "touch" || (!fine.matches && e.detail > 0);
+// click의 pointerType이 있으면 그것을 믿는다. 마우스는 "mouse"이므로 hover·fine 미디어 질의가 거짓인 환경(터치 겸용 노트북, 일부 Linux)에서도 데스크톱 클릭이 터치로 오인되지 않는다.
+// pointerType을 주지 않는 브라우저(빈 값)에서만, 포인터가 거칠고 실제 클릭(detail>0)일 때 터치로 본다.
+const isTouch = (e) => e.pointerType === "touch" || (!e.pointerType && !fine.matches && e.detail > 0);
 
 /* 터치: 첫 탭은 미리 보기만 하고(페이지 전체의 data-go-axis 처리보다 먼저 가로챈다), 같은 노드를 한 번 더 누르면 이동한다 */
 document.addEventListener("click", (e) => {
