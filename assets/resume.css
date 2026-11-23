@@ -59,6 +59,11 @@ body.resume-doc {
   text-underline-offset: 3px;
 }
 
+/* 문장 속 링크도 눌리는 높이가 24px 이상이 되도록 위아래 여백을 준다(줄 높이는 그대로). */
+.resume-doc a {
+  padding-block: 3px;
+}
+
 .resume-doc a:hover {
   text-decoration-color: var(--r-accent);
 }
@@ -408,6 +413,7 @@ body.resume-doc {
   }
 
   .resume-doc a {
+    padding-block: 0;
     text-decoration: none;
   }
 
