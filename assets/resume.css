@@ -1,0 +1,513 @@
+/*
+ * 웹 이력서(resume/) 전용 스타일. 한 열, A4 한 쪽(사진 포함).
+ * 화면: 홈과 같은 상단 막대(site-frame.css) + 흰 종이, 본문 16px 이상.
+ * 인쇄·PDF: 같은 구조를 A4 한 장에 맞춘 pt 단위로 출력한다.
+ */
+:root {
+  color-scheme: light;
+  --r-ink: #1c2119;
+  --r-ink-2: #3d4439;
+  --r-muted: #565e50;
+  --r-line: #d9dcd2;
+  --r-accent: #3f5b1d;
+  --r-paper: #ffffff;
+  --r-desk: #e9eae3;
+  --r-focus: #2f4a12;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body.resume-doc {
+  margin: 0;
+  background: var(--r-desk);
+  color: var(--r-ink);
+  font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  font-variant-numeric: tabular-nums;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.resume-doc h1,
+.resume-doc h2,
+.resume-doc h3,
+.resume-doc p,
+.resume-doc ul,
+.resume-doc dl,
+.resume-doc dd,
+.resume-doc figure,
+.resume-doc address {
+  margin: 0;
+  padding: 0;
+}
+
+.resume-doc address {
+  font-style: normal;
+}
+
+.resume-doc a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--r-line);
+  text-underline-offset: 3px;
+}
+
+.resume-doc a:hover {
+  text-decoration-color: var(--r-accent);
+}
+
+.resume-doc a:focus-visible,
+.resume-doc main:focus-visible {
+  outline: 2px solid var(--r-focus);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.resume-doc main:focus {
+  outline: none;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -64px;
+  z-index: 40;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: #ffcc66;
+  color: #12151c;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 8px;
+}
+
+/* 화면: 흰 종이 한 장 */
+.resume-canvas {
+  padding: 32px clamp(0px, 3vw, 24px) 64px;
+}
+
+.resume-sheet {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px clamp(40px, 6vw, 64px) 56px;
+  background: var(--r-paper);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.resume-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "id photo"
+    "summary photo"
+    "contact contact";
+  column-gap: 32px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--r-ink);
+}
+
+.resume-id {
+  grid-area: id;
+}
+
+.resume-head h1 {
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.resume-head h1 small {
+  margin-left: 10px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--r-muted);
+}
+
+.resume-role {
+  margin-top: 6px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--r-ink-2);
+}
+
+.resume-hero-copy {
+  grid-area: summary;
+  margin-top: 12px;
+  color: var(--r-ink-2);
+}
+
+.resume-photo {
+  grid-area: photo;
+  align-self: start;
+  width: 104px;
+}
+
+.resume-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 689 / 886;
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--r-line);
+}
+
+.resume-contact {
+  grid-area: contact;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 20px;
+  margin-top: 14px;
+  font-size: 16px;
+  color: var(--r-ink-2);
+}
+
+.resume-contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+}
+
+.resume-section {
+  margin-top: 32px;
+}
+
+.resume-section > h2 {
+  margin-bottom: 14px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--r-ink);
+  font-size: 20px;
+  line-height: 1.4;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.resume-job + .resume-job {
+  margin-top: 24px;
+}
+
+.resume-job-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px 16px;
+}
+
+.resume-job-head h3 {
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.resume-job-head h3 small {
+  margin-left: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--r-muted);
+}
+
+.resume-job-head time {
+  flex: none;
+  font-size: 16px;
+  color: var(--r-ink-2);
+  white-space: nowrap;
+}
+
+.resume-achievement-list,
+.resume-plain-list {
+  margin-top: 6px;
+  padding-left: 20px;
+  list-style: disc;
+}
+
+.resume-achievement-list li,
+.resume-plain-list li {
+  margin: 4px 0;
+}
+
+.resume-achievement-list li::marker,
+.resume-plain-list li::marker {
+  color: var(--r-muted);
+}
+
+.resume-doc b,
+.resume-doc strong {
+  font-weight: 700;
+}
+
+.resume-topics {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 0 16px;
+  margin-top: 6px;
+}
+
+.resume-topics dt {
+  margin-top: 10px;
+  font-weight: 700;
+  color: var(--r-accent);
+}
+
+.resume-topics dd {
+  margin-top: 4px;
+}
+
+.resume-topics dd .resume-achievement-list {
+  margin-top: 0;
+}
+
+.resume-skills {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 6px 16px;
+}
+
+.resume-skills dt {
+  font-weight: 700;
+  color: var(--r-ink-2);
+}
+
+@media screen and (max-width: 760px) {
+  body.resume-doc {
+    background: var(--r-paper);
+  }
+
+  .resume-canvas {
+    padding: 0;
+  }
+
+  .resume-sheet {
+    padding: 24px 16px 48px;
+    box-shadow: none;
+  }
+
+  .resume-head {
+    grid-template-areas:
+      "id photo"
+      "summary summary"
+      "contact contact";
+    column-gap: 16px;
+  }
+
+  .resume-head h1 {
+    font-size: 30px;
+  }
+
+  .resume-head h1 small {
+    display: block;
+    margin: 2px 0 0;
+    font-size: 16px;
+  }
+
+  .resume-role {
+    font-size: 16px;
+  }
+
+  .resume-photo {
+    width: 80px;
+  }
+
+  .resume-hero-copy {
+    margin-top: 16px;
+  }
+
+  .resume-contact {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .resume-contact a {
+    min-height: 32px;
+  }
+
+  .resume-section {
+    margin-top: 28px;
+  }
+
+  .resume-job-head {
+    flex-direction: column;
+  }
+
+  .resume-job-head h3 small {
+    display: block;
+    margin: 0;
+  }
+
+  .resume-topics,
+  .resume-skills {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .resume-topics dt {
+    margin-top: 12px;
+  }
+
+  .resume-skills dt {
+    margin-top: 10px;
+  }
+
+  .resume-skills dd {
+    margin-top: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* 인쇄·PDF: A4 한 쪽 */
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body.resume-doc {
+    background: #fff;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body.resume-doc {
+    font-size: 9.5pt;
+    line-height: 1.47;
+  }
+
+  .skip-link {
+    display: none;
+  }
+
+  .resume-canvas {
+    padding: 0;
+  }
+
+  .resume-sheet {
+    width: 210mm;
+    max-width: none;
+    margin: 0;
+    padding: 12mm 17mm 10mm;
+    box-shadow: none;
+  }
+
+  .resume-doc a {
+    text-decoration: none;
+  }
+
+  .resume-head {
+    column-gap: 6mm;
+    padding-bottom: 4mm;
+    border-bottom-width: 1.5px;
+  }
+
+  .resume-head h1 {
+    font-size: 24pt;
+  }
+
+  .resume-head h1 small {
+    margin-left: 6px;
+    font-size: 12pt;
+  }
+
+  .resume-role {
+    margin-top: 1.4mm;
+    font-size: 11pt;
+  }
+
+  .resume-hero-copy {
+    margin-top: 2mm;
+  }
+
+  .resume-photo {
+    width: 23mm;
+  }
+
+  .resume-contact {
+    gap: 0 12px;
+    margin-top: 2.6mm;
+    font-size: 8.8pt;
+  }
+
+  .resume-contact a {
+    min-height: 0;
+  }
+
+  .resume-section {
+    margin-top: 4.3mm;
+  }
+
+  .resume-section > h2 {
+    margin-bottom: 2mm;
+    padding-bottom: 1.2mm;
+    border-bottom-width: 1.5px;
+    font-size: 11.5pt;
+    line-height: 1.4;
+  }
+
+  .resume-job + .resume-job {
+    margin-top: 3.4mm;
+  }
+
+  .resume-job-head h3 {
+    font-size: 10.5pt;
+  }
+
+  .resume-job-head h3 small {
+    margin-left: 6px;
+    font-size: 9.4pt;
+  }
+
+  .resume-job-head time {
+    font-size: 9pt;
+  }
+
+  .resume-achievement-list,
+  .resume-plain-list {
+    margin-top: 1.2mm;
+    padding-left: 4.2mm;
+  }
+
+  .resume-achievement-list li,
+  .resume-plain-list li {
+    margin: 0.6mm 0;
+    padding-left: 0.5mm;
+    break-inside: avoid;
+  }
+
+  .resume-topics {
+    grid-template-columns: 19mm minmax(0, 1fr);
+    gap: 0.4mm 3mm;
+    margin-top: 1.2mm;
+  }
+
+  .resume-topics dt {
+    margin-top: 0.6mm;
+    font-size: 9pt;
+  }
+
+  .resume-topics dd {
+    margin-top: 0;
+  }
+
+  .resume-skills {
+    grid-template-columns: 22mm minmax(0, 1fr);
+    gap: 1mm 4mm;
+  }
+}

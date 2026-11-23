@@ -5,6 +5,7 @@ import test from "node:test";
 
 import {
   buildPdfDocument,
+  loadLinkedStylesheets,
   loadLocalAssetReplacements,
 } from "./prepare-pdf-document.mjs";
 
@@ -42,9 +43,28 @@ function effectivePropertyValue(declarations, property) {
     .at(-1)?.value;
 }
 
-test("PDF preparation embeds the canonical stylesheet and removes runtime-only assets", async () => {
+test("PDF preparation embeds every shared stylesheet the resume links and drops the screen bar", async () => {
+  const sourcePath = path.join(projectRoot, "resume/index.html");
+  const sourceHtml = await readFile(sourcePath, "utf8");
+  const linked = await loadLinkedStylesheets(sourceHtml, sourcePath);
+
+  assert.deepEqual([...linked.keys()], [
+    "../assets/site-frame.css",
+    "../assets/resume.css",
+  ]);
+
+  const preparedHtml = buildPdfDocument(sourceHtml, "", new Map(), linked);
+
+  assert.equal(preparedHtml.match(/<style data-pdf-export-style>/g)?.length, 1);
+  for (const css of linked.values()) assert.ok(preparedHtml.includes(css));
+  assert.doesNotMatch(preparedHtml, /<link rel="stylesheet"/);
+  assert.doesNotMatch(preparedHtml, /<script src="\.\.\/assets\/site\.js"/);
+  assert.match(preparedHtml, /data-edit-id="resume-002"/);
+});
+
+test("PDF preparation embeds the canonical stylesheet for documents that still use it", async () => {
   const [sourceHtml, stylesheet] = await Promise.all([
-    readFile(path.join(projectRoot, "resume/index.html"), "utf8"),
+    readFile(path.join(projectRoot, "career/index.html"), "utf8"),
     readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
   ]);
 
@@ -54,7 +74,7 @@ test("PDF preparation embeds the canonical stylesheet and removes runtime-only a
   assert.ok(preparedHtml.includes(stylesheet));
   assert.doesNotMatch(preparedHtml, /<link rel="stylesheet"/);
   assert.doesNotMatch(preparedHtml, /<script src="\.\.\/assets\/site\.js"/);
-  assert.match(preparedHtml, /data-edit-id="resume-001"/);
+  assert.match(preparedHtml, /data-edit-id="career-001"/);
 });
 
 test("all submission documents use the same export-safe asset contract", async () => {
@@ -69,8 +89,14 @@ test("all submission documents use the same export-safe asset contract", async (
   ];
 
   for (const documentPath of documentPaths) {
-    const sourceHtml = await readFile(path.join(projectRoot, documentPath), "utf8");
-    const preparedHtml = buildPdfDocument(sourceHtml, stylesheet);
+    const sourcePath = path.join(projectRoot, documentPath);
+    const sourceHtml = await readFile(sourcePath, "utf8");
+    const preparedHtml = buildPdfDocument(
+      sourceHtml,
+      stylesheet,
+      new Map(),
+      await loadLinkedStylesheets(sourceHtml, sourcePath),
+    );
 
     assert.equal(
       preparedHtml.match(/<style data-pdf-export-style>/g)?.length,

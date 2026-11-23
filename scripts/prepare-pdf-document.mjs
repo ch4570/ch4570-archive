@@ -4,8 +4,6 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const canonicalStylesheetLink =
-  '<link rel="stylesheet" href="../assets/design-system.css">';
 const runtimeScript = '<script src="../assets/site.js" defer></script>';
 
 function findTagEnd(html, start) {
@@ -131,29 +129,80 @@ export async function loadLocalAssetReplacements(sourceHtml, sourcePath) {
   return replacements;
 }
 
-export function buildPdfDocument(sourceHtml, stylesheet, assetReplacements = new Map()) {
-  if (!sourceHtml.includes(canonicalStylesheetLink)) {
-    throw new Error("The document does not load the canonical design-system stylesheet.");
-  }
-  if (
-    sourceHtml.indexOf(canonicalStylesheetLink) !==
-    sourceHtml.lastIndexOf(canonicalStylesheetLink)
-  ) {
-    throw new Error("The document loads the canonical stylesheet more than once.");
-  }
-  if (stylesheet.toLowerCase().includes("</style")) {
-    throw new Error("The stylesheet cannot be safely embedded in an HTML style element.");
+const sharedStylesheetPattern =
+  /[ \t]*<link rel="stylesheet" href="(\.\.\/assets\/[A-Za-z0-9_-]+\.css)">[ \t]*\n?/gu;
+const canonicalStylesheetHref = "../assets/design-system.css";
+
+function findSharedStylesheetLinks(sourceHtml) {
+  return [...sourceHtml.matchAll(sharedStylesheetPattern)].map((match) => ({
+    markup: match[0],
+    href: match[1],
+    index: match.index,
+  }));
+}
+
+/** 문서가 링크한 공통 CSS(design-system.css 외)를 읽어 href → 내용 표로 돌려준다. */
+export async function loadLinkedStylesheets(sourceHtml, sourcePath) {
+  const sourceDirectory = path.dirname(path.resolve(sourcePath));
+  const linked = new Map();
+
+  for (const { href } of findSharedStylesheetLinks(sourceHtml)) {
+    if (href === canonicalStylesheetHref || linked.has(href)) continue;
+    linked.set(href, await readFile(path.resolve(sourceDirectory, href), "utf8"));
   }
 
-  const embeddedStylesheet = `<style data-pdf-export-style>\n${stylesheet}\n</style>`;
+  return linked;
+}
+
+export function buildPdfDocument(
+  sourceHtml,
+  stylesheet,
+  assetReplacements = new Map(),
+  linkedStylesheets = new Map(),
+) {
+  const links = findSharedStylesheetLinks(sourceHtml);
+  if (links.length === 0) {
+    throw new Error(
+      "The document does not load the canonical design-system stylesheet or a shared local stylesheet.",
+    );
+  }
+
+  const seen = new Set();
+  const cssParts = [];
+  for (const { href } of links) {
+    if (seen.has(href)) {
+      throw new Error(
+        href === canonicalStylesheetHref
+          ? "The document loads the canonical stylesheet more than once."
+          : `The document loads ${href} more than once.`,
+      );
+    }
+    seen.add(href);
+
+    const css = href === canonicalStylesheetHref ? stylesheet : linkedStylesheets.get(href);
+    if (css === undefined) {
+      throw new Error(`No stylesheet content was supplied for ${href}.`);
+    }
+    if (css.toLowerCase().includes("</style")) {
+      throw new Error("The stylesheet cannot be safely embedded in an HTML style element.");
+    }
+    cssParts.push(css);
+  }
+
+  const embeddedStylesheet = `<style data-pdf-export-style>\n${cssParts.join("\n")}\n</style>`;
 
   let preparedHtml = expandDetailsElements(sourceHtml);
   for (const [source, replacement] of assetReplacements) {
     preparedHtml = preparedHtml.replaceAll(source, replacement);
   }
 
+  let first = true;
   return preparedHtml
-    .replace(canonicalStylesheetLink, embeddedStylesheet)
+    .replace(sharedStylesheetPattern, () => {
+      if (!first) return "";
+      first = false;
+      return embeddedStylesheet;
+    })
     .replace(runtimeScript, "");
 }
 
@@ -172,7 +221,13 @@ async function main() {
     readFile(stylesheetPath, "utf8"),
   ]);
   const assetReplacements = await loadLocalAssetReplacements(sourceHtml, sourcePath);
-  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, assetReplacements);
+  const linkedStylesheets = await loadLinkedStylesheets(sourceHtml, sourcePath);
+  const preparedHtml = buildPdfDocument(
+    sourceHtml,
+    stylesheet,
+    assetReplacements,
+    linkedStylesheets,
+  );
 
   await mkdir(path.dirname(targetPath), { recursive: true });
   await writeFile(targetPath, preparedHtml, "utf8");
