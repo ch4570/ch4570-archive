@@ -109,7 +109,7 @@ Java·Kotlin과 Spring Boot를 주력으로 약 3년간 백엔드를 개발해 �
 ### Docker·Kubernetes 운영
 
 ```text
-CKA를 취득했고 Kubernetes 실습 경험은 있지만, 실서비스 환경에서 Kubernetes를 직접 운영한 경험은 없습니다.
+Kubernetes 실습 경험은 있지만, 실서비스 환경에서 Kubernetes를 직접 운영한 경험은 없습니다.
 ```
 
 ### 글로벌·컴플라이언스
