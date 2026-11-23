@@ -21,6 +21,7 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-padding-top: 72px;
 }
 
 body.resume-doc {
@@ -35,32 +36,32 @@ body.resume-doc {
   overflow-wrap: anywhere;
 }
 
-.resume-doc h1,
-.resume-doc h2,
-.resume-doc h3,
-.resume-doc p,
-.resume-doc ul,
-.resume-doc dl,
-.resume-doc dd,
-.resume-doc figure,
-.resume-doc address {
+:where(.resume-doc) h1,
+:where(.resume-doc) h2,
+:where(.resume-doc) h3,
+:where(.resume-doc) p,
+:where(.resume-doc) ul,
+:where(.resume-doc) dl,
+:where(.resume-doc) dd,
+:where(.resume-doc) figure,
+:where(.resume-doc) address {
   margin: 0;
   padding: 0;
 }
 
-.resume-doc address {
+:where(.resume-doc) address {
   font-style: normal;
 }
 
-.resume-doc a {
+.resume-doc a:not(.skip-link) {
   color: inherit;
   text-decoration: underline;
-  text-decoration-color: var(--r-line);
+  text-decoration-color: var(--r-muted);
   text-underline-offset: 3px;
 }
 
 /* 문장 속 링크도 눌리는 높이가 24px 이상이 되도록 위아래 여백을 준다(줄 높이는 그대로). */
-.resume-doc a {
+.resume-doc a:not(.skip-link) {
   padding-block: 3px;
 }
 
@@ -414,7 +415,8 @@ body.resume-doc {
 
   .resume-doc a {
     padding-block: 0;
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
   }
 
   .resume-head {
@@ -456,7 +458,7 @@ body.resume-doc {
   }
 
   .resume-section {
-    margin-top: 4.3mm;
+    margin-top: 3.6mm;
   }
 
   .resume-section > h2 {
@@ -468,7 +470,7 @@ body.resume-doc {
   }
 
   .resume-job + .resume-job {
-    margin-top: 3.4mm;
+    margin-top: 2.8mm;
   }
 
   .resume-job-head h3 {
