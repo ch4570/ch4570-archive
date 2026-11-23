@@ -15,6 +15,8 @@ const copies = [
   ["assets/home-data.js", "public/assets/home-data.js"],
   ["assets/cosmic-cinema.webp", "public/assets/cosmic-cinema.webp"],
   ["assets/design-system.css", "public/assets/design-system.css"],
+  ["assets/site-frame.css", "public/assets/site-frame.css"],
+  ["assets/resume.css", "public/assets/resume.css"],
   ["assets/terminal-home.css", "public/assets/terminal-home.css"],
   ["assets/site.js", "public/assets/site.js"],
   ["assets/system-scene.js", "public/assets/system-scene.js"],

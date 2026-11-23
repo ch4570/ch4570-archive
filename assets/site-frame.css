@@ -1,0 +1,129 @@
+/*
+ * 사이트 공통 상단 막대 (문서 화면 전용).
+ * 홈과 같은 어두운 바탕(#12151c)과 앰버(#ffcc66)를 쓰고, 현재 문서는 앰버 밑줄로 표시한다.
+ * 마크업은 <header class="site-bar screen-only"> 한 가지이며, 인쇄·PDF에서는 숨긴다.
+ * 현재 적용: resume/. career/·portfolio/·홈은 이번 범위에서 이 파일을 쓰지 않는다.
+ */
+.site-bar {
+  --bar-bg: #12151c;
+  --bar-fg: #dfe2e6;
+  --bar-fg-2: #bcc2ca;
+  --bar-line: #2d3442;
+  --bar-amber: #ffcc66;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bar-bg);
+  color: var(--bar-fg);
+  border-bottom: 1px solid var(--bar-line);
+}
+
+.site-bar__inner {
+  display: flex;
+  align-items: center;
+  gap: 8px 24px;
+  max-width: 1240px;
+  min-height: 56px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+header.site-bar a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header.site-bar a:focus-visible {
+  outline: 2px solid var(--bar-amber);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.site-bar__home {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.site-bar__home small {
+  margin-left: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--bar-amber);
+}
+
+.site-bar__nav {
+  display: flex;
+  gap: 4px;
+  margin-right: auto;
+}
+
+header.site-bar .site-bar__nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  font-size: 15px;
+  color: var(--bar-fg-2);
+  white-space: nowrap;
+}
+
+header.site-bar .site-bar__nav a:hover {
+  color: #fff;
+}
+
+header.site-bar .site-bar__nav a[aria-current="page"] {
+  color: #fff;
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--bar-amber);
+}
+
+header.site-bar a.site-bar__pdf {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border-radius: 6px;
+  background: var(--bar-amber);
+  color: var(--bar-bg);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+header.site-bar a.site-bar__pdf:hover {
+  background: #ffd98a;
+  color: var(--bar-bg);
+}
+
+@media screen and (max-width: 640px) {
+  .site-bar {
+    position: static;
+  }
+
+  .site-bar__inner {
+    flex-wrap: wrap;
+    padding-block: 4px;
+  }
+
+  .site-bar__home {
+    margin-right: auto;
+  }
+
+  .site-bar__nav {
+    order: 3;
+    width: 100%;
+    margin: 0 -10px;
+    overflow-x: auto;
+  }
+}
+
+@media print {
+  .site-bar,
+  .screen-only {
+    display: none !important;
+  }
+}
