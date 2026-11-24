@@ -453,7 +453,7 @@ try {
   await screenshot(printPage, "print-home.png");
   await printPage.close();
 
-  for (const route of ["/resume/", "/career/", "/portfolio/", "/pdf/seo-minjae-resume.pdf", "/pdf/seo-minjae-career-description.pdf", "/pdf/seo-minjae-backend-portfolio.pdf"]) {
+  for (const route of ["/resume/", "/career/", "/portfolio/", "/pdf/seo-minjae-resume.pdf", "/pdf/seo-minjae-resume-print.pdf", "/pdf/seo-minjae-career-description.pdf", "/pdf/seo-minjae-backend-portfolio.pdf"]) {
     const response = await fetch(origin + route);
     const bytes = Buffer.from(await response.arrayBuffer());
     const isPDF = route.endsWith(".pdf");

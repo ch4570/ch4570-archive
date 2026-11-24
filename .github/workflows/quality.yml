@@ -29,10 +29,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Prepare Korean screenshot fonts
+      - name: Prepare Korean screenshot fonts and PDF inspection tools
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk poppler-utils
           fc-match ":lang=ko"
 
       - name: Verify application

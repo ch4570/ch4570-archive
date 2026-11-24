@@ -4,7 +4,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const runtimeScript = '<script src="../assets/site.js" defer></script>';
+// PDF에는 화면용 스크립트를 싣지 않는다(site.js, 이력서 grep 줄의 resume-terminal.js).
+const runtimeScriptPattern =
+  /[ \t]*<script src="\.\.\/assets\/(?:site|resume-terminal)\.js" defer><\/script>[ \t]*\n?/gu;
 
 function findTagEnd(html, start) {
   let quote = "";
@@ -129,6 +131,59 @@ export async function loadLocalAssetReplacements(sourceHtml, sourcePath) {
   return replacements;
 }
 
+const cssUrlMimeTypes = new Map([
+  ...imageMimeTypes,
+  [".woff2", "font/woff2"],
+]);
+const cssUrlPattern = /url\(\s*(["']?)([^"')]+)\1\s*\)/gu;
+
+/**
+ * 공통 CSS를 HTML 안에 넣으면 CSS 파일 기준의 상대 경로 url()이 깨진다.
+ * data:·절대 경로·외부 주소가 아닌 url()은 CSS 파일 위치에서 읽어 data URI로 바꾼다.
+ */
+export async function inlineStylesheetUrls(css, stylesheetPath) {
+  const stylesheetDirectory = path.dirname(path.resolve(stylesheetPath));
+  const replacements = new Map();
+
+  for (const match of css.matchAll(cssUrlPattern)) {
+    const reference = match[2];
+    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|\/|#)/iu.test(reference)) continue;
+    if (replacements.has(reference)) continue;
+
+    const mimeType = cssUrlMimeTypes.get(path.extname(reference).toLowerCase());
+    if (!mimeType) {
+      throw new Error(`Cannot inline ${reference} from ${stylesheetPath}: unsupported file type.`);
+    }
+    const file = await readFile(path.resolve(stylesheetDirectory, reference));
+    replacements.set(reference, `data:${mimeType};base64,${file.toString("base64")}`);
+  }
+
+  return css.replace(cssUrlPattern, (whole, quote, reference) =>
+    replacements.has(reference) ? `url("${replacements.get(reference)}")` : whole,
+  );
+}
+
+const htmlOpeningTagPattern = /<html\b([^>]*)>/iu;
+
+/**
+ * 인쇄 안전판(흰 머리)용으로 소스 HTML을 바꾼다. html에 print-safe 클래스를 더하고
+ * 장식 줄 그림을 어두운 띠용(dark)에서 흰 바탕용(light)으로 바꾼다.
+ */
+export function applyPrintSafe(sourceHtml) {
+  const match = htmlOpeningTagPattern.exec(sourceHtml);
+  if (!match) throw new Error("The document has no <html> element.");
+  const attributes = match[1];
+  const classAttribute = /\sclass=(["'])([^"']*)\1/iu.exec(attributes);
+  const nextAttributes = classAttribute
+    ? attributes.replace(classAttribute[0], ` class=${classAttribute[1]}${classAttribute[2]} print-safe${classAttribute[1]}`)
+    : `${attributes} class="print-safe"`;
+  return (
+    sourceHtml.slice(0, match.index) +
+    `<html${nextAttributes}>` +
+    sourceHtml.slice(match.index + match[0].length)
+  ).replaceAll("/resume-deco/dark/", "/resume-deco/light/");
+}
+
 const sharedStylesheetPattern =
   /[ \t]*<link rel="stylesheet" href="(\.\.\/assets\/[A-Za-z0-9_-]+\.css)">[ \t]*\n?/gu;
 const canonicalStylesheetHref = "../assets/design-system.css";
@@ -148,7 +203,8 @@ export async function loadLinkedStylesheets(sourceHtml, sourcePath) {
 
   for (const { href } of findSharedStylesheetLinks(sourceHtml)) {
     if (href === canonicalStylesheetHref || linked.has(href)) continue;
-    linked.set(href, await readFile(path.resolve(sourceDirectory, href), "utf8"));
+    const stylesheetPath = path.resolve(sourceDirectory, href);
+    linked.set(href, await inlineStylesheetUrls(await readFile(stylesheetPath, "utf8"), stylesheetPath));
   }
 
   return linked;
@@ -196,6 +252,9 @@ export function buildPdfDocument(
     preparedHtml = preparedHtml.replaceAll(source, replacement);
   }
 
+  // 인쇄 직전에 지연 로딩 그림을 기다리지 않도록 즉시 로딩으로 둔다.
+  preparedHtml = preparedHtml.replaceAll(' loading="lazy"', "");
+
   let first = true;
   return preparedHtml
     .replace(sharedStylesheetPattern, () => {
@@ -203,23 +262,25 @@ export function buildPdfDocument(
       first = false;
       return embeddedStylesheet;
     })
-    .replace(runtimeScript, "");
+    .replace(runtimeScriptPattern, "");
 }
 
 async function main() {
-  const [sourcePath, stylesheetPath, targetPath] = process.argv.slice(2);
-  if (!sourcePath || !stylesheetPath || !targetPath) {
+  const [sourcePath, stylesheetPath, targetPath, ...flags] = process.argv.slice(2);
+  const printSafe = flags.includes("--print-safe");
+  if (!sourcePath || !stylesheetPath || !targetPath || flags.some((flag) => flag !== "--print-safe")) {
     process.stderr.write(
-      "Usage: node scripts/prepare-pdf-document.mjs <source-html> <stylesheet> <target-html>\n",
+      "Usage: node scripts/prepare-pdf-document.mjs <source-html> <stylesheet> <target-html> [--print-safe]\n",
     );
     process.exitCode = 1;
     return;
   }
 
-  const [sourceHtml, stylesheet] = await Promise.all([
+  const [rawHtml, stylesheet] = await Promise.all([
     readFile(sourcePath, "utf8"),
     readFile(stylesheetPath, "utf8"),
   ]);
+  const sourceHtml = printSafe ? applyPrintSafe(rawHtml) : rawHtml;
   const assetReplacements = await loadLocalAssetReplacements(sourceHtml, sourcePath);
   const linkedStylesheets = await loadLinkedStylesheets(sourceHtml, sourcePath);
   const preparedHtml = buildPdfDocument(

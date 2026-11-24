@@ -1,0 +1,56 @@
+{
+  "note": "scripts/render-resume-deco.mjs가 만든다. 직접 고치지 않는다. inputs가 현재 resume.css·글꼴·장식 글자와 다르면 그림이 낡은 것이다.",
+  "scale": 4,
+  "printWidth": 794,
+  "inputs": {
+    "css": "bbecd40d93e54be5016670154c282f8d9fb44c3892c06d3d373909498322460a",
+    "fonts": {
+      "Pretendard-Regular.woff2": "01dd73155fdfab7ce9b25224523e85a96927e21aef97f21957d41f1bfa7e3878",
+      "Pretendard-SemiBold.woff2": "4247dc5e260b92640c2cbd0e75091154647b71e1d5884116655e2903468c54cc",
+      "Pretendard-Bold.woff2": "78eb71c33101ee7d4f8d1b777d193a12d00f8a296e712a8c417cf27abe946397",
+      "Pretendard-ExtraBold.woff2": "abb0933bd492a56403d2b288394923fdc4c210aaa827c9e44714fcac8ff70c7c",
+      "JetBrainsMono-Regular.woff2": "a9cb1cd82332b23a47e3a1239d25d13c86d16c4220695e34b243effa999f45f2",
+      "JetBrainsMono-Medium.woff2": "086c48dfbea9ddaff1320f7e09399b8e2924e88ce67453721255db3bdbb5a353",
+      "JetBrainsMono-Bold.woff2": "c503cc5ec5f8b2c7666b7ecda1adf44bd45f2e6579b2eba0fc292150416588a2"
+    },
+    "texts": {
+      "title": "ch4570@archive: ~/resume — zsh",
+      "prompt": "ch4570@archive:~/resume$ cat profile.md",
+      "cmd-career": "ch4570@archive:~/resume$ git log --graph career",
+      "head": "(HEAD -> main)",
+      "cmd-stack": "ch4570@archive:~/resume$ cat stack.yaml",
+      "cmd-oss": "ch4570@archive:~/resume$ cat oss.md",
+      "cmd-activity": "ch4570@archive:~/resume$ cat activity.md"
+    }
+  },
+  "sizes": {
+    "title": [
+      588.92,
+      10.67
+    ],
+    "prompt": [
+      282.03,
+      18
+    ],
+    "cmd-career": [
+      339.63,
+      18
+    ],
+    "head": [
+      96.27,
+      17.2
+    ],
+    "cmd-stack": [
+      282.03,
+      18
+    ],
+    "cmd-oss": [
+      253.22,
+      18
+    ],
+    "cmd-activity": [
+      289.22,
+      18
+    ]
+  }
+}
