@@ -104,7 +104,8 @@ body.resume-doc { background: var(--desk); color: var(--ink); font-family: Prete
 
 .resume-skills { display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 4px 16px; }
 .resume-skills dt { font-weight: 700; }
-[aria-labelledby=skills-title] .resume-skills dd { font: 400 16px/1.7 var(--mono); color: var(--ink-2); cursor: pointer; text-wrap: balance; }
+[aria-labelledby=skills-title] .resume-skills dd { font: 400 16px/1.7 var(--mono); color: var(--ink-2); cursor: pointer; }
+@media screen and (min-width: 761px) { [aria-labelledby=skills-title] .resume-skills dd { text-wrap: balance; } }
 
 
 @media screen and (max-width: 760px) {
