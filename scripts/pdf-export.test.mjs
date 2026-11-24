@@ -4,10 +4,18 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  applyPrintSafe,
   buildPdfDocument,
+  inlineStylesheetUrls,
   loadLinkedStylesheets,
   loadLocalAssetReplacements,
 } from "./prepare-pdf-document.mjs";
+import { decoInputs } from "./render-resume-deco.mjs";
+import {
+  hasPoppler,
+  inspectResumePdf,
+  resumePdfProblems,
+} from "./verify-resume-pdf.mjs";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const chronologicalCareerColumn = "1fr";
@@ -248,5 +256,115 @@ test("previous-career grid parsing rejects ineffective chronological declaration
       chronologicalCareerColumn,
       ruleBody,
     );
+  }
+});
+
+test("the resume stylesheet's relative font urls become data URIs for PDF export", async () => {
+  const sourcePath = path.join(projectRoot, "resume/index.html");
+  const sourceHtml = await readFile(sourcePath, "utf8");
+  const linked = await loadLinkedStylesheets(sourceHtml, sourcePath);
+  const resumeCss = linked.get("../assets/resume.css");
+
+  assert.doesNotMatch(resumeCss, /url\("fonts\//u);
+  assert.equal(resumeCss.match(/url\("data:font\/woff2;base64,/gu)?.length, 7);
+  assert.match(resumeCss, /font-family: "Pretendard"; font-weight: 400/u);
+  assert.doesNotMatch(resumeCss, /font-weight: 500;[^}]*Pretendard/u);
+
+  const inlined = await inlineStylesheetUrls(
+    'a{background:url("data:image/svg+xml,%3Csvg%3E")}',
+    path.join(projectRoot, "assets/resume.css"),
+  );
+  assert.equal(inlined, 'a{background:url("data:image/svg+xml,%3Csvg%3E")}');
+  await assert.rejects(
+    inlineStylesheetUrls('a{src:url("fonts/missing.woff2")}', path.join(projectRoot, "assets/resume.css")),
+    /ENOENT/u,
+  );
+});
+
+test("the print-safe resume swaps decoration images to the light set and adds the class", async () => {
+  const sourcePath = path.join(projectRoot, "resume/index.html");
+  const sourceHtml = await readFile(sourcePath, "utf8");
+  const safe = applyPrintSafe(sourceHtml);
+
+  assert.match(safe, /<html lang="ko" class="deco print-safe">/u);
+  assert.doesNotMatch(safe, /resume-deco\/dark\//u);
+  assert.equal(safe.match(/resume-deco\/light\/[a-z-]+\.png/gu)?.length, 7);
+  assert.equal(applyPrintSafe("<!doctype html><html lang=\"ko\"><body></body></html>").includes('class="print-safe"'), true);
+
+  const replacements = await loadLocalAssetReplacements(safe, sourcePath);
+  const prepared = buildPdfDocument(safe, "", replacements, await loadLinkedStylesheets(safe, sourcePath));
+  assert.equal(/loading="lazy"/u.test(prepared), false);
+  assert.equal(prepared.match(/src="data:image\/png;base64,/gu)?.length, 7);
+  assert.equal(/<script/u.test(prepared), false);
+});
+
+test("decoration images are fresh for the current CSS, fonts and decoration text", async () => {
+  const manifest = JSON.parse(
+    await readFile(path.join(projectRoot, "assets/resume-deco/manifest.json"), "utf8"),
+  );
+  assert.deepEqual(
+    manifest.inputs,
+    await decoInputs(),
+    "resume.css, a font, or a decoration string changed: run `node scripts/render-resume-deco.mjs` (sh scripts/export-pdfs.sh does it too)",
+  );
+  assert.deepEqual(Object.keys(manifest.inputs.texts).sort(), Object.keys(manifest.sizes).sort());
+  for (const key of Object.keys(manifest.sizes)) {
+    for (const variant of ["dark", "light"]) {
+      const png = await readFile(path.join(projectRoot, "assets/resume-deco", variant, `${key}.png`));
+      assert.equal(png.toString("latin1", 1, 4), "PNG");
+      const [width, height] = manifest.sizes[key];
+      assert.ok(Math.abs(png.readUInt32BE(16) - width * 4) <= 1, `${variant}/${key} width`);
+      assert.ok(Math.abs(png.readUInt32BE(20) - height * 4) <= 1, `${variant}/${key} height`);
+    }
+  }
+});
+
+test("resume markup keeps decoration lines out of the reading order", async () => {
+  const html = await readFile(path.join(projectRoot, "resume/index.html"), "utf8");
+
+  // 장식 줄은 진짜 글자(화면)와 그림(PDF)이 짝이고 낭독기에서 빠진다.
+  const pairs = html.match(/<span class="deco-txt">[\s\S]*?<img class="deco-img" src="[^"]+" alt="" loading="lazy"/gu) ?? [];
+  assert.equal(pairs.length, 7);
+  assert.match(html, /\(HEAD -&gt; main\)/u);
+  assert.doesNotMatch(html, /HEAD -&gt; current/u);
+  assert.match(html, /<svg class="band-fill" aria-hidden="true"/u);
+  // 편집 필드 51개, 인쇄용 PDF 링크는 화면 전용이며 공통 막대는 그대로다.
+  assert.equal(html.match(/data-edit-id="/gu)?.length, 51);
+  assert.match(html, /<div class="resume-tools screen-only">[\s\S]*?href="\.\.\/pdf\/seo-minjae-resume-print\.pdf"[^>]*>인쇄용 PDF<\/a>/u);
+  assert.match(html, /<a class="site-bar__pdf" href="\.\.\/pdf\/seo-minjae-resume\.pdf"/u);
+});
+
+const poppler = await hasPoppler();
+const popplerRequired = Boolean(process.env.CI);
+
+test("poppler is available where CI requires PDF inspection", () => {
+  if (popplerRequired) assert.equal(poppler, true, "install poppler-utils in CI");
+});
+
+for (const [name, file] of [
+  ["dark-band submission", "seo-minjae-resume.pdf"],
+  ["print-safe", "seo-minjae-resume-print.pdf"],
+]) {
+  test(`the ${name} resume PDF is one A4 page with only Pretendard/JetBrains Mono, name first, in reading order`, { skip: !poppler && "poppler not installed" }, async () => {
+    const result = await inspectResumePdf(path.join(projectRoot, "output/pdf", file));
+    assert.deepEqual(resumePdfProblems(result), [], JSON.stringify(result, null, 1));
+    assert.equal(result.pages, 1);
+    assert.deepEqual(result.type3Fonts, []);
+    assert.equal(result.firstLine, "서민재 Rex Seo");
+    assert.deepEqual(result.decorationHits, []);
+    assert.deepEqual(result.orderProblems, []);
+  });
+}
+
+test("the career description and portfolio PDFs keep their page counts", { skip: !poppler && "poppler not installed" }, async () => {
+  const { execFile } = await import("node:child_process");
+  const { promisify } = await import("node:util");
+  const run = promisify(execFile);
+  for (const [file, pages] of [
+    ["seo-minjae-career-description.pdf", 2],
+    ["seo-minjae-backend-portfolio.pdf", 3],
+  ]) {
+    const { stdout } = await run("pdfinfo", [path.join(projectRoot, "output/pdf", file)]);
+    assert.equal(Number(/^Pages:\s+(\d+)/mu.exec(stdout)[1]), pages, file);
   }
 });

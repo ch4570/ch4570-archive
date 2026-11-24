@@ -9,6 +9,8 @@ output_dir=${1:-"$default_output_dir"}
 tmp_parent="$project_root/tmp/pdfs"
 stylesheet_path="$project_root/assets/design-system.css"
 prepare_document="$script_dir/prepare-pdf-document.mjs"
+render_deco="$script_dir/render-resume-deco.mjs"
+verify_resume_pdf="$script_dir/verify-resume-pdf.mjs"
 
 find_browser() {
   if [ -n "${BROWSER_BIN:-}" ]; then
@@ -118,7 +120,7 @@ verify_pdf() {
     fi
 
     case "$document_name" in
-      resume) expected_pages=1 ;;
+      resume|resume-print) expected_pages=1 ;;
       career-description) expected_pages=2 ;;
       portfolio) expected_pages=3 ;;
       *) expected_pages='' ;;
@@ -152,6 +154,18 @@ verify_pdf() {
     esac
   fi
 
+  # 이력서 두 판: 쪽수 외에 글꼴(Pretendard·JetBrains Mono만, Type 3 없음), 글자 추출 첫 줄과
+  # 순서, 장식 줄이 PDF 글자에 없는지를 확인한다. subset 밖 글자가 있으면 대체 글꼴이 잡혀 걸린다.
+  case "$document_name" in
+    resume|resume-print)
+      if command -v pdftotext >/dev/null 2>&1 && command -v pdffonts >/dev/null 2>&1; then
+        if ! node "$verify_resume_pdf" "$pdf_path"; then
+          exit 1
+        fi
+      fi
+      ;;
+  esac
+
   file_size=$(wc -c < "$pdf_path" | tr -d ' ')
 }
 
@@ -159,13 +173,16 @@ export_pdf() {
   source_path=$1
   target_path=$2
   document_name=$3
+  prepare_flag=${4:-}
   prepared_path="$tmp_root/$document_name.html"
   staged_path="$tmp_root/$document_name.pdf"
 
+  # shellcheck disable=SC2086 # prepare_flag는 비었거나 --print-safe 하나다.
   node "$prepare_document" \
     "$source_path" \
     "$stylesheet_path" \
-    "$prepared_path"
+    "$prepared_path" \
+    $prepare_flag
 
   active_profile=$(mktemp -d "$tmp_root/chrome-profile.XXXXXX")
   rm -f "$staged_path"
@@ -221,10 +238,20 @@ export_pdf() {
   printf 'Created %s (%s pages, %s bytes)\n' "$target_path" "$pages" "$file_size"
 }
 
+# 이력서의 장식 줄 그림(창 제목·프롬프트·명령 줄·HEAD)은 글꼴·색·문구가 바뀌면 어긋나므로
+# 내보내기 직전에 같은 Chrome으로 다시 찍는다.
+BROWSER_BIN="$browser_bin" node "$render_deco"
+
 export_pdf \
   "$project_root/resume/index.html" \
   "$output_dir/seo-minjae-resume.pdf" \
   'resume'
+
+export_pdf \
+  "$project_root/resume/index.html" \
+  "$output_dir/seo-minjae-resume-print.pdf" \
+  'resume-print' \
+  '--print-safe'
 
 export_pdf \
   "$project_root/career/index.html" \
