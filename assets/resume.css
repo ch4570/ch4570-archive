@@ -1,521 +1,311 @@
 /*
- * 웹 이력서(resume/) 전용 스타일. 한 열, A4 한 쪽(사진 포함).
- * 화면: 홈과 같은 상단 막대(site-frame.css) + 흰 종이, 본문 16px 이상.
- * 인쇄·PDF: 같은 구조를 A4 한 장에 맞춘 pt 단위로 출력한다.
+ * 웹 이력서(resume/) 전용 스타일. 터미널 세션 연출, A4 한 쪽(사진 포함).
+ * 화면: 홈과 같은 상단 막대(site-frame.css) + 어두운 띠 머리 + 흰 종이. 읽는 글자는 16px 이상,
+ *       장식(aria-hidden 명령 줄·창 제목·tmux 상태줄)만 13~14px.
+ * 인쇄·PDF: 같은 구조를 A4 한 장에 맞춘 pt 단위로 출력한다. 장식 줄은 글자 대신 4배 PNG
+ *       (assets/resume-deco/)로 바꿔 PDF 글자 추출에서 빠지게 한다(scripts/render-resume-deco.mjs).
+ *       html에 print-safe 클래스를 더하면 흰 머리 인쇄 안전판이 된다(내보내기 때만 더함).
+ * 글꼴: assets/fonts/의 Pretendard(subset 4굵기)와 JetBrains Mono(3굵기). 둘 다 OFL.
+ * 구문 색: GitHub Primer(MIT). 토큰: Radix Colors(MIT), 간격은 IBM Carbon spacing 값.
  */
+@font-face { font-family: "Pretendard"; font-weight: 400; font-display: block; src: url("fonts/Pretendard-Regular.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 600; font-display: block; src: url("fonts/Pretendard-SemiBold.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 700; font-display: block; src: url("fonts/Pretendard-Bold.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 800; font-display: block; src: url("fonts/Pretendard-ExtraBold.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 400; font-display: block; src: url("fonts/JetBrainsMono-Regular.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 500; font-display: block; src: url("fonts/JetBrainsMono-Medium.woff2") format("woff2"); }
+@font-face { font-family: "JetBrains Mono"; font-weight: 700; font-display: block; src: url("fonts/JetBrainsMono-Bold.woff2") format("woff2"); }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 72px; }
+body.resume-doc { margin: 0; font-variant-numeric: tabular-nums; word-break: keep-all; overflow-wrap: anywhere; }
+:where(.resume-doc) :is(h1,h2,h3,p,ul,dl,dd,figure,address) { margin: 0; padding: 0; }
+:where(.resume-doc) address { font-style: normal; }
+.resume-doc b { font-weight: 700; }
+.skip-link { position: absolute; left: 12px; top: -64px; z-index: 40; padding: 10px 14px; border-radius: 6px; background: #ffcc66; color: #12151c; font-weight: 700; text-decoration: none; }
+.skip-link:focus { top: 8px; }
+.resume-doc main:focus { outline: none; }
+.resume-photo img { display: block; width: 100%; height: auto; }
+@page { size: A4; margin: 0; }
+@media print {
+  html, body.resume-doc { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .skip-link, .screen-only { display: none !important; }
+  .resume-doc a { padding-block: 0 !important; }
+  li { break-inside: avoid; }
+}
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+
+/* 토큰: 사이트 공통 막대(#12151c, #ffcc66) + Radix Colors amber(3·9·11·12)·slate(6·11·12)
+   간격은 IBM Carbon spacing(2·4·8·12·16·24·32·40·48px), 모노 라벨은 Carbon의 code/label 역할을 따름 */
 :root {
   color-scheme: light;
-  --r-ink: #1c2119;
-  --r-ink-2: #3d4439;
-  --r-muted: #565e50;
-  --r-line: #d9dcd2;
-  --r-accent: #3f5b1d;
-  --r-paper: #ffffff;
-  --r-desk: #e9eae3;
-  --r-focus: #2f4a12;
+  --bar: #12151c; --bar-fg: #dfe2e6; --bar-fg-2: #bcc2ca; --bar-line: #2d3442; --bar-amber: #ffcc66;
+  --ink: #1c2024; --ink-2: #3b3f46; --muted: #60646c; --line: #d9d9e0; --desk: #e8e8ec;
+  --amber-3: #fff7c2; --amber-4: #ffee9c; --amber-9: #ffc53d; --amber-11: #ab6400; --amber-12: #4f3422;
+  --mono: "JetBrains Mono", Pretendard, ui-monospace, monospace;
+  --s2: 4px; --s3: 8px; --s4: 12px; --s5: 16px; --s6: 24px; --s7: 32px; --s8: 40px; --s9: 48px;
+  --pad: 56px;
 }
+body.resume-doc { background: var(--desk); color: var(--ink); font-family: Pretendard, "Apple SD Gothic Neo", sans-serif; font-size: 16px; line-height: 1.65; }
+.resume-doc a:not(.skip-link) { color: inherit; text-decoration: underline; text-decoration-color: #c4c6cf; text-underline-offset: 3px; padding-block: 3px; }
+.resume-doc a:not(.skip-link):hover { text-decoration-color: var(--amber-11); text-decoration-thickness: 2px; }
+.resume-doc a:focus-visible, .resume-doc main:focus-visible, .resume-doc input:focus-visible { outline: 2px solid var(--amber-11); outline-offset: 2px; border-radius: 2px; }
 
-* {
-  box-sizing: border-box;
-}
+.resume-canvas { padding: 32px 24px 72px; }
+.resume-sheet { max-width: 900px; margin: 0 auto; background: #fff; border-radius: 6px; overflow: hidden; }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  scroll-padding-top: 72px;
-}
+/* 머리 띠: 공통 막대에서 그대로 흘러내린 어두운 면 */
+.resume-head { display: grid; grid-template-columns: minmax(0,1fr) auto; grid-template-areas: "prompt photo" "id photo" "summary photo" "contact contact"; column-gap: var(--s7); padding: var(--s7) var(--pad) var(--s6); background: var(--bar); color: var(--bar-fg); }
+.resume-id { grid-area: id; }
+.resume-head h1 { display: flex; flex-wrap: wrap; align-items: baseline; font-size: 44px; line-height: 1.1; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+.resume-head h1::after { content: ""; order: 2; display: inline-block; width: .42em; height: .78em; margin-left: .14em; vertical-align: -0.02em; background: var(--bar-amber); }
+@media screen { .resume-head h1::after { animation: blink 1.1s steps(1) infinite; } }
+@keyframes blink { 50% { opacity: 0; } }
+.resume-head h1 small { order: 1; display: block; margin: 0 0 0 .5em; font: 500 16px/1.4 var(--mono); letter-spacing: 0; color: var(--bar-amber); }
+.resume-head h1 small::after { content: none; }
+.resume-role { margin-top: var(--s4); font-size: 18px; font-weight: 600; color: var(--bar-fg); }
+.resume-hero-copy { grid-area: summary; margin-top: var(--s3); max-width: 36em; color: var(--bar-fg-2); }
+.resume-photo { grid-area: photo; align-self: start; width: 120px; padding: 3px; border: 1px solid #3a4252; }
+.resume-photo img { aspect-ratio: 1/1; object-fit: cover; object-position: 50% 18%; }
+.resume-contact { grid-area: contact; display: grid; grid-template-columns: repeat(3, max-content); gap: 0 var(--s7); margin-top: var(--s5); padding-top: var(--s4); border-top: 1px dashed var(--bar-line); font: 400 16px/1.6 var(--mono); }
+.resume-contact a { display: inline-flex; align-items: center; min-height: 28px; color: var(--bar-fg) !important; text-decoration-color: #6b7280 !important; }
+.resume-contact a:hover { text-decoration-color: var(--bar-amber) !important; }
+.resume-head a:focus-visible { outline-color: var(--bar-amber); }
 
-body.resume-doc {
-  margin: 0;
-  background: var(--r-desk);
-  color: var(--r-ink);
-  font-family: Pretendard, "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  font-variant-numeric: tabular-nums;
-  word-break: keep-all;
-  overflow-wrap: anywhere;
-}
+.resume-body { padding: var(--s7) var(--pad) var(--s9); }
 
-:where(.resume-doc) h1,
-:where(.resume-doc) h2,
-:where(.resume-doc) h3,
-:where(.resume-doc) p,
-:where(.resume-doc) ul,
-:where(.resume-doc) dl,
-:where(.resume-doc) dd,
-:where(.resume-doc) figure,
-:where(.resume-doc) address {
-  margin: 0;
-  padding: 0;
-}
+/* 절 제목: 앰버 네모 표식 + 점선 구분선 */
+.resume-section + .resume-section { margin-top: var(--s7); }
+.resume-section h2 { display: flex; align-items: center; gap: 10px; margin-bottom: var(--s4); font-size: 19px; line-height: 1.4; font-weight: 800; }
+.resume-section h2::after { content: ""; flex: 1; border-top: 1px dashed var(--line); }
 
-:where(.resume-doc) address {
-  font-style: normal;
-}
+/* 경력: 커밋 로그처럼 세로선과 점. 절도 relative로 둬서 PDF 글자 순서가 DOM 순서와 같게 한다 */
+.resume-section { position: relative; }
+.cmdline:has(#experience-title) ~ .resume-job { position: relative; padding-left: 26px; }
+.cmdline:has(#experience-title) ~ .resume-job::before { content: ""; position: absolute; left: 5px; top: 14px; bottom: -24px; border-left: 1.5px solid var(--line); }
+.cmdline:has(#experience-title) ~ .resume-job:last-child::before { display: none; }
+.cmdline:has(#experience-title) ~ .resume-job::after { content: ""; position: absolute; left: 2px; top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #b9bbc6; }
+.cmdline:has(#experience-title) + .resume-job::after { left: 0; top: 8px; width: 12px; height: 12px; background: var(--amber-9); box-shadow: inset 0 0 0 2px var(--amber-11); }
+.resume-job + .resume-job { margin-top: var(--s6); }
+.resume-job-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px 16px; }
+.resume-job-head h3 { font-size: 18px; line-height: 1.5; font-weight: 700; }
+.resume-job-head h3 small { margin-left: 10px; font-size: 16px; font-weight: 500; color: var(--muted); }
+.resume-job-head time { flex: none; font: 500 16px/1.5 var(--mono); color: var(--muted); white-space: nowrap; }
 
-.resume-doc a:not(.skip-link) {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-color: var(--r-muted);
-  text-underline-offset: 3px;
-}
+.resume-achievement-list, .resume-plain-list { padding-left: 1.1em; list-style: none; }
+.resume-achievement-list li, .resume-plain-list li { margin: 3px 0; }
+.resume-achievement-list li::before, .resume-plain-list li::before { content: ""; display: inline-block; margin: 0 .56em .12em -1.02em; vertical-align: .08em; width: .36em; height: .36em; border-right: 1.5px solid #8b8d98; border-bottom: 1.5px solid #8b8d98; transform: rotate(-45deg); }
+.resume-job > .resume-achievement-list { margin-top: 6px; }
 
-/* 문장 속 링크도 눌리는 높이가 24px 이상이 되도록 위아래 여백을 준다(줄 높이는 그대로). */
-.resume-doc a:not(.skip-link) {
-  padding-block: 3px;
-}
+.resume-topics { margin-top: 4px; }
+.resume-topics dt { margin-top: 10px; font-size: 16px; line-height: 1.6; font-weight: 700; color: var(--amber-11); }
+.resume-topics dd { margin-top: 2px; }
+.resume-topics dt:first-of-type { margin-top: 2px; }
 
-.resume-doc a:hover {
-  text-decoration-color: var(--r-accent);
-}
+.resume-skills { display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 4px 16px; }
+.resume-skills dt { font-weight: 700; }
+[aria-labelledby=skills-title] .resume-skills dd { font: 400 16px/1.7 var(--mono); color: var(--ink-2); cursor: pointer; text-wrap: balance; }
 
-.resume-doc a:focus-visible,
-.resume-doc main:focus-visible {
-  outline: 2px solid var(--r-focus);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
-
-.resume-doc main:focus {
-  outline: none;
-}
-
-.skip-link {
-  position: absolute;
-  left: 12px;
-  top: -64px;
-  z-index: 40;
-  padding: 10px 14px;
-  border-radius: 6px;
-  background: #ffcc66;
-  color: #12151c;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.skip-link:focus {
-  top: 8px;
-}
-
-/* 화면: 흰 종이 한 장 */
-.resume-canvas {
-  padding: 32px clamp(0px, 3vw, 24px) 64px;
-}
-
-.resume-sheet {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 48px clamp(40px, 6vw, 64px) 56px;
-  background: var(--r-paper);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-}
-
-.resume-head {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-areas:
-    "id photo"
-    "summary photo"
-    "contact contact";
-  column-gap: 32px;
-  padding-bottom: 20px;
-  border-bottom: 2px solid var(--r-ink);
-}
-
-.resume-id {
-  grid-area: id;
-}
-
-.resume-head h1 {
-  font-size: 34px;
-  line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-}
-
-.resume-head h1 small {
-  margin-left: 10px;
-  font-size: 17px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--r-muted);
-}
-
-.resume-role {
-  margin-top: 6px;
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--r-ink-2);
-}
-
-.resume-hero-copy {
-  grid-area: summary;
-  margin-top: 12px;
-  color: var(--r-ink-2);
-}
-
-.resume-photo {
-  grid-area: photo;
-  align-self: start;
-  width: 104px;
-}
-
-.resume-photo img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 689 / 886;
-  object-fit: cover;
-  border-radius: 4px;
-  background: var(--r-line);
-}
-
-.resume-contact {
-  grid-area: contact;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 20px;
-  margin-top: 14px;
-  font-size: 16px;
-  color: var(--r-ink-2);
-}
-
-.resume-contact a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 28px;
-}
-
-.resume-section {
-  margin-top: 32px;
-}
-
-.resume-section > h2 {
-  margin-bottom: 14px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid var(--r-ink);
-  font-size: 20px;
-  line-height: 1.4;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-
-.resume-job + .resume-job {
-  margin-top: 24px;
-}
-
-.resume-job-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 4px 16px;
-}
-
-.resume-job-head h3 {
-  font-size: 18px;
-  line-height: 1.5;
-  font-weight: 700;
-}
-
-.resume-job-head h3 small {
-  margin-left: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--r-muted);
-}
-
-.resume-job-head time {
-  flex: none;
-  font-size: 16px;
-  color: var(--r-ink-2);
-  white-space: nowrap;
-}
-
-.resume-achievement-list,
-.resume-plain-list {
-  margin-top: 6px;
-  padding-left: 20px;
-  list-style: disc;
-}
-
-.resume-achievement-list li,
-.resume-plain-list li {
-  margin: 4px 0;
-}
-
-.resume-achievement-list li::marker,
-.resume-plain-list li::marker {
-  color: var(--r-muted);
-}
-
-.resume-doc b,
-.resume-doc strong {
-  font-weight: 700;
-}
-
-.resume-topics {
-  display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 0 16px;
-  margin-top: 6px;
-}
-
-.resume-topics dt {
-  margin-top: 10px;
-  font-weight: 700;
-  color: var(--r-accent);
-}
-
-.resume-topics dd {
-  margin-top: 4px;
-}
-
-.resume-topics dd .resume-achievement-list {
-  margin-top: 0;
-}
-
-.resume-skills {
-  display: grid;
-  grid-template-columns: 112px minmax(0, 1fr);
-  gap: 6px 16px;
-}
-
-.resume-skills dt {
-  font-weight: 700;
-  color: var(--r-ink-2);
-}
 
 @media screen and (max-width: 760px) {
-  body.resume-doc {
-    background: var(--r-paper);
-  }
-
-  .resume-canvas {
-    padding: 0;
-  }
-
-  .resume-sheet {
-    padding: 24px 16px 48px;
-    box-shadow: none;
-  }
-
-  .resume-head {
-    grid-template-areas:
-      "id photo"
-      "summary summary"
-      "contact contact";
-    column-gap: 16px;
-  }
-
-  .resume-head h1 {
-    font-size: 30px;
-  }
-
-  .resume-head h1 small {
-    display: block;
-    margin: 2px 0 0;
-    font-size: 16px;
-  }
-
-  .resume-role {
-    font-size: 16px;
-  }
-
-  .resume-photo {
-    width: 80px;
-  }
-
-  .resume-hero-copy {
-    margin-top: 16px;
-  }
-
-  .resume-contact {
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .resume-contact a {
-    min-height: 32px;
-  }
-
-  .resume-section {
-    margin-top: 28px;
-  }
-
-  .resume-job-head {
-    flex-direction: column;
-  }
-
-  .resume-job-head h3 small {
-    display: block;
-    margin: 0;
-  }
-
-  .resume-topics,
-  .resume-skills {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
-  .resume-topics dt {
-    margin-top: 12px;
-  }
-
-  .resume-skills dt {
-    margin-top: 10px;
-  }
-
-  .resume-skills dd {
-    margin-top: 2px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    scroll-behavior: auto !important;
-    transition: none !important;
-    animation: none !important;
-  }
-}
-
-/* 인쇄·PDF: A4 한 쪽 */
-@page {
-  size: A4;
-  margin: 0;
+  body.resume-doc { background: #fff; }
+  .resume-canvas { padding: 12px 0 0; }
+  .resume-sheet { border-radius: 0; }
+  :root { --pad: 16px; }
+  .resume-head { grid-template-areas: "prompt prompt" "id photo" "summary summary" "contact contact"; column-gap: 16px; padding-top: 24px; }
+  .resume-head h1 { font-size: 36px; }
+  .resume-photo { width: 84px; }
+  .resume-contact { grid-template-columns: minmax(0,1fr); }
+  .resume-contact a { min-height: 32px; }
+  .resume-body { padding-top: 24px; }
+  .resume-job-head { flex-direction: column; }
+  .resume-job-head h3 small { display: block; margin: 0; }
+  .resume-skills { grid-template-columns: minmax(0,1fr); gap: 0; }
+  .resume-skills dt { margin-top: 10px; }
 }
 
 @media print {
-  html,
-  body.resume-doc {
-    background: #fff;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-
-  body.resume-doc {
-    font-size: 9.5pt;
-    line-height: 1.47;
-  }
-
-  .skip-link {
-    display: none;
-  }
-
-  .resume-canvas {
-    padding: 0;
-  }
-
-  .resume-sheet {
-    width: 210mm;
-    max-width: none;
-    margin: 0;
-    padding: 12mm 17mm 10mm;
-    box-shadow: none;
-  }
-
-  .resume-doc a {
-    padding-block: 0;
-    text-decoration: underline;
-    text-decoration-thickness: 0.5pt;
-  }
-
-  .resume-head {
-    column-gap: 6mm;
-    padding-bottom: 4mm;
-    border-bottom-width: 1.5px;
-  }
-
-  .resume-head h1 {
-    font-size: 24pt;
-  }
-
-  .resume-head h1 small {
-    margin-left: 6px;
-    font-size: 12pt;
-  }
-
-  .resume-role {
-    margin-top: 1.4mm;
-    font-size: 11pt;
-  }
-
-  .resume-hero-copy {
-    margin-top: 2mm;
-  }
-
-  .resume-photo {
-    width: 23mm;
-  }
-
-  .resume-contact {
-    gap: 0 12px;
-    margin-top: 2.6mm;
-    font-size: 8.8pt;
-  }
-
-  .resume-contact a {
-    min-height: 0;
-  }
-
-  .resume-section {
-    margin-top: 3.6mm;
-  }
-
-  .resume-section > h2 {
-    margin-bottom: 2mm;
-    padding-bottom: 1.2mm;
-    border-bottom-width: 1.5px;
-    font-size: 11.5pt;
-    line-height: 1.4;
-  }
-
-  .resume-job + .resume-job {
-    margin-top: 2.8mm;
-  }
-
-  .resume-job-head h3 {
-    font-size: 10.5pt;
-  }
-
-  .resume-job-head h3 small {
-    margin-left: 6px;
-    font-size: 9.4pt;
-  }
-
-  .resume-job-head time {
-    font-size: 9pt;
-  }
-
-  .resume-achievement-list,
-  .resume-plain-list {
-    margin-top: 1.2mm;
-    padding-left: 4.2mm;
-  }
-
-  .resume-achievement-list li,
-  .resume-plain-list li {
-    margin: 0.6mm 0;
-    padding-left: 0.5mm;
-    break-inside: avoid;
-  }
-
-  .resume-topics {
-    grid-template-columns: 19mm minmax(0, 1fr);
-    gap: 0.4mm 3mm;
-    margin-top: 1.2mm;
-  }
-
-  .resume-topics dt {
-    margin-top: 0.6mm;
-    font-size: 9pt;
-  }
-
-  .resume-topics dd {
-    margin-top: 0;
-  }
-
-  .resume-skills {
-    grid-template-columns: 22mm minmax(0, 1fr);
-    gap: 1mm 4mm;
-  }
+  :root { --pad: 15mm; }
+  body.resume-doc { font-size: 9.5pt; line-height: 1.5; }
+  .resume-canvas { padding: 0; }
+  .resume-sheet { width: 210mm; max-width: none; margin: 0; }
+  .resume-head { padding: 7.5mm var(--pad) 3.6mm; column-gap: 7mm; grid-template-areas: "id photo" "summary photo" "contact contact"; }
+  .resume-head h1 { font-size: 28pt; }
+  .resume-head h1 small { font-size: 11pt; }
+  .resume-role { margin-top: 2.2mm; font-size: 11pt; }
+  .resume-hero-copy { margin-top: 1.6mm; }
+  .resume-photo { width: 24mm; padding: .7mm; border-width: .6pt; }
+  .resume-sheet { border-radius: 0; }
+  .resume-head h1::after { height: .5em; width: .26em; vertical-align: .04em; }
+  .resume-contact { gap: 0 7mm; margin-top: 2.4mm; padding-top: 1.8mm; font-size: 9pt; line-height: 1.5; }
+  .resume-contact a { min-height: 0; }
+  .resume-doc a:not(.skip-link) { text-decoration-thickness: .5pt; text-underline-offset: 1.6pt; }
+  .resume-body { padding: 4.6mm var(--pad) 7mm; }
+  .resume-section h2 { break-after: avoid; }
+  .resume-section + .resume-section { margin-top: 3.6mm; }
+  .resume-section h2 { gap: 2.4mm; margin-bottom: 1.8mm; font-size: 11pt; }
+  .resume-section h2::after { border-top-width: .6pt; }
+  .cmdline:has(#experience-title) ~ .resume-job { padding-left: 6mm; }
+  .cmdline:has(#experience-title) ~ .resume-job::before { left: 1.25mm; top: 3.6mm; bottom: -3.4mm; border-left-width: .8pt; }
+  .cmdline:has(#experience-title) ~ .resume-job::after { left: .55mm; top: 2.1mm; width: 1.8mm; height: 1.8mm; }
+  .cmdline:has(#experience-title) + .resume-job::after { left: 0; top: 1.5mm; width: 2.9mm; height: 2.9mm; box-shadow: inset 0 0 0 .9pt var(--amber-11); }
+  .resume-job + .resume-job { margin-top: 2.8mm; }
+  .resume-job-head h3 { font-size: 10.5pt; }
+  .resume-job-head h3 small { margin-left: 2mm; font-size: 9pt; }
+  .resume-job-head time { font-size: 9pt; }
+  .resume-achievement-list li, .resume-plain-list li { margin: .45mm 0; }
+  .resume-job > .resume-achievement-list { margin-top: .8mm; }
+  .resume-topics { margin-top: .4mm; }
+  .resume-topics dt { margin-top: 1.3mm; font-size: 9pt; line-height: 1.45; }
+  .resume-topics dd { margin-top: .1mm; }
+  .resume-topics dt:first-of-type { margin-top: .3mm; }
+  .resume-skills { grid-template-columns: 18mm minmax(0,1fr); gap: .5mm 3mm; }
+  [aria-labelledby=skills-title] .resume-skills dd { font-size: 9.5pt; line-height: 1.5; }
 }
+
+.grep-line { display: none; align-items: center; flex-wrap: wrap; gap: 4px 10px; font: 400 16px/1.6 var(--mono); }
+.js .grep-line { display: flex; }
+.grep-line label { white-space: nowrap; }
+.grep-line input { flex: 1 1 160px; min-width: 0; min-height: 36px; padding: 0 8px; border: 1px solid var(--g-border); border-radius: 3px; background: var(--g-bg); color: var(--g-fg); font: inherit; caret-color: var(--g-caret); }
+.grep-line output { color: var(--g-out); }
+.grep-hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+::highlight(grep) { background: #ffcc66; color: #12151c; }
+@media screen and (max-width: 760px) { .js .grep-line { display: none; } }
+/* 동작 줄이기: 의사 요소(커서)까지 멈춘다 */
+@media (prefers-reduced-motion: reduce) { *::before, *::after { animation: none !important; } }
+
+.band-fill { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; fill: var(--fill, #12151c); pointer-events: none; }
+.print-safe .band-fill { display: none; }
+li, .resume-hero-copy { text-wrap: pretty; }
+/* 이름과 영문 이름 사이에 진짜 공백을 넣어 글자 추출에서 붙지 않게 한다 */
+.resume-head h1 small::before { content: " "; white-space: pre; }
+
+/* ---- T1 덧칠 ----
+   구문 색: 띠(어두운 면) 위는 GitHub Primer dark syntax, 흰 종이 위는 Primer light syntax(둘 다 MIT). 모노는 JetBrains Mono 고정 */
+:root {
+  --syn-key: #0550ae; --syn-str: #116329; --syn-num: #953800; --syn-com: #59636e; --syn-prompt: #1a7f37;
+  --d-com: #8b949e; --d-key: #79c0ff; --d-str: #7ee787; --d-num: #ffcc66;
+  --title-bg: #0b0d12;
+  --g-border: #c4c6cf; --g-bg: #fff; --g-fg: var(--ink); --g-caret: #ab6400; --g-out: var(--syn-com);
+}
+.resume-sheet { position: relative; }
+.resume-head { position: relative; z-index: 0; grid-template-areas: "title title" "prompt photo" "id photo" "summary photo" "contact contact"; padding-top: 0; }
+
+/* 창 제목줄: 신호등 세 점 + 경로 */
+.term-titlebar { grid-area: title; display: flex; align-items: center; gap: 14px; margin: 0 calc(-1 * var(--pad)) var(--s6); padding: 0 var(--pad); height: 38px; background: var(--title-bg); border-bottom: 1px solid var(--bar-line); font: 500 13px/1 var(--mono); color: var(--d-com); }
+.term-dots { display: inline-flex; gap: 7px; }
+.term-dots i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.term-dots i:nth-child(2) { background: #febc2e; }
+.term-dots i:nth-child(3) { background: #28c840; }
+.term-title { flex: 1; text-align: center; margin-right: 54px; }
+
+/* 프롬프트 */
+.cmd { margin: 0; font: 400 14px/1.5 var(--mono); white-space: nowrap; }
+.ps1 { color: var(--syn-prompt); font-weight: 700; }
+.ps-path { color: var(--syn-key); }
+.ps-sym { color: var(--ink-2); margin-right: .1em; }
+.resume-head .cmd { grid-area: prompt; margin-bottom: var(--s3); color: var(--bar-fg); }
+.resume-head .ps1 { color: var(--d-str); }
+.resume-head .ps-path { color: var(--d-key); }
+.resume-head .ps-sym { color: var(--bar-fg-2); }
+.resume-head .cmd-text { color: #fff; }
+
+/* 절: 명령 줄 다음에 같은 줄로 제목 */
+.cmdline { display: flex; align-items: baseline; gap: 12px; margin-bottom: var(--s4); }
+.cmdline .cmd { flex: none; color: var(--ink-2); }
+.cmdline .ps1 { color: var(--syn-prompt); font-weight: 700; }
+.cmdline .ps-path { color: var(--syn-key); }
+.cmdline .ps-sym { color: var(--ink-2); }
+.cmdline .cmd-text { color: #3b3f46; }
+.cmdline h2 { flex: 1; margin: 0 !important; }
+
+/* 흰 종이 위 구문 강조: 숫자=앰버 갈색, 기술 키=파랑, 기술 값=초록 */
+.resume-achievement-list b { color: var(--syn-num); }
+.resume-topics dt { color: #3b3f46 !important; }
+[aria-labelledby=skills-title] .resume-skills dt { font-family: var(--mono); font-weight: 500; color: var(--syn-key); }
+[aria-labelledby=skills-title] .resume-skills dt::after { content: ":"; color: var(--syn-com); }
+[aria-labelledby=skills-title] .resume-skills dd { color: var(--ink-2) !important; }
+
+/* tmux 상태줄 */
+.tmux-status { display: flex; gap: 0; margin-top: 0; padding: 0 var(--pad); height: 30px; align-items: center; background: var(--bar); color: var(--bar-fg-2); font: 500 13px/1 var(--mono); }
+.tmux-status .ts-session { margin-right: 14px; padding: 0 10px; height: 100%; display: inline-flex; align-items: center; background: #ffcc66; color: #12151c; font-weight: 700; margin-left: calc(-1 * var(--pad)); padding-left: var(--pad); }
+.tmux-status span + span { margin-right: 14px; }
+.tmux-status .on { color: #ffcc66; }
+.tmux-status .ts-right { margin-left: auto; margin-right: 0 !important; }
+
+/* 화면 전용 도구 줄: grep(JS 있을 때만)과 인쇄용 PDF 링크(JS 없이도 보임) */
+.resume-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: var(--s7); }
+.resume-tools .grep-line { flex: 1 1 360px; }
+.print-pdf-link { display: inline-flex; align-items: center; min-height: 28px; font-size: 16px; color: var(--muted) !important; }
+@media screen and (min-width: 761px) { .print-pdf-link { margin-left: auto; } }
+/* 경력: T2의 git log --graph. 해시 자리에 기간, 현재 회사 뒤에 (HEAD -> current). 별은 글자가 아닌 그림 */
+.resume-job-head { justify-content: flex-start; flex-wrap: wrap; gap: 2px 10px; }
+.resume-job-head time { order: -2; flex: none; width: 17ch; color: #3b3f46; font-family: var(--mono); font-weight: 600; }
+.git-ref { order: 1; font: 500 13px/1.5 var(--mono); color: #1a7f37; }
+.cmdline:has(#experience-title) ~ .resume-job::after { content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 1v8M1.5 3l7 4M8.5 3l-7 4' stroke='%238b8d98' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); width: 11px; height: 11px; background: none !important; box-shadow: none !important; border-radius: 0; left: 0; top: 6px; }
+.cmdline:has(#experience-title) + .resume-job::after { content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 1v8M1.5 3l7 4M8.5 3l-7 4' stroke='%23ab6400' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); width: 13px; height: 13px; left: -1px; top: 5px; }
+.cmdline:has(#experience-title) ~ .resume-job::before { border-left: 1.5px solid #c4c6cf; left: 5px; top: 22px; }
+/* 장식 그림: 화면은 글자, 인쇄는 그림 */
+.deco-img { display: none; zoom: .25; } /* 4배 PNG를 CSS 크기로 되돌린다 */
+.resume-plain-list { padding-left: calc(26px + 1.1em); }
+
+/* ---- 인쇄 안전판: 흰 띠 + 같은 연출, 구문 색은 인쇄용 ---- */
+.print-safe .resume-head { --bar-fg: #1c2024; --bar-fg-2: #3b3f46; --bar-line: #d9d9e0; --bar-amber: #ab6400; --title-bg: #f0f0f3; --d-com: #59636e; --d-key: #0550ae; --d-str: #1a7f37;
+  background: #fff; color: var(--ink); border-bottom: 2px solid #12151c; }
+.print-safe .resume-head h1 { color: var(--ink); }
+.print-safe .resume-head h1::after { background: #ffc53d; box-shadow: inset 0 0 0 1px #ab6400; }
+.print-safe .resume-head .cmd-text { color: var(--ink); }
+.print-safe .resume-photo { border-color: #c4c6cf; }
+.print-safe .resume-contact a { text-decoration-color: #b9bbc6 !important; }
+.print-safe .tmux-status { background: #f0f0f3; color: #3b3f46; border-top: 1px solid #d9d9e0; }
+.print-safe .tmux-status .ts-session { background: #12151c; color: #ffcc66; }
+.print-safe .tmux-status .on { color: #9a6700; }
+
+@media screen and (max-width: 760px) {
+  .resume-job-head time { width: auto; }
+  .resume-head { position: relative; z-index: 0; grid-template-areas: "title title" "prompt prompt" "id photo" "summary summary" "contact contact"; }
+  .term-title { margin-right: 0; text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* 좁은 화면: 명령 줄은 줄바꿈을 허용해 잘리지 않게 하고, 제목은 그 아래 한 줄로 둔다 */
+  .cmd { white-space: normal; overflow-wrap: anywhere; }
+  .cmdline { flex-wrap: wrap; gap: 0 10px; }
+  .cmdline .cmd, .cmdline h2 { flex: 1 1 100%; min-width: 0; }
+  .tmux-status { font-size: 12px; overflow: hidden; white-space: nowrap; }
+  .tmux-status .ts-right { display: none; }
+}
+
+@media print {
+  .resume-sheet { min-height: 297mm; }
+  .resume-head { padding-top: 0; padding-bottom: 3mm; grid-template-areas: "title title" "prompt photo" "id photo" "summary photo" "contact contact"; }
+  .term-titlebar { height: 6.4mm; margin-bottom: 2.6mm; gap: 3mm; font-size: 8pt; }
+  .term-dots { gap: 1.5mm; }
+  .term-dots i { width: 2.4mm; height: 2.4mm; }
+  .term-title { margin-right: 11mm; }
+  .cmd { font-size: 9pt; }
+  .tmux-status { display: none !important; }
+  .git-ref { font-size: 8.6pt; }
+  .resume-section h2 { font-size: 11.5pt !important; font-weight: 800 !important; }
+  html.deco .git-ref .deco-img { display: inline-block; vertical-align: -0.2em; }
+  .cmdline:has(#experience-title) ~ .resume-job::after { width: 2.6mm; height: 2.6mm; top: 1.3mm; }
+  .cmdline:has(#experience-title) + .resume-job::after { width: 3mm; height: 3mm; top: 1.1mm; }
+  .cmdline:has(#experience-title) ~ .resume-job::before { left: 1.2mm; top: 4.6mm; border-left-width: .8pt; }
+  html.deco .deco-txt { display: none; }
+  html.deco .deco-img { display: block; }
+  html.deco .term-title .deco-img { margin: 0 auto; }
+  html.deco .cmdline { align-items: center; }
+  html.deco .cmdline h2 { line-height: 18px; }
+  .resume-plain-list { padding-left: calc(6mm + 1.1em); }
+  .resume-head .cmd { margin-bottom: 1.2mm; }
+  .cmdline { gap: 2.4mm; margin-bottom: 1.8mm; }
+  .resume-section + .resume-section { margin-top: 3.6mm !important; }
+  body.resume-doc { line-height: 1.46; }
+  .resume-body { padding-top: 3.6mm; padding-bottom: 6mm; }
+  .resume-sheet { min-height: 0 !important; }
+  .resume-section + .resume-section { margin-top: 3mm; }
+  .resume-job + .resume-job { margin-top: 2.2mm; }
+  .resume-achievement-list li, .resume-plain-list li { margin: .25mm 0; }
+  .resume-topics dt { margin-top: 1mm; }
+  .tmux-status { position: absolute; left: 0; right: 0; bottom: 0; height: 6mm; font-size: 8pt; }
+  .tmux-status .ts-session { margin-right: 3mm; }
+  .tmux-status span + span { margin-right: 3mm; }
+}
+
