@@ -17,6 +17,14 @@
   }
 
   const skip = ".resume-tools, .cmd, [aria-hidden=true]";
+  // 화면이 좁아져 grep 줄이 숨으면 칠해 둔 강조도 지운다.
+  matchMedia("(max-width: 760px)").addEventListener("change", (event) => {
+    if (event.matches) {
+      CSS.highlights.delete("grep");
+      input.value = "";
+      out.textContent = "";
+    }
+  });
   const run = () => {
     const query = input.value.trim().toLowerCase();
     CSS.highlights.delete("grep");
@@ -51,6 +59,7 @@
     .querySelectorAll("[aria-labelledby=skills-title] .resume-skills dd")
     .forEach((dd) =>
       dd.addEventListener("click", (event) => {
+        if (getComputedStyle(box).display === "none") return; // 좁은 화면에서는 grep 줄이 없으니 칠하지 않는다
         const position = document.caretPositionFromPoint
           ? document.caretPositionFromPoint(event.clientX, event.clientY)
           : null;
