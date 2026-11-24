@@ -104,7 +104,7 @@ body.resume-doc { background: var(--desk); color: var(--ink); font-family: Prete
 
 .resume-skills { display: grid; grid-template-columns: 112px minmax(0,1fr); gap: 4px 16px; }
 .resume-skills dt { font-weight: 700; }
-[aria-labelledby=skills-title] .resume-skills dd { font: 400 16px/1.7 var(--mono); color: var(--ink-2); cursor: pointer; }
+[aria-labelledby=skills-title] .resume-skills dd { font: 400 16px/1.7 var(--mono); color: var(--ink-2); }
 @media screen and (min-width: 761px) { [aria-labelledby=skills-title] .resume-skills dd { text-wrap: balance; } }
 
 
@@ -172,6 +172,8 @@ body.resume-doc { background: var(--desk); color: var(--ink); font-family: Prete
 .grep-hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 ::highlight(grep) { background: #ffcc66; color: #12151c; }
 @media screen and (max-width: 760px) { .js .grep-line { display: none; } }
+/* 기술 단어를 눌러 찾는 동작은 grep 줄이 보일 때만 있다(JS 있음, 760px 초과) */
+@media screen and (min-width: 761px) { .js [aria-labelledby=skills-title] .resume-skills dd { cursor: pointer; } }
 /* 동작 줄이기: 의사 요소(커서)까지 멈춘다 */
 @media (prefers-reduced-motion: reduce) { *::before, *::after { animation: none !important; } }
 
