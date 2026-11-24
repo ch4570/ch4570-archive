@@ -328,6 +328,28 @@ try {
           layout.summary,
           scope,
         );
+        if (route === "resume") {
+          // 터미널 연출 이력서: 장식(aria-hidden)을 뺀 읽는 글자는 16px 이상, 누르는 곳은 24px 이상이어야 한다.
+          const resume = await context.evaluate(`(() => {
+            const visible = (element) => { const box = element.getBoundingClientRect(), style = getComputedStyle(element); return box.width > 0 && box.height > 0 && style.visibility !== 'hidden' && style.display !== 'none'; };
+            const small = [], walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            for (let node; (node = walker.nextNode());) {
+              const element = node.parentElement;
+              if (!node.data.trim() || element.closest('script,style,[aria-hidden=true],.grep-hint') || !visible(element)) continue;
+              const size = parseFloat(getComputedStyle(element).fontSize);
+              if (size < 16 && !element.closest('.site-bar')) small.push({ text: node.data.trim().slice(0, 40), size });
+            }
+            const targets = [...document.querySelectorAll('main a[href], main input, .skip-link')].filter((element) => !element.matches('.skip-link') && visible(element)).map((element) => ({ text: (element.textContent || element.id).trim().slice(0, 30), height: element.getBoundingClientRect().height, width: element.getBoundingClientRect().width })).filter((item) => item.height < 24 || item.width < 24);
+            const printLink = document.querySelector('.print-pdf-link');
+            return { small, targets, printLink: !!printLink && visible(printLink) && printLink.getAttribute('href').endsWith('seo-minjae-resume-print.pdf'), cursorAnimation: getComputedStyle(document.querySelector('.resume-head h1'), '::after').animationName, fonts: [...document.fonts].filter((face) => face.status === 'loaded').map((face) => face.family.replaceAll('"', '') + ' ' + face.weight), grep: getComputedStyle(document.querySelector('.grep-line')).display };
+          })()`);
+          record("resume reading text is at least 16px outside decorative terminal lines", resume.small.length === 0, resume.small, scope);
+          record("resume touch targets are at least 24px", resume.targets.length === 0, resume.targets, scope);
+          record("resume print PDF link is visible", resume.printLink, { printLink: resume.printLink }, scope);
+          record("resume cursor animation is stopped under reduced motion", resume.cursorAnimation === "none", { animationName: resume.cursorAnimation }, scope);
+          record("resume loads only the repository Pretendard and JetBrains Mono faces", resume.fonts.length >= 4 && resume.fonts.every((face) => /^(Pretendard|JetBrains Mono) /u.test(face)) && !resume.fonts.includes("Pretendard 500"), resume.fonts, scope);
+          record("resume grep line shows only at wide widths", (width > 760) === (resume.grep === "flex"), { grep: resume.grep, width }, scope);
+        }
         await screenshot(context, `${scope}.png`);
         await context.page("Page.bringToFront");
         for (const type of ["keyDown", "keyUp"])
