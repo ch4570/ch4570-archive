@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#12151c">
-  <meta name="description" content="서민재 백엔드 엔지니어 이력서. Java·Kotlin·Spring 기반의 이벤트 복구, 배치, 개인화 피드, JPA 오류 대응 경력을 담았습니다.">
+  <meta name="description" content="서민재 백엔드 엔지니어 이력서. 추천 피드, CPC 광고·포인트, 이벤트 복구와 배치, 공통 코드 관리 경력을 수치와 도식으로 정리했습니다.">
   <title>서민재 · 백엔드 엔지니어 이력서</title>
   <link rel="canonical" href="https://ch4570-archive.vercel.app/resume/">
   <meta property="og:title" content="서민재 · 백엔드 엔지니어 이력서">
@@ -21,6 +21,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='18' fill='%232c2230'/%3E%3Cpath d='M16%2016h32v32H16z' rx='10' fill='%23fbe9e7'/%3E%3Cpath d='M24%2024h16v16H24z' rx='5' fill='%236e4c71'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../assets/site-frame.css">
   <link rel="stylesheet" href="../assets/resume.css">
+  <link rel="stylesheet" href="../assets/viz.css">
 </head>
 <body class="resume-doc">
   <a class="skip-link" href="#resume-main">이력서 본문으로 건너뛰기</a>
@@ -28,7 +29,7 @@
     <div class="site-bar__inner">
       <a class="site-bar__home" href="../">서민재<small lang="en">Rex Seo</small></a>
       <nav class="site-bar__nav" aria-label="주요 문서">
-        <a href="./" aria-current="page">이력서</a>
+        <a href="../resume/" aria-current="page">이력서</a>
         <a href="../career/">경력기술서</a>
         <a href="../portfolio/">포트폴리오</a>
       </nav>
@@ -45,7 +46,7 @@
           <h1 data-edit-id="resume-002">서민재<small lang="en">Rex Seo</small></h1>
           <p class="resume-role" data-edit-id="resume-003">백엔드 엔지니어 · Java, Kotlin, Spring</p>
         </div>
-        <p class="resume-hero-copy" data-edit-id="resume-004">멈춘 자리에서 이어 가도록 만듭니다. 지금은 JOBKOREA·Albamon 플랫폼에서 이벤트 복구, 배치, 개인화 피드를 맡고 있습니다.</p>
+        <p class="resume-hero-copy" data-edit-id="resume-004">문제를 해결하는 데서 끝내지 않고 같은 문제가 반복되지 않도록 기준과 구조를 남깁니다. 지금은 잡코리아·알바몬 플랫폼에서 추천 피드와 CPC 광고·포인트를 맡고 있습니다.</p>
         <figure class="resume-photo">
           <img src="../assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async">
         </figure>
@@ -60,71 +61,48 @@
       <div class="resume-body" data-grep-root>
         <section class="resume-section" aria-labelledby="experience-title">
           <div class="cmdline"><p class="cmd cmd--inline" aria-hidden="true"><span class="deco-txt"><span class="ps1">ch4570@archive</span><span class="ps-path">:~/resume</span><span class="ps-sym">$</span> <span class="cmd-text">git log --graph career</span></span><img class="deco-img" src="../assets/resume-deco/dark/cmd-career.png" alt="" loading="lazy" decoding="async"></p><h2 id="experience-title" data-edit-id="resume-009">경력</h2></div>
-
           <article class="resume-job">
             <div class="resume-job-head">
-              <h3 data-edit-id="resume-010">웍스피어(유)<small>백엔드 엔지니어 · JOBKOREA·Albamon 플랫폼</small></h3>
+              <h3 data-edit-id="resume-010">유한책임회사웍스피어<small>사원 · AI 추천/검색 플랫폼팀</small></h3>
               <time datetime="2025-06" data-edit-id="resume-052">2025.06 – 현재</time><span class="git-ref" aria-hidden="true"><span class="deco-txt">(HEAD -&gt; main)</span><img class="deco-img" src="../assets/resume-deco/dark/head.png" alt="" loading="lazy" decoding="async"></span>
             </div>
             <dl class="resume-topics">
-              <dt data-edit-id="resume-053">이벤트 복구</dt>
+              <dt data-edit-id="resume-058">추천 피드</dt>
               <dd>
-                <ul class="resume-achievement-list">
-                  <li data-edit-id="resume-013">Kafka 내부 이벤트 <b>9종</b>의 발행·처리 실패를 <b>6개</b> 상태로 나눠 기록했습니다.</li>
-                  <li data-edit-id="resume-054">저장한 payload로 실패한 업무만 다시 실행하는 복구 경로 <b>8개</b>를 만들었습니다.</li>
-                  <li data-edit-id="resume-055"><b>15분</b> 넘게 멈춘 이벤트는 유형별로 묶어 Slack으로 알렸습니다.</li>
-                </ul>
+                <ul class="resume-achievement-list"><li data-edit-id="resume-015">조회 경로 <b>9개</b>를 병렬로 돌리고 경로마다 <b>500ms</b> 타임아웃을 두어 늦은 경로만 빼고 응답하게 했습니다.</li><li data-edit-id="resume-076">후보를 <b>500건</b>, <b>100건</b>으로 좁혀 재정렬하고 <b>20건</b>을 응답하는 3단계 랭킹과 스코어링 정책을 설계했습니다.</li></ul>
               </dd>
-              <dt data-edit-id="resume-056">배치·정합성</dt>
+              <dt data-edit-id="resume-053">이벤트 복구·배치</dt>
               <dd>
-                <ul class="resume-achievement-list">
-                  <li data-edit-id="resume-057">아카이브 테이블 <b>10개</b>를 옮기는 배치가 멈추면 시작 ID를 지정해 남은 범위부터 다시 실행하게 했습니다.</li>
-                  <li data-edit-id="resume-014"><b>9개</b> API에 <b>13개</b> 동시성 시나리오를 돌려 동시 요청 뒤에도 잔액과 원장, 후속 이벤트가 맞는지 확인했습니다.</li>
-                </ul>
+                <ul class="resume-achievement-list"><li data-edit-id="resume-013">Kafka 내부 이벤트 <b>9종</b>의 실패를 <b>6개</b> 상태로 기록하고, 복구 경로 <b>8개</b>로 실패한 업무만 다시 실행하게 했습니다.</li><li data-edit-id="resume-055"><b>15분</b> 넘게 멈춘 이벤트는 유형별로 묶어 Slack으로 알렸고, <b>60초</b> 안의 중복 클릭은 포인트를 차감하지 않게 했습니다.</li></ul>
               </dd>
-              <dt data-edit-id="resume-058">개인화 피드</dt>
+              <dt data-edit-id="resume-060">공통 코드·도구</dt>
               <dd>
-                <ul class="resume-achievement-list">
-                  <li data-edit-id="resume-015">검색 소스 <b>8개</b>에 소스별 타임아웃과 실패 경로를 두었습니다.</li>
-                  <li data-edit-id="resume-059">Redis 캐시를 우회해도 첫 페이지를 계산해 응답하는 경로를 추가했습니다.</li>
-                </ul>
-              </dd>
-              <dt data-edit-id="resume-060">테스트·CI</dt>
-              <dd>
-                <ul class="resume-achievement-list">
-                  <li data-edit-id="resume-029">테스트 준비 코드를 공통 모듈로 모으고 컨텍스트 재사용 방식을 조정해 추가 자원 없이 CI 메모리 부족을 해결했습니다.</li>
-                </ul>
+                <ul class="resume-achievement-list"><li data-edit-id="resume-079">코드 변경을 신청, 검증, 승인 순서로 처리하고 승인 뒤 캐시를 갱신하는 흐름과 쓰기 API 접근 제어를 작업했습니다.</li><li data-edit-id="resume-080">ElastiCache 패치로 Primary가 바뀌어도 쓰기가 막히지 않도록 Primary·reader endpoint 접속으로 바꾸는 작업을 했습니다.</li><li data-edit-id="resume-029">공용 Test Support 모듈(지원 클래스 <b>26개</b>, 자체 테스트 <b>37개</b>)과 n8n 코드리뷰 봇, 에이전트 하네스(Vulpora)를 만들었습니다.</li></ul>
+                <div class="viz-row viz-row--2"><div class="viz" data-viz="feed-funnel" data-src="랠릿 프로젝트 02: 1차 500건 → 2차 100건 → 재정렬, 20건 응답"><svg viewBox="0 0 270 108" aria-hidden="true" focusable="false"><defs><marker id="ah-feed-funnel" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">후보 수 · 3단계 랭킹</text><text x="0" y="38" class="v-l" text-anchor="start">1차 랭킹</text><rect x="80" y="26" width="124" height="15" rx="2" class="v-before"/><text x="210" y="38" class="v-n" text-anchor="start">500건</text><text x="0" y="64" class="v-l" text-anchor="start">2차 랭킹</text><rect x="80" y="52" width="24.8" height="15" rx="2" class="v-before"/><text x="110.8" y="64" class="v-n" text-anchor="start">100건</text><text x="0" y="90" class="v-l" text-anchor="start">재정렬 · 응답</text><rect x="80" y="78" width="5" height="15" rx="2" class="v-after"/><text x="91" y="90" class="v-n" text-anchor="start">20건</text></svg></div><div class="viz viz--wide viz--max" data-viz="approval" data-src="랠릿 경력 01·프로젝트 01: 신청, 검증, 승인, 승인 뒤 캐시 갱신"><svg viewBox="0 0 330 100" aria-hidden="true" focusable="false"><defs><marker id="ah-approval" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">코드 변경 승인 흐름</text><rect x="0" y="24" width="66" height="30" rx="4" class="v-box"/><text x="33" y="43" class="v-lb" text-anchor="middle">신청</text><path d="M68 39L86 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="88" y="24" width="66" height="30" rx="4" class="v-box"/><text x="121" y="43" class="v-lb" text-anchor="middle">검증</text><path d="M156 39L174 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="176" y="24" width="66" height="30" rx="4" class="v-hi"/><text x="209" y="43" class="v-lb" text-anchor="middle">승인</text><path d="M244 39L262 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="264" y="24" width="66" height="30" rx="4" class="v-box"/><text x="297" y="43" class="v-lb" text-anchor="middle">캐시 갱신</text><text x="165" y="76" class="v-s" text-anchor="middle">검증: 사이트별 정합성</text><text x="165" y="92" class="v-s" text-anchor="middle">승인 직전 재판정</text></svg></div></div>
               </dd>
             </dl>
           </article>
 
           <article class="resume-job">
             <div class="resume-job-head">
-              <h3 data-edit-id="resume-024">토스랩<small>백엔드 엔지니어 · JANDI</small></h3>
+              <h3 data-edit-id="resume-024">토스랩<small>Developer · Backend Team</small></h3>
               <time datetime="2024-06" data-edit-id="resume-061">2024.06 – 2025.04</time>
             </div>
-            <ul class="resume-achievement-list">
-              <li data-edit-id="resume-028">Mock 테스트로는 드러나지 않던 JPA 변경 감지 오류를 실제 영속성 컨텍스트에서 재현해 원인을 확인했습니다.</li>
-              <li data-edit-id="resume-062">이 오류로 잘못 저장된 데이터 <b>약 200만 건</b>을 보정 스크립트로 바로잡았습니다.</li>
-              <li data-edit-id="resume-027">Drive-Service를 Spring Boot 2.3.8에서 3.3.3으로 옮기기 전에 테스트를 <b>0개에서 160개 이상</b>으로 늘렸습니다.</li>
-            </ul>
+            <ul class="resume-achievement-list"><li data-edit-id="resume-028">JPA 변경 감지 오류를 실제 영속성 컨텍스트에서 재현해 잘못 저장된 데이터 <b>약 200만 건</b>을 보정 스크립트로 바로잡았습니다.</li><li data-edit-id="resume-062">Live RDS CPU <b>99%</b> 과점유를 분석해 평균 <b>3%</b>로 낮췄고, S3 미삭제 파일 <b>60,325건</b>(<b>771.61 GB</b>)을 삭제했습니다.</li><li data-edit-id="resume-027">Drive 서비스 테스트를 <b>0개에서 300개+</b>로 늘리고 Spring Boot를 2.3.8에서 3.3.3으로 올렸습니다.</li></ul>
+            <div class="viz-row"><div class="viz" data-viz="rds-cpu" data-src="랠릿 프로젝트 08: Live RDS CPU 99% 과점유 → 평균 3%"><svg viewBox="0 0 270 78" aria-hidden="true" focusable="false"><defs><marker id="ah-rds-cpu" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">Live RDS CPU</text><text x="0" y="38" class="v-l" text-anchor="start">개선 전</text><rect x="56" y="26" width="122.8" height="15" rx="2" class="v-before"/><text x="184.8" y="38" class="v-n" text-anchor="start">99%</text><text x="0" y="64" class="v-l" text-anchor="start">개선 후</text><rect x="56" y="52" width="3.7" height="15" rx="2" class="v-after"/><text x="65.7" y="64" class="v-n" text-anchor="start">평균 3%</text></svg></div><div class="viz" data-viz="test-count" data-src="랠릿 프로젝트 08: 테스트 0개 → 300개+"><svg viewBox="0 0 270 78" aria-hidden="true" focusable="false"><defs><marker id="ah-test-count" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">Drive 서비스 테스트</text><text x="0" y="38" class="v-l" text-anchor="start">도입 전</text><path d="M56 25v16" class="v-tick"/><text x="64.5" y="38" class="v-n" text-anchor="start">0개</text><text x="0" y="64" class="v-l" text-anchor="start">도입 후</text><rect x="56" y="52" width="110" height="15" rx="2" class="v-after"/><text x="172" y="64" class="v-n" text-anchor="start">300개+</text></svg></div><div class="viz" data-viz="s3-cleanup" data-src="랠릿 프로젝트 08: S3 미삭제 60,325건, 771.61 GB"><svg viewBox="0 0 270 100" aria-hidden="true" focusable="false"><defs><marker id="ah-s3-cleanup" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">S3 미삭제 파일</text><text x="0" y="46" class="v-big" text-anchor="start">60,325건</text><text x="0" y="66" class="v-l" text-anchor="start">찾아서 삭제</text><text x="0" y="82" class="v-l" text-anchor="start">771.61 GB 점유 해소</text></svg></div></div>
           </article>
 
           <article class="resume-job">
             <div class="resume-job-head">
-              <h3 data-edit-id="resume-030">오케스트로<small>백엔드 엔지니어 · IDP·Vista</small></h3>
+              <h3 data-edit-id="resume-030">오케스트로주식회사<small>Member · Platform Service Dev 6</small></h3>
               <time datetime="2023-09" data-edit-id="resume-063">2023.09 – 2024.05</time>
             </div>
-            <ul class="resume-achievement-list">
-              <li data-edit-id="resume-033">Spring Cloud Gateway에 Spring Security와 JWT로 인증·인가를 붙였습니다.</li>
-              <li data-edit-id="resume-064">SonarQube·Jenkins 연동 API를 구현했습니다.</li>
-              <li data-edit-id="resume-034">VM 메트릭 조회 조건에 따라 OpenSearch 쿼리를 생성하는 API를 개발했습니다.</li>
-            </ul>
+            <ul class="resume-achievement-list"><li data-edit-id="resume-033">Spring Cloud Gateway에 Spring Security·JWT 인증을 붙이고 SonarQube·Jenkins 연동 API를 개발했습니다.</li></ul>
           </article>
 
           <article class="resume-job">
             <div class="resume-job-head">
-              <h3 data-edit-id="resume-035">즐거운<small>백엔드 엔지니어 · 자사 서비스 개발·운영</small></h3>
+              <h3 data-edit-id="resume-035">주식회사즐거운커뮤니케이션즈<small>팀원 · 개발2팀</small></h3>
               <time datetime="2022-11" data-edit-id="resume-065">2022.11 – 2023.02</time>
             </div>
           </article>
@@ -136,11 +114,11 @@
             <dt data-edit-id="resume-066">백엔드</dt>
             <dd data-edit-id="resume-006">Java, Kotlin, Spring Boot, Spring Batch, Spring Data JPA, Hibernate, SQL</dd>
             <dt data-edit-id="resume-067">연동·보안</dt>
-            <dd data-edit-id="resume-007">Kafka, Spring Security, Spring Cloud Gateway, JWT</dd>
+            <dd data-edit-id="resume-007">Kafka, MSA, Spring Security, Spring Cloud Gateway, JWT</dd>
             <dt data-edit-id="resume-068">데이터</dt>
-            <dd data-edit-id="resume-008">Redis, OpenSearch, PostgreSQL, MySQL, JSONB</dd>
-            <dt data-edit-id="resume-069">테스트·CI</dt>
-            <dd data-edit-id="resume-012">JUnit 5, Kotest, MockMvc, Testcontainers, ArchUnit, Jenkins</dd>
+            <dd data-edit-id="resume-008">Redis, OpenSearch, PostgreSQL, MySQL, MariaDB, Oracle, MSSQL</dd>
+            <dt data-edit-id="resume-069">인프라·CI</dt>
+            <dd data-edit-id="resume-012">AWS, Grafana, JUnit 5, Kotest, Testcontainers, ArchUnit, Jenkins</dd>
           </dl>
         </section>
 
@@ -148,21 +126,17 @@
           <div class="cmdline"><p class="cmd cmd--inline" aria-hidden="true"><span class="deco-txt"><span class="ps1">ch4570@archive</span><span class="ps-path">:~/resume</span><span class="ps-sym">$</span> <span class="cmd-text">cat oss.md</span></span><img class="deco-img" src="../assets/resume-deco/dark/cmd-oss.png" alt="" loading="lazy" decoding="async"></p><h2 id="opensource-title" data-edit-id="resume-039">오픈소스·개인 프로젝트</h2></div>
           <ul class="resume-plain-list">
             <li data-edit-id="resume-042"><b>Spring 오픈소스</b> — <a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a> PR이 병합됐고 <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>와 <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에는 제안이 반영됐습니다.</li>
-            <li data-edit-id="resume-040"><b><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 검색 플러그인</a></b> — <a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe</a>의 Elasticsearch 플러그인을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다.</li>
+            <li data-edit-id="resume-040"><b><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 검색 플러그인</a></b> — <a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe</a>의 Elasticsearch 플러그인을 OpenSearch 2.19용 Kotlin으로 이식했습니다.</li>
           </ul>
         </section>
 
         <section class="resume-section" aria-labelledby="activity-title">
           <div class="cmdline"><p class="cmd cmd--inline" aria-hidden="true"><span class="deco-txt"><span class="ps1">ch4570@archive</span><span class="ps-path">:~/resume</span><span class="ps-sym">$</span> <span class="cmd-text">cat activity.md</span></span><img class="deco-img" src="../assets/resume-deco/dark/cmd-activity.png" alt="" loading="lazy" decoding="async"></p><h2 id="activity-title" data-edit-id="resume-044">학력·자격·활동</h2></div>
           <dl class="resume-skills">
-            <dt data-edit-id="resume-070">학력</dt>
-            <dd data-edit-id="resume-050">한국방송통신대학교 컴퓨터과학과 졸업 (2023.03 – 2025.03)</dd>
-            <dt data-edit-id="resume-071">자격·어학</dt>
-            <dd data-edit-id="resume-051">SQLD (2022.06) · OPIc IM1</dd>
-            <dt data-edit-id="resume-072">발표</dt>
-            <dd data-edit-id="resume-046"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025</a> 「우리팀을 위한 Spring Test 만들기」</dd>
-            <dt data-edit-id="resume-073">글·커뮤니티</dt>
-            <dd data-edit-id="resume-074"><a href="https://velog.io/@ch4570/posts">기술 글 156편</a> (Velog) · 글또 10기 백엔드·인프라 빌리지 준비위원, 연사</dd>
+            <dt data-edit-id="resume-070">학력·자격</dt>
+            <dd data-edit-id="resume-050">한국방송통신대학교 컴퓨터과학과 졸업 (2023.03 – 2025.03) · SQLD (2022.06) · OPIc IM1</dd>
+            <dt data-edit-id="resume-072">발표·활동</dt>
+            <dd data-edit-id="resume-046"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025</a> 「우리팀을 위한 Spring Test 만들기」 · <a href="https://velog.io/@ch4570/posts">Velog</a> · 글또 10기 준비위원, 연사</dd>
           </dl>
         </section>
 
