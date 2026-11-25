@@ -18,7 +18,8 @@ Vercel이 운영 서비스입니다. 제출 전 원본 HTML·PDF와 Vercel 배�
 
 ## 구조
 
-- 원본 HTML 네 파일이 공개 문서의 기준입니다.
+- 원본 HTML 네 파일이 공개 문서의 기준입니다. 이력서·경력기술서·포트폴리오는 같은 터미널 디자인이며, 사실의 정본은 랠릿 프로필입니다.
+- 문서의 도식(SVG)은 `scripts/viz.mjs`가 만들고 `npm test`(`viz-consistency.test.mjs`)가 본문 숫자와의 일치를 검사합니다. 도식은 편집 대상이 아니며, 숫자를 바꾸려면 `viz.mjs`와 HTML을 함께 고칩니다.
 - 홈의 디자인 계약은 `DESIGN.md`, 경력·커밋 근거는 `design/public-evidence.md`에 있습니다.
 - 홈은 `assets/home.css` 한 장으로 구성한 터미널 세션형 이력서입니다. 모든 경력·프로젝트 내용을 클릭 없이 읽을 수 있습니다.
 - Archify 원본 IR은 `design/archify/`, 배포용 정적 SVG는 `assets/diagrams/`에서 관리합니다.
@@ -84,7 +85,7 @@ node scripts/check-documents-browser.mjs http://127.0.0.1:3000 output/screenshot
 
 브라우저 결과 JSON은 자동 검사 결과와 시각 검수를 구분합니다. 캡처 이미지를 직접 열어 확인해야 시각 검증이 완료됩니다. `validate:content`는 편집 전용 검사이므로 의도적인 레이아웃 변경을 리뷰·커밋한 뒤 새 HEAD 기준으로 실행합니다.
 
-제출 PDF는 네 개이며 이력서 1쪽(어두운 띠 판, `seo-minjae-resume.pdf`)과 이력서 인쇄 안전판 1쪽(`seo-minjae-resume-print.pdf`), 경력기술서 2쪽, 포트폴리오 3쪽을 기준으로 회귀 확인합니다. 이력서 두 PDF는 Pretendard·JetBrains Mono만 임베드(Type 3 없음)하고 글자 추출 첫 줄이 이름이어야 하며, 이 검사는 내보내기와 `npm test`(poppler 필요)가 함께 합니다.
+제출 PDF는 네 개이며 이력서 1쪽(어두운 띠 판, `seo-minjae-resume.pdf`)과 이력서 인쇄 안전판 1쪽(`seo-minjae-resume-print.pdf`), 경력기술서 3쪽, 포트폴리오 2쪽을 기준으로 회귀 확인합니다. 이력서 두 PDF는 Pretendard·JetBrains Mono만 임베드(Type 3 없음)하고 글자 추출 첫 줄이 이름이어야 하며, 이 검사는 내보내기와 `npm test`(poppler 필요)가 함께 합니다.
 내보내기 스크립트는 먼저 이력서의 장식 줄 그림(`assets/resume-deco/`)을 같은 Chrome으로 다시 찍고(`scripts/render-resume-deco.mjs`), 현재 디자인 시스템 CSS와 로컬 SVG·글꼴을 PDF용 임시 HTML에 직접 포함하고, 기본 출력 경로를 사용할 때 Next.js의 `public/` 사본도 함께 갱신합니다.
 
 피드 도식은 Archify `v2.11.0` (`ed0efcc763d358b78df845182b5ed24a9d165a1c`) CLI를 준비한 뒤 아래 명령으로 재생성합니다. 프로젝트 런타임 의존성은 추가하지 않습니다.
