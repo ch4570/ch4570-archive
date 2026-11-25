@@ -39,11 +39,11 @@ export const KEYWORDS = [
   {
     id: "resume", word: "이어 가기", tone: "ok", axis: "batch", card: "batch", x: 33, y: 13.5, cap: "r",
     path: "M500 340 C 480 220, 360 170, 330 97",
-    caption: "아카이브 테이블 <b>10개</b>, 멈추면 시작 ID를 지정해 남은 범위부터",
+    caption: "참조 순서대로 옮기다 멈추면 <b>시작 ID</b>를 지정해 남은 범위부터",
     desc: "중단된 배치는 시작 ID를 지정해 남은 범위부터 다시 실행합니다.",
-    shell: { cmd: "cat batch.flow", out: "아카이브 테이블 10개 · 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행" },
+    shell: { cmd: "cat batch.flow", out: "참조 순서대로 이동 · 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행" },
     strip: [
-      step("테이블 10개", "정해진 순서로 이동"), step("중단되면", "시작 ID 지정", { cls: "k-fail" }),
+      step("아카이브 테이블", "정해진 순서로 이동"), step("중단되면", "시작 ID 지정", { cls: "k-fail" }),
       step("남은 범위부터", "재실행", { cls: "k-done" }),
     ],
   },
@@ -124,12 +124,12 @@ const MINIS = {
     ],
   },
   batch: {
-    title: "소멸 배치는 커서로 한 구간씩 읽어 청크 단위로 처리하고 끝나면 일별 통계 이벤트를 발행. 아카이브 배치는 청크마다 테이블 10개를 정해진 순서로 옮기고, 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행.",
+    title: "소멸 배치는 커서로 한 구간씩 읽어 청크 단위로 처리하고 끝나면 일별 통계 이벤트를 발행. 아카이브 배치는 청크마다 테이블을 정해진 순서로 옮기고, 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행.",
     h: 158,
     lanes: [["소멸 배치 · 커서 기반", 12], ["아카이브 배치", 98]],
     nodes: {
       scan: nd(0, 24, "한 구간씩|조회", "gate"), exp: nd(1, 24, "청크 단위|소멸 처리"), stat: nd(2, 24, "끝 → 일별|통계 이벤트", "done"),
-      mv: nd(0, 110, "테이블 10개|정해진 순서"), stop: nd(1, 110, "중단", "fail"), rerun: nd(2, 110, "시작 ID 지정|재실행"),
+      mv: nd(0, 110, "아카이브 테이블|정해진 순서"), stop: nd(1, 110, "중단", "fail"), rerun: nd(2, 110, "시작 ID 지정|재실행"),
     },
     edges: [["scan", "exp", "r", "l"], ["exp", "stat", "r", "l"], ["mv", "stop", "r", "l"], ["stop", "rerun", "r", "l"]],
   },
@@ -264,18 +264,18 @@ const DETAILS = {
       ],
       [
         "한 일",
-        "<ul><li>소멸 대상을 한 번에 읽지 않고 페이지 단위로 처리했습니다.</li><li>아카이브 테이블 10개를 청크마다 정해진 순서로 옮기고, 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행할 수 있게 했습니다.</li><li>같은 락 키나 예산을 공유하는 요청을 동시에 실행한 뒤 잔액·원장·후속 이벤트를 대조했습니다.</li></ul>"
+        "<ul><li>소멸 대상을 한 번에 읽지 않고 페이지 단위로 처리했습니다.</li><li>아카이브 테이블을 청크마다 정해진 순서로 옮기고, 중단되면 시작 ID를 지정해 남은 범위부터 다시 실행할 수 있게 했습니다.</li><li>같은 락 키나 예산을 공유하는 요청을 동시에 실행한 뒤 잔액·원장·후속 이벤트를 대조했습니다.</li></ul>"
       ],
       [
         "결과",
-        "아카이브 테이블 10개 · API 9개 · 동시성 시나리오 13개"
+        "중단돼도 시작 ID부터 이어 실행 · 동시 요청 뒤 잔액·원장 대조"
       ]
     ],
     "flow": "batch",
     "steps": [
       "커서 다음의 소멸 후보를 한 구간씩 읽고, 대상 회원을 청크 단위로 소멸 처리합니다.",
       "더 읽을 후보가 없으면 일별 소멸 통계 이벤트를 발행합니다.",
-      "아카이브는 청크마다 테이블 10개를 정해진 순서로 옮깁니다.",
+      "아카이브는 청크마다 테이블을 정해진 순서로 옮깁니다.",
       "중단되면 시작 ID를 지정해 남은 범위부터 다시 실행합니다."
     ],
     "diagram": false,
@@ -349,7 +349,7 @@ export const CARDS = [
   { id: "event", kw: "record", axes: ["event"], title: "Kafka 이벤트 실패 복구", org: "웍스피어", period: "2025.06–", status: "run",
     result: `이벤트 ${num(9)}종 · 상태 ${num(6)}개 · 복구 경로 ${num(8)}개`, mini: MINIS.event, detail: DETAILS.event },
   { id: "batch", kw: "resume", axes: ["batch", "integrity"], title: "배치 재시작과 포인트 정합성 검증", org: "웍스피어", period: "2025.06–", status: "run",
-    result: `아카이브 테이블 ${num(10)}개 · API ${num(9)}개 · 동시성 시나리오 ${num(13)}개`, mini: MINIS.batch, detail: DETAILS.batch },
+    result: "중단돼도 시작 ID부터 이어 실행 · 동시 요청 뒤 잔액·원장 대조", mini: MINIS.batch, detail: DETAILS.batch },
   { id: "search", kw: "split", axes: ["search"], title: "개인화 피드 검색 소스 실패 격리", org: "웍스피어", period: "2025.06–", status: "run",
     result: `조회 경로 ${num(9, true)}개`, mini: MINIS.search, detail: DETAILS.search },
   { id: "test", axes: ["migrate"], title: "테스트 공통 모듈과 CI 메모리 부족 해소", org: "웍스피어", period: "사내 개선", status: "run",

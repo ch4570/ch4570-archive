@@ -203,6 +203,17 @@ test("diagrams are aria-hidden, sourced, and appear next to the numbers they dra
   }
 });
 
+// 산출물의 양(클래스·테스트·API·시나리오·테이블 개수, 코드 줄 수, 자격증 연동 종수)은 수치로 쓰지 않는다.
+// 효과·결과·설계 값(전후 비교, 정정 건수, 랭킹 단계, 타임아웃)은 쓴다.
+const workVolume = /지원 클래스|자체 테스트\s*\d|테스트 약\s*\d+\s*개|\d+\s*개\s*API|API\s*\d+\s*개|(?:시나리오|테이블)\s*\d+\s*개|\d+\s*개\s*(?:시나리오|테이블)|자격증\s*\d+\s*종|assertion\s*예시|(?:코드|소스)\s*\d+\s*줄|\d+\s*줄의|변경 파일\s*\d+/u;
+
+test("home copy also leaves work volume out", async () => {
+  for (const file of ["index.html", "assets/home-data.js"]) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    assert.doesNotMatch(source, workVolume, file + " should not state work volume");
+  }
+});
+
 test("submission documents follow the wording rules", async () => {
   const allowedHosts = new Set([
     "github.com",
@@ -222,6 +233,7 @@ test("submission documents follow the wording rules", async () => {
       /(?:MR|PR|커밋|머지)\s*\d+\s*(?:건|개)|(?:개선|제안)\s*\d+\s*건|저장소\s*\d+\s*개|기술 글\s*\d+\s*편|\d+\s*편/u,
       file + " should not state activity counts",
     );
+    assert.doesNotMatch(text, workVolume, file + " should not state work volume (class, test, API, scenario or table counts)");
     assert.doesNotMatch(text, /endpoint로 바꿨습니다/u, file + " should not claim the unmerged endpoint switch is done");
     assert.doesNotMatch(text, /(?:승인 흐름|접근 제어)[^.]*?(?:완료했습니다|도입했습니다)/u, file + " should not claim unmerged work is done");
     for (const [, host] of source.matchAll(/https?:\/\/([^/"'\s<>)]+)/gu)) {
