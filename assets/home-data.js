@@ -30,7 +30,7 @@ export const KEYWORDS = [
     path: "M500 340 C 330 360, 200 320, 184 161",
     caption: "이벤트 상태 <b>6개</b>로 멈춘 곳 추적",
     desc: "이벤트의 발행·처리 단계를 상태로 남겨 어디서 멈췄는지 추적합니다.",
-    shell: { cmd: "cat event.flow", out: "이벤트 9종 · 상태 6개 · 복구 경로 8개" },
+    shell: { cmd: "cat event.flow", out: "상태 6개 · 15분 넘게 멈추면 Slack 알림" },
     strip: [
       step("이벤트 저장", "CREATED", { mo: true }), step("Kafka", "발행"), step("수신", "IN_PROGRESS", { mo: true }),
       step("성공하면 COMPLETED", "예외는 재시도 대상 FAILED", { cls: "k-done" }),
@@ -72,13 +72,13 @@ export const KEYWORDS = [
   {
     id: "split", word: "분리", tone: "pre", axis: "search", card: "search", x: 86, y: 17.5, cap: "b",
     path: "M500 340 C 640 340, 740 200, 786 91",
-    caption: "OpenSearch 조회를 별도 모듈로",
-    desc: "입력과 출력을 나누고 모듈 의존 규칙은 ArchUnit 테스트로 확인합니다.",
-    shell: { cmd: "cat search.flow", out: "모듈 의존 규칙 확인 · OpenSearch 조회는 별도 모듈" },
+    caption: "느린 조회 경로를 격리",
+    desc: "조회 경로마다 500ms 타임아웃을 두어 늦은 경로만 빼고 응답합니다.",
+    shell: { cmd: "cat search.flow", out: "조회 경로 병렬 실행 · 경로별 500ms 타임아웃" },
     list: true,
     strip: [
-      step("OpenSearch 조회", "별도 모듈로 분리"), step("입력과 출력 분리", "후보 필터링·점수화·재정렬·캐시 저장"),
-      step("모듈 의존 규칙", "ArchUnit 테스트로 검증"),
+      step("조회 경로", "병렬 실행"), step("경로별 500ms", "타임아웃"),
+      step("늦은 경로만", "제외하고 응답"),
     ],
   },
 ];
@@ -237,7 +237,7 @@ const DETAILS = {
       ],
       [
         "결과",
-        "이벤트 9종 · 상태 6개 · 복구 경로 8개"
+        "상태 6개 · 15분 넘게 멈추면 Slack 알림"
       ],
       [
         "기술",
@@ -289,7 +289,7 @@ const DETAILS = {
       ],
       [
         "한 일",
-        "<ul><li>9개 조회 경로에 필터·정렬·벡터 규칙과 경로별 500ms 타임아웃·실패 경로를 적용했습니다.</li><li>후보 필터링·점수화·재정렬·캐시 저장의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li><li>OpenSearch 조회 기능을 별도 모듈로 분리하고, 모듈 의존 규칙을 ArchUnit 테스트로 검증했습니다.</li></ul>"
+        "<ul><li>9개 조회 경로에 필터·정렬·벡터 규칙과 경로별 500ms 타임아웃을 적용하고, 늦은 경로만 제외하고 응답합니다.</li><li>후보를 1차 500건, 2차 100건으로 좁혀 재정렬하고 20건을 응답하는 3단계 랭킹을 구현했습니다.</li><li>단계별 캐시로 다음 페이지 재계산을 줄이고 페이지 간 중복 노출을 막았습니다.</li></ul>"
       ],
       [
         "결과",
@@ -297,7 +297,7 @@ const DETAILS = {
       ],
       [
         "기술",
-        "OpenSearch, Redis, ArchUnit"
+        "OpenSearch, Redis"
       ]
     ],
     "flow": "search",
@@ -305,7 +305,7 @@ const DETAILS = {
       "캐시를 쓰는 요청은 스냅샷에서 다음 페이지를 꺼내 응답합니다.",
       "스냅샷이 비면 검색 소스를 병렬로 조회하고, 실패한 소스만 건너뜁니다.",
       "FPR에서 병합·차단·중복 제거·점수화를 하고, SPR과 Re-Rank를 거쳐 스냅샷에 붙인 뒤 응답합니다.",
-      "캐시를 우회하면 Redis 없이 첫 페이지만 계산해 응답합니다."
+      "세션이 없으면 캐시 없이 첫 페이지부터 계산해 응답합니다."
     ],
     "diagram": true,
     "links": "<a class=\"lnk\" href=\"./portfolio/#feed\">구현 과정 읽기</a>"
@@ -347,7 +347,7 @@ export const CARDS = [
   { id: "boot", kw: "test", axes: ["migrate"], title: "Drive-Service Spring Boot 3 전환", org: "토스랩", period: "2024.06–2025.04", status: "done",
     result: `테스트 0개 → ${num("300", true)}개+`, mini: MINIS.boot, detail: DETAILS.boot },
   { id: "event", kw: "record", axes: ["event"], title: "Kafka 이벤트 실패 복구", org: "웍스피어", period: "2025.06–", status: "run",
-    result: `이벤트 ${num(9)}종 · 상태 ${num(6)}개 · 복구 경로 ${num(8)}개`, mini: MINIS.event, detail: DETAILS.event },
+    result: `상태 ${num(6)}개 · 15분 넘게 멈추면 Slack 알림`, mini: MINIS.event, detail: DETAILS.event },
   { id: "batch", kw: "resume", axes: ["batch", "integrity"], title: "배치 재시작과 포인트 정합성 검증", org: "웍스피어", period: "2025.06–", status: "run",
     result: "중단돼도 시작 ID부터 이어 실행 · 동시 요청 뒤 잔액·원장 대조", mini: MINIS.batch, detail: DETAILS.batch },
   { id: "search", kw: "split", axes: ["search"], title: "개인화 피드 검색 소스 실패 격리", org: "웍스피어", period: "2025.06–", status: "run",

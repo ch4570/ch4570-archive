@@ -82,7 +82,7 @@
 <li class="node node--ok" data-kw="resume" data-cap="r" style="--x:33;--y:13.5"><a class="node__a" href="#projects" data-go-axis="batch" data-kw="resume"><span class="node__pill"><span class="node__w">이어 가기</span></span><span class="node__n">참조 순서대로 옮기다 멈추면 <b>시작 ID</b>를 지정해 남은 범위부터</span><span class="node__d sr-only"> — 중단된 배치는 시작 ID를 지정해 남은 범위부터 다시 실행합니다.</span></a></li>
 <li class="node node--stop" data-kw="cause" data-cap="b" style="--x:35;--y:48"><a class="node__a" href="#projects" data-go-axis="integrity" data-kw="cause"><span class="node__pill"><span class="node__w">원인</span></span><span class="node__n"><b>약 200만 건</b>을 바로잡기 전에 원인부터 재현했습니다</span><span class="node__d sr-only"> — JPA 변경 감지 오류는 재현으로 원인을 확인한 뒤 보정했습니다.</span></a></li>
 <li class="node node--pre" data-kw="test" data-cap="b" style="--x:61;--y:33"><a class="node__a" href="#projects" data-go-axis="migrate" data-kw="test"><span class="node__pill"><span class="node__w">테스트 먼저</span></span><span class="node__n">테스트 <b>0개</b>에서 <b>300개+</b>로</span><span class="node__d sr-only"> — Spring Boot 3 전환 전에 회귀 테스트부터 보강했습니다.</span></a></li>
-<li class="node node--pre" data-kw="split" data-cap="b" style="--x:86;--y:17.5"><a class="node__a" href="#projects" data-go-axis="search" data-kw="split"><span class="node__pill"><span class="node__w">분리</span></span><span class="node__n">OpenSearch 조회를 별도 모듈로</span><span class="node__d sr-only"> — 입력과 출력을 나누고 모듈 의존 규칙은 ArchUnit 테스트로 확인합니다.</span></a></li>
+<li class="node node--pre" data-kw="split" data-cap="b" style="--x:86;--y:17.5"><a class="node__a" href="#projects" data-go-axis="search" data-kw="split"><span class="node__pill"><span class="node__w">분리</span></span><span class="node__n">느린 조회 경로를 격리</span><span class="node__d sr-only"> — 조회 경로마다 500ms 타임아웃을 두어 늦은 경로만 빼고 응답합니다.</span></a></li>
       </ul>
       <span class="hub" aria-hidden="true"></span><span class="token" aria-hidden="true"></span>
       <div class="strip">
@@ -92,7 +92,7 @@
 <ol class="steps" data-kw="resume" aria-label="이어 가기 흐름" hidden><li class="" style="--i:0"><span>아카이브 테이블</span><span class="sub">정해진 순서로 이동</span></li><li class="k-fail" style="--i:1"><span>중단되면</span><span class="sub">시작 ID 지정</span></li><li class="k-done" style="--i:2"><span>남은 범위부터</span><span class="sub">재실행</span></li></ol>
 <ol class="steps" data-kw="cause" aria-label="원인 흐름" hidden><li class="" style="--i:0"><span>Mock 테스트</span><span class="sub">통과</span></li><li class="k-fail" style="--i:1"><span>데이터가</span><span class="sub">잘못 저장됨</span></li><li class="" style="--i:2"><span>영속성 컨텍스트</span><span class="sub">재현</span></li><li class="" style="--i:3"><span>원인 확인</span><span class="sub">변경 감지 누락</span></li><li class="" style="--i:4"><span>보정 스크립트</span></li><li class="k-done" style="--i:5"><span>약 200만 건</span><span class="sub">보정</span></li></ol>
 <ol class="steps" data-kw="test" aria-label="테스트 먼저 흐름" hidden><li class="" style="--i:0"><span>Spring Boot</span><span class="sub">2.3.8 → 3.3.3 전환</span></li><li class="k-fail" style="--i:1"><span>테스트 0개</span></li><li class="" style="--i:2"><span>회귀 테스트부터</span><span class="sub">보강</span></li><li class="k-done" style="--i:3"><span>300개+</span></li></ol>
-<ol class="steps steps--list" data-kw="split" aria-label="분리 흐름" hidden><li class="" style="--i:0"><span>OpenSearch 조회</span><span class="sub">별도 모듈로 분리</span></li><li class="" style="--i:1"><span>입력과 출력 분리</span><span class="sub">후보 필터링·점수화·재정렬·캐시 저장</span></li><li class="" style="--i:2"><span>모듈 의존 규칙</span><span class="sub">ArchUnit 테스트로 검증</span></li></ol>
+<ol class="steps steps--list" data-kw="split" aria-label="분리 흐름" hidden><li class="" style="--i:0"><span>조회 경로</span><span class="sub">병렬 실행</span></li><li class="" style="--i:1"><span>경로별 500ms</span><span class="sub">타임아웃</span></li><li class="" style="--i:2"><span>늦은 경로만</span><span class="sub">제외하고 응답</span></li></ol>
       </div>
 <!-- home:end map -->
     </div>
@@ -145,12 +145,12 @@
   <div>
     <h3><button type="button" class="card__t" aria-haspopup="dialog">Kafka 이벤트 실패 복구<span class="sr-only"> — 상세 내용과 처리 순서 열기</span></button></h3>
     <p class="card__m"><span class="kwtag" data-kw="record">기록</span><span>웍스피어</span><span>2025.06–</span><span class="st st--run">진행 중</span></p>
-    <p class="card__res">이벤트 <span class="num">9</span>종 · 상태 <span class="num">6</span>개 · 복구 경로 <span class="num">8</span>개</p>
+    <p class="card__res">상태 <span class="num">6</span>개 · 15분 넘게 멈추면 Slack 알림</p>
   </div>
   <div class="detail"><dl class="desc">
 <dt>문제</dt><dd>발행 전에 멈춘 이벤트와 발행 뒤 개별 업무에서 실패한 이벤트는 확인할 데이터와 다시 실행할 범위가 달랐습니다.</dd>
 <dt>한 일</dt><dd><ul><li>Kafka 이벤트의 발행·처리 단계를 상태로 기록해 어느 지점에서 멈췄는지 추적할 수 있게 했습니다.</li><li>PostgreSQL JSONB에 저장한 payload로 업무별 복구 경로를 구현해, 실패한 업무만 다시 실행했습니다.</li><li>15분 넘게 멈춘 이벤트는 유형별로 묶어 Slack으로 알림을 보냈습니다.</li></ul></dd>
-<dt>결과</dt><dd>이벤트 9종 · 상태 6개 · 복구 경로 8개</dd>
+<dt>결과</dt><dd>상태 6개 · 15분 넘게 멈추면 Slack 알림</dd>
 <dt>기술</dt><dd>Kafka, PostgreSQL JSONB, Slack</dd>
 </dl><figure class="flow" data-flow="event" aria-labelledby="flow-event-title"><figcaption id="flow-event-title" class="flow__title">처리 흐름 <span class="dim">· 시나리오를 고르거나 단계를 눌러 보세요</span></figcaption><ol class="flow__steps"><li>업무가 끝나면 이벤트를 CREATED로 저장하고 payload를 JSONB로 남깁니다.</li><li>Kafka로 발행합니다. 발행 실패는 SEND_FAILED로 따로 분류합니다.</li><li>consumer는 CREATED 이벤트만 IN_PROGRESS로 바꿔 실행하고, 이미 처리된 이벤트는 건너뜁니다.</li><li>성공하면 COMPLETED, 예외는 재시도 대상 FAILED, 업무 규칙 위반은 재시도하지 않는 실패로 기록합니다.</li><li>복구 워커가 유형·상태로 대상을 찾아 저장한 payload로 그 업무만 다시 실행합니다.</li><li>IN_PROGRESS로 15분 넘게 멈춘 이벤트는 유형별로 묶어 Slack으로 알립니다.</li></ol></figure><p class="desc__links"><a class="lnk" href="./portfolio/#event">구현 과정 읽기</a></p></div>
 </article>
@@ -176,10 +176,10 @@
   </div>
   <div class="detail"><dl class="desc">
 <dt>문제</dt><dd>개인화 피드에서 검색 소스별 정책과 실패 처리를 맡고, OpenSearch 후보 조회부터 캐시 저장까지 처리 단계를 나눴습니다.</dd>
-<dt>한 일</dt><dd><ul><li>9개 조회 경로에 필터·정렬·벡터 규칙과 경로별 500ms 타임아웃·실패 경로를 적용했습니다.</li><li>후보 필터링·점수화·재정렬·캐시 저장의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li><li>OpenSearch 조회 기능을 별도 모듈로 분리하고, 모듈 의존 규칙을 ArchUnit 테스트로 검증했습니다.</li></ul></dd>
+<dt>한 일</dt><dd><ul><li>9개 조회 경로에 필터·정렬·벡터 규칙과 경로별 500ms 타임아웃을 적용하고, 늦은 경로만 제외하고 응답합니다.</li><li>후보를 1차 500건, 2차 100건으로 좁혀 재정렬하고 20건을 응답하는 3단계 랭킹을 구현했습니다.</li><li>단계별 캐시로 다음 페이지 재계산을 줄이고 페이지 간 중복 노출을 막았습니다.</li></ul></dd>
 <dt>결과</dt><dd>조회 경로 9개</dd>
-<dt>기술</dt><dd>OpenSearch, Redis, ArchUnit</dd>
-</dl><figure class="flow" data-flow="search" aria-labelledby="flow-search-title"><figcaption id="flow-search-title" class="flow__title">처리 흐름 <span class="dim">· 시나리오를 고르거나 단계를 눌러 보세요</span></figcaption><ol class="flow__steps"><li>캐시를 쓰는 요청은 스냅샷에서 다음 페이지를 꺼내 응답합니다.</li><li>스냅샷이 비면 검색 소스를 병렬로 조회하고, 실패한 소스만 건너뜁니다.</li><li>FPR에서 병합·차단·중복 제거·점수화를 하고, SPR과 Re-Rank를 거쳐 스냅샷에 붙인 뒤 응답합니다.</li><li>캐시를 우회하면 Redis 없이 첫 페이지만 계산해 응답합니다.</li></ol></figure><details class="diagram" open><summary>피드 서빙 구조도 보기</summary><figure><div class="diagram__viewport" tabindex="0" role="region" aria-label="피드 서빙 구조도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/feed-serving.svg" alt="피드 서빙 구조도: API, Orchestrator, Snapshot, 검색 소스와 FPR·SPR·Re-Rank 책임 경계" width="1000" height="360" loading="lazy" /></div><figcaption>요청 → 스냅샷 조회 → Hit이면 응답. Empty이면 검색 소스 → 중복 제거 → 점수화 → 재정렬 → 새 스냅샷 저장 → 응답.</figcaption></figure></details><p class="desc__links"><a class="lnk" href="./portfolio/#feed">구현 과정 읽기</a></p></div>
+<dt>기술</dt><dd>OpenSearch, Redis</dd>
+</dl><figure class="flow" data-flow="search" aria-labelledby="flow-search-title"><figcaption id="flow-search-title" class="flow__title">처리 흐름 <span class="dim">· 시나리오를 고르거나 단계를 눌러 보세요</span></figcaption><ol class="flow__steps"><li>캐시를 쓰는 요청은 스냅샷에서 다음 페이지를 꺼내 응답합니다.</li><li>스냅샷이 비면 검색 소스를 병렬로 조회하고, 실패한 소스만 건너뜁니다.</li><li>FPR에서 병합·차단·중복 제거·점수화를 하고, SPR과 Re-Rank를 거쳐 스냅샷에 붙인 뒤 응답합니다.</li><li>세션이 없으면 캐시 없이 첫 페이지부터 계산해 응답합니다.</li></ol></figure><details class="diagram" open><summary>피드 서빙 구조도 보기</summary><figure><div class="diagram__viewport" tabindex="0" role="region" aria-label="피드 서빙 구조도. 좁은 화면에서는 가로로 스크롤할 수 있습니다."><img src="./assets/diagrams/feed-serving.svg" alt="피드 서빙 구조도: API, Orchestrator, Snapshot, 검색 소스와 FPR·SPR·Re-Rank 책임 경계" width="1000" height="360" loading="lazy" /></div><figcaption>요청 → 스냅샷 조회 → Hit이면 응답. Empty이면 검색 소스 → 중복 제거 → 점수화 → 재정렬 → 새 스냅샷 저장 → 응답.</figcaption></figure></details><p class="desc__links"><a class="lnk" href="./portfolio/#feed">구현 과정 읽기</a></p></div>
 </article>
 <article class="card" id="case-test" data-axes="migrate">
   <div><figure class="card__fig"><svg class="mini" viewBox="0 0 360 204" role="img" aria-labelledby="mt-test" focusable="false"><title id="mt-test">테스트 공통 모듈에서 Base, Mock, WebMvc, JPA 진입점으로 나눠 필요한 설정만 불러옴. 느린 테스트 범위와 컨텍스트 재사용을 조정해 추가 자원 없이 CI 메모리 부족을 해소.</title><defs><marker id="ah-test" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z"/></marker></defs><g transform="translate(0 6)"><path class="e " d="M180 48 C180 78 39 44 39 74" marker-end="url(#ah-test)"/><path class="e " d="M180 48 C180 78 133 44 133 74" marker-end="url(#ah-test)"/><path class="e " d="M180 48 C180 78 227 44 227 74" marker-end="url(#ah-test)"/><path class="e " d="M180 48 C180 78 321 44 321 74" marker-end="url(#ah-test)"/><path class="e " d="M164 159 L196 159" marker-end="url(#ah-test)"/><g class="n k-gate" style="--i:0"><rect x="0" y="8" width="360" height="40" rx="7"/><text class="t" x="180" y="21" text-anchor="middle" dominant-baseline="central">테스트 공통 모듈</text><text class="t" x="180" y="35" text-anchor="middle" dominant-baseline="central">Fixture · Mock · WebMvc · JPA 설정</text></g><g class="n k-step" style="--i:1"><rect x="0" y="74" width="78" height="34" rx="7"/><text class="t" x="39" y="91" text-anchor="middle" dominant-baseline="central">Base</text></g><g class="n k-step" style="--i:2"><rect x="94" y="74" width="78" height="34" rx="7"/><text class="t" x="133" y="91" text-anchor="middle" dominant-baseline="central">Mock</text></g><g class="n k-step" style="--i:3"><rect x="188" y="74" width="78" height="34" rx="7"/><text class="t" x="227" y="91" text-anchor="middle" dominant-baseline="central">WebMvc</text></g><g class="n k-step" style="--i:4"><rect x="282" y="74" width="78" height="34" rx="7"/><text class="m" x="321" y="91" text-anchor="middle" dominant-baseline="central">JPA</text></g><g class="n k-step" style="--i:5"><rect x="0" y="138" width="164" height="42" rx="7"/><text class="t" x="82" y="152" text-anchor="middle" dominant-baseline="central">느린 테스트·컨텍스트</text><text class="t" x="82" y="166" text-anchor="middle" dominant-baseline="central">재사용 조정</text></g><g class="n k-done" style="--i:6"><rect x="196" y="138" width="164" height="42" rx="7"/><text class="t" x="278" y="152" text-anchor="middle" dominant-baseline="central">추가 자원 없이</text><text class="t" x="278" y="166" text-anchor="middle" dominant-baseline="central">CI 메모리 부족 해소</text></g></g></svg><span class="go js-only" aria-hidden="true">자세히 ↗</span></figure></div>
@@ -246,12 +246,12 @@
     <li><a class="lnk" href="https://github.com/ch4570/redis-distributed-lock" target="_blank" rel="noreferrer">분산 락과 트랜잭션의 실행 순서</a><span class="rows__m">2025.07—08 · 학습 · 재현</span><p>재고 차감 예제로 락이 없을 때, DB 비관적 락, Redis 락과 트랜잭션 순서를 네 가지 시나리오로 나눠 동시 요청 100개 뒤 남은 재고를 확인했습니다.</p></li>
     <li><a class="lnk" href="https://github.com/ch4570/transactional-outbox" target="_blank" rel="noreferrer">Transactional Outbox 구현 비교</a><span class="rows__m">2024.06—07 · 학습 · 재현</span><p>이벤트 직접 발행, Outbox 폴링, Debezium 연동을 버전별로 구현해 데이터 저장과 이벤트 발행을 연결하는 방식을 비교했습니다.</p></li></ul></div>
 </div>
-<details class="snap"><summary>GitHub 활동 집계 · <span data-edit-id="home-028">2026.09.07 확인</span></summary><dl>
-  <div><dt>공개 저장소</dt><dd data-edit-id="home-029">62</dd></div>
-  <div><dt>원본 저장소</dt><dd data-edit-id="home-030">45</dd></div>
-  <div><dt>팔로워</dt><dd data-edit-id="home-031">67</dd></div>
-  <div><dt>포크한 저장소</dt><dd data-edit-id="home-032">17</dd></div></dl>
-  <p>확인한 날짜의 GitHub 공개 정보입니다. 저장소 수에는 포크가 포함되며, 비공개 기여는 집계하지 않았습니다.</p></details></section>
+<details class="snap"><summary>대표 결과 · <span data-edit-id="home-028">랠릿 프로필 기준</span></summary><dl>
+  <div><dt>운영 RDS CPU</dt><dd data-edit-id="home-029">99% → 평균 3%</dd></div>
+  <div><dt>S3 미삭제 파일</dt><dd data-edit-id="home-030">60,325건 정리</dd></div>
+  <div><dt>잘못 저장된 데이터</dt><dd data-edit-id="home-031">약 200만 건 정정</dd></div>
+  <div><dt>피드 후보 랭킹</dt><dd data-edit-id="home-032">500 → 100 → 20</dd></div></dl>
+  <p>Drive 서비스와 추천 피드에서 확인한 결과 수치입니다. 자세한 내용은 경력기술서에 있습니다.</p></details></section>
 <section id="docs" class="wrap" aria-labelledby="dt"><p class="cmd" aria-hidden="true"><i>$</i> ls docs/</p><h2 id="dt" tabindex="-1"><span data-edit-id="home-006">문서</span> · 학력</h2><p class="lede">제출용 문서는 웹에서 읽거나 PDF로 받을 수 있습니다.</p><div class="facts">
   <div><h3>학력</h3><ul><li>한국방송통신대학교 컴퓨터과학과<span class="rows__m">2025.03 졸업</span></li></ul></div>
   <div><h3>자격</h3><ul><li>SQLD<span class="rows__m">2022.06</span></li></ul></div>
