@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fbf8f5">
-  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. 이벤트 복구, JPA 데이터 보정, 포인트 원장·배치, 검색·캐시 사례를 정리했습니다.">
-  <title>서민재 · Backend Engineering Portfolio</title>
+  <meta name="theme-color" content="#12151c">
+  <meta name="description" content="서민재 백엔드 엔지니어 포트폴리오. JPA 데이터 보정, 추천 피드, 이벤트 복구와 배치, 공통 코드 관리 사례를 수치와 도식으로 정리했습니다.">
+  <title>서민재 · 백엔드 엔지니어 포트폴리오</title>
   <link rel="canonical" href="https://ch4570-archive.vercel.app/portfolio/">
-  <meta property="og:title" content="서민재 · Backend Engineering Portfolio">
+  <meta property="og:title" content="서민재 · 백엔드 엔지니어 포트폴리오">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://ch4570-archive.vercel.app/portfolio/">
   <meta property="og:locale" content="ko_KR">
@@ -16,243 +16,72 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="서민재 백엔드 엔지니어 — 실패 이후까지 설계합니다. 세 층으로 분리된 금속 시스템 구조.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="서민재 · Backend Engineering Portfolio">
+  <meta name="twitter:title" content="서민재 · 백엔드 엔지니어 포트폴리오">
   <meta name="twitter:image" content="https://ch4570-archive.vercel.app/assets/social-card.png">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0%200%2064%2064'%3E%3Crect width='64' height='64' rx='18' fill='%232c2230'/%3E%3Cpath d='M16%2016h32v32H16z' rx='10' fill='%23fbe9e7'/%3E%3Cpath d='M24%2024h16v16H24z' rx='5' fill='%236e4c71'/%3E%3C/svg%3E">
-  <link rel="stylesheet" href="../assets/design-system.css">
-  <script src="../assets/site.js" defer></script>
+  <link rel="stylesheet" href="../assets/site-frame.css">
+  <link rel="stylesheet" href="../assets/resume.css">
+  <link rel="stylesheet" href="../assets/viz.css">
+  <link rel="stylesheet" href="../assets/doc.css">
 </head>
-<body class="portfolio-page">
-  <a class="skip-link" href="#portfolio-main">포트폴리오 본문으로 건너뛰기</a>
-  <div class="scroll-progress" aria-hidden="true"></div>
-
-  <header class="site-header screen-only">
-    <div class="site-header-inner">
-      <a class="site-brand" href="../" aria-label="서민재 홈">
-        <svg class="site-brand-mark" aria-hidden="true" viewBox="0 0 28 28" width="28" height="28"><path d="m14 2 11 6v12l-11 6-11-6V8zM3 8l11 6 11-6M14 14v12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <span class="site-brand-name">Rex Seo.</span>
-      </a>
-      <nav class="site-nav" aria-label="주요 문서">
+<body class="resume-doc">
+  <a class="skip-link" href="#resume-main">포트폴리오 본문으로 건너뛰기</a>
+  <header class="site-bar screen-only">
+    <div class="site-bar__inner">
+      <a class="site-bar__home" href="../">서민재<small lang="en">Rex Seo</small></a>
+      <nav class="site-bar__nav" aria-label="주요 문서">
         <a href="../resume/">이력서</a>
         <a href="../career/">경력기술서</a>
-        <a href="./" aria-current="page">포트폴리오</a>
+        <a href="../portfolio/" aria-current="page">포트폴리오</a>
       </nav>
-      <div class="site-utilities">
-        <a class="button pdf-download" href="../pdf/seo-minjae-backend-portfolio.pdf" download="서민재_백엔드_포트폴리오.pdf">PDF 다운로드</a>
-      </div>
+      <a class="site-bar__pdf" href="../pdf/seo-minjae-backend-portfolio.pdf" download="서민재_백엔드_포트폴리오.pdf">PDF 받기</a>
     </div>
   </header>
-
-  <main id="portfolio-main" tabindex="-1">
-    <section class="portfolio-hero" aria-labelledby="portfolio-title">
-      <div class="container">
-        <div class="portfolio-hero-grid">
-          <div>
-            <p class="eyebrow eyebrow-coral" data-edit-id="portfolio-001">백엔드 엔지니어 포트폴리오</p>
-            <h1 class="portfolio-title" id="portfolio-title" data-edit-id="portfolio-002">실패를 격리하고, 중단된&nbsp;처리를 이어&nbsp;가며, 틀어진&nbsp;데이터를 바로잡았습니다</h1>
-            <p class="hero-copy" data-edit-id="portfolio-003">
-              Java·Kotlin·Spring으로 실패 후 다시 시작할 수 있고 데이터 정합성을 지키는 백엔드를 개발합니다.
-              이벤트&nbsp;복구, JPA 데이터 보정, 포인트 배치·동시성, <span lang="en"><span lang="ko">검색·캐시&nbsp;설계</span></span>의 네 가지 사례와 공개한 코드·글·발표를 정리했습니다.
-            </p>
-          </div>
-          <aside class="portfolio-profile">
-            <figure class="profile-portrait profile-portrait--portfolio">
-              <img src="../assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async">
-            </figure>
-            <b data-edit-id="portfolio-004">서민재 · Rex Seo</b>
-            <span data-edit-id="portfolio-005">Backend Engineer · Java / Kotlin / Spring</span>
-            <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
-            <a href="https://github.com/ch4570">GitHub</a>
-            <a href="https://velog.io/@ch4570/posts">Velog</a>
-            <a href="https://www.linkedin.com/in/devseorex/">LinkedIn</a>
-            <a href="https://ch4570-archive.vercel.app/resume/">이력서</a>
-            <a href="https://ch4570-archive.vercel.app/career/">경력기술서</a>
-          </aside>
+  <main class="resume-canvas" id="resume-main" tabindex="-1">
+    <article class="resume-sheet">
+      <header class="resume-head">
+        <svg class="band-fill" aria-hidden="true" focusable="false" viewBox="0 0 1 1" preserveAspectRatio="none"><rect width="1" height="1"/></svg>
+        <div class="term-titlebar" aria-hidden="true"><span class="term-dots"><i></i><i></i><i></i></span><span class="term-title"><span class="deco-txt">ch4570@archive: ~/portfolio — zsh</span></span></div>
+        <p class="cmd resume-whoami" aria-hidden="true"><span class="deco-txt"><span class="ps1">ch4570@archive</span><span class="ps-path">:~/portfolio</span><span class="ps-sym">$</span> <span class="cmd-text">cat portfolio.md</span></span></p>
+        <div class="resume-id">
+          <h1 data-edit-id="portfolio-004">서민재<small lang="en">Rex Seo</small></h1>
+          <p class="resume-role" data-edit-id="portfolio-005">백엔드 엔지니어 · Java, Kotlin, Spring</p>
         </div>
-
+        <p class="resume-hero-copy" data-edit-id="portfolio-003">같은 문제가 반복되지 않도록 기준과 구조를 남기는 백엔드 엔지니어입니다. 숫자로 확인되는 결과와 처리 구조를 사례별로 정리했습니다.</p>
+        <figure class="resume-photo">
+          <img src="../assets/profile.jpg" alt="서민재 프로필 사진" width="689" height="886" decoding="async">
+        </figure>
+        <address class="resume-contact" aria-label="연락처">
+          <a href="mailto:ckdekrn88@gmail.com">ckdekrn88@gmail.com</a>
+          <a href="https://github.com/ch4570">github.com/ch4570</a>
+          <a href="https://velog.io/@ch4570/posts">velog.io/@ch4570</a>
+          <a href="https://www.linkedin.com/in/devseorex/">linkedin.com/in/devseorex</a>
+          <a href="https://ch4570-archive.vercel.app/">ch4570-archive.vercel.app</a>
+        </address>
+      </header>
+      <div class="resume-body">
+        <nav class="case-nav screen-only" aria-label="포트폴리오 목차">
+          <ol>
+            <li><a href="#jpa"><span>01</span>JPA 데이터 보정</a></li>
+            <li><a href="#drive"><span>02</span>Drive 성능·정합성</a></li>
+            <li><a href="#feed"><span>03</span>추천 피드</a></li>
+            <li><a href="#event"><span>04</span>이벤트 복구·배치</a></li>
+            <li><a href="#codehub"><span>05</span>코드 승인·접근 제어</a></li>
+            <li><a href="#evidence"><span>06</span>공개 기록</a></li>
+          </ol>
+        </nav>
+        <section class="resume-section doc-sec" aria-labelledby="cases-title">
+          <div class="cmdline"><p class="cmd cmd--inline" aria-hidden="true"><span class="deco-txt"><span class="ps1">ch4570@archive</span><span class="ps-path">:~/portfolio</span><span class="ps-sym">$</span> <span class="cmd-text">ls cases/</span></span></p><h2 id="cases-title" data-edit-id="portfolio-008">작업 사례</h2></div>
+          <article class="doc-proj" id="jpa" aria-labelledby="jpa-title"><span class="doc-case-no" aria-hidden="true">01</span><h3 id="jpa-title" data-edit-id="portfolio-009">실제 영속성 컨텍스트에서 JPA 변경 감지 오류를 재현하고 약 200만 건을 보정했습니다</h3><p class="doc-lede" data-edit-id="portfolio-010">Mock 테스트에서 놓친 저장 오류를 실제 영속성 컨텍스트에서 재현했습니다. 보정 스크립트로 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p><ul class="resume-achievement-list"><li data-edit-id="portfolio-011">문제: Mock 테스트는 영속성 컨텍스트의 변경 감지와 저장 시점을 거치지 않아 오류가 드러나지 않았습니다.</li><li data-edit-id="portfolio-012">재현·보정: 실제 저장 환경에서 재현해 원인을 확인하고, 오류 데이터 <b>약 200만 건</b>을 식별해 보정 스크립트로 바로잡았습니다.</li><li data-edit-id="portfolio-013">회귀 검증: 실제 저장 결과를 확인하는 테스트를 보강했습니다.</li></ul></article>
+          <article class="doc-proj" id="drive" aria-labelledby="drive-title"><span class="doc-case-no" aria-hidden="true">02</span><h3 id="drive-title" data-edit-id="portfolio-014">Drive 서비스의 CPU·미삭제 파일·테스트를 숫자로 확인했습니다</h3><p class="doc-lede" data-edit-id="portfolio-015">JANDI 드라이브 기능을 제공하는 마이크로서비스입니다.</p><div class="viz-row"><div class="viz" data-viz="rds-cpu" data-src="랠릿 프로젝트 08: Live RDS CPU 99% 과점유 → 평균 3%"><svg viewBox="0 0 270 78" aria-hidden="true" focusable="false"><defs><marker id="ah-rds-cpu" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">Live RDS CPU</text><text x="0" y="38" class="v-l" text-anchor="start">개선 전</text><rect x="56" y="26" width="122.8" height="15" rx="2" class="v-before"/><text x="184.8" y="38" class="v-n" text-anchor="start">99%</text><text x="0" y="64" class="v-l" text-anchor="start">개선 후</text><rect x="56" y="52" width="3.7" height="15" rx="2" class="v-after"/><text x="65.7" y="64" class="v-n" text-anchor="start">평균 3%</text></svg></div><div class="viz" data-viz="test-count" data-src="랠릿 프로젝트 08: 테스트 0개 → 300개+"><svg viewBox="0 0 270 78" aria-hidden="true" focusable="false"><defs><marker id="ah-test-count" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">Drive 서비스 테스트</text><text x="0" y="38" class="v-l" text-anchor="start">도입 전</text><path d="M56 25v16" class="v-tick"/><text x="64.5" y="38" class="v-n" text-anchor="start">0개</text><text x="0" y="64" class="v-l" text-anchor="start">도입 후</text><rect x="56" y="52" width="110" height="15" rx="2" class="v-after"/><text x="172" y="64" class="v-n" text-anchor="start">300개+</text></svg></div><div class="viz" data-viz="s3-cleanup" data-src="랠릿 프로젝트 08: S3 미삭제 60,325건, 771.61 GB"><svg viewBox="0 0 270 100" aria-hidden="true" focusable="false"><defs><marker id="ah-s3-cleanup" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">S3 미삭제 파일</text><text x="0" y="46" class="v-big" text-anchor="start">60,325건</text><text x="0" y="66" class="v-l" text-anchor="start">찾아서 삭제</text><text x="0" y="82" class="v-l" text-anchor="start">771.61 GB 점유 해소</text></svg></div></div><ul class="resume-achievement-list"><li data-edit-id="portfolio-016">Live RDS CPU가 <b>99%</b>까지 오른 문제를 리소스를 늘리기 전에 원인부터 분석해 평균 <b>3%</b>로 낮췄습니다.</li><li data-edit-id="portfolio-017">S3에 지워지지 않고 남은 파일 <b>60,325건</b>을 찾아 삭제해 <b>771.61 GB</b> 점유를 해소했습니다.</li><li data-edit-id="portfolio-018">테스트 코드를 도입해 <b>0개에서 300개+</b>로 늘렸고, Spring Boot를 2.3.8에서 3.3.3으로 올렸습니다.</li></ul></article>
+          <article class="doc-proj" id="feed" aria-labelledby="feed-title"><span class="doc-case-no" aria-hidden="true">03</span><h3 id="feed-title" data-edit-id="portfolio-019">추천 피드 서빙 엔진은 느린 경로를 빼고 응답을 이어 갑니다</h3><p class="doc-lede" data-edit-id="portfolio-020">벡터 검색은 후보를 찾는 단계에 쓰고, 이후에는 접근성·신선도·열람 경험을 같은 기준으로 다시 평가합니다.</p><div class="viz-row viz-row--2"><div class="viz" data-viz="feed-paths" data-src="랠릿 프로젝트 02: 9개 조회 경로, 경로별 500ms 타임아웃"><svg viewBox="0 0 270 108" aria-hidden="true" focusable="false"><defs><marker id="ah-feed-paths" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">후보 조회 경로 · 병렬</text><rect x="0" y="24" width="21" height="21" rx="3" class="v-hi"/><rect x="27" y="24" width="21" height="21" rx="3" class="v-hi"/><rect x="54" y="24" width="21" height="21" rx="3" class="v-hi"/><rect x="0" y="51" width="21" height="21" rx="3" class="v-hi"/><rect x="27" y="51" width="21" height="21" rx="3" class="v-hi"/><rect x="54" y="51" width="21" height="21" rx="3" class="v-hi"/><rect x="0" y="78" width="21" height="21" rx="3" class="v-hi"/><rect x="27" y="78" width="21" height="21" rx="3" class="v-hi"/><rect x="54" y="78" width="21" height="21" rx="3" class="v-hi"/><text x="92" y="40" class="v-lb" text-anchor="start">경로 9개를 동시에 실행</text><text x="92" y="60" class="v-l" text-anchor="start">경로마다 <tspan class="v-n">500ms</tspan> 타임아웃</text><text x="92" y="78" class="v-l" text-anchor="start">늦은 경로만 빼고 응답</text></svg></div><div class="viz" data-viz="feed-funnel" data-src="랠릿 프로젝트 02: 1차 500건 → 2차 100건 → 재정렬, 20건 응답"><svg viewBox="0 0 270 108" aria-hidden="true" focusable="false"><defs><marker id="ah-feed-funnel" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">후보 수 · 3단계 랭킹</text><text x="0" y="38" class="v-l" text-anchor="start">1차 랭킹</text><rect x="80" y="26" width="124" height="15" rx="2" class="v-before"/><text x="210" y="38" class="v-n" text-anchor="start">500건</text><text x="0" y="64" class="v-l" text-anchor="start">2차 랭킹</text><rect x="80" y="52" width="24.8" height="15" rx="2" class="v-before"/><text x="110.8" y="64" class="v-n" text-anchor="start">100건</text><text x="0" y="90" class="v-l" text-anchor="start">재정렬 · 응답</text><rect x="80" y="78" width="5" height="15" rx="2" class="v-after"/><text x="91" y="90" class="v-n" text-anchor="start">20건</text></svg></div></div><ul class="resume-achievement-list"><li data-edit-id="portfolio-021">조회 경로 <b>9개</b>를 병렬로 실행하고 경로별 <b>500ms</b> 타임아웃으로 늦은 경로만 제외했습니다.</li><li data-edit-id="portfolio-022">1차 <b>500건</b> → 2차 <b>100건</b> → 재정렬 → <b>20건</b> 응답. 단계별 캐시로 다음 페이지 재계산을 줄이고 페이지 간 중복 노출을 막았습니다(개발 환경에서 확인).</li><li data-edit-id="portfolio-023">Redis 캐시를 우회해도 첫 페이지를 계산해 응답하는 경로를 두었습니다.</li></ul></article>
+          <article class="doc-proj" id="event" aria-labelledby="event-title"><span class="doc-case-no" aria-hidden="true">04</span><h3 id="event-title" data-edit-id="portfolio-024">멈춘 이벤트와 배치를 이어 실행하고 포인트 정합성을 확인했습니다</h3><p class="doc-lede" data-edit-id="portfolio-025">포인트·CPC 광고 플랫폼의 이벤트 복구와 배치입니다.</p><div class="viz-row viz-row--2"><div class="viz viz--wide viz--max" data-viz="event-recovery" data-src="랠릿 프로젝트 05: 6개 상태, 15분 초과 알림 / 저장소 문서: 이벤트 9종, 복구 경로 8개"><svg viewBox="0 0 360 190" aria-hidden="true" focusable="false"><defs><marker id="ah-event-recovery" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">이벤트 실패 단계 · 복구 · 정체 알림</text><rect x="0" y="22" width="82" height="26" rx="4" class="v-box"/><text x="41" y="39" class="v-lb" text-anchor="middle">이벤트 9종</text><path d="M84 35L100 35" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="102" y="22" width="52" height="26" rx="4" class="v-box"/><text x="128" y="39" class="v-lb" text-anchor="middle">발행</text><path d="M156 35L172 35" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="174" y="22" width="52" height="26" rx="4" class="v-box"/><text x="200" y="39" class="v-lb" text-anchor="middle">처리</text><path d="M228 35L244 35" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="246" y="22" width="52" height="26" rx="4" class="v-hi"/><text x="272" y="39" class="v-lb" text-anchor="middle">완료</text><text x="306" y="39" class="v-n" text-anchor="start">상태 6개</text><rect x="78" y="70" width="80" height="22" rx="4" class="v-dash"/><text x="118" y="85" class="v-s" text-anchor="middle">발행 전 멈춤</text><path d="M128 50L118 68" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="166" y="70" width="80" height="22" rx="4" class="v-dash"/><text x="206" y="85" class="v-s" text-anchor="middle">처리 중 실패</text><path d="M200 50L206 68" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="10" y="114" width="110" height="34" rx="4" class="v-box"/><text x="65" y="128" class="v-sb" text-anchor="middle">payload 저장</text><text x="65" y="142" class="v-s" text-anchor="middle">(JSONB)</text><rect x="140" y="114" width="100" height="34" rx="4" class="v-box"/><text x="190" y="128" class="v-sb" text-anchor="middle">복구 경로 8개</text><text x="190" y="142" class="v-s" text-anchor="middle">업무별</text><rect x="260" y="114" width="100" height="34" rx="4" class="v-hi"/><text x="310" y="128" class="v-sb" text-anchor="middle">실패한 업무만</text><text x="310" y="142" class="v-sb" text-anchor="middle">다시 실행</text><path d="M118 94V104H65V112" class="v-line" marker-end="url(#ah-event-recovery)"/><path d="M206 94V104H65" class="v-line"/><path d="M122 131L138 131" class="v-line" marker-end="url(#ah-event-recovery)"/><path d="M242 131L258 131" class="v-line" marker-end="url(#ah-event-recovery)"/><rect x="0" y="162" width="360" height="24" rx="4" class="v-dash"/><text x="180" y="178" class="v-s" text-anchor="middle">IN_PROGRESS 15분 초과 → 유형별로 묶어 Slack 알림</text></svg></div><div class="viz" data-viz="archive-batch" data-src="랠릿 프로젝트 05: 아카이브 테이블 10개, 시작 ID 지정 재실행"><svg viewBox="0 0 270 92" aria-hidden="true" focusable="false"><defs><marker id="ah-archive-batch" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">아카이브 배치 · 테이블 10개</text><rect x="0" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="27" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="54" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="81" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="108" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="135" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="162" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="189" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="216" y="24" width="21" height="21" rx="3" class="v-box"/><rect x="243" y="24" width="21" height="21" rx="3" class="v-box"/><text x="0" y="66" class="v-l" text-anchor="start">참조 순서대로 이동</text><text x="0" y="84" class="v-l" text-anchor="start">중단되면 <tspan class="v-n">시작 ID</tspan> 지정 → 남은 범위부터 재실행</text></svg></div></div><ul class="resume-achievement-list"><li data-edit-id="portfolio-026">발행 전에 멈춘 이벤트와 발행 뒤 업무 처리에서 실패한 이벤트를 나눠 <b>6개</b> 상태로 기록하고, 저장한 payload로 실패한 업무만 다시 실행합니다.</li><li data-edit-id="portfolio-027">Kafka 내부 이벤트 <b>9종</b>에 복구 경로 <b>8개</b>를 두었고, <b>15분</b> 넘게 멈춘 이벤트는 유형별로 묶어 Slack으로 알립니다.</li><li data-edit-id="portfolio-028">아카이브 테이블 <b>10개</b>는 참조 순서대로 옮기고 중단되면 시작 ID부터 다시 실행합니다.</li><li data-edit-id="portfolio-029"><b>9개</b> API, <b>13개</b> 시나리오로 동시 요청 뒤 잔액·원장·후속 이벤트를 대조했습니다.</li><li data-edit-id="portfolio-030"><b>60초</b> 안에 클릭 정보 <b>5개</b> 키가 모두 같은 클릭이 다시 들어오면 포인트를 차감하지 않고 어뷰징 로그로 기록했습니다. 광고 노출 종료일 <b>576건</b>도 일괄 보정했습니다.</li></ul><div class="viz-row"><div class="viz" data-viz="stat-concurrency" data-src="랠릿 프로젝트 05: 9개 API, 13개 시나리오"><svg viewBox="0 0 270 100" aria-hidden="true" focusable="false"><defs><marker id="ah-stat-concurrency" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">동시성 검증</text><text x="0" y="46" class="v-big" text-anchor="start">9 · 13</text><text x="0" y="66" class="v-l" text-anchor="start">API 9개 · 시나리오 13개</text><text x="0" y="82" class="v-l" text-anchor="start">잔액·원장·후속 이벤트 확인</text></svg></div><div class="viz" data-viz="stat-duplicate-click" data-src="랠릿 프로젝트 05: 60초, 클릭 정보 5개 키"><svg viewBox="0 0 270 100" aria-hidden="true" focusable="false"><defs><marker id="ah-stat-duplicate-click" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">중복 클릭 차단</text><text x="0" y="46" class="v-big" text-anchor="start">60초</text><text x="0" y="66" class="v-l" text-anchor="start">클릭 정보 5개 키 일치 시</text><text x="0" y="82" class="v-l" text-anchor="start">차감 없이 어뷰징 로그 기록</text></svg></div><div class="viz" data-viz="stat-ad-end-date" data-src="랠릿 프로젝트 05: 광고 노출 종료일 576건"><svg viewBox="0 0 270 84" aria-hidden="true" focusable="false"><defs><marker id="ah-stat-ad-end-date" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">광고 노출 종료일</text><text x="0" y="46" class="v-big" text-anchor="start">576건</text><text x="0" y="66" class="v-l" text-anchor="start">일괄 보정</text></svg></div></div></article>
+          <article class="doc-proj" id="codehub" aria-labelledby="codehub-title"><span class="doc-case-no" aria-hidden="true">05</span><h3 id="codehub-title" data-edit-id="portfolio-031">code-hub의 신청·검증·승인 흐름과 쓰기 API 접근 제어를 작업했습니다</h3><p class="doc-lede" data-edit-id="portfolio-032">다른 팀에서 인수인계받은 공통 코드 관리 플랫폼의 관리자 기능입니다. 2026.10 이후 작업은 공동 작업 브랜치에서 병합 전입니다.</p><div class="viz-row viz-row--2"><div class="viz viz--wide viz--max" data-viz="approval" data-src="랠릿 경력 01·프로젝트 01: 신청, 검증, 승인, 승인 뒤 캐시 갱신"><svg viewBox="0 0 330 100" aria-hidden="true" focusable="false"><defs><marker id="ah-approval" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">코드 변경 승인 흐름</text><rect x="0" y="24" width="66" height="30" rx="4" class="v-box"/><text x="33" y="43" class="v-lb" text-anchor="middle">신청</text><path d="M68 39L86 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="88" y="24" width="66" height="30" rx="4" class="v-box"/><text x="121" y="43" class="v-lb" text-anchor="middle">검증</text><path d="M156 39L174 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="176" y="24" width="66" height="30" rx="4" class="v-hi"/><text x="209" y="43" class="v-lb" text-anchor="middle">승인</text><path d="M244 39L262 39" class="v-line" marker-end="url(#ah-approval)"/><rect x="264" y="24" width="66" height="30" rx="4" class="v-box"/><text x="297" y="43" class="v-lb" text-anchor="middle">캐시 갱신</text><text x="165" y="76" class="v-s" text-anchor="middle">검증: 사이트별 정합성</text><text x="165" y="92" class="v-s" text-anchor="middle">승인 직전 재판정</text></svg></div><div class="viz viz--wide viz--max" data-viz="endpoints" data-src="랠릿 프로젝트 01: 노드 나열 → Primary·reader endpoint"><svg viewBox="0 0 330 104" aria-hidden="true" focusable="false"><defs><marker id="ah-endpoints" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 1l7 3-7 3z" class="v-arrow"/></marker></defs><text x="0" y="12" class="v-cap" text-anchor="start">이전 · 노드 나열</text><text x="186" y="12" class="v-cap" text-anchor="start">이후 · endpoint</text><rect x="0" y="38" width="34" height="40" rx="4" class="v-box"/><text x="17" y="62" class="v-lb" text-anchor="middle">앱</text><rect x="70" y="22" width="76" height="22" rx="4" class="v-box"/><text x="108" y="37" class="v-d" text-anchor="middle">node A</text><path d="M36 58L68 33" class="v-line" marker-end="url(#ah-endpoints)"/><rect x="70" y="50" width="76" height="22" rx="4" class="v-box"/><text x="108" y="65" class="v-d" text-anchor="middle">node B</text><path d="M36 58L68 61" class="v-line" marker-end="url(#ah-endpoints)"/><rect x="70" y="78" width="76" height="22" rx="4" class="v-box"/><text x="108" y="93" class="v-d" text-anchor="middle">…</text><path d="M36 58L68 89" class="v-line" marker-end="url(#ah-endpoints)"/><rect x="186" y="38" width="34" height="40" rx="4" class="v-box"/><text x="203" y="62" class="v-lb" text-anchor="middle">앱</text><rect x="256" y="24" width="74" height="24" rx="4" class="v-hi"/><text x="293" y="40" class="v-d" text-anchor="middle">Primary</text><path d="M222 52L254 38" class="v-line" marker-end="url(#ah-endpoints)"/><rect x="256" y="68" width="74" height="24" rx="4" class="v-box"/><text x="293" y="84" class="v-d" text-anchor="middle">reader</text><path d="M222 66L254 80" class="v-line" marker-end="url(#ah-endpoints)"/></svg></div></div><ul class="resume-achievement-list"><li data-edit-id="portfolio-033">승인 직전에 다시 판정하고 승인 뒤 캐시를 갱신합니다. 새 테이블 없이 기존 상세 테이블을 다시 쓰는 구조로 설계했습니다.</li><li data-edit-id="portfolio-034">관리자 키를 DB 해시로 옮기고 경로 기반으로 호출자를 가르며, 클라이언트별 허용 경로를 화면에서 고치고 이력을 남기는 기능을 작업했습니다.</li><li data-edit-id="portfolio-035">ElastiCache 패치로 Primary가 바뀌어도 쓰기가 막히지 않도록 접속 방식을 Primary·reader endpoint로 바꾸는 작업을 했습니다.</li></ul></article>
+          <article class="doc-proj" id="evidence" aria-labelledby="evidence-title"><span class="doc-case-no" aria-hidden="true">06</span><h3 id="evidence-title" data-edit-id="portfolio-036">발표·글·코드로 남긴 공개 기록</h3><p class="doc-lede" data-edit-id="portfolio-037">YouthCon 발표, Spring 오픈소스 개선, 개인 프로젝트를 한곳에 모았습니다.</p><ul class="resume-achievement-list"><li data-edit-id="portfolio-038"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 발표</a>: 「우리팀을 위한 Spring Test 만들기」에서 반복되는 테스트 준비 코드를 공통화하고 테스트 유형별 설정과 작성 기준을 정리한 과정을 다뤘습니다.</li><li data-edit-id="portfolio-039"><a href="https://velog.io/@ch4570/posts">Velog 기술 블로그</a>: Java·JPA·테스트 문제와 SQL 튜닝 경험을 글로 기록했습니다. 글또 10기에서는 준비위원회에 참여하고 연사로 발표했습니다.</li><li data-edit-id="portfolio-040">Spring 오픈소스: <a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a> PR은 병합됐고 <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>와 <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에는 개선 제안이 반영됐습니다.</li><li data-edit-id="portfolio-041"><a href="https://github.com/ch4570/open-search-custom-plugin">OpenSearch 한글 플러그인</a>: <a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다. 한·영 자판 변환과 초성·자모 검색을 다루며 저장소에는 assertion 예시 16개가 있습니다.</li><li data-edit-id="portfolio-042"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">파일 삭제 상태 불일치 분석 글</a>: 파일 삭제 상태와 DB 기록이 어긋난 원인을 분석해 글로 남겼습니다.</li><li data-edit-id="portfolio-043"><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">JPA 오류 재현과 보정 글</a>: Mock 테스트에서 드러나지 않던 JPA 변경 감지 오류를 재현하고 보정한 과정을 정리했습니다.</li></ul></article>
+        </section>
       </div>
-    </section>
-
-    <div class="portfolio-layout">
-      <nav class="case-nav" aria-label="포트폴리오 목차">
-        <p class="case-nav-title">작업</p>
-        <ol>
-          <li><a href="#jpa" aria-current="true"><span>01</span>JPA 데이터 보정</a></li>
-          <li><a href="#event"><span>02</span>이벤트 복구</a></li>
-          <li><a href="#point"><span>03</span>배치·동시성</a></li>
-          <li><a href="#feed"><span>04</span>검색·캐시</a></li>
-          <li><a href="#evidence"><span>05</span>공개 기록</a></li>
-        </ol>
-      </nav>
-
-      <article class="portfolio-content">
-        <section class="case-section" id="jpa" aria-labelledby="jpa-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">01</span>
-            <div>
-              <h2 class="case-title" id="jpa-title" data-edit-id="portfolio-079">실제 영속성 컨텍스트에서 JPA 변경 감지 오류를 재현하고 <span lang="en"><span lang="ko">약 200만&nbsp;건</span></span>을 보정했습니다</h2>
-              <p class="case-lede" data-edit-id="portfolio-080">Mock 테스트에서 놓친 저장 오류를 실제 영속성 컨텍스트에서 재현했습니다. 보정 스크립트로 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
-            </div>
-          </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-081">문제</dt><dd data-edit-id="portfolio-082">JPA 변경 감지 오류</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-083">재현</dt><dd data-edit-id="portfolio-084">실제 영속성 컨텍스트에서 저장 과정 검증</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-085">보정</dt><dd data-edit-id="portfolio-086">오류 데이터 식별 · 보정 스크립트 적용</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-087">회귀 검증</dt><dd data-edit-id="portfolio-088">실제 저장 동작을 확인하는 테스트 보강</dd></div>
-          </dl>
-
-          <div class="story-grid">
-            <div class="story-block">
-              <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-089">Mock 테스트만으로는 실제 저장 오류를 찾을 수&nbsp;없었습니다</h3>
-              <p data-edit-id="portfolio-090">기존 테스트는 실제 영속성 컨텍스트의 변경 감지와 저장 시점을 거치지 않아 오류가 드러나지 않았습니다.</p>
-            </div>
-            <div class="story-block">
-              <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-091">실제 저장 환경에서 재현한 뒤 보정 경로를 만들었습니다</h3>
-              <p data-edit-id="portfolio-092">오류 원인을 재현해 확인하고 보정 스크립트를 작성했습니다. 잘못 저장된 값을 바로잡아 저장 데이터를 다시 신뢰할 수 있게 했습니다.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="case-section" id="event" aria-labelledby="event-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">02</span>
-            <div>
-              <h2 class="case-title" id="event-title" data-edit-id="portfolio-007">실패 단계를 기록해 필요한&nbsp;업무만 다시&nbsp;실행했습니다</h2>
-            </div>
-          </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-009">담당</dt><dd data-edit-id="portfolio-010">이벤트 상태 기록·수동 복구·정체 알림 경로 설계·개발</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-011">구현</dt><dd data-edit-id="portfolio-012">Kafka 이벤트의 발행·처리 상태를 단계별로 구분</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-013">저장</dt><dd data-edit-id="portfolio-014">PostgreSQL에 처리 상태 기록 · JSONB에 복구용 payload 저장</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-015">알림</dt><dd data-edit-id="portfolio-016">정체된 IN_PROGRESS 이벤트를 유형별로 묶어 Slack 알림</dd></div>
-          </dl>
-
-          <div class="story-grid">
-            <div class="story-block">
-              <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-017">같은 실패 상태로는 복구 지점을 정할 수&nbsp;없었습니다</h3>
-              <p data-edit-id="portfolio-018">발행 전에 멈췄는지, 발행 후 업무 처리에서 멈췄는지에 따라 확인할 데이터와 재실행 범위가 달랐지만 하나의 실패 상태만 남았습니다.</p>
-            </div>
-            <div class="story-block">
-              <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-019">실패 단계와 업무를 분리해 복구 범위를 좁혔습니다</h3>
-              <p data-edit-id="portfolio-020">발행 실패와 처리 실패를 나눠 기록하고 payload를 보존했습니다. 포인트 차감·회수·만료 알림 가운데 완료되지 않은 업무만 골라 다시 실행했습니다.</p>
-            </div>
-          </div>
-
-        </section>
-
-        <section class="case-section" id="point" aria-labelledby="point-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">03</span>
-            <div>
-              <h2 class="case-title" id="point-title" data-edit-id="portfolio-029">중단된&nbsp;배치를 이어&nbsp;처리하고 포인트&nbsp;정합성을 검증했습니다</h2>
-              <p class="case-lede" data-edit-id="portfolio-030">
-                배치마다 재시작 기준을 분리하고, 동시 요청이 끝난 뒤 잔액·원장·예산을 함께 대조했습니다.
-              </p>
-            </div>
-          </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-031">담당</dt><dd data-edit-id="portfolio-032">포인트 소멸·아카이브 배치 구현 · 만료 알림 개선</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-033">처리 단위</dt><dd data-edit-id="portfolio-034">소멸 대상을 페이지 단위로 읽고 반복 처리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-035">보관 대상</dt><dd data-edit-id="portfolio-036">참조 순서대로 옮긴 아카이브 테이블 10개</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-037">동시성</dt><dd data-edit-id="portfolio-038">9개 API · 13개 시나리오 · 3·5·10개 동시 요청</dd></div>
-          </dl>
-
-          <div class="story-grid">
-            <div class="story-block">
-              <span class="story-label">상황</span>
-              <h3 data-edit-id="portfolio-039">배치마다 중단 후 이어갈 지점이 달랐습니다</h3>
-              <p data-edit-id="portfolio-040">소멸 배치는 잔액·원장을 바꾸고 만료 알림 배치는 발송 대상을 모았습니다. 아카이브 배치는 참조 순서를 지켜 테이블을 옮겨야 했습니다.</p>
-            </div>
-            <div class="story-block">
-              <span class="story-label">바꾼 점</span>
-              <h3 data-edit-id="portfolio-041">커서와 시작 ID로 재실행 범위를 정하고 결과 정합성을 확인했습니다</h3>
-              <p data-edit-id="portfolio-042">소멸 배치는 커서로 한 구간씩 읽고, 아카이브 배치는 시작 ID를 지정해 남은 범위부터 다시 실행하게 했습니다. 동시 요청 후에는 잔액·원장·예산·후속 이벤트를 함께 대조했습니다.</p>
-            </div>
-          </div>
-
-        </section>
-
-        <section class="case-section" id="feed" aria-labelledby="feed-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">04</span>
-            <div>
-              <h2 class="case-title" id="feed-title" data-edit-id="portfolio-049">검색 소스의 실패를 격리하고 캐시&nbsp;우회&nbsp;경로를 만들었습니다</h2>
-              <p class="case-lede" data-edit-id="portfolio-050">검색 소스별 정책·타임아웃·실패 처리를 분리했습니다. 캐시를 쓰지 않고 다시 계산하는 경로도 마련했습니다.</p>
-            </div>
-          </header>
-
-          <dl class="fact-grid">
-            <div class="fact-cell"><dt data-edit-id="portfolio-051">처리 단계</dt><dd data-edit-id="portfolio-052">후보 조회 → 중복 제거 → 점수화 → 재정렬 → 캐시 저장</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-053">구성</dt><dd data-edit-id="portfolio-054">후보 수집 인터페이스 · 역방향 조회 방식 · 캐시 전략 분리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-055">실패 격리</dt><dd data-edit-id="portfolio-056">검색 소스별 정책·타임아웃·실패 처리</dd></div>
-            <div class="fact-cell"><dt data-edit-id="portfolio-057">연동</dt><dd data-edit-id="portfolio-058">OpenSearch 조회 · Redis 캐시 우회 · ArchUnit 모듈 의존 검증</dd></div>
-          </dl>
-
-          <details class="diagram-disclosure archify-disclosure" open>
-            <summary>개인화 피드 처리 흐름 보기</summary>
-            <figure class="archify-figure" data-diagram-tool="archify@2.11.0">
-              <figcaption>
-                <b>후보를 모아 피드로 내보내기까지</b>
-                <span>Snapshot 상태에 따라 캐시를 쓰거나 랭킹을 다시 실행합니다.</span>
-              </figcaption>
-              <img
-                class="archify-diagram"
-                src="../assets/diagrams/feed-serving.svg"
-                alt="Feed API가 후보를 모아 랭킹하고 Snapshot으로 저장하는 처리 흐름"
-                decoding="async"
-              >
-            </figure>
-          </details>
-
-        </section>
-
-        <section class="case-section" id="evidence" aria-labelledby="evidence-title">
-          <header class="case-header">
-            <span class="case-number" aria-hidden="true">05</span>
-            <div>
-              <h2 class="case-title" id="evidence-title" data-edit-id="portfolio-109">발표·글·코드로 남긴 공개 기록</h2>
-              <p class="case-lede" data-edit-id="portfolio-110">기술 글 156편과 YouthCon 발표, Spring 오픈소스 개선 제안, 개인 프로젝트를 한곳에 모았습니다.</p>
-            </div>
-          </header>
-
-          <div class="scope-grid">
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-111"><a href="https://www.linkedin.com/posts/devseorex_ssqswmtgo-youthcon2025-activity-7410871152220405760-Ubd9">YouthCon 2025 발표</a></h3>
-              <p data-edit-id="portfolio-112">‘우리팀을 위한 Spring Test 만들기’ 발표에서 반복되는 테스트 준비 코드를 공통화하고, 테스트 유형에 맞는 설정과 작성 기준을 정리한 과정을 다뤘습니다.</p>
-            </article>
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-113"><a href="https://velog.io/@ch4570/posts">기술 글 156편 · 2026.07 기준</a></h3>
-              <p data-edit-id="portfolio-114">Java·JPA·테스트 관련 문제와 SQL 튜닝 경험을 글로 기록했습니다. 글또 10기에서는 준비위원과 연사로 참여했습니다.</p>
-            </article>
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-115">Spring 오픈소스 · 반영된 개선 제안</h3>
-              <p data-edit-id="portfolio-116"><a href="https://github.com/spring-projects/spring-kafka/pull/2875">Spring Kafka</a>, <a href="https://github.com/spring-projects/spring-boot/pull/38029">Spring Boot</a>, <a href="https://github.com/spring-projects/spring-data-jpa/pull/3408">Spring Data JPA</a>에 불변 컬렉션 처리, 하드코딩 제거, 자원 정리에 관한 개선을 제안했고 모두 반영됐습니다.</p>
-            </article>
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-117"><a href="https://github.com/ch4570/open-search-custom-plugin">Java Cafe 기반 OpenSearch 한글 플러그인</a></h3>
-              <p data-edit-id="portfolio-118"><a href="https://github.com/javacafe-project/elasticsearch-plugin">Java Cafe Elasticsearch 플러그인</a>을 OpenSearch 2.19에서 동작하도록 Kotlin으로 이식했습니다. 저장소에는 한·영 자판 변환과 초성·자모 검색을 다루는 assertion 예시 16개가 있습니다.</p>
-            </article>
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-119"><a href="https://velog.io/@ch4570/%EC%A7%91%EC%9A%94%ED%95%A8%EC%9D%98-%EB%AF%B8%ED%95%99%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC-%EB%B6%80%EC%A0%9C.-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EB%8A%90%EB%81%BC%EC%A7%80-%EB%AA%BB%ED%95%9C%EB%8B%A4%EA%B3%A0-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EC%97%86%EB%8A%94%EA%B2%8C-%EC%95%84%EB%8B%88%EB%8B%A4">약 7만 건의 삭제 상태 불일치</a></h3>
-              <p data-edit-id="portfolio-120">파일 삭제 상태와 DB 기록이 어긋난 원인을 분석해 글로 남겼습니다.</p>
-            </article>
-            <article class="scope-item">
-              <h3 data-edit-id="portfolio-121"><a href="https://velog.io/@ch4570/%EC%97%AC%EB%9F%AC%EB%B6%84%EC%9D%B4-%EC%97%B4%EC%8B%AC%ED%9E%88-%EC%A7%A0-%ED%85%8C%EC%8A%A4%ED%8A%B8%EB%8A%94-%EC%95%88%EB%85%95%ED%95%98%EC%8B%AD%EB%8B%88%EA%B9%8C">JPA 오류 재현과 약 200만&nbsp;건 보정</a></h3>
-              <p data-edit-id="portfolio-122">Mock 테스트에서 드러나지 않던 JPA 변경 감지 오류를 재현하고 보정한 과정을 글로 정리했습니다.</p>
-            </article>
-          </div>
-        </section>
-      </article>
-    </div>
+      <div class="tmux-status" aria-hidden="true"><span class="ts-session">[portfolio]</span><span>0:resume</span><span>1:career</span><span class="on">2:portfolio*</span><span class="ts-right">ch4570@archive</span></div>
+    </article>
   </main>
-
-  <div class="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
