@@ -211,6 +211,7 @@ test("home copy also leaves work volume out", async () => {
   for (const file of ["index.html", "assets/home-data.js"]) {
     const source = await readFile(resolve(repositoryRoot, file), "utf8");
     assert.doesNotMatch(source, workVolume, file + " should not state work volume");
+    assert.doesNotMatch(source, /팔로워|공개 저장소|원본 저장소|포크한 저장소/u, file + " should not state follower or repository counts");
   }
 });
 

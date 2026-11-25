@@ -114,10 +114,10 @@ export const FLOWS = {
       { key: "hit", label: "스냅샷 있음", path: ["req", "snap", "hit"] },
       { key: "refill", label: "스냅샷 비어 있음", path: ["req", "snap", "src", "fpr", "rerank", "append"] },
       { key: "partial", label: "소스 일부 실패", path: ["req", "snap", "src", "drop", "fpr", "rerank", "append"] },
-      { key: "bypass", label: "캐시 우회", path: ["req", "first"] },
+      { key: "bypass", label: "첫 페이지 계산", path: ["req", "first"] },
     ],
     notes: {
-      req: "요청마다 캐시를 쓸지, 우회할지 정합니다.",
+      req: "요청마다 스냅샷에서 꺼낼지, 처음부터 계산할지 정합니다.",
       snap: "저장된 스냅샷에서 다음 페이지를 꺼냅니다.",
       hit: "꺼낸 페이지를 응답하고 본 공고로 기록합니다.",
       src: "비어 있으면 앞 단계로 거슬러 채웁니다. 검색 소스는 병렬로 조회하고, 소스마다 필터·정렬·벡터 규칙과 타임아웃이 다릅니다.",
@@ -125,7 +125,7 @@ export const FLOWS = {
       fpr: "FPR 단계에서 후보를 합치고, 차단 대상을 거르고, 같은 공고·같은 내용을 중복 제거한 뒤 점수를 매깁니다.",
       rerank: "SPR을 거쳐 Re-Rank에서 회사가 몰리지 않게 순서를 섞습니다.",
       append: "결과를 스냅샷 뒤에 붙이고 한 페이지를 응답합니다. 저장이 실패해도 계산한 결과로 응답합니다.",
-      first: "캐시를 우회하거나 세션이 없으면 Redis 캐시 없이 첫 페이지만 계산해 응답합니다.",
+      first: "세션이 없으면 캐시 없이 첫 페이지부터 계산해 응답합니다.",
     },
   },
   jpa: {
