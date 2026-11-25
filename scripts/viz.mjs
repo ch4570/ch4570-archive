@@ -27,7 +27,7 @@ const SRC = {
   approval: "랠릿 경력 01·프로젝트 04: 신청, 검증, 승인, 승인 뒤 캐시 갱신",
   endpoints: "랠릿 프로젝트 04: 노드 나열 → Primary·reader endpoint",
   events: "랠릿 프로젝트 03: 6개 상태, 15분 초과 알림, 저장한 payload로 실패한 업무만 재실행",
-  archive: "랠릿 프로젝트 03: 참조 순서대로 이동, 중단되면 시작 ID를 지정해 남은 범위부터 재실행",
+  archive: "랠릿 프로젝트 03: 아카이브 배치는 중단되면 시작 ID를 지정해 남은 범위부터 재실행",
   duplicate: "랠릿 프로젝트 03: 60초 안의 중복 클릭은 차감하지 않음",
   expiry: "랠릿 프로젝트 03: 광고 노출 종료일 576건",
   timeline: "랠릿 경력 01~04 재직 기간",
@@ -91,7 +91,7 @@ const builders = {
     return wrap("approval", SRC.approval, svg(330, 100, g), "viz--wide viz--max");
   },
   endpoints: () => {
-    let g = text(0, 12, "v-cap", "이전 · 노드 나열") + text(186, 12, "v-cap", "이후 · endpoint");
+    let g = text(0, 12, "v-cap", "기존 · 노드 나열") + text(186, 12, "v-cap", "전환 · endpoint");
     g += box(0, 38, 34, 40, "v-box") + text(17, 62, "v-lb", "앱", "middle");
     ["node A", "node B", "…"].forEach((t, i) => {
       const y = 22 + i * 28;
@@ -123,7 +123,7 @@ const builders = {
     // 개수가 아니라 흐름만 그린다: 참조 순서대로 이동 → 중단 → 시작 ID 지정 → 남은 범위부터 재실행.
     const xs = [0, 87, 174, 261];
     let g = text(0, 12, "v-cap", "아카이브 배치 · 중단 뒤 이어 실행");
-    g += box(xs[0], 24, 69, 36, "v-box") + text(xs[0] + 34.5, 40, "v-sb", "참조 순서대로", "middle") + text(xs[0] + 34.5, 54, "v-sb", "이동", "middle");
+    g += box(xs[0], 24, 69, 36, "v-box") + text(xs[0] + 34.5, 40, "v-sb", "아카이브", "middle") + text(xs[0] + 34.5, 54, "v-sb", "테이블 이동", "middle");
     g += box(xs[1], 24, 69, 36, "v-dash") + text(xs[1] + 34.5, 46, "v-sb", "중단", "middle");
     g += box(xs[2], 24, 69, 36, "v-box") + text(xs[2] + 34.5, 40, "v-sb", "시작 ID", "middle") + text(xs[2] + 34.5, 54, "v-sb", "지정", "middle");
     g += box(xs[3], 24, 69, 36, "v-hi") + text(xs[3] + 34.5, 40, "v-sb", "남은 범위부터", "middle") + text(xs[3] + 34.5, 54, "v-sb", "재실행", "middle");
