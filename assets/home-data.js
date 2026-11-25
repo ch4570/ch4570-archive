@@ -61,12 +61,12 @@ export const KEYWORDS = [
   {
     id: "test", word: "테스트 먼저", tone: "pre", axis: "migrate", card: "boot", x: 61, y: 33, cap: "b",
     path: "M500 340 C 500 280, 520 220, 536 170",
-    caption: "테스트 <b>0개</b>에서 <b>160개 이상</b>으로",
+    caption: "테스트 <b>0개</b>에서 <b>300개+</b>로",
     desc: "Spring Boot 3 전환 전에 회귀 테스트부터 보강했습니다.",
-    shell: { cmd: "cat boot.compare", out: "테스트 0개 → 160개 이상 · Spring Boot 2.3.8 → 3.3.3 전환 전" },
+    shell: { cmd: "cat boot.compare", out: "테스트 0개 → 300개+ · Spring Boot 2.3.8 → 3.3.3 전환 전" },
     strip: [
       step("Spring Boot", "2.3.8 → 3.3.3 전환"), step("테스트 0개", "", { cls: "k-fail" }), step("회귀 테스트부터", "보강"),
-      step("160개 이상", "", { cls: "k-done" }),
+      step("300개+", "", { cls: "k-done" }),
     ],
   },
   {
@@ -100,14 +100,14 @@ const MINIS = {
     edges: [["mock", "bad", "r", "l"], ["bad", "repro", "r", "l"], ["repro", "cause", "b", "t"], ["cause", "fix", "l", "r"], ["fix", "done", "l", "r"]],
   },
   boot: {
-    title: "Spring Boot 2.3.8에서 3.3.3으로 전환하기 전에 회귀 테스트를 먼저 보강. 테스트 수는 0개에서 160개 이상.",
+    title: "Spring Boot 2.3.8에서 3.3.3으로 전환하기 전에 회귀 테스트를 먼저 보강. 테스트 수는 0개에서 300개+.",
     h: 148,
     nodes: { from: nd(0, 8, "Spring Boot|2.3.8"), mid: nd(1, 8, "회귀 테스트|먼저 보강", "gate"), to: nd(2, 8, "Spring Boot|3.3.3", "done") },
     edges: [["from", "mid", "r", "l"], ["mid", "to", "r", "l"]],
     bars: [
       { text: "회귀 테스트 수", y: 82, lane: true },
       { text: "전환 전", y: 106, value: "0개", width: 3, x: 62 },
-      { text: "전환 중", y: 132, value: "160+", width: 240, x: 62, strong: true },
+      { text: "전환 중", y: 132, value: "300+", width: 240, x: 62, strong: true },
     ],
   },
   event: {
@@ -216,7 +216,7 @@ const DETAILS = {
       ],
       [
         "결과",
-        "테스트 0개 → 160개 이상"
+        "테스트 0개 → 300개+"
       ],
       [
         "기술",
@@ -289,11 +289,11 @@ const DETAILS = {
       ],
       [
         "한 일",
-        "<ul><li>8개 검색 소스에 필터·정렬·벡터 규칙과 소스별 타임아웃·실패 경로를 적용했습니다.</li><li>후보 필터링·점수화·재정렬·캐시 저장의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li><li>OpenSearch 조회 기능을 별도 모듈로 분리하고, 모듈 의존 규칙을 ArchUnit 테스트로 검증했습니다.</li></ul>"
+        "<ul><li>9개 조회 경로에 필터·정렬·벡터 규칙과 경로별 500ms 타임아웃·실패 경로를 적용했습니다.</li><li>후보 필터링·점수화·재정렬·캐시 저장의 입력과 출력을 분리하고, Redis 캐시 우회 경로를 구현했습니다.</li><li>OpenSearch 조회 기능을 별도 모듈로 분리하고, 모듈 의존 규칙을 ArchUnit 테스트로 검증했습니다.</li></ul>"
       ],
       [
         "결과",
-        "검색 소스 8개"
+        "조회 경로 9개"
       ],
       [
         "기술",
@@ -345,13 +345,13 @@ export const CARDS = [
   { id: "jpa", kw: "cause", axes: ["integrity"], title: "JPA 변경 감지 오류 재현과 데이터 보정", org: "토스랩", period: "2024.06–2025.04", status: "done",
     result: `약 ${num("200만", true)} 건 보정`, mini: MINIS.jpa, detail: DETAILS.jpa },
   { id: "boot", kw: "test", axes: ["migrate"], title: "Drive-Service Spring Boot 3 전환", org: "토스랩", period: "2024.06–2025.04", status: "done",
-    result: `테스트 0개 → ${num("160", true)}개 이상`, mini: MINIS.boot, detail: DETAILS.boot },
+    result: `테스트 0개 → ${num("300", true)}개+`, mini: MINIS.boot, detail: DETAILS.boot },
   { id: "event", kw: "record", axes: ["event"], title: "Kafka 이벤트 실패 복구", org: "웍스피어", period: "2025.06–", status: "run",
     result: `이벤트 ${num(9)}종 · 상태 ${num(6)}개 · 복구 경로 ${num(8)}개`, mini: MINIS.event, detail: DETAILS.event },
   { id: "batch", kw: "resume", axes: ["batch", "integrity"], title: "배치 재시작과 포인트 정합성 검증", org: "웍스피어", period: "2025.06–", status: "run",
     result: `아카이브 테이블 ${num(10)}개 · API ${num(9)}개 · 동시성 시나리오 ${num(13)}개`, mini: MINIS.batch, detail: DETAILS.batch },
   { id: "search", kw: "split", axes: ["search"], title: "개인화 피드 검색 소스 실패 격리", org: "웍스피어", period: "2025.06–", status: "run",
-    result: `검색 소스 ${num(8, true)}개`, mini: MINIS.search, detail: DETAILS.search },
+    result: `조회 경로 ${num(9, true)}개`, mini: MINIS.search, detail: DETAILS.search },
   { id: "test", axes: ["migrate"], title: "테스트 공통 모듈과 CI 메모리 부족 해소", org: "웍스피어", period: "사내 개선", status: "run",
     result: "테스트 준비 코드를 공통 모듈로 모았고 테스트 범위와 컨텍스트 재사용을 조정해 CI 메모리 부족을 해소했습니다", mini: MINIS.test, detail: DETAILS.test },
   { id: "gateway", axes: ["search"], title: "Gateway 인증·인가와 검색 API", org: "오케스트로", period: "2023.09–2024.05", status: "done",
