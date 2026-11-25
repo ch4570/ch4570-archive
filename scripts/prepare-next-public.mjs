@@ -26,6 +26,8 @@ const copies = [
   ["assets/design-system.css", "public/assets/design-system.css"],
   ["assets/site-frame.css", "public/assets/site-frame.css"],
   ["assets/resume.css", "public/assets/resume.css"],
+  ["assets/viz.css", "public/assets/viz.css"],
+  ["assets/doc.css", "public/assets/doc.css"],
   ["assets/resume-terminal.js", "public/assets/resume-terminal.js"],
   ["assets/resume-deco/dark/cmd-activity.png", "public/assets/resume-deco/dark/cmd-activity.png"],
   ["assets/resume-deco/dark/cmd-career.png", "public/assets/resume-deco/dark/cmd-career.png"],

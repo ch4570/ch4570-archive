@@ -1,0 +1,55 @@
+/*
+ * 경력기술서(career/)·포트폴리오(portfolio/) 전용 보충 스타일. resume.css(터미널 세션 연출)와 viz.css 위에 얹는다.
+ * 이력서와 달리 여러 쪽이므로 인쇄는 첫 쪽만 위·옆 여백 0(어두운 띠가 가장자리까지)이고 다음 쪽부터 위·아래 12mm를 둔다.
+ * 장식 줄(창 제목·프롬프트·명령 줄)은 이 두 문서에서는 PDF에서도 진짜 글자다(글자 추출 순서 계약은 이력서에만 있다).
+ */
+.doc-sec { margin-top: 32px; }
+.doc-sec:first-child { margin-top: 0; }
+.doc-lede { margin-top: 4px; color: var(--ink-2); }
+.doc-proj { margin-top: 20px; padding-top: 16px; border-top: 1px dashed var(--line); }
+.doc-sec > .doc-proj:first-of-type { border-top: 0; padding-top: 0; margin-top: 12px; }
+.doc-proj h3 { font-size: 18px; line-height: 1.5; font-weight: 700; }
+.doc-kicker { display: block; font: 500 14px/1.5 var(--mono); color: var(--muted); }
+.doc-case-no { display: block; margin-bottom: 2px; font: 700 14px/1.4 var(--mono); color: var(--syn-num); }
+.doc-sec .resume-achievement-list { margin-top: 6px; }
+.doc-sec h2 small { display: block; margin-top: 2px; font-size: 15px; line-height: 1.5; font-weight: 600; color: var(--muted); }
+.doc-hist { padding: 0; list-style: none; }
+.doc-hist li { display: flex; flex-wrap: wrap; gap: 0 12px; margin: 3px 0; }
+.doc-hist time { flex: none; width: 17ch; font: 600 16px/1.65 var(--mono); color: #3b3f46; }
+.doc-hist li::before { content: none; }
+.doc-doclinks { display: flex; flex-wrap: wrap; gap: 0 20px; margin-top: 6px; }
+.case-nav { margin: 0 0 28px; padding: 0; }
+.case-nav ol { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0; padding: 0; list-style: none; }
+.case-nav a { display: inline-flex; align-items: center; min-height: 28px; }
+.case-nav a span { margin-right: 6px; font: 700 14px/1 var(--mono); color: var(--syn-num); }
+.doc-nav-title { margin: 0 0 4px; font: 500 14px/1.5 var(--mono); color: var(--muted); }
+@media screen and (max-width: 760px) {
+  .doc-hist time { width: auto; flex-basis: 100%; }
+  .case-nav ol { flex-direction: column; }
+}
+@media print {
+  @page { size: A4; margin: 12mm 0; }
+  @page :first { margin: 0 0 12mm; }
+  .case-nav { display: none; }
+  .tmux-status { position: static !important; height: 6mm; margin-top: 3mm; font-size: 8pt; }
+  .tmux-status .ts-session { margin-right: 3mm; }
+  .resume-sheet { min-height: 0 !important; }
+  .resume-body { padding-top: 3.6mm; padding-bottom: 2mm; }
+  .doc-sec { margin-top: 4mm; }
+  .doc-sec:first-child { margin-top: 0; }
+  .doc-proj { margin-top: 2.6mm; padding-top: 2.2mm; border-top-width: .5pt; break-inside: auto; }
+  .doc-proj h3 { font-size: 10.5pt; break-after: avoid; }
+  .doc-kicker { font-size: 8pt; }
+  .doc-case-no { font-size: 8.5pt; margin: 0; }
+  .doc-lede { margin-top: .6mm; }
+  .doc-hist time { font-size: 9pt; width: 17ch; }
+  .doc-sec .resume-achievement-list { margin-top: 1mm; }
+  .cmdline, .doc-kicker, .doc-lede, .doc-case-no { break-after: avoid; }
+  .doc-sec h2 small { font-size: 9pt; }
+  .viz-row--2 .viz { width: 84mm; }
+  .viz-row--2 .viz--wide { width: 84mm; }
+  [data-viz=event-recovery] { width: 100mm !important; }
+  [data-viz=archive-batch] { width: 68mm !important; }
+  [data-viz=timeline] { width: 110mm; }
+  .viz-row { break-after: avoid; }
+}
