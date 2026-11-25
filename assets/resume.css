@@ -300,7 +300,7 @@ li, .resume-hero-copy { text-wrap: pretty; }
   .resume-head .cmd { margin-bottom: 1.2mm; }
   .cmdline { gap: 2.4mm; margin-bottom: 1.8mm; }
   .resume-section + .resume-section { margin-top: 3.6mm !important; }
-  body.resume-doc { line-height: 1.46; }
+  body.resume-doc { line-height: 1.4; }
   .resume-body { padding-top: 3.6mm; padding-bottom: 6mm; }
   .resume-sheet { min-height: 0 !important; }
   .resume-section + .resume-section { margin-top: 3mm; }
