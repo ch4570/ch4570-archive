@@ -172,9 +172,9 @@ test("career employer headings keep the Rallit company, team and period", async 
   }
 });
 
-test("portfolio keeps six ordered cases and leads with the JPA correction", async () => {
+test("portfolio keeps seven ordered cases and leads with AI automation", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const orderedIds = ["jpa", "drive", "feed", "event", "codehub", "evidence"];
+  const orderedIds = ["ai", "jpa", "drive", "feed", "event", "codehub", "evidence"];
   const positions = orderedIds.map((id) => source.indexOf('<article class="doc-proj" id="' + id + '"'));
 
   assert.ok(positions.every((position) => position >= 0), "expected every portfolio case");
@@ -183,7 +183,7 @@ test("portfolio keeps six ordered cases and leads with the JPA correction", asyn
     assert.match(source, new RegExp('<a href="#' + id + '">'), "case nav should link #" + id);
   }
 
-  const jpa = source.slice(positions[0], positions[1]);
+  const jpa = source.slice(positions[1], positions[2]);
   assert.match(jpa, /실제 영속성 컨텍스트/u);
   assert.match(jpa, /약 200만/u);
 });

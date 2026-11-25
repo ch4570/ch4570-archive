@@ -24,12 +24,12 @@ const SRC = {
   s3: "랠릿 프로젝트 08: S3 미삭제 60,325건, 771.61 GB",
   funnel: "랠릿 프로젝트 02: 1차 500건 → 2차 100건 → 재정렬, 20건 응답",
   paths: "랠릿 프로젝트 02: 9개 조회 경로, 경로별 500ms 타임아웃",
-  approval: "랠릿 경력 01·프로젝트 01: 신청, 검증, 승인, 승인 뒤 캐시 갱신",
-  endpoints: "랠릿 프로젝트 01: 노드 나열 → Primary·reader endpoint",
-  events: "랠릿 프로젝트 05: 6개 상태, 15분 초과 알림 / 저장소 문서: 이벤트 9종, 복구 경로 8개",
-  archive: "랠릿 프로젝트 05: 참조 순서대로 이동, 중단되면 시작 ID를 지정해 남은 범위부터 재실행",
-  duplicate: "랠릿 프로젝트 05: 60초, 클릭 정보 5개 키",
-  expiry: "랠릿 프로젝트 05: 광고 노출 종료일 576건",
+  approval: "랠릿 경력 01·프로젝트 04: 신청, 검증, 승인, 승인 뒤 캐시 갱신",
+  endpoints: "랠릿 프로젝트 04: 노드 나열 → Primary·reader endpoint",
+  events: "랠릿 프로젝트 03: 6개 상태, 15분 초과 알림, 저장한 payload로 실패한 업무만 재실행",
+  archive: "랠릿 프로젝트 03: 참조 순서대로 이동, 중단되면 시작 ID를 지정해 남은 범위부터 재실행",
+  duplicate: "랠릿 프로젝트 03: 60초 안의 중복 클릭은 차감하지 않음",
+  expiry: "랠릿 프로젝트 03: 광고 노출 종료일 576건",
   timeline: "랠릿 경력 01~04 재직 기간",
 };
 
@@ -103,21 +103,20 @@ const builders = {
     return wrap("endpoints", SRC.endpoints, svg(330, 104, g), "viz--wide viz--max");
   },
   "event-recovery": () => {
-    let g = text(0, 12, "v-cap", "이벤트 실패 단계 · 복구 · 정체 알림");
-    const row1 = [["이벤트 9종", 0, 82], ["발행", 102, 52], ["처리", 174, 52], ["완료", 246, 52]];
+    let g = text(0, 12, "v-cap", "이벤트 실패 단계 · 6개 상태로 기록 · 복구 · 정체 알림");
+    const row1 = [["Kafka 이벤트", 0, 82], ["발행", 102, 52], ["처리", 174, 52], ["완료", 246, 52]];
     row1.forEach(([t, x, w], i) => {
       g += box(x, 22, w, 26, i === 3 ? "v-hi" : "v-box") + text(x + w / 2, 39, "v-lb", t, "middle");
       if (i < 3) g += arrow(x + w + 2, 35, row1[i + 1][1] - 2, 35);
     });
-    g += text(306, 39, "v-n", "상태 6개");
-    g += box(78, 70, 80, 22, "v-dash") + text(118, 85, "v-s", "발행 전 멈춤", "middle") + arrow(128, 50, 118, 68);
+      g += box(78, 70, 80, 22, "v-dash") + text(118, 85, "v-s", "발행 전 멈춤", "middle") + arrow(128, 50, 118, 68);
     g += box(166, 70, 80, 22, "v-dash") + text(206, 85, "v-s", "처리 중 실패", "middle") + arrow(200, 50, 206, 68);
     g += box(10, 114, 110, 34, "v-box") + text(65, 128, "v-sb", "payload 저장", "middle") + text(65, 142, "v-s", "(JSONB)", "middle");
-    g += box(140, 114, 100, 34, "v-box") + text(190, 128, "v-sb", "복구 경로 8개", "middle") + text(190, 142, "v-s", "업무별", "middle");
+    g += box(140, 114, 100, 34, "v-box") + text(190, 128, "v-sb", "업무별", "middle") + text(190, 142, "v-sb", "복구 경로", "middle");
     g += box(260, 114, 100, 34, "v-hi") + text(310, 128, "v-sb", "실패한 업무만", "middle") + text(310, 142, "v-sb", "다시 실행", "middle");
     g += `<path d="M118 94V104H65V112" class="v-line" marker-end="url(#ah)"/><path d="M206 94V104H65" class="v-line"/>`;
     g += arrow(122, 131, 138, 131) + arrow(242, 131, 258, 131);
-    g += box(0, 162, 360, 24, "v-dash") + text(180, 178, "v-s", "IN_PROGRESS 15분 초과 → 유형별로 묶어 Slack 알림", "middle");
+    g += box(0, 162, 360, 24, "v-dash") + text(180, 178, "v-s", "15분 넘게 멈춘 이벤트 → 유형별로 묶어 Slack 알림", "middle");
     return wrap("event-recovery", SRC.events, svg(360, 190, g), "viz--wide viz--max");
   },
   "archive-batch": () => {
@@ -132,7 +131,7 @@ const builders = {
     return wrap("archive-batch", SRC.archive, svg(330, 72, g), "viz--wide viz--max");
   },
   "stat-duplicate-click": () =>
-    stat({ id: "stat-duplicate-click", src: SRC.duplicate, title: "중복 클릭 차단", big: "60초", lines: ["클릭 정보 5개 키 일치 시", "차감 없이 어뷰징 로그 기록"] }),
+    stat({ id: "stat-duplicate-click", src: SRC.duplicate, title: "중복 클릭 차단", big: "60초", lines: ["같은 클릭이 다시 오면", "차감 없이 어뷰징 로그 기록"] }),
   "stat-ad-end-date": () =>
     stat({ id: "stat-ad-end-date", src: SRC.expiry, title: "광고 노출 종료일", big: "576건", lines: ["일괄 보정"] }),
   timeline: () => {
@@ -167,9 +166,9 @@ export const VIZ = {
   "feed-funnel": { facts: ["500건", "100건", "20건"] },
   approval: { facts: ["신청", "검증", "승인", "캐시"] },
   endpoints: { facts: ["Primary", "reader"] },
-  "event-recovery": { facts: ["9종", "6개", "8개", "15분"] },
+  "event-recovery": { facts: ["6개", "15분"] },
   "archive-batch": { facts: ["시작 ID"] },
-  "stat-duplicate-click": { facts: ["60초", "5개"] },
+  "stat-duplicate-click": { facts: ["60초"] },
   "stat-ad-end-date": { facts: ["576건"] },
   timeline: { facts: ["2022.11", "2023.02", "2023.09", "2024.05", "2024.06", "2025.04", "2025.06"] },
 };
