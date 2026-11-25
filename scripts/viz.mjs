@@ -27,12 +27,9 @@ const SRC = {
   approval: "랠릿 경력 01·프로젝트 01: 신청, 검증, 승인, 승인 뒤 캐시 갱신",
   endpoints: "랠릿 프로젝트 01: 노드 나열 → Primary·reader endpoint",
   events: "랠릿 프로젝트 05: 6개 상태, 15분 초과 알림 / 저장소 문서: 이벤트 9종, 복구 경로 8개",
-  archive: "랠릿 프로젝트 05: 아카이브 테이블 10개, 시작 ID 지정 재실행",
-  concurrency: "랠릿 프로젝트 05: 9개 API, 13개 시나리오",
+  archive: "랠릿 프로젝트 05: 참조 순서대로 이동, 중단되면 시작 ID를 지정해 남은 범위부터 재실행",
   duplicate: "랠릿 프로젝트 05: 60초, 클릭 정보 5개 키",
   expiry: "랠릿 프로젝트 05: 광고 노출 종료일 576건",
-  supportClasses: "랠릿 프로젝트 06: 지원 클래스 26개",
-  supportTests: "랠릿 프로젝트 06: 자체 테스트 37개",
   timeline: "랠릿 경력 01~04 재직 기간",
 };
 
@@ -124,22 +121,20 @@ const builders = {
     return wrap("event-recovery", SRC.events, svg(360, 190, g), "viz--wide viz--max");
   },
   "archive-batch": () => {
-    let g = text(0, 12, "v-cap", "아카이브 배치 · 테이블 10개");
-    for (let i = 0; i < 10; i++) g += box(i * 27, 24, 21, 21, "v-box", 3);
-    g += text(0, 66, "v-l", "참조 순서대로 이동");
-    g += text(0, 84, "v-l", '중단되면 <tspan class="v-n">시작 ID</tspan> 지정 → 남은 범위부터 재실행');
-    return wrap("archive-batch", SRC.archive, svg(270, 92, g));
+    // 개수가 아니라 흐름만 그린다: 참조 순서대로 이동 → 중단 → 시작 ID 지정 → 남은 범위부터 재실행.
+    const xs = [0, 87, 174, 261];
+    let g = text(0, 12, "v-cap", "아카이브 배치 · 중단 뒤 이어 실행");
+    g += box(xs[0], 24, 69, 36, "v-box") + text(xs[0] + 34.5, 40, "v-sb", "참조 순서대로", "middle") + text(xs[0] + 34.5, 54, "v-sb", "이동", "middle");
+    g += box(xs[1], 24, 69, 36, "v-dash") + text(xs[1] + 34.5, 46, "v-sb", "중단", "middle");
+    g += box(xs[2], 24, 69, 36, "v-box") + text(xs[2] + 34.5, 40, "v-sb", "시작 ID", "middle") + text(xs[2] + 34.5, 54, "v-sb", "지정", "middle");
+    g += box(xs[3], 24, 69, 36, "v-hi") + text(xs[3] + 34.5, 40, "v-sb", "남은 범위부터", "middle") + text(xs[3] + 34.5, 54, "v-sb", "재실행", "middle");
+    for (let i = 0; i < 3; i++) g += arrow(xs[i] + 71, 42, xs[i + 1] - 2, 42);
+    return wrap("archive-batch", SRC.archive, svg(330, 72, g), "viz--wide viz--max");
   },
-  "stat-concurrency": () =>
-    stat({ id: "stat-concurrency", src: SRC.concurrency, title: "동시성 검증", big: "9 · 13", lines: ["API 9개 · 시나리오 13개", "잔액·원장·후속 이벤트 확인"] }),
   "stat-duplicate-click": () =>
     stat({ id: "stat-duplicate-click", src: SRC.duplicate, title: "중복 클릭 차단", big: "60초", lines: ["클릭 정보 5개 키 일치 시", "차감 없이 어뷰징 로그 기록"] }),
   "stat-ad-end-date": () =>
     stat({ id: "stat-ad-end-date", src: SRC.expiry, title: "광고 노출 종료일", big: "576건", lines: ["일괄 보정"] }),
-  "stat-support-classes": () =>
-    stat({ id: "stat-support-classes", src: SRC.supportClasses, title: "Test Support", big: "26개", lines: ["지원 클래스"] }),
-  "stat-support-tests": () =>
-    stat({ id: "stat-support-tests", src: SRC.supportTests, title: "Test Support", big: "37개", lines: ["자체 테스트"] }),
   timeline: () => {
     // 달 단위 위치. m=0은 2022.11, 오른쪽 끝은 2026.12 직전(현재). 재직 사이 빈 기간은 칠하지 않는다.
     const x0 = 70, per = 280 / 48;
@@ -173,12 +168,9 @@ export const VIZ = {
   approval: { facts: ["신청", "검증", "승인", "캐시"] },
   endpoints: { facts: ["Primary", "reader"] },
   "event-recovery": { facts: ["9종", "6개", "8개", "15분"] },
-  "archive-batch": { facts: ["10개", "시작 ID"] },
-  "stat-concurrency": { facts: ["9개 API", "13개"] },
+  "archive-batch": { facts: ["시작 ID"] },
   "stat-duplicate-click": { facts: ["60초", "5개"] },
   "stat-ad-end-date": { facts: ["576건"] },
-  "stat-support-classes": { facts: ["26개"] },
-  "stat-support-tests": { facts: ["37개"] },
   timeline: { facts: ["2022.11", "2023.02", "2023.09", "2024.05", "2024.06", "2025.04", "2025.06"] },
 };
 for (const id of Object.keys(VIZ)) VIZ[id].build = builders[id];
