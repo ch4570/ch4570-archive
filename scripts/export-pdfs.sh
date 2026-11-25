@@ -121,8 +121,8 @@ verify_pdf() {
 
     case "$document_name" in
       resume|resume-print) expected_pages=1 ;;
-      career-description) expected_pages=2 ;;
-      portfolio) expected_pages=3 ;;
+      career-description) expected_pages=3 ;;
+      portfolio) expected_pages=2 ;;
       *) expected_pages='' ;;
     esac
     if [ -n "$expected_pages" ] && [ "$pages" -ne "$expected_pages" ]; then

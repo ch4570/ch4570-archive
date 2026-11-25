@@ -19,6 +19,7 @@ import {
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const chronologicalCareerColumn = "1fr";
+const RESUME_EDIT_FIELDS = 43;
 
 function findExactRuleDeclarations(stylesheet, selector) {
   const withoutComments = stylesheet.replace(/\/\*[\s\S]*?\*\//gu, "");
@@ -59,6 +60,7 @@ test("PDF preparation embeds every shared stylesheet the resume links and drops 
   assert.deepEqual([...linked.keys()], [
     "../assets/site-frame.css",
     "../assets/resume.css",
+    "../assets/viz.css",
   ]);
 
   const preparedHtml = buildPdfDocument(sourceHtml, "", new Map(), linked);
@@ -70,11 +72,12 @@ test("PDF preparation embeds every shared stylesheet the resume links and drops 
   assert.match(preparedHtml, /data-edit-id="resume-002"/);
 });
 
-test("PDF preparation embeds the canonical stylesheet for documents that still use it", async () => {
-  const [sourceHtml, stylesheet] = await Promise.all([
-    readFile(path.join(projectRoot, "career/index.html"), "utf8"),
-    readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
-  ]);
+test("PDF preparation embeds the canonical stylesheet for documents that still use it", () => {
+  const sourceHtml = `<!doctype html>
+<link rel="stylesheet" href="../assets/design-system.css">
+<script src="../assets/site.js" defer></script>
+<main data-edit-id="x-001">content</main>`;
+  const stylesheet = "body { color: black; }";
 
   const preparedHtml = buildPdfDocument(sourceHtml, stylesheet);
 
@@ -82,7 +85,23 @@ test("PDF preparation embeds the canonical stylesheet for documents that still u
   assert.ok(preparedHtml.includes(stylesheet));
   assert.doesNotMatch(preparedHtml, /<link rel="stylesheet"/);
   assert.doesNotMatch(preparedHtml, /<script src="\.\.\/assets\/site\.js"/);
-  assert.match(preparedHtml, /data-edit-id="career-001"/);
+  assert.match(preparedHtml, /data-edit-id="x-001"/);
+});
+
+test("career and portfolio share the terminal stylesheets and need no site script", async () => {
+  for (const name of ["career", "portfolio"]) {
+    const sourcePath = path.join(projectRoot, name, "index.html");
+    const sourceHtml = await readFile(sourcePath, "utf8");
+    const linked = await loadLinkedStylesheets(sourceHtml, sourcePath);
+    assert.deepEqual([...linked.keys()], [
+      "../assets/site-frame.css",
+      "../assets/resume.css",
+      "../assets/viz.css",
+      "../assets/doc.css",
+    ]);
+    assert.doesNotMatch(sourceHtml, /design-system\.css|assets\/site\.js|<details\b/u);
+    assert.match(linked.get("../assets/doc.css"), /@page :first/u);
+  }
 });
 
 test("all submission documents use the same export-safe asset contract", async () => {
@@ -114,35 +133,19 @@ test("all submission documents use the same export-safe asset contract", async (
   }
 });
 
-test("PDF preparation expands every printable disclosure without site JavaScript", async () => {
-  const [sourceHtml, stylesheet] = await Promise.all([
-    readFile(path.join(projectRoot, "portfolio/index.html"), "utf8"),
-    readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
-  ]);
-
-  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet);
-  const detailElements = preparedHtml.match(/<details\b[^>]*>/g) ?? [];
-
-  assert.ok(detailElements.length > 0);
-  assert.ok(
-    detailElements.every((element) => /\sopen(?:\s|>)/.test(element)),
-    "every disclosure should be open before Chrome starts printing",
-  );
-});
-
 test("PDF preparation embeds every supported local document image", async () => {
   const sourcePath = path.join(projectRoot, "portfolio/index.html");
-  const [sourceHtml, stylesheet] = await Promise.all([
-    readFile(sourcePath, "utf8"),
-    readFile(path.join(projectRoot, "assets/design-system.css"), "utf8"),
-  ]);
+  const sourceHtml = await readFile(sourcePath, "utf8");
   const replacements = await loadLocalAssetReplacements(sourceHtml, sourcePath);
-  const preparedHtml = buildPdfDocument(sourceHtml, stylesheet, replacements);
+  const preparedHtml = buildPdfDocument(
+    sourceHtml,
+    "",
+    replacements,
+    await loadLinkedStylesheets(sourceHtml, sourcePath),
+  );
 
-  assert.equal(replacements.size, 2);
-  assert.match(preparedHtml, /src="data:image\/svg\+xml;base64,/);
+  assert.equal(replacements.size, 1);
   assert.match(preparedHtml, /src="data:image\/jpeg;base64,/);
-  assert.doesNotMatch(preparedHtml, /\.\.\/assets\/diagrams\/feed-serving\.svg/);
   assert.doesNotMatch(preparedHtml, /\.\.\/assets\/profile\.jpg/);
 });
 
@@ -329,7 +332,7 @@ test("resume markup keeps decoration lines out of the reading order", async () =
   assert.doesNotMatch(html, /HEAD -&gt; current/u);
   assert.match(html, /<svg class="band-fill" aria-hidden="true"/u);
   // 편집 필드 51개, 인쇄용 PDF 링크는 화면 전용이며 공통 막대는 그대로다.
-  assert.equal(html.match(/data-edit-id="/gu)?.length, 51);
+  assert.equal(html.match(/data-edit-id="/gu)?.length, RESUME_EDIT_FIELDS);
   assert.match(html, /<div class="resume-tools screen-only">[\s\S]*?href="\.\.\/pdf\/seo-minjae-resume-print\.pdf"[^>]*>인쇄용 PDF<\/a>/u);
   assert.match(html, /<a class="site-bar__pdf" href="\.\.\/pdf\/seo-minjae-resume\.pdf"/u);
 });
@@ -361,8 +364,8 @@ test("the career description and portfolio PDFs keep their page counts", { skip:
   const { promisify } = await import("node:util");
   const run = promisify(execFile);
   for (const [file, pages] of [
-    ["seo-minjae-career-description.pdf", 2],
-    ["seo-minjae-backend-portfolio.pdf", 3],
+    ["seo-minjae-career-description.pdf", 3],
+    ["seo-minjae-backend-portfolio.pdf", 2],
   ]) {
     const { stdout } = await run("pdfinfo", [path.join(projectRoot, "output/pdf", file)]);
     assert.equal(Number(/^Pages:\s+(\d+)/mu.exec(stdout)[1]), pages, file);

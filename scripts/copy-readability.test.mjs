@@ -17,14 +17,6 @@ function visibleText(fragment) {
     .trim();
 }
 
-function caseSection(source, id) {
-  const opening = '<section class="case-section" id="' + id + '"';
-  const start = source.indexOf(opening);
-  assert.notEqual(start, -1, "expected #" + id + " case section");
-  const next = source.indexOf('<section class="case-section"', start + opening.length);
-  return source.slice(start, next === -1 ? source.length : next);
-}
-
 test("resume list items stay concise enough to scan", async () => {
   const source = await readFile(resolve(repositoryRoot, "resume/index.html"), "utf8");
   const listItems = scanEditableRegions(source).filter(
@@ -139,40 +131,6 @@ test("home keeps changing career and public metrics editable", async () => {
   }
 });
 
-test("portfolio story cards stay short and semantic", async () => {
-  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const editableById = new Map(
-    scanEditableRegions(source).map((region) => [region.id, region]),
-  );
-  const storyPairs = [
-    ["portfolio-017", "portfolio-018"],
-    ["portfolio-019", "portfolio-020"],
-    ["portfolio-089", "portfolio-090"],
-    ["portfolio-091", "portfolio-092"],
-    ["portfolio-039", "portfolio-040"],
-    ["portfolio-041", "portfolio-042"],
-  ];
-
-  for (const [headingId, summaryId] of storyPairs) {
-    const heading = editableById.get(headingId);
-    const summary = editableById.get(summaryId);
-    assert.equal(heading?.tagName, "h3", "expected story heading " + headingId);
-    assert.equal(summary?.tagName, "p", "expected story summary " + summaryId);
-
-    const headingText = visibleText(heading.innerHTML);
-    const summaryText = visibleText(summary.innerHTML);
-    const sentences = summaryText.split(/[.!?](?:\s|$)/u).filter(Boolean);
-
-    assert.ok(headingText.length <= 46, headingId + " should stay scannable");
-    assert.ok(summaryText.length <= 150, summaryId + " should stay scannable");
-    assert.ok(
-      sentences.length >= 1 && sentences.length <= 3,
-      summaryId + " should contain one to three sentences",
-    );
-    assert.doesNotMatch(summary.innerHTML, /<br\s*\/?\s*>|^\s*•/iu);
-  }
-});
-
 test("submission text stays searchable without invisible joiners", async () => {
   for (const file of ["resume/index.html", "career/index.html", "portfolio/index.html"]) {
     const source = await readFile(resolve(repositoryRoot, file), "utf8");
@@ -182,85 +140,94 @@ test("submission text stays searchable without invisible joiners", async () => {
 
 test("career overview preserves period, employer, and role reading order", async () => {
   const source = await readFile(resolve(repositoryRoot, "career/index.html"), "utf8");
-  const rows = [...source.matchAll(/<article><p class="career-history-line">([\s\S]*?)<\/p><\/article>/gu)];
+  const list = source.match(/<ul class="resume-plain-list doc-hist"[\s\S]*?<\/ul>/u)?.[0] ?? "";
+  const rows = [...list.matchAll(/<li>([\s\S]*?)<\/li>/gu)];
 
   assert.equal(rows.length, 4, "expected four semantic career rows");
   for (const [, row] of rows) {
     const period = row.indexOf("<time");
-    const employer = row.indexOf("<strong");
-    const role = row.indexOf("<span");
+    const employer = row.indexOf("<b>");
+    const role = row.indexOf("<span>");
     assert.ok(period >= 0 && period < employer && employer < role);
   }
 });
 
-test("career employer headings separate company from product and role", async () => {
+test("career employer headings keep the Rallit company, team and period", async () => {
   const source = await readFile(resolve(repositoryRoot, "career/index.html"), "utf8");
-  const editableById = new Map(
-    scanEditableRegions(source).map((region) => [region.id, region]),
-  );
-  const employerHeadings = [
-    ["career-025", "웍스피어(유)", "JOBKOREA·Albamon"],
-    ["career-065", "토스랩", "JANDI"],
+  const headings = scanEditableRegions(source)
+    .filter((region) => region.tagName === "h2")
+    .map((region) => visibleText(region.innerHTML));
+  const expected = [
+    ["유한책임회사웍스피어", "사원 · AI 추천/검색 플랫폼팀", "2025.06"],
+    ["(주)토스랩", "Developer · Backend Team", "2024.06 – 2025.04"],
+    ["오케스트로주식회사", "Member · Platform Service Dev 6", "2023.09 – 2024.05"],
+    ["주식회사즐거운커뮤니케이션즈", "팀원 · 개발2팀", "2022.11 – 2023.02"],
   ];
 
-  for (const [id, company, product] of employerHeadings) {
-    const heading = editableById.get(id);
-    assert.equal(heading?.tagName, "h2", "expected employer heading " + id);
-
-    const hierarchy = heading.innerHTML.match(
-      /^\s*([^<]+?)\s*<small>([\s\S]+)<\/small>\s*$/u,
-    );
-    assert.ok(hierarchy, id + " should nest product and role in a <small> subtitle");
-    assert.equal(visibleText(hierarchy[1]), company, id + " should expose only the company");
-
-    const subtitle = visibleText(hierarchy[2]);
-    assert.ok(subtitle.includes(product), id + " should keep the product in its subtitle");
+  for (const parts of expected) {
     assert.ok(
-      subtitle.includes("Backend Engineer"),
-      id + " should keep the role in its subtitle",
+      headings.some((heading) => parts.every((part) => heading.includes(part))),
+      "missing employer heading: " + parts.join(" / "),
     );
   }
-
-  const continuation = editableById.get("career-042");
-  assert.equal(continuation?.tagName, "h2", "expected continuation heading career-042");
-  assert.match(
-    visibleText(continuation.innerHTML),
-    /^웍스피어\(유\)/u,
-    "career-042 should retain its employer context",
-  );
 });
 
-test("portfolio leads with the JPA correction case before supporting work", async () => {
+test("portfolio keeps six ordered cases and leads with the JPA correction", async () => {
   const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-  const orderedIds = ["jpa", "event", "point", "feed", "evidence"];
-  const positions = orderedIds.map((id) => source.indexOf('id="' + id + '"'));
+  const orderedIds = ["jpa", "drive", "feed", "event", "codehub", "evidence"];
+  const positions = orderedIds.map((id) => source.indexOf('<article class="doc-proj" id="' + id + '"'));
 
   assert.ok(positions.every((position) => position >= 0), "expected every portfolio case");
   assert.deepEqual(positions, [...positions].sort((left, right) => left - right));
-
-  const jpa = caseSection(source, "jpa");
-  assert.match(jpa, /실제 영속성 컨텍스트/u);
-  assert.match(jpa, /약 200만/u);
-  assert.equal(jpa.match(/<div class="fact-cell">/gu)?.length, 4);
-  assert.equal(jpa.match(/<div class="story-block">/gu)?.length, 2);
-});
-
-test("portfolio cases keep diagrams focused and accessible", async () => {
-  const source = await readFile(resolve(repositoryRoot, "portfolio/index.html"), "utf8");
-
-  for (const id of ["event", "jpa", "point", "feed"]) {
-    const section = caseSection(source, id);
-    assert.ok(
-      (section.match(/<figure\b/gu) ?? []).length <= 1,
-      "#" + id + " should not repeat diagrams",
-    );
+  for (const id of orderedIds) {
+    assert.match(source, new RegExp('<a href="#' + id + '">'), "case nav should link #" + id);
   }
 
-  const feed = caseSection(source, "feed");
-  assert.equal(feed.match(/<figure\b/gu)?.length, 1, "feed should expose one figure");
-  assert.match(feed, /data-diagram-tool="archify@2\.11\.0"/u);
-  assert.match(feed, /<figcaption>[\s\S]*<\/figcaption>/u);
-  assert.match(feed, /<img\b[^>]*\balt="[^"]+"/u);
+  const jpa = source.slice(positions[0], positions[1]);
+  assert.match(jpa, /실제 영속성 컨텍스트/u);
+  assert.match(jpa, /약 200만/u);
+});
+
+test("diagrams are aria-hidden, sourced, and appear next to the numbers they draw", async () => {
+  for (const file of ["resume/index.html", "career/index.html", "portfolio/index.html"]) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    const figures = [...source.matchAll(/<div class="viz[^"]*" data-viz="([^"]+)" data-src="([^"]+)">(<svg[\s\S]*?<\/svg>)<\/div>/gu)];
+
+    assert.ok(figures.length > 0, file + " should carry diagrams");
+    assert.equal(figures.length, source.match(/data-viz="/gu).length, file + " has a malformed diagram");
+    for (const [, id, src, markup] of figures) {
+      assert.match(markup, /^<svg [^>]*aria-hidden="true"/u, id + " should be hidden from readers");
+      assert.ok(src.length > 8, id + " should name its source");
+      assert.doesNotMatch(markup, /<script\b|<foreignObject\b|<image\b|href=/iu, id);
+    }
+  }
+});
+
+test("submission documents follow the wording rules", async () => {
+  const allowedHosts = new Set([
+    "github.com",
+    "velog.io",
+    "www.linkedin.com",
+    "ch4570-archive.vercel.app",
+    "www.w3.org",
+  ]);
+  for (const file of ["resume/index.html", "career/index.html", "portfolio/index.html"]) {
+    const source = await readFile(resolve(repositoryRoot, file), "utf8");
+    const body = source.replace(/<head>[\s\S]*?<\/head>/u, "").replace(/<svg[\s\S]*?<\/svg>/gu, "");
+    const text = visibleText(body);
+
+    assert.doesNotMatch(text, /약\s*\d+\s*년|\d+\s*년간|\d+\s*년\s*차|\d+\s*년의/u, file + " should not state years of experience");
+    assert.doesNotMatch(
+      text,
+      /(?:MR|PR|커밋|머지)\s*\d+\s*(?:건|개)|(?:개선|제안)\s*\d+\s*건|저장소\s*\d+\s*개|기술 글\s*\d+\s*편|\d+\s*편/u,
+      file + " should not state activity counts",
+    );
+    assert.doesNotMatch(text, /endpoint로 바꿨습니다/u, file + " should not claim the unmerged endpoint switch is done");
+    assert.doesNotMatch(text, /(?:승인 흐름|접근 제어)[^.]*?(?:완료했습니다|도입했습니다)/u, file + " should not claim unmerged work is done");
+    for (const [, host] of source.matchAll(/https?:\/\/([^/"'\s<>)]+)/gu)) {
+      assert.ok(allowedHosts.has(host), file + " links to an unexpected host: " + host);
+    }
+  }
 });
 
 test("Archify output stays safe, readable, and on the design grid", async () => {
